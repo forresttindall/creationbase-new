@@ -368,16 +368,13 @@ function App() {
                     height: '100%',
                     maxWidth: 'none',
                     display: 'block',
-                    transition: 'all 0.5s ease',
-                    filter: 'grayscale(100%)',
+                    transition: 'all 0.5s ease'
                   }}
                   onMouseOver={(e) => {
                     e.currentTarget.style.transform = 'scale(1.05)';
-                    e.currentTarget.style.filter = 'grayscale(0%)';
                   }}
                   onMouseOut={(e) => {
                     e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.filter = 'grayscale(100%)';
                   }}
                 />
               </div>
@@ -433,16 +430,13 @@ function App() {
                       height: '100%',
                       maxWidth: 'none',
                       display: 'block',
-                      transition: 'all 0.5s ease',
-                      filter: 'grayscale(100%)'
+                      transition: 'all 0.5s ease'
                     }} 
                     onMouseOver={(e) => {
                       e.currentTarget.style.transform = 'scale(1.05)';
-                      e.currentTarget.style.filter = 'grayscale(0%)';
                     }}
                     onMouseOut={(e) => {
                       e.currentTarget.style.transform = 'scale(1)';
-                      e.currentTarget.style.filter = 'grayscale(100%)';
                     }}
                     loading="lazy" 
                   />

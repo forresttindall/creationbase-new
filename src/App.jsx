@@ -53,7 +53,7 @@ const graphicDesign = [
   {
     title: "Analogix Zine",
     category: "Brand Identity",
-    image: "/images/analogix submissions.png",
+    image: "/images/gif.gif",
     description: "Asset design and brand identity.",
     year: "2025"
   },
@@ -331,73 +331,11 @@ function App() {
         </motion.div>
       </section>
 
-      {/* Selected Work */}
+      {/* Graphic Design */}
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
         <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>Web Design</h2>
+          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>Graphic Design</h2>
           <span className="small-text">Index (01)</span>
-        </div>
-        
-        <div className="project-grid">
-          {projects.map((project, index) => (
-            <motion.article 
-              key={index} 
-              className="project-card"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              onClick={() => setSelectedProject(project)}
-              style={{ cursor: 'pointer' }}
-            >
-              <div style={{ 
-                marginBottom: 'var(--spacing-sm)', 
-                overflow: 'hidden',
-                border: '1px solid #000',
-                aspectRatio: '1/1',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'transparent'
-              }}>
-                <img 
-                  src={project.image} 
-                  alt={project.title}
-                  style={{ 
-                    width: 'auto',
-                    height: '100%',
-                    maxWidth: 'none',
-                    display: 'block',
-                    transition: 'all 0.5s ease'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.05)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }}
-                />
-              </div>
-              <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #000', paddingTop: 'var(--spacing-xs)' }}>
-                <div>
-                  <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
-                  <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
-                </div>
-                <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
-                  <div>{project.year}</div>
-                </div>
-              </div>
-            </motion.article>
-          ))}
-        </div>
-      </section>
-
-      {/* Graphic Design */}
-      <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
-        <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>Graphic Design</h2>
-          <span className="small-text">Index (02)</span>
         </div>
 
         <div className="project-grid" style={{ alignItems: 'start' }}>
@@ -415,12 +353,12 @@ function App() {
                 <div style={{ 
                  marginBottom: 'var(--spacing-sm)', 
                  overflow: 'hidden',
-                 border: '1px solid #333',
+                 border: '1px solid #000',
                  aspectRatio: '1/1',
                  display: 'flex',
                  alignItems: 'center',
                  justifyContent: 'center',
-                 backgroundColor: '#000'
+                 backgroundColor: 'transparent'
                }}>
                  <img 
                     src={project.image} 
@@ -441,6 +379,68 @@ function App() {
                     loading="lazy" 
                   />
                </div>
+              <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #000', paddingTop: 'var(--spacing-xs)' }}>
+                <div>
+                  <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
+                  <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
+                </div>
+                <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
+                  <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
+                  <div>{project.year}</div>
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </section>
+
+      {/* Selected Work */}
+      <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
+        <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
+          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>Web Design</h2>
+          <span className="small-text">Index (02)</span>
+        </div>
+        
+        <div className="project-grid">
+          {projects.map((project, index) => (
+            <motion.article 
+              key={index} 
+              className="project-card"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-10%" }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              onClick={() => setSelectedProject(project)}
+              style={{ cursor: 'pointer' }}
+            >
+              <div style={{ 
+                marginBottom: 'var(--spacing-sm)', 
+                overflow: 'hidden',
+                border: '1px solid #333',
+                aspectRatio: '1/1',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#000'
+              }}>
+                <img 
+                  src={project.image} 
+                  alt={project.title}
+                  style={{ 
+                    width: 'auto',
+                    height: '100%',
+                    maxWidth: 'none',
+                    display: 'block',
+                    transition: 'all 0.5s ease'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                />
+              </div>
               <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #333', paddingTop: 'var(--spacing-xs)' }}>
                 <div>
                   <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>

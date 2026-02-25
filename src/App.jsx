@@ -4,16 +4,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 const projects = [
   {
     title: "Ricochet",
-    category: "Web Design",
+    category: "UI/UX Design",
     image: "/images/ricochet mockup.png",
-    description: "SaaS platform design and prototyping.",
+    description: "SaaS website design and prototyping at Superbase",
     year: "2026"
   },
   {
     title: "Amore",
-    category: "Web Design & Dev",
+    category: "UI/UX Design & Dev",
     image: "/images/amore mockup.png",
-    description: "Website design and development.",
+    description: "UI/UX design and development.",
     year: "2025"
   },
   {
@@ -25,14 +25,14 @@ const projects = [
   },
   {
     title: "Fastburger",
-    category: "Brand & Web Design",
+    category: "Brand & UI/UX Design",
     image: "/images/fastburger.png",
     description: "Brand design and web presence.",
     year: "2025"
   },
   {
     title: "Arrowleaf",
-    category: "Web Design & Dev",
+    category: "UI/UX Design & Dev",
     image: "/images/arrowleaf.png",
     description: "Website design and development.",
     year: "2024"

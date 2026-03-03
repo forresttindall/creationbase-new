@@ -653,7 +653,7 @@ function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.6 }}
-              style={{ borderTop: '2px solid #000', paddingTop: 'var(--spacing-md)' }}
+              style={{ borderTop: '2px solid #fff', paddingTop: 'var(--spacing-md)' }}
             >
               <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                 <img src="/images/cmyk.jpg" alt="CMYK Graffix" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />

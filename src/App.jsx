@@ -580,6 +580,60 @@ function App() {
                 [WEB DESIGN] [DIGITAL EXPERIENCE] [PARTNERSHIP]
               </div>
             </motion.div>
+
+            {/* Superbase */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              style={{ borderTop: '2px solid #000', paddingTop: 'var(--spacing-md)' }}
+            >
+              <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
+                <img src="/images/superbasewhite.jpg" alt="Superbase" style={{ height: '100%', filter: 'grayscale(100%)' }} />
+              </div>
+              <h4 style={{ 
+                fontSize: 'var(--fs-lg)', 
+                margin: '0 0 var(--spacing-sm) 0',
+                textTransform: 'uppercase',
+                fontFamily: 'var(--font-display)'
+              }}>
+                Superbase
+              </h4>
+              <p className="small-text" style={{ maxWidth: '90%' }}>
+                Continued partner for high-level UI/UX and design. Collaborating on scalable digital products and design systems for a leading design agency.
+              </p>
+              <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
+                [UI/UX DESIGN] [DEVELOPMENT] [AGENCY PARTNER]
+              </div>
+            </motion.div>
+
+            {/* CMYK Graffix */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6 }}
+              style={{ borderTop: '2px solid #000', paddingTop: 'var(--spacing-md)' }}
+            >
+              <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
+                <img src="/images/cmyk.jpg" alt="CMYK Graffix" style={{ height: '100%', filter: 'grayscale(100%)' }} />
+              </div>
+              <h4 style={{ 
+                fontSize: 'var(--fs-lg)', 
+                margin: '0 0 var(--spacing-sm) 0',
+                textTransform: 'uppercase',
+                fontFamily: 'var(--font-display)'
+              }}>
+                CMYK Graffix
+              </h4>
+              <p className="small-text" style={{ maxWidth: '90%' }}>
+                Strategic graphic design partner for large-format print and branding projects. Delivering print-ready assets and visual identities for a premier design and print agency.
+              </p>
+              <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
+                [GRAPHIC DESIGN] [PRINT] [AGENCY PARTNER]
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>

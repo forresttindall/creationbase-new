@@ -495,7 +495,7 @@ function App() {
         padding: '0',
         background: '#ffffff',
         color: '#000',
-        minHeight: '100vh',
+        minHeight: 'auto',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',

@@ -177,6 +177,16 @@ ul {
   }
 }
 
+@media (min-width: 1600px) {
+  .studio-portrait-wrapper {
+    padding: var(--spacing-xxl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+  }
+}
+
 @media (min-width: 1024px) {
   .studio-client-grid {
     grid-template-columns: repeat(2, 1fr);

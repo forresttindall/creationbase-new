@@ -472,7 +472,7 @@ function App() {
       {/* About Section */}
       <section style={{ 
         padding: '0',
-        background: '#f0f0f0',
+        background: '#ffffff',
         color: '#000',
         minHeight: '100vh',
         display: 'flex',

@@ -146,6 +146,27 @@ const graphicDesign = [
   }
 ];
 
+const testimonials = [
+  {
+    name: "Lori Tindall",
+    stars: "★★★★★",
+    headline: "FIVE STARS!!!",
+    text: "I put off rebranding my business and building out a new website because I just didn't have the time or inclination to do it all myself. Working with Forrest was easy and fun because he was able to draw information out of me that helped make the design and layout reflect my values. He also built elements into my website that gets it ranked higher in search engines and it gets noticed."
+  },
+  {
+    name: "Jackie Beauchaine",
+    stars: "★★★★★",
+    headline: "I couldn't be happier!",
+    text: "Forrest did a fantastic job on my website. It's now ranking higher on Google and bringing in more business. He gave my site the professional look I always wanted!"
+  },
+  {
+    name: "Douglas Herlocker",
+    stars: "★★★★★",
+    headline: "Very pleased with the results!",
+    text: "His quality and attention to detail is among the best. He built a website for my business partner that was clean, professional, and exceeded expectations."
+  }
+];
+
 const ProjectModal = ({ project, onClose }) => {
   if (!project) return null;
 
@@ -525,18 +546,36 @@ function App() {
           </div>
         </div>
 
+      </section>
+
+      {/* Selected Clients & Testimonials */}
+      <section style={{ 
+        padding: '0',
+        background: '#000',
+        color: '#fff',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
         {/* Selected Clients Marquee/Grid */}
         <div style={{ padding: 'var(--spacing-xl) var(--spacing-md)' }}>
+           <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
+             <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>Clients & Partners</h2>
+             <span className="small-text">Index (04)</span>
+           </div>
+
           <div className="studio-client-grid">
             {/* Micron */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              style={{ borderTop: '2px solid #000', paddingTop: 'var(--spacing-md)' }}
+              style={{ borderTop: '2px solid #fff', paddingTop: 'var(--spacing-md)' }}
             >
               <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
-                <img src="/images/micron.png" alt="Micron" style={{ height: '100%', filter: 'grayscale(100%)' }} />
+                <img src="/images/micron.png" alt="Micron" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
               </div>
               <h4 style={{ 
                 fontSize: 'var(--fs-lg)', 
@@ -560,10 +599,10 @@ function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              style={{ borderTop: '2px solid #000', paddingTop: 'var(--spacing-md)' }}
+              style={{ borderTop: '2px solid #fff', paddingTop: 'var(--spacing-md)' }}
             >
               <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
-                <img src="/images/ricochet.png" alt="Ricochet" style={{ height: '100%', filter: 'grayscale(100%)' }} />
+                <img src="/images/ricochet.png" alt="Ricochet" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
               </div>
               <h4 style={{ 
                 fontSize: 'var(--fs-lg)', 
@@ -587,10 +626,10 @@ function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              style={{ borderTop: '2px solid #000', paddingTop: 'var(--spacing-md)' }}
+              style={{ borderTop: '2px solid #fff', paddingTop: 'var(--spacing-md)' }}
             >
               <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
-                <img src="/images/superbasewhite.jpg" alt="Superbase" style={{ height: '100%', filter: 'grayscale(100%)' }} />
+                <img src="/images/superbase.jpg" alt="Superbase" style={{ height: '100%', filter: 'grayscale(100%)' }} />
               </div>
               <h4 style={{ 
                 fontSize: 'var(--fs-lg)', 
@@ -617,7 +656,7 @@ function App() {
               style={{ borderTop: '2px solid #000', paddingTop: 'var(--spacing-md)' }}
             >
               <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
-                <img src="/images/cmyk.jpg" alt="CMYK Graffix" style={{ height: '100%', filter: 'grayscale(100%)' }} />
+                <img src="/images/cmyk.jpg" alt="CMYK Graffix" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
               </div>
               <h4 style={{ 
                 fontSize: 'var(--fs-lg)', 
@@ -634,6 +673,74 @@ function App() {
                 [GRAPHIC DESIGN] [PRINT] [AGENCY PARTNER]
               </div>
             </motion.div>
+          </div>
+        </div>
+
+        {/* Testimonials */}
+        <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
+          <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
+            <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>Client Feedback</h2>
+          </div>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            gap: 'var(--spacing-lg)',
+            alignItems: 'start'
+          }}>
+            {testimonials.map((testimonial, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                style={{ 
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  borderTop: '2px solid #fff',
+                  paddingTop: 'var(--spacing-md)'
+                }}
+              >
+                <div>
+                   <div style={{ 
+                      fontSize: 'var(--fs-lg)', 
+                      color: '#fff', 
+                      marginBottom: 'var(--spacing-sm)',
+                      letterSpacing: '-2px'
+                    }}>
+                      {testimonial.stars}
+                   </div>
+                   <h4 style={{ 
+                      fontFamily: 'var(--font-display)', 
+                      fontSize: 'var(--fs-lg)', 
+                      textTransform: 'uppercase',
+                      marginBottom: 'var(--spacing-sm)',
+                      lineHeight: 1
+                   }}>
+                      {testimonial.headline}
+                   </h4>
+                   <p className="small-text" style={{ 
+                      fontSize: 'var(--fs-sm)', 
+                      lineHeight: 1.5,
+                      marginBottom: 'var(--spacing-md)',
+                      textTransform: 'none',
+                      maxWidth: '90%'
+                   }}>
+                      "{testimonial.text}"
+                   </p>
+                </div>
+                <div style={{ 
+                  marginTop: 'auto',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 'var(--fs-xs)',
+                  textTransform: 'uppercase'
+                }}>
+                  [{testimonial.name}]
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

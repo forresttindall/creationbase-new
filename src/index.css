@@ -175,14 +175,20 @@ ul {
   .studio-portrait-wrapper {
     min-height: auto;
   }
+}
 
+@media (min-width: 1024px) {
   .studio-client-grid {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1600px) {
   .project-grid {
     grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  }
+  
+  .studio-client-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 }

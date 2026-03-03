@@ -13,77 +13,83 @@ const projects = [
     title: "Amore",
     category: "UI/UX Design & Dev",
     image: "/images/amore mockup.png",
-    description: "UI/UX design and development.",
+    description: "Restaurant website design in figma and dev in REACT",
     year: "2025"
   },
   {
     title: "Clearfeed",
-    category: "UI/UX Design",
+    category: "UI/UX Design & Dev",
     image: "/images/clearfeed.png",
-    description: "RSS feed reader interface design.",
+    description: "Desktop RSS feed reader interface design in figma and dev in ELECTRON",
     year: "2025"
   },
   {
     title: "Fastburger",
     category: "Brand & UI/UX Design",
     image: "/images/fastburger.png",
-    description: "Brand design and web presence.",
+    description: "Restaurant website design in figma and dev in REACT",
     year: "2025"
   },
   {
     title: "Arrowleaf",
     category: "UI/UX Design & Dev",
     image: "/images/arrowleaf.png",
-    description: "Website design and development.",
+    description: "Website design in figma and dev in REACT",
     year: "2024"
   },
 
 ];
 
 const graphicDesign = [
-
-
+ {
+    title: "Analogix Zine",
+    category: "Brand Identity",
+    image: "/images/gif.gif",
+    description: "Logo Design, Animation Design",
+    year: "2025"
+  },
+     {
+    title: "Local Photographer",
+    category: "Social Media",
+    image: "/images/getportraits.jpg",
+    description: "Promotional Asset Design",
+    year: "2026"
+  },
       {
     title: "Boise Analog Club",
     category: "Brand Identity",
     image: "/images/BAC March.jpg",
-    description: "Asset design and brand identity.",
-    year: "2025"
+    description: "Event Flyer Design",
+    year: "2026"
   },
   {
     title: "Boise Analog Club",
     category: "Brand Identity",
     image: "/images/bac gen x soft club.png",
-    description: "Asset design and brand identity.",
-    year: "2025"
+    description: "Social Media Promotional Asset Design",
+    year: "2026"
   },
-  {
-    title: "Analogix Zine",
-    category: "Brand Identity",
-    image: "/images/gif.gif",
-    description: "Asset design and brand identity.",
-    year: "2025"
-  },
+ 
 
     {
     title: "Boise Analog Club",
     category: "Brand Identity",
     image: "/images/BAC january.png",
-    description: "Asset design and brand identity.",
-    year: "2025"
+    description: "Event Flyer Design",
+    year: "2026"
   },
 
   {
     title: "Boise Analog Club",
     category: "Brand Identity",
     image: "/images/BAC FEBUARY.png",
-    description: "Monthly event marketing design.",
-    year: "2025"
+    description: "Event Flyer Design",
+    year: "2026"
   },
   {
-    title: "Westside Gunn",
+    title: "Gee Tee",
     category: "Album Art Design",
-    image: "/images/westsidegun mockup 1.png",
+    image: "/images/geetee.jpg",
     description: "Concept album artwork design.",
     year: "2025"
   },
@@ -107,21 +113,21 @@ const graphicDesign = [
     title: "Open Netizen",
     category: "Brand Identity",
     image: "/images/OPEN NETIZEN.jpg",
-    description: "Brand identity and visual system.",
+    description: "Logo, Branding and visual system.",
     year: "2025"
   },
   {
     title: "Paradox Labs",
     category: "Brand Identity",
     image: "/images/paradoxlabscard.jpg",
-    description: "Business card and identity design.",
+    description: "Logo and Visual Identity System",
     year: "2025"
   },
   {
     title: "Moab Brewery",
     category: "Illustration",
     image: "/images/beer-3.jpg",
-    description: "Label illustration and design.",
+    description: "Label illustration and design",
     year: "2025"
   },
   {
@@ -135,7 +141,7 @@ const graphicDesign = [
     title: "Boise Analog Club",
     category: "Brand Identity",
     image: "/images/bac.png",
-    description: "Logo and visual identity system.",
+    description: "Promotional Poster Design",
     year: "2025"
   }
 ];

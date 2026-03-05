@@ -640,7 +640,7 @@ function App() {
                 Superbase
               </h4>
               <p className="small-text" style={{ maxWidth: '90%' }}>
-                Continued partner for high-level UI/UX and design. Collaborating on scalable digital products and design systems for a leading design agency.
+                Partner for high-level UI/UX and design. Collaborating on scalable digital products and design systems for a leading design agency.
               </p>
               <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
                 [UI/UX DESIGN] [DEVELOPMENT] [AGENCY PARTNER]
@@ -667,7 +667,7 @@ function App() {
                 CMYK Graffix
               </h4>
               <p className="small-text" style={{ maxWidth: '90%' }}>
-                Strategic graphic design partner for large-format print and branding projects. Delivering print-ready assets and visual identities for a premier design and print agency.
+                Partner for large-format print and branding projects. Delivering print-ready assets and visual identities for a premier design and print agency.
               </p>
               <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
                 [GRAPHIC DESIGN] [PRINT] [AGENCY PARTNER]

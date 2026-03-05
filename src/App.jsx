@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 
 const projects = [
   {
@@ -263,6 +263,18 @@ const ProjectModal = ({ project, onClose }) => {
 function App() {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
   const [selectedProject, setSelectedProject] = useState(null);
+  const { scrollY } = useScroll();
+  const [activeWord, setActiveWord] = useState('visual');
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (latest < 180) {
+      setActiveWord('visual');
+    } else if (latest < 350) {
+      setActiveWord('system');
+    } else {
+      setActiveWord('design');
+    }
+  });
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
@@ -330,7 +342,27 @@ function App() {
               animate={{ y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             >
+              {activeWord === 'visual' && (
+                <motion.span
+                  layoutId="bracket-left"
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ 
+                    opacity: { duration: 0.5, repeat: Infinity, repeatType: "reverse", ease: "step-end" },
+                    layout: { duration: 0.3, ease: "easeInOut" }
+                  }}
+                >[</motion.span>
+              )}
               Visual
+              {activeWord === 'visual' && (
+                <motion.span
+                  layoutId="bracket-right"
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ 
+                    opacity: { duration: 0.5, repeat: Infinity, repeatType: "reverse", ease: "step-end" },
+                    layout: { duration: 0.3, ease: "easeInOut" }
+                  }}
+                >]</motion.span>
+              )}
             </motion.div>
           </div>
           <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
@@ -339,7 +371,27 @@ function App() {
               animate={{ y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
             >
+              {activeWord === 'system' && (
+                <motion.span
+                  layoutId="bracket-left"
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ 
+                    opacity: { duration: 0.5, repeat: Infinity, repeatType: "reverse", ease: "step-end" },
+                    layout: { duration: 0.3, ease: "easeInOut" }
+                  }}
+                >[</motion.span>
+              )}
               System
+              {activeWord === 'system' && (
+                <motion.span
+                  layoutId="bracket-right"
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ 
+                    opacity: { duration: 0.5, repeat: Infinity, repeatType: "reverse", ease: "step-end" },
+                    layout: { duration: 0.3, ease: "easeInOut" }
+                  }}
+                >]</motion.span>
+              )}
             </motion.div>
           </div>
           <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
@@ -348,7 +400,27 @@ function App() {
               animate={{ y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
             >
+              {activeWord === 'design' && (
+                <motion.span
+                  layoutId="bracket-left"
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ 
+                    opacity: { duration: 0.5, repeat: Infinity, repeatType: "reverse", ease: "step-end" },
+                    layout: { duration: 0.3, ease: "easeInOut" }
+                  }}
+                >[</motion.span>
+              )}
               Design
+              {activeWord === 'design' && (
+                <motion.span
+                  layoutId="bracket-right"
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ 
+                    opacity: { duration: 0.5, repeat: Infinity, repeatType: "reverse", ease: "step-end" },
+                    layout: { duration: 0.3, ease: "easeInOut" }
+                  }}
+                >]</motion.span>
+              )}
             </motion.div>
           </div>
         </h1>

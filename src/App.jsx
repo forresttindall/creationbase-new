@@ -938,7 +938,7 @@ function App() {
             <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>CONTACT</p>
             <ul className="small-text">
               <li><a href="mailto:hello@forresttindall.com" style={{ wordBreak: 'break-all' }}>FORREST.TINDALL@GMAIL.COM</a></li>
-              <li><a href="www.instagram.com/forrest.tindall/">INSTAGRAM</a></li>
+              <li><a href="https://instagram.com/forrest.designer/">INSTAGRAM</a></li>
               <li><a href="https://www.linkedin.com/in/forrest-tindall/">LINKEDIN</a></li>
             </ul>
           </div>

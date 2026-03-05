@@ -149,18 +149,21 @@ const graphicDesign = [
 const testimonials = [
   {
     name: "Lori Tindall",
+    image: "/images/lori.jpg",
     stars: "★★★★★",
     headline: "FIVE STARS!!!",
     text: "I put off rebranding my business and building out a new website because I just didn't have the time or inclination to do it all myself. Working with Forrest was easy and fun because he was able to draw information out of me that helped make the design and layout reflect my values. He also built elements into my website that gets it ranked higher in search engines and it gets noticed."
   },
   {
     name: "Jackie Beauchaine",
+    image: "/images/jackie.jpg",
     stars: "★★★★★",
     headline: "I couldn't be happier!",
     text: "Forrest did a fantastic job on my website. It's now ranking higher on Google and bringing in more business. He gave my site the professional look I always wanted!"
   },
   {
     name: "Douglas Herlocker",
+    image: "/images/douglas.webp",
     stars: "★★★★★",
     headline: "Very pleased with the results!",
     text: "His quality and attention to detail is among the best. He built a website for my business partner that was clean, professional, and exceeded expectations."
@@ -365,10 +368,12 @@ function App() {
         </motion.div>
       </section>
 
+
+
       {/* Graphic Design */}
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
         <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>Graphic Design</h2>
+          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>[ GRAPHIC DESIGN ]</h2>
           <span className="small-text">Index (01)</span>
         </div>
 
@@ -431,7 +436,7 @@ function App() {
       {/* Selected Work */}
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
         <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>Web Design</h2>
+          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>[ WEB DESIGN ]</h2>
           <span className="small-text">Index (02)</span>
         </div>
         
@@ -507,7 +512,7 @@ function App() {
           <div className="studio-typography-column">
             <div>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>Studio Practice</h2>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>[ STUDIO PRACTICE ]</h2>
                 <span className="small-text">Index (03)</span>
               </div>
 
@@ -548,6 +553,80 @@ function App() {
 
       </section>
 
+      {/* Case Study: Boise Analog Club */}
+      <section style={{ 
+        padding: 'var(--spacing-xl) var(--spacing-md)',
+        borderBottom: '1px solid #000',
+        minHeight: 'auto',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-lg)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
+          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>[ CASE STUDY ]</h2>
+          <span className="small-text">Index (04)</span>
+        </div>
+
+        {/* Top Row: Title/Intro + 2x2 Info Grid */}
+        <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--spacing-xl)', marginBottom: 'var(--spacing-xl)' }}>
+          
+          {/* Left: Title & Intro */}
+          <div>
+            <h3 style={{ 
+              fontFamily: 'var(--font-display)', 
+              fontSize: 'var(--fs-xxl)', 
+              lineHeight: 0.9,
+              marginBottom: 'var(--spacing-md)',
+              textTransform: 'uppercase'
+            }}>
+              Boise Analog Club
+            </h3>
+            <p className="small-text" style={{ maxWidth: '90%' }}>
+              A community for film photography enthusiasts in Boise. Forrest Tindall led a retro redesign of the brand identity inspired by an iconic camera brand, delivering a cohesive visual system and supporting assets.
+            </p>
+          </div>
+
+          {/* Right: 2x2 Info Grid */}
+          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-md)' }}>
+            <div>
+              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)', textTransform: 'uppercase', marginBottom: 'var(--spacing-sm)' }}>The Problem</h4>
+              <p className="small-text">Boise Analog Club needed a refreshed identity that reflected film photography roots and felt timeless, while supporting community events.</p>
+            </div>
+            <div>
+              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)', textTransform: 'uppercase', marginBottom: 'var(--spacing-sm)' }}>The Solution</h4>
+              <p className="small-text">Forrest Tindall delivered a retro brand redesign inspired by an iconic camera brand, with crisp typography and a badge‑style mark.</p>
+            </div>
+            <div style={{ borderTop: '1px solid #000', paddingTop: 'var(--spacing-sm)' }}>
+                <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)', textTransform: 'uppercase', marginBottom: 'var(--spacing-sm)' }}>Deliverables</h4>
+                <ul className="small-text" style={{ listStyle: 'none', padding: 0 }}>
+                  <li>+ Full brand identity rebrand</li>
+                  <li>+ Logo</li>
+                  <li>+ Event flyer designs</li>
+                  <li>+ Infographic social media assets</li>
+                </ul>
+             </div>
+            <div style={{ borderTop: '1px solid #000', paddingTop: 'var(--spacing-sm)' }}>
+               <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)', textTransform: 'uppercase', marginBottom: 'var(--spacing-sm)' }}>Role & Tools</h4>
+               <p className="small-text">
+                 Brand identity, logo creation, web mockups, and community assets. Used Figma, Affinity, React, Illustrator, Procreate.
+               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Row: 1x3 Image Grid */}
+        <div className="grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--spacing-md)' }}>
+          <div style={{ border: '1px solid #000', aspectRatio: '3/4', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+            <img src="/images/analog2.png" alt="Boise Analog Club Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+          <div style={{ border: '1px solid #000', aspectRatio: '3/4', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+            <img src="/images/BAC january.png" alt="Flyer Asset" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+          <div style={{ border: '1px solid #000', aspectRatio: '3/4', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+            <img src="/images/bac.png" alt="Social Assets" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+        </div>
+      </section>
+
       {/* Selected Clients & Testimonials */}
       <section style={{ 
         padding: '0',
@@ -562,8 +641,8 @@ function App() {
         {/* Selected Clients Marquee/Grid */}
         <div style={{ padding: 'var(--spacing-xl) var(--spacing-md)' }}>
            <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-             <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>Clients & Partners</h2>
-             <span className="small-text">Index (04)</span>
+             <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>[ CLIENTS & PARTNERS ]</h2>
+             <span className="small-text">Index (05)</span>
            </div>
 
           <div className="studio-client-grid">
@@ -679,7 +758,7 @@ function App() {
         {/* Testimonials */}
         <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
           <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-            <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>Client Feedback</h2>
+            <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>[ CLIENT FEEDBACK ]</h2>
           </div>
 
           <div style={{ 
@@ -698,20 +777,53 @@ function App() {
                 style={{ 
                   display: 'flex',
                   flexDirection: 'column',
-                  justifyContent: 'space-between',
                   borderTop: '2px solid #fff',
                   paddingTop: 'var(--spacing-md)'
                 }}
               >
-                <div>
+                {/* Header: User Info + Stars */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--spacing-md)' }}>
+                   {/* Left: Image + Name */}
+                   <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+                      <div style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '50%',
+                        overflow: 'hidden',
+                        border: '1px solid #fff'
+                      }}>
+                        <img 
+                          src={testimonial.image} 
+                          alt={testimonial.name}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover'
+                          }}
+                        />
+                      </div>
+                      <div style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 'var(--fs-xs)',
+                        textTransform: 'uppercase'
+                      }}>
+                        [{testimonial.name}]
+                      </div>
+                   </div>
+
+                   {/* Right: Stars */}
                    <div style={{ 
                       fontSize: 'var(--fs-lg)', 
                       color: '#fff', 
-                      marginBottom: 'var(--spacing-sm)',
-                      letterSpacing: '-2px'
+                      letterSpacing: '-2px',
+                      lineHeight: 1
                     }}>
                       {testimonial.stars}
                    </div>
+                </div>
+
+                {/* Body Content */}
+                <div>
                    <h4 style={{ 
                       fontFamily: 'var(--font-display)', 
                       fontSize: 'var(--fs-lg)', 
@@ -730,14 +842,6 @@ function App() {
                    }}>
                       "{testimonial.text}"
                    </p>
-                </div>
-                <div style={{ 
-                  marginTop: 'auto',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 'var(--fs-xs)',
-                  textTransform: 'uppercase'
-                }}>
-                  [{testimonial.name}]
                 </div>
               </motion.div>
             ))}

@@ -31,7 +31,7 @@
   --fs-sm: 12px;
   --fs-base: 14px;
   --fs-lg: 24px;
-  --fs-xl: 48px;
+  --fs-xl: clamp(28px, 6vw, 48px);
   --fs-xxl: clamp(48px, 14vw, 96px);
   --fs-display: clamp(64px, 14vw, 260px);
 }

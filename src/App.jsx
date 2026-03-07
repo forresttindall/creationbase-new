@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 
+const BlinkingBracket = ({ children }) => (
+  <motion.span
+    initial={{ opacity: 1 }}
+    whileInView={{ opacity: [1, 0, 1] }}
+    viewport={{ margin: "-20% 0px -20% 0px" }}
+    transition={{ 
+      duration: 1, 
+      repeat: Infinity, 
+      repeatType: "reverse", 
+      ease: "stepEnd" 
+    }}
+  >
+    {children}
+  </motion.span>
+);
+
 const projects = [
   {
     title: "Ricochet",
@@ -444,8 +460,10 @@ function App() {
 
       {/* Graphic Design */}
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
-        <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>[ GRAPHIC DESIGN ]</h2>
+        <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
+          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+            <BlinkingBracket>[</BlinkingBracket> GRAPHIC DESIGN <BlinkingBracket>]</BlinkingBracket>
+          </h2>
           <span className="small-text">Index (01)</span>
         </div>
 
@@ -507,8 +525,10 @@ function App() {
 
       {/* Selected Work */}
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
-        <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>[ WEB DESIGN ]</h2>
+        <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
+          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+            <BlinkingBracket>[</BlinkingBracket> WEB DESIGN <BlinkingBracket>]</BlinkingBracket>
+          </h2>
           <span className="small-text">Index (02)</span>
         </div>
         
@@ -584,7 +604,9 @@ function App() {
           <div className="studio-typography-column">
             <div>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>[ STUDIO PRACTICE ]</h2>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+                  <BlinkingBracket>[</BlinkingBracket> STUDIO PRACTICE <BlinkingBracket>]</BlinkingBracket>
+                </h2>
                 <span className="small-text">Index (03)</span>
               </div>
 
@@ -634,7 +656,9 @@ function App() {
         flexDirection: 'column'
       }}>
         <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-lg)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
-          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>[ CASE STUDY ]</h2>
+          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+            <BlinkingBracket>[</BlinkingBracket> CASE STUDY <BlinkingBracket>]</BlinkingBracket>
+          </h2>
           <span className="small-text">Index (04)</span>
         </div>
 
@@ -713,7 +737,9 @@ function App() {
         {/* Selected Clients Marquee/Grid */}
         <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
            <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-             <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>[ CLIENTS & PARTNERS ]</h2>
+             <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+               <BlinkingBracket>[</BlinkingBracket> CLIENTS & PARTNERS <BlinkingBracket>]</BlinkingBracket>
+             </h2>
              <span className="small-text">Index (05)</span>
            </div>
 
@@ -830,7 +856,9 @@ function App() {
         {/* Testimonials */}
         <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
           <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-            <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>[ CLIENT FEEDBACK ]</h2>
+            <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+              <BlinkingBracket>[</BlinkingBracket> CLIENT FEEDBACK <BlinkingBracket>]</BlinkingBracket>
+            </h2>
           </div>
 
           <div style={{ 

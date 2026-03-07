@@ -627,13 +627,13 @@ function App() {
 
       {/* Case Study: Boise Analog Club */}
       <section style={{ 
-        padding: 'var(--spacing-xl) var(--spacing-md)',
+        padding: 'var(--spacing-xxl) var(--spacing-md)',
         borderBottom: '1px solid #000',
         minHeight: 'auto',
         display: 'flex',
         flexDirection: 'column'
       }}>
-        <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-lg)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
+        <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-lg)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
           <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>[ CASE STUDY ]</h2>
           <span className="small-text">Index (04)</span>
         </div>
@@ -659,11 +659,11 @@ function App() {
 
           {/* Right: 2x2 Info Grid */}
           <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-md)' }}>
-            <div>
+            <div style={{ borderTop: '1px solid #000', paddingTop: 'var(--spacing-sm)' }}>
               <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)', textTransform: 'uppercase', marginBottom: 'var(--spacing-sm)' }}>The Problem</h4>
               <p className="small-text">Boise Analog Club needed a refreshed identity that reflected film photography roots and felt timeless, while supporting community events.</p>
             </div>
-            <div>
+            <div style={{ borderTop: '1px solid #000', paddingTop: 'var(--spacing-sm)' }}>
               <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)', textTransform: 'uppercase', marginBottom: 'var(--spacing-sm)' }}>The Solution</h4>
               <p className="small-text">Forrest Tindall delivered a retro brand redesign inspired by an iconic camera brand, with crisp typography and a badge‑style mark.</p>
             </div>
@@ -711,7 +711,7 @@ function App() {
         overflow: 'hidden'
       }}>
         {/* Selected Clients Marquee/Grid */}
-        <div style={{ padding: 'var(--spacing-xl) var(--spacing-md)' }}>
+        <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
            <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
              <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>[ CLIENTS & PARTNERS ]</h2>
              <span className="small-text">Index (05)</span>
@@ -723,7 +723,7 @@ function App() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              style={{ borderTop: '2px solid #fff', paddingTop: 'var(--spacing-md)' }}
+              style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
             >
               <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                 <img src="/images/micron.png" alt="Micron" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
@@ -750,7 +750,7 @@ function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              style={{ borderTop: '2px solid #fff', paddingTop: 'var(--spacing-md)' }}
+              style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
             >
               <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                 <img src="/images/ricochet.png" alt="Ricochet" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
@@ -777,7 +777,7 @@ function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              style={{ borderTop: '2px solid #fff', paddingTop: 'var(--spacing-md)' }}
+              style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
             >
               <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                 <img src="/images/superbase.jpg" alt="Superbase" style={{ height: '100%', filter: 'grayscale(100%)' }} />
@@ -804,7 +804,7 @@ function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.6 }}
-              style={{ borderTop: '2px solid #fff', paddingTop: 'var(--spacing-md)' }}
+              style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
             >
               <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                 <img src="/images/cmyk.jpg" alt="CMYK Graffix" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
@@ -849,7 +849,7 @@ function App() {
                 style={{ 
                   display: 'flex',
                   flexDirection: 'column',
-                  borderTop: '2px solid #fff',
+                  borderTop: '1px solid #fff',
                   paddingTop: 'var(--spacing-md)'
                 }}
               >
@@ -938,8 +938,8 @@ function App() {
             <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>CONTACT</p>
             <ul className="small-text">
               <li><a href="mailto:hello@forresttindall.com" style={{ wordBreak: 'break-all' }}>FORREST.TINDALL@GMAIL.COM</a></li>
-              <li><a href="https://instagram.com/forrest.designer/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a></li>
-              <li><a href="https://www.linkedin.com/in/forrest-tindall/" target="_blank" rel="noopener noreferrer">LINKEDIN</a></li>
+              <li><a href="https://instagram.com/forrest.designer/">INSTAGRAM</a></li>
+              <li><a href="https://www.linkedin.com/in/forrest-tindall/">LINKEDIN</a></li>
             </ul>
           </div>
           <div>

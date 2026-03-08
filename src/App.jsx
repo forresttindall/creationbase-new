@@ -817,7 +817,7 @@ function App() {
                 Superbase
               </h4>
               <p className="small-text" style={{ maxWidth: '90%' }}>
-                Partner for high-level UI/UX and design. Collaborating on scalable digital products and design systems for a leading design agency.
+                Collaborated on high-level UI/UX and design.  Building a scalable digital website and design systems with a leading design agency.
               </p>
               <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
                 [UI/UX DESIGN] [DEVELOPMENT] [AGENCY PARTNER]

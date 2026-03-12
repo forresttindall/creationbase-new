@@ -694,7 +694,7 @@ function App() {
               </div>
             </motion.div>
 
-            {/* Ricochet */}
+            {/* Ramboll */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -703,7 +703,7 @@ function App() {
               style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
             >
               <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
-                <img src="/images/ricochet.png" alt="Ricochet" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
+                <img src="/images/ramboll.png" alt="Ramboll" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
               </div>
               <h4 style={{ 
                 fontSize: 'var(--fs-lg)', 
@@ -711,13 +711,13 @@ function App() {
                 textTransform: 'uppercase',
                 fontFamily: 'var(--font-display)'
               }}>
-                Ricochet Consignment
+                Ramboll
               </h4>
               <p className="small-text" style={{ maxWidth: '90%' }}>
-                Partnered with Superbase to design a completely new marketing website and digital experience. Elevating the brand presence for a leading consignment SaaS platform.
+                Built a custom data migration system for Ramboll North America's Air Quality division. Delivering a robust full-stack solution to streamline complex environmental data workflows.
               </p>
               <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
-                [WEB DESIGN] [DIGITAL EXPERIENCE] [PARTNERSHIP]
+                [FULL STACK] [DATA MIGRATION] [AIR QUALITY]
               </div>
             </motion.div>
 

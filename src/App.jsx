@@ -714,10 +714,10 @@ function App() {
                 Ramboll
               </h4>
               <p className="small-text" style={{ maxWidth: '90%' }}>
-                Built a custom data migration system for Ramboll North America's Air Quality division. Delivering a robust full-stack solution to streamline complex environmental data workflows.
+                Built a custom data migration system for Ramboll North America's Air Quality division and provide ongoing system administration for data migration servers. Delivering a robust full-stack solution to ensure data integrity and streamline complex environmental reporting workflows.
               </p>
               <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
-                [FULL STACK] [DATA MIGRATION] [AIR QUALITY]
+                [FULL STACK] [SYSTEM ADMIN] [DATA MIGRATION]
               </div>
             </motion.div>
 

@@ -1,22 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 
-const BlinkingBracket = ({ children }) => (
-  <motion.span
-    initial={{ opacity: 1 }}
-    whileInView={{ opacity: [1, 0, 1] }}
-    viewport={{ margin: "-20% 0px -20% 0px" }}
-    transition={{ 
-      duration: 1, 
-      repeat: Infinity, 
-      repeatType: "reverse", 
-      ease: "stepEnd" 
-    }}
-  >
-    {children}
-  </motion.span>
-);
-
 const projects = [
   {
     title: "Ricochet",
@@ -358,27 +342,7 @@ function App() {
               animate={{ y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             >
-              {activeWord === 'visual' && (
-                <motion.span
-                  layoutId="bracket-left"
-                  animate={{ opacity: [1, 0] }}
-                  transition={{ 
-                    opacity: { duration: 0.5, repeat: Infinity, repeatType: "reverse", ease: "step-end" },
-                    layout: { duration: 0.3, ease: "easeInOut" }
-                  }}
-                >[</motion.span>
-              )}
               Visual
-              {activeWord === 'visual' && (
-                <motion.span
-                  layoutId="bracket-right"
-                  animate={{ opacity: [1, 0] }}
-                  transition={{ 
-                    opacity: { duration: 0.5, repeat: Infinity, repeatType: "reverse", ease: "step-end" },
-                    layout: { duration: 0.3, ease: "easeInOut" }
-                  }}
-                >]</motion.span>
-              )}
             </motion.div>
           </div>
           <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
@@ -387,27 +351,7 @@ function App() {
               animate={{ y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
             >
-              {activeWord === 'system' && (
-                <motion.span
-                  layoutId="bracket-left"
-                  animate={{ opacity: [1, 0] }}
-                  transition={{ 
-                    opacity: { duration: 0.5, repeat: Infinity, repeatType: "reverse", ease: "step-end" },
-                    layout: { duration: 0.3, ease: "easeInOut" }
-                  }}
-                >[</motion.span>
-              )}
               System
-              {activeWord === 'system' && (
-                <motion.span
-                  layoutId="bracket-right"
-                  animate={{ opacity: [1, 0] }}
-                  transition={{ 
-                    opacity: { duration: 0.5, repeat: Infinity, repeatType: "reverse", ease: "step-end" },
-                    layout: { duration: 0.3, ease: "easeInOut" }
-                  }}
-                >]</motion.span>
-              )}
             </motion.div>
           </div>
           <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
@@ -416,27 +360,7 @@ function App() {
               animate={{ y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
             >
-              {activeWord === 'design' && (
-                <motion.span
-                  layoutId="bracket-left"
-                  animate={{ opacity: [1, 0] }}
-                  transition={{ 
-                    opacity: { duration: 0.5, repeat: Infinity, repeatType: "reverse", ease: "step-end" },
-                    layout: { duration: 0.3, ease: "easeInOut" }
-                  }}
-                >[</motion.span>
-              )}
               Design
-              {activeWord === 'design' && (
-                <motion.span
-                  layoutId="bracket-right"
-                  animate={{ opacity: [1, 0] }}
-                  transition={{ 
-                    opacity: { duration: 0.5, repeat: Infinity, repeatType: "reverse", ease: "step-end" },
-                    layout: { duration: 0.3, ease: "easeInOut" }
-                  }}
-                >]</motion.span>
-              )}
             </motion.div>
           </div>
         </h1>
@@ -462,7 +386,7 @@ function App() {
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
         <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
           <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-            <BlinkingBracket>[</BlinkingBracket> GRAPHIC DESIGN <BlinkingBracket>]</BlinkingBracket>
+            GRAPHIC DESIGN
           </h2>
           <span className="small-text">Index (01)</span>
         </div>
@@ -527,7 +451,7 @@ function App() {
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
         <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
           <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
-            <BlinkingBracket>[</BlinkingBracket> WEB DESIGN <BlinkingBracket>]</BlinkingBracket>
+            WEB DESIGN
           </h2>
           <span className="small-text">Index (02)</span>
         </div>
@@ -605,7 +529,7 @@ function App() {
             <div>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-                  <BlinkingBracket>[</BlinkingBracket> STUDIO PRACTICE <BlinkingBracket>]</BlinkingBracket>
+                  STUDIO PRACTICE
                 </h2>
                 <span className="small-text">Index (03)</span>
               </div>
@@ -657,7 +581,7 @@ function App() {
       }}>
         <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-lg)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
           <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-            <BlinkingBracket>[</BlinkingBracket> CASE STUDY <BlinkingBracket>]</BlinkingBracket>
+            CASE STUDY
           </h2>
           <span className="small-text">Index (04)</span>
         </div>
@@ -738,7 +662,7 @@ function App() {
         <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
            <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
              <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
-               <BlinkingBracket>[</BlinkingBracket> CLIENTS & PARTNERS <BlinkingBracket>]</BlinkingBracket>
+               CLIENTS & PARTNERS
              </h2>
              <span className="small-text">Index (05)</span>
            </div>
@@ -857,7 +781,7 @@ function App() {
         <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
           <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
             <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
-              <BlinkingBracket>[</BlinkingBracket> CLIENT FEEDBACK <BlinkingBracket>]</BlinkingBracket>
+              CLIENT FEEDBACK
             </h2>
           </div>
 

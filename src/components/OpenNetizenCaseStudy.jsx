@@ -76,7 +76,7 @@ function SectionNav({ active }) {
 
 function PageHeader({ number, title }) {
   return (
-    <div style={{ marginBottom: 48 }}>
+    <div style={{ marginBottom: "clamp(16px, 3vh, 24px)" }}>
       <h2 style={{
         fontFamily: "var(--font-display)",
         fontWeight: 400, // Match site regular weight
@@ -90,7 +90,7 @@ function PageHeader({ number, title }) {
       }}>
         {number} {title}
       </h2>
-      <div style={{ height: 1, background: GRAY2, marginTop: 16 }} />
+      <div style={{ height: 1, background: GRAY2, marginTop: 12 }} />
     </div>
   );
 }
@@ -222,25 +222,25 @@ const ScrollSection = ({ children, index, setActive }) => {
     }
   }, [isInView, index, setActive]);
 
-  // Smoother "Card Flip" without darkening or shrinking
+  // Restore simple "Card Flip" without extra dwell time
   const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [5, 0, -5]);
 
   return (
     <div ref={containerRef} style={{ 
-      height: "100vh", // Match viewport exactly for snap
+      height: "100vh", 
       scrollSnapAlign: "start",
       position: "relative"
     }}>
       <motion.section
         style={{
           height: "100vh",
-          padding: "120px 56px",
+          padding: "clamp(32px, 6vh, 64px) 56px",
           perspective: "1200px",
           transformStyle: "preserve-3d",
           rotateX,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "flex-start", // Keep titles at the same top position
+          justifyContent: "flex-start",
           background: BLACK,
         }}
       >
@@ -258,6 +258,9 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
 
   useEffect(() => {
     // Force scroll to top on mount
+    if (mainRef.current) {
+      mainRef.current.scrollTop = 0;
+    }
     window.scrollTo(0, 0);
   }, []);
 
@@ -418,13 +421,19 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
             <PageHeader number="2.0" title="LOGO SYSTEM" />
             
             {/* 2.1 LOGOMARK GRID */}
-            <div style={{ marginBottom: 48 }}>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>2.1 LOGOMARK</p>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
+            <div style={{ marginBottom: "clamp(12px, 2vh, 24px)" }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: "clamp(6px, 1vh, 12px)" }}>2.1 LOGOMARK</p>
+              <div style={{ 
+                display: "grid", 
+                gridTemplateColumns: "repeat(3, 1fr)", 
+                gap: 1, 
+                background: GRAY2,
+                width: "100%" 
+              }}>
                 {[
                   { bg: BLUE, color: WHITE },
                   { bg: WHITE, color: BLUE },
-                  { bg: GRAY1, color: BLUE },
+                  { bg: GRAY1, color: WHITE },
                 ].map((v, i) => (
                   <div key={i} style={{
                     background: v.bg,
@@ -432,9 +441,9 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: 40,
+                    padding: "clamp(16px, 3vh, 32px)",
                   }}>
-                    <LogoMark size={80} color={v.color} bg="transparent" />
+                    <LogoMark size="var(--on-logo-size)" color={v.color} bg="transparent" />
                   </div>
                 ))}
               </div>
@@ -442,7 +451,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
 
             {/* 2.2 TYPEMARK BARS */}
             <div>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>2.2 TYPEMARK</p>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: "clamp(6px, 1vh, 12px)" }}>2.2 TYPEMARK</p>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {[
                   { bg: BLUE, color: WHITE },
@@ -452,11 +461,11 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   <div key={i} style={{
                     background: v.bg,
                     border: `1px solid ${GRAY2}`,
-                    padding: "24px 28px",
+                    padding: "0 28px",
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    height: "clamp(80px, 12vh, 140px)",
+                    height: "clamp(60px, 9vh, 120px)",
                     marginTop: "-1px",
                   }}>
                     <span style={{ 
@@ -472,7 +481,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                       <span style={{
                         fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
                         fontWeight: 900,
-                        fontSize: "clamp(24px, 4vw, 48px)",
+                        fontSize: "clamp(20px, 3.8vw, 44px)",
                         color: v.color,
                         letterSpacing: -1,
                         lineHeight: 1,
@@ -600,6 +609,17 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
       </div>
 
       <style>{`
+        :root {
+          --on-logo-size: clamp(50px, 7vh, 120px);
+        }
+
+        /* Large Screen / iMac Optimizations only apply to wide, tall viewports */
+        @media (min-width: 1800px) and (min-height: 900px) {
+          :root {
+            --on-logo-size: clamp(80px, 12vh, 180px);
+          }
+        }
+
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(8px); }
           to { opacity: 1; transform: translateY(0); }

@@ -257,9 +257,23 @@ const ProjectModal = ({ project, onClose }) => {
 function App() {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
   const [selectedProject, setSelectedProject] = useState(null);
-  const [activeCaseStudy, setActiveCaseStudy] = useState(null);
+  
+  // Initialize from localStorage or null
+  const [activeCaseStudy, setActiveCaseStudy] = useState(() => {
+    return localStorage.getItem('activeCaseStudy') || null;
+  });
+
   const { scrollY } = useScroll();
   const [activeWord, setActiveWord] = useState('visual');
+
+  // Update localStorage when activeCaseStudy changes
+  useEffect(() => {
+    if (activeCaseStudy) {
+      localStorage.setItem('activeCaseStudy', activeCaseStudy);
+    } else {
+      localStorage.removeItem('activeCaseStudy');
+    }
+  }, [activeCaseStudy]);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (latest < 180) {
@@ -298,9 +312,36 @@ function App() {
           pointerEvents: 'none'
         }}
       >
-        <div className="logo small-text" style={{ pointerEvents: 'auto' }}>
-          Forrest Tindall<br />
-          Design & Dev
+        <div className="logo small-text" style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-lg)' }}>
+          <div>
+            Forrest Tindall<br />
+            Design & Dev
+          </div>
+          
+          {activeCaseStudy === 'on' && (
+            <motion.button
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              onClick={() => setActiveCaseStudy(null)}
+              whileHover={{ opacity: 0.7 }}
+              style={{
+                background: 'none',
+                border: 'none',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '10px',
+                letterSpacing: '2px',
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                color: '#fff',
+                padding: 0,
+                marginTop: '2px', // Align with the first line of text
+                whiteSpace: 'nowrap',
+                transition: 'opacity 0.3s ease'
+              }}
+            >
+              [ BACK TO CASE STUDIES ]
+            </motion.button>
+          )}
         </div>
         <div className="small-text" style={{ textAlign: 'right', pointerEvents: 'auto' }}>
           Boise, ID<br />

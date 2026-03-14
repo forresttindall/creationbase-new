@@ -99,6 +99,7 @@ function LogoMark({ size = 80, color = WHITE, bg = BLUE }) {
   // Use exact PNG file names as requested by the user
   const logoSrc = 
     color === BLACK || color === 'black' || color === '#000000' ? '/images/open netizen logo black.png' :
+    color === BLUE || color === 'blue' || color === '#172EFF' ? '/images/open netizen logo blue.png' :
     color === GRAY1 || color === 'gray medium' || color === '#676767' ? '/images/open netizen logo gray medium.png' :
     color === GRAY2 || color === 'gray dark' || color === '#353535' ? '/images/open netizen logo gray dark.png' :
     '/images/open netizen logo white.png';
@@ -412,48 +413,71 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
             </div>
           </ScrollSection>
 
+          {/* 2.0 LOGO SYSTEM */}
           <ScrollSection index={1} setActive={setActive}>
             <PageHeader number="2.0" title="LOGO SYSTEM" />
-            <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: GRAY1, lineHeight: 1.8, maxWidth: 600, marginBottom: 48 }}>
-              The Open Netizen logo is a figure mark built from the letters O and N. The O sits at the top as a head, and the N forms the body below it, creating the silhouette of a standing person. The diagonal stroke running through the N gives the figure a sense of movement and forward lean.
-            </p>
-
+            
+            {/* 2.1 LOGOMARK GRID */}
             <div style={{ marginBottom: 48 }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>2.1 LOGOMARK</p>
-              <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
-                <LogoMark size={120} color={WHITE} bg={BLUE} />
-                <LogoMark size={120} color={BLACK} bg={WHITE} />
-                <LogoMark size={120} color={WHITE} bg={BLACK} />
-              </div>
-            </div>
-
-            <div>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>2.2 TYPEMARK</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 1, background: GRAY2 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
                 {[
-                  { bg: BLUE, text: WHITE, layout: "row" },
-                  { bg: BLACK, text: WHITE, layout: "stack" },
-                  { bg: WHITE, text: BLACK, layout: "stack-reverse" },
+                  { bg: BLUE, color: WHITE },
+                  { bg: WHITE, color: BLUE },
+                  { bg: GRAY1, color: BLUE },
                 ].map((v, i) => (
                   <div key={i} style={{
                     background: v.bg,
-                    padding: "28px 32px",
+                    aspectRatio: "1/1",
                     display: "flex",
                     alignItems: "center",
-                    gap: 20,
+                    justifyContent: "center",
+                    padding: 40,
                   }}>
-                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: v.text === WHITE ? GRAY1 : GRAY1, minWidth: 16 }}>{i + 1}</span>
-                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                      <LogoMark size={48} color={v.text} bg="transparent" />
+                    <LogoMark size={80} color={v.color} bg="transparent" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 2.2 TYPEMARK BARS */}
+            <div>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>2.2 TYPEMARK</p>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                {[
+                  { bg: BLUE, color: WHITE },
+                  { bg: WHITE, color: BLUE },
+                  { bg: GRAY1, color: WHITE },
+                ].map((v, i) => (
+                  <div key={i} style={{
+                    background: v.bg,
+                    border: `1px solid ${GRAY2}`,
+                    padding: "24px 28px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    height: "clamp(80px, 12vh, 140px)",
+                    marginTop: "-1px",
+                  }}>
+                    <span style={{ 
+                      fontFamily: "var(--font-display)", 
+                      fontSize: "var(--fs-xl)", 
+                      fontWeight: 400, 
+                      color: v.color, 
+                      lineHeight: 0.85,
+                      letterSpacing: "-0.04em",
+                      textTransform: "uppercase"
+                    }}>{i + 1}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
                       <span style={{
                         fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
                         fontWeight: 900,
-                        fontSize: 32,
-                        color: v.text,
+                        fontSize: "clamp(24px, 4vw, 48px)",
+                        color: v.color,
                         letterSpacing: -1,
-                      }}>
-                        {i === 0 ? "OPEN NETIZEN" : i === 1 ? "OPEN\nNETIZEN" : "OPEN NETIZEN"}
-                      </span>
+                        lineHeight: 1,
+                        textTransform: "uppercase"
+                      }}>OPEN NETIZEN</span>
                     </div>
                   </div>
                 ))}

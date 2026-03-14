@@ -78,14 +78,15 @@ function PageHeader({ number, title }) {
   return (
     <div style={{ marginBottom: 48 }}>
       <h2 style={{
-        fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
-        fontWeight: 900,
-        fontSize: "clamp(32px, 5vw, 64px)",
-        letterSpacing: -1,
-        lineHeight: 1,
+        fontFamily: "var(--font-display)",
+        fontWeight: 400, // Match site regular weight
+        fontSize: "var(--fs-xl)", // Match site section title size
+        letterSpacing: "-0.04em",
+        lineHeight: 0.85,
         color: WHITE,
         margin: 0,
         whiteSpace: 'nowrap',
+        textTransform: 'uppercase'
       }}>
         {number} {title}
       </h2>
@@ -127,27 +128,54 @@ function LogoMark({ size = 80, color = WHITE, bg = BLUE }) {
   );
 }
 
-function ColorSwatch({ label, letter, num, hex, cmyk, rgb, description, bg, textColor }) {
+function ColorSwatch({ label, letter, num, hex, cmyk, rgb, bg, textColor }) {
   return (
-    <div style={{ marginBottom: 40 }}>
-      <div style={{
-        background: bg,
-        border: `1px solid ${GRAY2}`,
-        padding: "32px 28px",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "flex-end",
-        marginBottom: 16,
+    <div style={{
+      background: bg,
+      border: `1px solid ${GRAY2}`,
+      padding: "24px 28px",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      height: "clamp(100px, 14vh, 180px)",
+      position: "relative",
+      marginTop: "-1px", // Make blocks touch top-to-bottom
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <span style={{ 
+          fontFamily: "var(--font-display)", 
+          fontSize: "var(--fs-xl)", 
+          fontWeight: 400, 
+          color: textColor, 
+          lineHeight: 0.85,
+          letterSpacing: "-0.04em",
+          textTransform: "uppercase"
+        }}>{letter}</span>
+        <span style={{ 
+          fontFamily: "var(--font-display)", 
+          fontSize: "var(--fs-xl)", 
+          fontWeight: 400, 
+          color: textColor, 
+          lineHeight: 0.85,
+          letterSpacing: "-0.04em",
+          textTransform: "uppercase"
+        }}>{num}</span>
+      </div>
+      
+      <div style={{ 
+        display: "flex", 
+        justifyContent: "center", 
+        gap: "48px", 
+        fontFamily: "'SF Mono', monospace", 
+        fontSize: "10px", 
+        color: textColor,
+        opacity: 0.8,
+        letterSpacing: "1px"
       }}>
-        <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontSize: 64, fontWeight: 900, color: textColor, lineHeight: 1 }}>{letter}</span>
-        <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontSize: 64, fontWeight: 900, color: textColor, lineHeight: 1 }}>{num}</span>
+        <span>{cmyk}</span>
+        <span>{rgb}</span>
+        <span>HEX {hex}</span>
       </div>
-      <div style={{ display: "flex", gap: 32, marginBottom: 16 }}>
-        <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1 }}>{cmyk}</span>
-        <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1 }}>{rgb}</span>
-        <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: WHITE }}>HEX {hex}</span>
-      </div>
-      {description && <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: GRAY1, lineHeight: 1.7, maxWidth: 560 }}>{description}</p>}
     </div>
   );
 }
@@ -436,43 +464,43 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           {/* 3.0 COLOR PALETTE */}
           <ScrollSection index={2} setActive={setActive}>
             <PageHeader number="3.0" title="COLOR PALETTE" />
-            <ColorSwatch
-              letter="A" num="01" label="Primary"
-              hex="172EFF"
-              cmyk="CMYK C85 M74 Y0 K0"
-              rgb="RGB R23 G46 B255"
-              bg={BLUE} textColor={WHITE}
-              description="The blue Open Netizen uses, #172EFF, sits at the bold end of the spectrum where blue tips toward electric. It carries trust and reliability but the high saturation pushes it out of corporate territory and into something more urgent and forward-facing."
-            />
-            <ColorSwatch
-              letter="B" num="02" label="Secondary"
-              hex="FFFFFF"
-              cmyk="CMYK C0 M0 Y0 K0"
-              rgb="RGB R255 G255 B255"
-              bg={WHITE} textColor={BLACK}
-              description="White as a secondary color is not a neutral choice. Against such a saturated, high-intensity blue, white carries real weight. It represents openness, clarity, and space."
-            />
-            <ColorSwatch
-              letter="C" num="03" label="Gray Mid"
-              hex="676767"
-              cmyk="CMYK C58 M58 Y51 K20"
-              rgb="RGB R103 G103 B103"
-              bg={GRAY1} textColor={WHITE}
-            />
-            <ColorSwatch
-              letter="D" num="03" label="Gray Dark"
-              hex="353535"
-              cmyk="CMYK C67 M63 Y62 K57"
-              rgb="RGB R53 G53 B53"
-              bg={GRAY2} textColor={WHITE}
-            />
-            <ColorSwatch
-              letter="E" num="04" label="Black"
-              hex="000000"
-              cmyk="CMYK C72 M68 Y67 K88"
-              rgb="RGB R0 G0 B0"
-              bg="#111" textColor={WHITE}
-            />
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <ColorSwatch
+                letter="A" num="01" label="Primary"
+                hex="172EFF"
+                cmyk="CMYK C85 M74 Y0 K0"
+                rgb="RGB R23 G46 B255"
+                bg={BLUE} textColor={WHITE}
+              />
+              <ColorSwatch
+                letter="B" num="02" label="Secondary"
+                hex="FFFFFF"
+                cmyk="CMYK C0 M0 Y0 K0"
+                rgb="RGB R255 G255 B255"
+                bg={WHITE} textColor={BLACK}
+              />
+              <ColorSwatch
+                letter="C" num="03" label="Gray Mid"
+                hex="676767"
+                cmyk="CMYK C58 M58 Y51 K20"
+                rgb="RGB R103 G103 B103"
+                bg={GRAY1} textColor={WHITE}
+              />
+              <ColorSwatch
+                letter="D" num="04" label="Gray Dark"
+                hex="353535"
+                cmyk="CMYK C67 M63 Y62 K57"
+                rgb="RGB R53 G53 B53"
+                bg={GRAY2} textColor={WHITE}
+              />
+              <ColorSwatch
+                letter="E" num="05" label="Black"
+                hex="000000"
+                cmyk="CMYK C72 M68 Y67 K88"
+                rgb="RGB R0 G0 B0"
+                bg="#111" textColor={WHITE}
+              />
+            </div>
           </ScrollSection>
 
           {/* 4.0 TYPOGRAPHY */}

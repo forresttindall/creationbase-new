@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
+import BoiseAnalogClubCaseStudy from './components/BoiseAnalogClubCaseStudy';
+import OpenNetizenCaseStudy from './components/OpenNetizenCaseStudy';
 
 const projects = [
   {
@@ -75,14 +77,6 @@ const graphicDesign = [
     title: "Boise Analog Club",
     category: "Brand Identity",
     image: "/images/BAC january.png",
-    description: "Event Flyer Design",
-    year: "2026"
-  },
-
-  {
-    title: "Boise Analog Club",
-    category: "Brand Identity",
-    image: "/images/BAC FEBUARY.png",
     description: "Event Flyer Design",
     year: "2026"
   },
@@ -263,6 +257,7 @@ const ProjectModal = ({ project, onClose }) => {
 function App() {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
   const [selectedProject, setSelectedProject] = useState(null);
+  const [activeCaseStudy, setActiveCaseStudy] = useState(null);
   const { scrollY } = useScroll();
   const [activeWord, setActiveWord] = useState('visual');
 
@@ -319,598 +314,632 @@ function App() {
         )}
       </AnimatePresence>
 
-      {/* Hero */}
-      <section style={{ 
-        minHeight: '100vh', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        justifyContent: 'flex-end', 
-        padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-xl)',
-        borderBottom: '1px solid #000'
-      }}>
-        <h1 style={{ 
-          fontFamily: 'var(--font-display)', 
-          fontSize: 'var(--fs-display)', 
-          lineHeight: 1,
-          textTransform: 'uppercase',
-          letterSpacing: '-0.04em',
-          marginBottom: 'var(--spacing-lg)'
-        }}>
-          <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-            <motion.div
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            >
-              Visual
-            </motion.div>
-          </div>
-          <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
-            <motion.div
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-            >
-              System
-            </motion.div>
-          </div>
-          <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
-            <motion.div
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-            >
-              Design
-            </motion.div>
-          </div>
-        </h1>
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex" 
-          style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}
-        >
-          <p className="small-text" style={{ maxWidth: '300px' }}>
-            Specializing in brand identity, interface design, and full-stack development. Creating cutting-edge digital experiences with a focus on typography and performance.
-          </p>
-          <div className="small-text">
-            (SCROLL)
-          </div>
-        </motion.div>
-      </section>
-
-
-
-      {/* Graphic Design */}
-      <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
-        <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
-          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-            GRAPHIC DESIGN
-          </h2>
-          <span className="small-text">Index (01)</span>
-        </div>
-
-        <div className="project-grid" style={{ alignItems: 'start' }}>
-          {graphicDesign.map((project, i) => (
-             <motion.article 
-               key={i} 
-               className="project-card"
-               initial={{ opacity: 0, y: 50 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true, margin: "-10%" }}
-               transition={{ duration: 0.6, ease: "easeOut" }}
-               onClick={() => setSelectedProject(project)}
-               style={{ cursor: 'pointer' }}
-             >
-                <div style={{ 
-                 marginBottom: 'var(--spacing-sm)', 
-                 overflow: 'hidden',
-                 border: '1px solid #000',
-                 aspectRatio: '1/1',
-                 display: 'flex',
-                 alignItems: 'center',
-                 justifyContent: 'center',
-                 backgroundColor: 'transparent'
-               }}>
-                 <img 
-                    src={project.image} 
-                    alt={project.title} 
-                    style={{ 
-                      width: 'auto',
-                      height: '100%',
-                      maxWidth: 'none',
-                      display: 'block',
-                      transition: 'all 0.5s ease'
-                    }} 
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.transform = 'scale(1.05)';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.transform = 'scale(1)';
-                    }}
-                    loading="lazy" 
-                  />
-               </div>
-              <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #000', paddingTop: 'var(--spacing-xs)' }}>
-                <div>
-                  <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
-                  <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
-                </div>
-                <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
-                  <div>{project.year}</div>
-                </div>
-              </div>
-            </motion.article>
-          ))}
-        </div>
-      </section>
-
-      {/* Selected Work */}
-      <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
-        <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
-          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
-            WEB DESIGN
-          </h2>
-          <span className="small-text">Index (02)</span>
-        </div>
-        
-        <div className="project-grid">
-          {projects.map((project, index) => (
-            <motion.article 
-              key={index} 
-              className="project-card"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              onClick={() => setSelectedProject(project)}
-              style={{ cursor: 'pointer' }}
-            >
-              <div style={{ 
-                marginBottom: 'var(--spacing-sm)', 
-                overflow: 'hidden',
-                border: '1px solid #333',
-                aspectRatio: '1/1',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#000'
-              }}>
-                <img 
-                  src={project.image} 
-                  alt={project.title}
-                  style={{ 
-                    width: 'auto',
-                    height: '100%',
-                    maxWidth: 'none',
-                    display: 'block',
-                    transition: 'all 0.5s ease'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.05)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }}
-                />
-              </div>
-              <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #333', paddingTop: 'var(--spacing-xs)' }}>
-                <div>
-                  <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
-                  <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
-                </div>
-                <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
-                  <div>{project.year}</div>
-                </div>
-              </div>
-            </motion.article>
-          ))}
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section style={{ 
-        padding: '0',
-        background: '#ffffff',
-        color: '#000',
-        minHeight: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        {/* Top Split Layout */}
-        <div className="studio-split-layout">
-          {/* Left: Typography */}
-          <div className="studio-typography-column">
-            <div>
-              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-                  STUDIO PRACTICE
-                </h2>
-                <span className="small-text">Index (03)</span>
-              </div>
-
-              <div className="small-text" style={{ maxWidth: '300px', marginTop: 'var(--spacing-lg)' }}>
-                J. F. Tindall is a Fullstack Creative from Boise, Idaho, raised in the wide landscapes of the American West. His work spans photography, design, art, and web development, blending technical precision with visual storytelling. He began making art early, first through drawing and writing, then discovering film photography at thirteen. In 2012, he began designing logos, websites, and he launched <em>Tindall Knives</em>, beginning an over decade-long career as a bladesmith. Around the same time, he started a parallel path in photography, focusing on outdoor and product photography for the knife and tool industry. His photography has been featured in multiple publications, including <em>Popular Mechanics Magazine</em>. Years spent shaping steel by hand in the mountains became a study in patience, discipline, and craftsmanship, qualities that continue to define his creative work today. Through photography, design, writing, illustration, and mixed media, Tindall explores identity, society, and the subtle contradictions of modern life, examining the space between what we call things and what they truly are. His work has appeared in exhibitions, global publications, and bespoke retailers, reflecting an ongoing effort to bridge the personal and the universal.
-              </div>
-            </div>
-          </div>
-
-          {/* Right: Image */}
-          <div className="studio-portrait-wrapper">
-            <img 
-              src="/images/me2.jpg" 
-              alt="Portrait" 
-              style={{ 
-                width: '100%', 
-                height: '100%', 
-                objectFit: 'cover',
-                filter: 'grayscale(100%) contrast(1.1)',
-                display: 'block'
-              }} 
-            />
-            <div style={{
-              position: 'absolute',
-              bottom: 'var(--spacing-md)',
-              left: 'var(--spacing-md)',
-              background: '#000',
-              color: '#fff',
-              padding: 'var(--spacing-xs) var(--spacing-sm)',
-              fontFamily: 'var(--font-mono)',
-              fontSize: 'var(--fs-xs)',
-              textTransform: 'uppercase'
+      <AnimatePresence mode="wait">
+        {activeCaseStudy === 'bac' ? (
+          <BoiseAnalogClubCaseStudy key="bac" onBack={() => setActiveCaseStudy(null)} />
+        ) : activeCaseStudy === 'on' ? (
+          <OpenNetizenCaseStudy key="on" onBack={() => setActiveCaseStudy(null)} />
+        ) : (
+          <motion.div
+            key="homepage"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {/* Hero */}
+            <section style={{ 
+              minHeight: '100vh', 
+              display: 'flex', 
+              flexDirection: 'column', 
+              justifyContent: 'flex-end', 
+              padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-xl)',
+              borderBottom: '1px solid #000'
             }}>
-              Figure 01. Portrait
-            </div>
-          </div>
-        </div>
-
-      </section>
-
-      {/* Case Study: Boise Analog Club */}
-      <section style={{ 
-        padding: 'var(--spacing-xxl) var(--spacing-md)',
-        borderBottom: '1px solid #000',
-        minHeight: 'auto',
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
-        <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-lg)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
-          <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-            CASE STUDY
-          </h2>
-          <span className="small-text">Index (04)</span>
-        </div>
-
-        {/* Top Row: Title/Intro + 2x2 Info Grid */}
-        <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--spacing-xl)', marginBottom: 'var(--spacing-xl)' }}>
-          
-          {/* Left: Title & Intro */}
-          <div>
-            <h3 style={{ 
-              fontFamily: 'var(--font-display)', 
-              fontSize: 'var(--fs-xxl)', 
-              lineHeight: 0.9,
-              marginBottom: 'var(--spacing-md)',
-              textTransform: 'uppercase'
-            }}>
-              Boise Analog Club
-            </h3>
-            <p className="small-text" style={{ maxWidth: '90%' }}>
-              A community for film photography enthusiasts in Boise. Forrest Tindall led a retro redesign of the brand identity inspired by an iconic camera brand, delivering a cohesive visual system and supporting assets.
-            </p>
-          </div>
-
-          {/* Right: 2x2 Info Grid */}
-          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-md)' }}>
-            <div style={{ borderTop: '1px solid #000', paddingTop: 'var(--spacing-sm)' }}>
-              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)', textTransform: 'uppercase', marginBottom: 'var(--spacing-sm)' }}>The Problem</h4>
-              <p className="small-text">Boise Analog Club needed a refreshed identity that reflected film photography roots and felt timeless, while supporting community events.</p>
-            </div>
-            <div style={{ borderTop: '1px solid #000', paddingTop: 'var(--spacing-sm)' }}>
-              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)', textTransform: 'uppercase', marginBottom: 'var(--spacing-sm)' }}>The Solution</h4>
-              <p className="small-text">Forrest Tindall delivered a retro brand redesign inspired by an iconic camera brand, with crisp typography and a badge‑style mark.</p>
-            </div>
-            <div style={{ borderTop: '1px solid #000', paddingTop: 'var(--spacing-sm)' }}>
-                <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)', textTransform: 'uppercase', marginBottom: 'var(--spacing-sm)' }}>Deliverables</h4>
-                <ul className="small-text" style={{ listStyle: 'none', padding: 0 }}>
-                  <li>+ Full brand identity rebrand</li>
-                  <li>+ Logo</li>
-                  <li>+ Event flyer designs</li>
-                  <li>+ Infographic social media assets</li>
-                </ul>
-             </div>
-            <div style={{ borderTop: '1px solid #000', paddingTop: 'var(--spacing-sm)' }}>
-               <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)', textTransform: 'uppercase', marginBottom: 'var(--spacing-sm)' }}>Role & Tools</h4>
-               <p className="small-text">
-                 Brand identity, logo creation, web mockups, and community assets. Used Figma, Affinity, React, Illustrator, Procreate.
-               </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Row: 1x3 Image Grid */}
-        <div className="grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--spacing-md)' }}>
-          <div style={{ border: '1px solid #000', aspectRatio: '3/4', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-            <img src="/images/analog2.png" alt="Boise Analog Club Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          </div>
-          <div style={{ border: '1px solid #000', aspectRatio: '3/4', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-            <img src="/images/BAC january.png" alt="Flyer Asset" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          </div>
-          <div style={{ border: '1px solid #000', aspectRatio: '3/4', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-            <img src="/images/bac.png" alt="Social Assets" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          </div>
-        </div>
-      </section>
-
-      {/* Selected Clients & Testimonials */}
-      <section style={{ 
-        padding: '0',
-        background: '#000',
-        color: '#fff',
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        {/* Selected Clients Marquee/Grid */}
-        <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
-           <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-             <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
-               CLIENTS & PARTNERS
-             </h2>
-             <span className="small-text">Index (05)</span>
-           </div>
-
-          <div className="studio-client-grid">
-            {/* Micron */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
-            >
-              <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
-                <img src="/images/micron.png" alt="Micron" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
-              </div>
-              <h4 style={{ 
-                fontSize: 'var(--fs-lg)', 
-                margin: '0 0 var(--spacing-sm) 0',
+              <h1 style={{ 
+                fontFamily: 'var(--font-display)', 
+                fontSize: 'var(--fs-display)', 
+                lineHeight: 1,
                 textTransform: 'uppercase',
-                fontFamily: 'var(--font-display)'
+                letterSpacing: '-0.04em',
+                marginBottom: 'var(--spacing-lg)'
               }}>
-                Micron Technology
-              </h4>
-              <p className="small-text" style={{ maxWidth: '90%' }}>
-                Designed over 1000 ADA-compliant signs for the massive 2026 Boise expansion. Creating a cohesive wayfinding system that merges strict regulatory standards with architectural harmony.
-              </p>
-              <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
-                [WAYFINDING] [ENVIRONMENTAL] [ADA]
-              </div>
-            </motion.div>
-
-            {/* Ramboll */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
-            >
-              <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
-                <img src="/images/ramboll.png" alt="Ramboll" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
-              </div>
-              <h4 style={{ 
-                fontSize: 'var(--fs-lg)', 
-                margin: '0 0 var(--spacing-sm) 0',
-                textTransform: 'uppercase',
-                fontFamily: 'var(--font-display)'
-              }}>
-                Ramboll
-              </h4>
-              <p className="small-text" style={{ maxWidth: '90%' }}>
-                Built a custom data migration system for Ramboll North America's Air Quality division and provide ongoing system administration for data migration servers. Delivering a robust full-stack solution to ensure data integrity and streamline complex environmental reporting workflows.
-              </p>
-              <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
-                [FULL STACK] [SYSTEM ADMIN] [DATA MIGRATION]
-              </div>
-            </motion.div>
-
-            {/* Superbase */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
-            >
-              <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
-                <img src="/images/superbase.jpg" alt="Superbase" style={{ height: '100%', filter: 'grayscale(100%)' }} />
-              </div>
-              <h4 style={{ 
-                fontSize: 'var(--fs-lg)', 
-                margin: '0 0 var(--spacing-sm) 0',
-                textTransform: 'uppercase',
-                fontFamily: 'var(--font-display)'
-              }}>
-                Superbase
-              </h4>
-              <p className="small-text" style={{ maxWidth: '90%' }}>
-                Collaborated on high-level UI/UX and design.  Building a scalable digital website and design systems with a leading design agency.
-              </p>
-              <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
-                [UI/UX DESIGN] [DEVELOPMENT] [AGENCY PARTNER]
-              </div>
-            </motion.div>
-
-            {/* CMYK Graffix */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6 }}
-              style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
-            >
-              <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
-                <img src="/images/cmyk.jpg" alt="CMYK Graffix" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
-              </div>
-              <h4 style={{ 
-                fontSize: 'var(--fs-lg)', 
-                margin: '0 0 var(--spacing-sm) 0',
-                textTransform: 'uppercase',
-                fontFamily: 'var(--font-display)'
-              }}>
-                CMYK Graffix
-              </h4>
-              <p className="small-text" style={{ maxWidth: '90%' }}>
-                Partner for large-format print and branding projects. Delivering print-ready assets and visual identities for a premier design and print agency.
-              </p>
-              <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
-                [GRAPHIC DESIGN] [PRINT] [AGENCY PARTNER]
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Testimonials */}
-        <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
-          <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-            <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
-              CLIENT FEEDBACK
-            </h2>
-          </div>
-
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-            gap: 'var(--spacing-lg)',
-            alignItems: 'start'
-          }}>
-            {testimonials.map((testimonial, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                style={{ 
-                  display: 'flex',
-                  flexDirection: 'column',
-                  borderTop: '1px solid #fff',
-                  paddingTop: 'var(--spacing-md)'
-                }}
+                <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
+                  <motion.div
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                  >
+                    Visual
+                  </motion.div>
+                </div>
+                <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
+                  <motion.div
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+                  >
+                    System
+                  </motion.div>
+                </div>
+                <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
+                  <motion.div
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+                  >
+                    Design
+                  </motion.div>
+                </div>
+              </h1>
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                className="flex" 
+                style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}
               >
-                {/* Header: User Info + Stars */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--spacing-md)' }}>
-                   {/* Left: Image + Name */}
-                   <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
-                      <div style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '50%',
-                        overflow: 'hidden',
-                        border: '1px solid #fff'
-                      }}>
-                        <img 
-                          src={testimonial.image} 
-                          alt={testimonial.name}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover'
-                          }}
-                        />
-                      </div>
-                      <div style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: 'var(--fs-xs)',
-                        textTransform: 'uppercase'
-                      }}>
-                        [{testimonial.name}]
-                      </div>
-                   </div>
-
-                   {/* Right: Stars */}
-                   <div style={{ 
-                      fontSize: 'var(--fs-lg)', 
-                      color: '#fff', 
-                      letterSpacing: '-2px',
-                      lineHeight: 1
-                    }}>
-                      {testimonial.stars}
-                   </div>
-                </div>
-
-                {/* Body Content */}
-                <div>
-                   <h4 style={{ 
-                      fontFamily: 'var(--font-display)', 
-                      fontSize: 'var(--fs-lg)', 
-                      textTransform: 'uppercase',
-                      marginBottom: 'var(--spacing-sm)',
-                      lineHeight: 1
-                   }}>
-                      {testimonial.headline}
-                   </h4>
-                   <p className="small-text" style={{ 
-                      fontSize: 'var(--fs-sm)', 
-                      lineHeight: 1.5,
-                      marginBottom: 'var(--spacing-md)',
-                      textTransform: 'none',
-                      maxWidth: '90%'
-                   }}>
-                      "{testimonial.text}"
-                   </p>
+                <p className="small-text" style={{ maxWidth: '300px' }}>
+                  Specializing in brand identity, interface design, and full-stack development. Creating cutting-edge digital experiences with a focus on typography and performance.
+                </p>
+                <div className="small-text">
+                  (SCROLL)
                 </div>
               </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </section>
 
-      {/* Footer / Contact */}
-      <motion.section 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-      >
-        <div>
-          <h2 className="section-title">Let's Work<br />Together</h2>
-        </div>
-        
-        <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-xl)' }}>
-          <div>
-            <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>CONTACT</p>
-            <ul className="small-text">
-              <li><a href="mailto:hello@forresttindall.com" style={{ wordBreak: 'break-all' }}>FORREST.TINDALL@GMAIL.COM</a></li>
-              <li><a href="https://instagram.com/forrest.designer/">INSTAGRAM</a></li>
-              <li><a href="https://www.linkedin.com/in/forrest-tindall/">LINKEDIN</a></li>
-            </ul>
-          </div>
-          <div>
-            <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>SERVICES</p>
-            <ul className="small-text">
-              <li>VISUAL SYSTEM DESIGN</li>
-              <li>WEB DEVELOPMENT</li>
-              <li>BRAND IDENTITY</li>
-              <li>ART DIRECTION</li>
-            
-            </ul>
-          </div>
-        </div>
 
-        <div style={{ marginTop: 'var(--spacing-xxl)', borderTop: '1px solid #000', paddingTop: 'var(--spacing-sm)' }} className="flex">
-          <p className="small-text" style={{ flex: 1 }}>© 2026 FORREST TINDALL</p>
-          <p className="small-text">DESIGNED & CODED IN BOISE, ID</p>
-        </div>
-      </motion.section>
+
+            {/* Graphic Design */}
+            <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
+              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+                  GRAPHIC DESIGN
+                </h2>
+                <span className="small-text">Index (01)</span>
+              </div>
+
+              <div className="project-grid" style={{ alignItems: 'start' }}>
+                {graphicDesign.map((project, i) => (
+                  <motion.article 
+                    key={i} 
+                    className="project-card"
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    onClick={() => setSelectedProject(project)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                      <div style={{ 
+                      marginBottom: 'var(--spacing-sm)', 
+                      overflow: 'hidden',
+                      border: '1px solid #000',
+                      aspectRatio: '1/1',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: 'transparent'
+                    }}>
+                      <img 
+                          src={project.image} 
+                          alt={project.title} 
+                          style={{ 
+                            width: 'auto',
+                            height: '100%',
+                            maxWidth: 'none',
+                            display: 'block',
+                            transition: 'all 0.5s ease'
+                          }} 
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.05)';
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                          }}
+                          loading="lazy" 
+                        />
+                    </div>
+                    <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #000', paddingTop: 'var(--spacing-xs)' }}>
+                      <div>
+                        <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
+                        <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
+                      </div>
+                      <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
+                        <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
+                        <div>{project.year}</div>
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            </section>
+
+            {/* Selected Work */}
+            <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
+              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+                  WEB DESIGN
+                </h2>
+                <span className="small-text">Index (02)</span>
+              </div>
+              
+              <div className="project-grid">
+                {projects.map((project, index) => (
+                  <motion.article 
+                    key={index} 
+                    className="project-card"
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    onClick={() => setSelectedProject(project)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div style={{ 
+                      marginBottom: 'var(--spacing-sm)', 
+                      overflow: 'hidden',
+                      border: '1px solid #333',
+                      aspectRatio: '1/1',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: '#000'
+                    }}>
+                      <img 
+                        src={project.image} 
+                        alt={project.title}
+                        style={{ 
+                          width: 'auto',
+                          height: '100%',
+                          maxWidth: 'none',
+                          display: 'block',
+                          transition: 'all 0.5s ease'
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.transform = 'scale(1.05)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                      />
+                    </div>
+                    <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #333', paddingTop: 'var(--spacing-xs)' }}>
+                      <div>
+                        <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
+                        <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
+                      </div>
+                      <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
+                        <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
+                        <div>{project.year}</div>
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            </section>
+
+            {/* About Section */}
+            <section style={{ 
+              padding: '0',
+              background: '#ffffff',
+              color: '#000',
+              minHeight: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
+              {/* Top Split Layout */}
+              <div className="studio-split-layout">
+                {/* Left: Typography */}
+                <div className="studio-typography-column">
+                  <div>
+                    <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
+                      <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+                        STUDIO PRACTICE
+                      </h2>
+                      <span className="small-text">Index (03)</span>
+                    </div>
+
+                    <div className="small-text" style={{ maxWidth: '300px', marginTop: 'var(--spacing-lg)' }}>
+                      J. F. Tindall is a Fullstack Creative from Boise, Idaho, raised in the wide landscapes of the American West. His work spans photography, design, art, and web development, blending technical precision with visual storytelling. He began making art early, first through drawing and writing, then discovering film photography at thirteen. In 2012, he began designing logos, websites, and he launched <em>Tindall Knives</em>, beginning an over decade-long career as a bladesmith. Around the same time, he started a parallel path in photography, focusing on outdoor and product photography for the knife and tool industry. His photography has been featured in multiple publications, including <em>Popular Mechanics Magazine</em>. Years spent shaping steel by hand in the mountains became a study in patience, discipline, and craftsmanship, qualities that continue to define his creative work today. Through photography, design, writing, illustration, and mixed media, Tindall explores identity, society, and the subtle contradictions of modern life, examining the space between what we call things and what they truly are. His work has appeared in exhibitions, global publications, and bespoke retailers, reflecting an ongoing effort to bridge the personal and the universal.
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Image */}
+                <div className="studio-portrait-wrapper">
+                  <img 
+                    src="/images/me2.jpg" 
+                    alt="Portrait" 
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'cover',
+                      filter: 'grayscale(100%) contrast(1.1)',
+                      display: 'block'
+                    }} 
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 'var(--spacing-md)',
+                    left: 'var(--spacing-md)',
+                    background: '#000',
+                    color: '#fff',
+                    padding: 'var(--spacing-xs) var(--spacing-sm)',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 'var(--fs-xs)',
+                    textTransform: 'uppercase'
+                  }}>
+                    Figure 01. Portrait
+                  </div>
+                </div>
+              </div>
+
+            </section>
+
+            {/* Featured Case Study: Open Netizen */}
+            <motion.section 
+              style={{ 
+                padding: '0',
+                borderBottom: 'none',
+                minHeight: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                cursor: 'pointer'
+              }}
+              whileHover="hover"
+              onClick={() => setActiveCaseStudy('on')}
+            >
+              <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline' }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+                  CASE STUDY
+                </h2>
+                <span className="small-text">Index (04)</span>
+              </div>
+
+              {/* Full Bleed Image for Open Netizen */}
+              <div style={{ 
+                position: 'relative', 
+                height: '80vh', 
+                width: '100%',
+                overflow: 'hidden'
+              }}>
+                <motion.div
+                  variants={{
+                    hover: { scale: 1.05 }
+                  }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ width: '100%', height: '100%' }}
+                >
+                  <img 
+                    src="/images/open netizen background.jpg" 
+                    alt="Open Netizen Case Study" 
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'cover',
+                      display: 'block'
+                    }} 
+                  />
+                </motion.div>
+                
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'flex-end',
+                  padding: '0 var(--spacing-md) var(--spacing-xl)',
+                  pointerEvents: 'none'
+                }}>
+                  <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                    <div>
+                      <h3 style={{ 
+                        fontFamily: 'var(--font-display)', 
+                        fontSize: 'var(--fs-xl)', 
+                        lineHeight: 1,
+                        color: '#fff',
+                        margin: '0 0 var(--spacing-sm) 0',
+                        textTransform: 'uppercase'
+                      }}>
+                        Open Netizen
+                      </h3>
+                      <p className="small-text" style={{ color: '#fff', maxWidth: '400px', margin: 0 }}>
+                        Brand identity and visual system design for a decentralized digital network.
+                      </p>
+                    </div>
+
+                    <motion.div 
+                      variants={{
+                        hover: { opacity: 0.7 }
+                      }}
+                      style={{
+                        color: '#fff',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '10px',
+                        letterSpacing: '2px',
+                        textTransform: 'uppercase',
+                        whiteSpace: 'nowrap',
+                        transition: 'opacity 0.3s ease'
+                      }}
+                    >
+                      [ VIEW CASE STUDY ]
+                    </motion.div>
+                  </div>
+                </div>
+              </div>
+            </motion.section>
+
+            {/* Selected Clients & Testimonials */}
+            <section style={{ 
+              padding: '0',
+              background: '#000',
+              color: '#fff',
+              minHeight: '100vh',
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
+              {/* Selected Clients Marquee/Grid */}
+              <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
+                <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
+                  <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+                    CLIENTS & PARTNERS
+                  </h2>
+                  <span className="small-text">Index (05)</span>
+                </div>
+
+                <div className="studio-client-grid">
+                  {/* Micron */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
+                  >
+                    <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
+                      <img src="/images/micron.png" alt="Micron" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
+                    </div>
+                    <h4 style={{ 
+                      fontSize: 'var(--fs-lg)', 
+                      margin: '0 0 var(--spacing-sm) 0',
+                      textTransform: 'uppercase',
+                      fontFamily: 'var(--font-display)'
+                    }}>
+                      Micron Technology
+                    </h4>
+                    <p className="small-text" style={{ maxWidth: '90%' }}>
+                      Designed over 1000 ADA-compliant signs for the massive 2026 Boise expansion. Creating a cohesive wayfinding system that merges strict regulatory standards with architectural harmony.
+                    </p>
+                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
+                      [WAYFINDING] [ENVIRONMENTAL] [ADA]
+                    </div>
+                  </motion.div>
+                  {/* Ramboll */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 }}
+                    style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
+                  >
+                    <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
+                      <img src="/images/ramboll.png" alt="Ramboll" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
+                    </div>
+                    <h4 style={{ 
+                      fontSize: 'var(--fs-lg)', 
+                      margin: '0 0 var(--spacing-sm) 0',
+                      textTransform: 'uppercase',
+                      fontFamily: 'var(--font-display)'
+                    }}>
+                      Ramboll
+                    </h4>
+                    <p className="small-text" style={{ maxWidth: '90%' }}>
+                      Built a custom data migration system for Ramboll North America's Air Quality division and provide ongoing system administration for data migration servers. Delivering a robust full-stack solution to ensure data integrity and streamline complex environmental reporting workflows.
+                    </p>
+                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
+                      [FULL STACK] [SYSTEM ADMIN] [DATA MIGRATION]
+                    </div>
+                  </motion.div>
+
+                  {/* Superbase */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4 }}
+                    style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
+                  >
+                    <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
+                      <img src="/images/superbase.jpg" alt="Superbase" style={{ height: '100%', filter: 'grayscale(100%)' }} />
+                    </div>
+                    <h4 style={{ 
+                      fontSize: 'var(--fs-lg)', 
+                      margin: '0 0 var(--spacing-sm) 0',
+                      textTransform: 'uppercase',
+                      fontFamily: 'var(--font-display)'
+                    }}>
+                      Superbase
+                    </h4>
+                    <p className="small-text" style={{ maxWidth: '90%' }}>
+                      Collaborated on high-level UI/UX and design.  Building a scalable digital website and design systems with a leading design agency.
+                    </p>
+                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
+                      [UI/UX DESIGN] [DEVELOPMENT] [AGENCY PARTNER]
+                    </div>
+                  </motion.div>
+
+                  {/* CMYK Graffix */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.6 }}
+                    style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
+                  >
+                    <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
+                      <img src="/images/cmyk.jpg" alt="CMYK Graffix" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
+                    </div>
+                    <h4 style={{ 
+                      fontSize: 'var(--fs-lg)', 
+                      margin: '0 0 var(--spacing-sm) 0',
+                      textTransform: 'uppercase',
+                      fontFamily: 'var(--font-display)'
+                    }}>
+                      CMYK Graffix
+                    </h4>
+                    <p className="small-text" style={{ maxWidth: '90%' }}>
+                      Partner for large-format print and branding projects. Delivering print-ready assets and visual identities for a premier design and print agency.
+                    </p>
+                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
+                      [GRAPHIC DESIGN] [PRINT] [AGENCY PARTNER]
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+
+              {/* Testimonials */}
+              <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
+                <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
+                  <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+                    CLIENT FEEDBACK
+                  </h2>
+                </div>
+
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+                  gap: 'var(--spacing-lg)',
+                  alignItems: 'start'
+                }}>
+                  {testimonials.map((testimonial, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 }}
+                      style={{ 
+                        display: 'flex',
+                        flexDirection: 'column',
+                        borderTop: '1px solid #fff',
+                        paddingTop: 'var(--spacing-md)'
+                      }}
+                    >
+                      {/* Header: User Info + Stars */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--spacing-md)' }}>
+                        {/* Left: Image + Name */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+                            <div style={{
+                              width: '40px',
+                              height: '40px',
+                              borderRadius: '50%',
+                              overflow: 'hidden',
+                              border: '1px solid #fff'
+                            }}>
+                              <img 
+                                src={testimonial.image} 
+                                alt={testimonial.name}
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  objectFit: 'cover'
+                                }}
+                              />
+                            </div>
+                            <div style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: 'var(--fs-xs)',
+                              textTransform: 'uppercase'
+                            }}>
+                              [{testimonial.name}]
+                            </div>
+                        </div>
+
+                        {/* Right: Stars */}
+                        <div style={{ 
+                            fontSize: 'var(--fs-lg)', 
+                            color: '#fff', 
+                            letterSpacing: '-2px',
+                            lineHeight: 1
+                          }}>
+                            {testimonial.stars}
+                        </div>
+                      </div>
+
+                      {/* Body Content */}
+                      <div>
+                        <h4 style={{ 
+                            fontFamily: 'var(--font-display)', 
+                            fontSize: 'var(--fs-lg)', 
+                            textTransform: 'uppercase',
+                            marginBottom: 'var(--spacing-sm)',
+                            lineHeight: 1
+                        }}>
+                            {testimonial.headline}
+                        </h4>
+                        <p className="small-text" style={{ 
+                            fontSize: 'var(--fs-sm)', 
+                            lineHeight: 1.5,
+                            marginBottom: 'var(--spacing-md)',
+                            textTransform: 'none',
+                            maxWidth: '90%'
+                        }}>
+                            "{testimonial.text}"
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Footer / Contact */}
+            <motion.section 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+            >
+              <div>
+                <h2 className="section-title">Let's Work<br />Together</h2>
+              </div>
+              
+              <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-xl)' }}>
+                <div>
+                  <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>CONTACT</p>
+                  <ul className="small-text">
+                    <li><a href="mailto:hello@forresttindall.com" style={{ wordBreak: 'break-all' }}>FORREST.TINDALL@GMAIL.COM</a></li>
+                    <li><a href="https://instagram.com/forrest.designer/">INSTAGRAM</a></li>
+                    <li><a href="https://www.linkedin.com/in/forrest-tindall/">LINKEDIN</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>SERVICES</p>
+                  <ul className="small-text">
+                    <li>VISUAL SYSTEM DESIGN</li>
+                    <li>WEB DEVELOPMENT</li>
+                    <li>BRAND IDENTITY</li>
+                    <li>ART DIRECTION</li>
+                  
+                  </ul>
+                </div>
+              </div>
+
+              <div style={{ marginTop: 'var(--spacing-xxl)', borderTop: '1px solid #000', paddingTop: 'var(--spacing-sm)' }} className="flex">
+                <p className="small-text" style={{ flex: 1 }}>© 2026 FORREST TINDALL</p>
+                <p className="small-text">DESIGNED & CODED IN BOISE, ID</p>
+              </div>
+            </motion.section>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

@@ -80,11 +80,12 @@ function PageHeader({ number, title }) {
       <h2 style={{
         fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
         fontWeight: 900,
-        fontSize: "clamp(48px, 7vw, 96px)",
+        fontSize: "clamp(32px, 5vw, 64px)",
         letterSpacing: -1,
         lineHeight: 1,
         color: WHITE,
         margin: 0,
+        whiteSpace: 'nowrap',
       }}>
         {number} {title}
       </h2>
@@ -288,37 +289,16 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               padding: '0 56px',
             }}
           >
-            <button 
-              onClick={onBack}
-              style={{
-                position: 'absolute',
-                top: '48px',
-                left: '56px',
-                background: 'none',
-                border: 'none',
-                fontFamily: "'SF Mono', monospace",
-                fontSize: 10,
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                color: WHITE,
-                letterSpacing: 2,
-                padding: 0,
-                zIndex: 10
-              }}
-            >
-              [ BACK TO CASE STUDIES ]
-            </button>
-
             <div style={{ marginTop: 'auto', marginBottom: '48px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 16 }}>
-                <LogoMark size={64} color={WHITE} bg="transparent" />
+              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 24, marginBottom: 16 }}>
+                <LogoMark size={56} color={WHITE} bg="transparent" />
                 <h1 style={{
                   fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
                   fontWeight: 900,
                   fontSize: "clamp(48px, 6vw, 96px)",
                   color: WHITE,
                   letterSpacing: -2,
-                  lineHeight: 0.9,
+                  lineHeight: 0.85,
                   margin: 0,
                   textTransform: 'uppercase',
                   whiteSpace: 'nowrap'
@@ -351,19 +331,12 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   background: BLUE,
                   padding: 48,
                   display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                  gap: 16,
-                  minHeight: 320,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  aspectRatio: '1/1',
+                  width: '100%',
                 }}>
-                  <LogoMark size={72} color={WHITE} bg="transparent" />
-                  <span style={{
-                    fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
-                    fontWeight: 900,
-                    fontSize: 28,
-                    color: WHITE,
-                    letterSpacing: -1,
-                  }}>OPEN NETIZEN</span>
+                  <LogoMark size={120} color={WHITE} bg="transparent" />
                 </div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>

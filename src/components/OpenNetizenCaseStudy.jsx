@@ -192,31 +192,26 @@ const ScrollSection = ({ children, index, setActive }) => {
     }
   }, [isInView, index, setActive]);
 
-  // Enhanced "Card Flip" transforms
-  // Rotate from 15deg (incoming) to 0 (active) to -15deg (outgoing)
-  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [15, 0, -15]);
-  const opacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0.9, 1, 1, 0.9]);
-  const y = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], ["5vh", "0vh", "0vh", "-5vh"]);
+  // Smoother "Card Flip" without darkening or shrinking
+  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [5, 0, -5]);
 
   return (
-    <div ref={containerRef} style={{ height: "150vh", position: "relative" }}>
+    <div ref={containerRef} style={{ 
+      height: "100vh", // Match viewport exactly for snap
+      scrollSnapAlign: "start",
+      position: "relative"
+    }}>
       <motion.section
         style={{
           height: "100vh",
-          position: "sticky",
-          top: 0,
           padding: "120px 56px",
           perspective: "1200px",
           transformStyle: "preserve-3d",
-          opacity,
-          scale,
           rotateX,
-          y,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          background: BLACK, // Ensure background is solid for stacking
+          justifyContent: "flex-start", // Keep titles at the same top position
+          background: BLACK,
         }}
       >
         <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
@@ -231,6 +226,11 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
   const [active, setActive] = useState(0);
   const mainRef = useRef(null);
 
+  useEffect(() => {
+    // Force scroll to top on mount
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <motion.div 
       ref={mainRef}
@@ -239,7 +239,9 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
       exit={{ opacity: 0 }}
       style={{ 
         background: BLACK,
-        minHeight: "100vh",
+        height: "100vh",
+        overflowY: "auto",
+        scrollSnapType: "y mandatory",
         fontFamily: "'SF Mono', monospace",
         color: WHITE,
         position: 'relative'
@@ -247,13 +249,14 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
       <SectionNav active={active} />
 
       <div style={{ marginRight: 260 }}>
-        {/* Hero Section with Parallax */}
+        {/* Hero Section */}
         <section style={{
           position: 'relative',
           height: '100vh',
           width: '100%',
           overflow: 'hidden',
           background: BLACK,
+          scrollSnapAlign: "start"
         }}>
           <div 
             style={{
@@ -279,7 +282,6 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: 'rgba(23, 46, 255, 0.4)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
@@ -308,17 +310,18 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
             </button>
 
             <div style={{ marginTop: 'auto', marginBottom: '48px' }}>
-              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 24, marginBottom: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 16 }}>
                 <LogoMark size={64} color={WHITE} bg="transparent" />
                 <h1 style={{
                   fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
                   fontWeight: 900,
-                  fontSize: "clamp(48px, 8vw, 120px)",
+                  fontSize: "clamp(48px, 6vw, 96px)",
                   color: WHITE,
                   letterSpacing: -2,
                   lineHeight: 0.9,
                   margin: 0,
-                  textTransform: 'uppercase'
+                  textTransform: 'uppercase',
+                  whiteSpace: 'nowrap'
                 }}>
                   Open Netizen
                 </h1>
@@ -336,33 +339,6 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
             </div>
           </div>
         </section>
-
-        {/* Brand Info Cover Section */}
-        <div style={{
-          background: BLUE,
-          padding: "48px 32px 48px 32px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          borderBottom: `1px solid #2a3fff`,
-        }}>
-          <div>
-            <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, color: "rgba(255,255,255,0.6)", letterSpacing: 2, margin: 0 }}>VISUAL SYSTEM DESIGN</p>
-            <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, color: "rgba(255,255,255,0.6)", letterSpacing: 2, margin: 0 }}>FORREST TINDALL</p>
-            <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, color: "rgba(255,255,255,0.6)", letterSpacing: 2, margin: 0 }}>©2024</p>
-          </div>
-          <div style={{ display: "flex", alignItems: "flex-end", gap: 24 }}>
-            <LogoMark size={56} color={WHITE} bg="transparent" />
-            <span style={{
-              fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
-              fontWeight: 900,
-              fontSize: "clamp(28px, 4vw, 56px)",
-              color: WHITE,
-              letterSpacing: -1,
-              lineHeight: 1,
-            }}>OPEN NETIZEN</span>
-          </div>
-        </div>
 
         {/* Continuous Scroll Sections */}
         <main>

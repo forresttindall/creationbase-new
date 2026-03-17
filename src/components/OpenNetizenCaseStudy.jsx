@@ -36,7 +36,7 @@ function SectionNav({ active }) {
       right: 0,
       width: 260,
       height: "100vh",
-      background: BLACK,
+      background: WHITE,
       borderLeft: `1px solid ${GRAY2}`,
       padding: "48px 24px",
       zIndex: 100,
@@ -59,14 +59,14 @@ function SectionNav({ active }) {
             fontSize: 11,
             letterSpacing: 1,
             cursor: "pointer",
-            color: active === i ? WHITE : GRAY1,
+            color: active === i ? BLACK : GRAY1,
             display: "flex",
             alignItems: "center",
             gap: 8,
             transition: "color 0.2s",
           }}
         >
-          {active === i && <span style={{ color: WHITE }}>▶</span>}
+          {active === i && <span style={{ color: BLUE }}>▶</span>}
           {s}
         </button>
       ))}
@@ -83,7 +83,7 @@ function PageHeader({ number, title }) {
         fontSize: "var(--fs-xl)", // Match site section title size
         letterSpacing: "-0.04em",
         lineHeight: 0.85,
-        color: WHITE,
+        color: BLACK,
         margin: 0,
         whiteSpace: 'nowrap',
         textTransform: 'uppercase'
@@ -194,7 +194,7 @@ function FontCard({ num, name, label, description }) {
           : "'Geist', 'Helvetica Neue', sans-serif",
         fontWeight: name === "PP Neue Machina" ? 900 : 400,
         fontSize: 48,
-        color: WHITE,
+        color: BLACK,
         margin: "0 0 16px",
         letterSpacing: name === "PP Neue Machina" ? -1 : 0,
       }}>
@@ -241,7 +241,7 @@ const ScrollSection = ({ children, index, setActive }) => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
-          background: BLACK,
+          background: WHITE,
         }}
       >
         <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
@@ -271,12 +271,12 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       style={{ 
-        background: BLACK,
+        background: WHITE,
         height: "100vh",
         overflowY: "auto",
         scrollSnapType: "y mandatory",
         fontFamily: "'SF Mono', monospace",
-        color: WHITE,
+        color: BLACK,
         position: 'relative'
       }}>
       <SectionNav active={active} />
@@ -374,19 +374,19 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
                 <div>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>ABOUT</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: WHITE, lineHeight: 1.8 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
                     OPEN NETIZEN is a 501(c)(3) non-profit organization established in 2023 to promote the free web, decentralized web and open source web.
                   </p>
                 </div>
                 <div>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>1.1 MISSION</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: WHITE, lineHeight: 1.8 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
                     Open Netizen exists to protect the web as a public commons. Open to everyone, owned by no one, built to last beyond any single company's interests.
                   </p>
                 </div>
                 <div>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>1.2 POSITIONING</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: WHITE, lineHeight: 1.8 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
                     Open Netizen is the civic voice of the open web. Not a tech startup. Not a government agency. A community organization that holds the web's future accountable to the public.
                   </p>
                 </div>
@@ -402,10 +402,10 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   { n: "3", label: "OPTIMISTIC", subs: ["Firm Convictions", "Grounded in Values", "Justice for All"] },
                   { n: "4", label: "INDEPENDENT", subs: ["Firm Convictions", "Grounded in Values", "Justice for All"] },
                 ].map((p) => (
-                  <div key={p.n} style={{ background: BLACK, padding: "24px 20px" }}>
+                  <div key={p.n} style={{ background: WHITE, padding: "24px 20px" }}>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
                       <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontSize: 28, fontWeight: 900, color: BLUE }}>{p.n}</span>
-                      <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: WHITE, letterSpacing: 1 }}>{p.label}</span>
+                      <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: BLACK, letterSpacing: 1 }}>{p.label}</span>
                     </div>
                     {p.subs.map((s, i) => (
                       <p key={i} style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, color: GRAY1, margin: "4px 0" }}>{s}</p>
@@ -557,7 +557,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           <ScrollSection index={4} setActive={setActive}>
             <PageHeader number="5.0" title="GRAPHIC ELEMENTS" />
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: GRAY2 }}>
-              <div style={{ background: BLACK, padding: 40 }}>
+              <div style={{ background: WHITE, padding: 40 }}>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>1 — PHOSPHOR REACT ICONS</p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
                   {["⬡", "◈", "⬢", "◉", "⬟", "◎", "⬠", "◈"].map((ic, i) => (
@@ -568,7 +568,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   Phosphor is a flexible icon family for interfaces, diagrams, and presentations. Consistent stroke weight and clear metaphors align with the brand's technical clarity.
                 </p>
               </div>
-              <div style={{ background: BLACK, padding: 40 }}>
+              <div style={{ background: WHITE, padding: 40 }}>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>2 — ISOMETRIC ILLUSTRATION</p>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 120 }}>
                   <svg viewBox="0 0 120 80" width="180" height="120">
@@ -589,19 +589,134 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           {/* Placeholder Sections */}
           <ScrollSection index={5} setActive={setActive}>
             <PageHeader number="6.0" title="PHOTOGRAPHY DIRECTION" />
-            <div style={{ border: `1px solid ${GRAY2}`, padding: 64, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 300 }}>
+            <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, padding: 64, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 300 }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: GRAY2, letterSpacing: 2 }}>6.0 PHOTOGRAPHY DIRECTION — CONTENT TBD</p>
             </div>
           </ScrollSection>
           <ScrollSection index={6} setActive={setActive}>
             <PageHeader number="7.0" title="LAYOUTS" />
-            <div style={{ border: `1px solid ${GRAY2}`, padding: 64, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 300 }}>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: GRAY2, letterSpacing: 2 }}>7.0 LAYOUTS — CONTENT TBD</p>
+            
+            <div style={{ marginBottom: 24, maxWidth: "800px" }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>DESIGN DIRECTION</p>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
+                The visual language of Open Netizen is rooted in the principles of the International Typographic Style. By employing rigid Swiss grids, we create a structured environment where technical data and bold brand statements coexist with mathematical precision. This approach reflects the brand's commitment to transparency, decentralization, and the architectural integrity of the open web. Every layout is a balance of asymmetric white space and disciplined typographic alignment, ensuring clarity and objectivity across all digital and physical touchpoints.
+              </p>
+            </div>
+
+            <div style={{ 
+              display: "grid", 
+              gridTemplateColumns: "1fr 1fr", 
+              gap: "clamp(16px, 2.5vw, 32px)", 
+              gridAutoRows: "1fr",
+              width: "100%",
+            }}>
+              {/* Example 1: Technical Dashboard UI */}
+              <div style={{ 
+                background: BLACK, 
+                padding: "clamp(16px, 2vh, 24px)", 
+                border: `1px solid ${GRAY2}`, 
+                color: WHITE,
+                display: "flex",
+                flexDirection: "column",
+                minHeight: 0
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", borderBottom: `1px solid ${GRAY2}`, paddingBottom: 12, marginBottom: "clamp(12px, 2vh, 24px)" }}>
+                  <span style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", letterSpacing: 1 }}>NETWORK_NODE_V.01</span>
+                  <span style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", color: BLUE }}>STATUS: ACTIVE</span>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(8px, 1.5vh, 16px)" }}>
+                  <div style={{ border: `1px solid ${GRAY2}`, padding: "clamp(8px, 1.5vh, 16px)" }}>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(7px, 1vh, 9px)", color: GRAY1, marginBottom: 4 }}>LATENCY</p>
+                    <p style={{ fontFamily: "'PP Neue Machina', sans-serif", fontSize: "clamp(16px, 2.5vh, 24px)", fontWeight: 900 }}>24ms</p>
+                  </div>
+                  <div style={{ border: `1px solid ${GRAY2}`, padding: "clamp(8px, 1.5vh, 16px)" }}>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(7px, 1vh, 9px)", color: GRAY1, marginBottom: 4 }}>UPTIME</p>
+                    <p style={{ fontFamily: "'PP Neue Machina', sans-serif", fontSize: "clamp(16px, 2.5vh, 24px)", fontWeight: 900 }}>99.9%</p>
+                  </div>
+                </div>
+                <div style={{ marginTop: "auto", height: "clamp(40px, 6vh, 60px)", background: `linear-gradient(90deg, ${BLUE} 0%, transparent 100%)`, opacity: 0.2 }} />
+                <p style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", marginTop: 8, color: GRAY1 }}>0x172EFF...A4B2</p>
+              </div>
+
+              {/* Example 2: Swiss Editorial Layout */}
+              <div style={{ 
+                background: WHITE, 
+                padding: "clamp(16px, 2vh, 24px)", 
+                border: `1px solid ${GRAY2}`, 
+                color: BLACK, 
+                position: "relative", 
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+                minHeight: 0
+              }}>
+                <div style={{ display: "flex", gap: "clamp(12px, 2vw, 24px)", flex: 1 }}>
+                  <div style={{ width: "45%" }}>
+                    <h4 style={{ fontFamily: "'PP Neue Machina', sans-serif", fontSize: "clamp(20px, 3vh, 32px)", fontWeight: 900, lineHeight: 0.9, marginBottom: 12 }}>THE OPEN WEB</h4>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", lineHeight: 1.5 }}>Built on the principles of transparency and decentralization.</p>
+                  </div>
+                  <div style={{ flex: 1, background: BLUE, position: "relative", marginBottom: "clamp(24px, 4vh, 40px)" }}>
+                    <div style={{ position: "absolute", bottom: 8, right: 8 }}>
+                      <LogoMark size="clamp(24px, 3vh, 32px)" color={WHITE} bg="transparent" />
+                    </div>
+                  </div>
+                </div>
+                <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+                  <span style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(32px, 5vh, 48px)", fontWeight: 900, color: "#EEE", position: "absolute", bottom: -8, left: 8 }}>01</span>
+                  <div style={{ width: "50%", marginLeft: "auto" }}>
+                    <div style={{ height: 1, background: BLACK, marginBottom: 6 }} />
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 8, letterSpacing: 1 }}>PAGE REF. 42-A</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Example 3: Mobile UI / App Mockup */}
+              <div style={{ 
+                background: BLUE, 
+                padding: "clamp(24px, 4vh, 48px) clamp(16px, 3vw, 32px)", 
+                border: `1px solid ${GRAY2}`, 
+                color: WHITE, 
+                display: "flex", 
+                flexDirection: "column", 
+                justifyContent: "space-between",
+                minHeight: 0
+              }}>
+                <div>
+                  <LogoMark size="clamp(32px, 5vh, 48px)" color={WHITE} bg="transparent" />
+                  <h4 style={{ fontFamily: "'PP Neue Machina', sans-serif", fontSize: "clamp(24px, 4vh, 40px)", fontWeight: 900, lineHeight: 0.85, marginTop: "clamp(12px, 2vh, 24px)" }}>CONNECT<br/>TO THE<br/>NETIZEN.</h4>
+                </div>
+                <div style={{ border: `1px solid ${WHITE}`, padding: "clamp(8px, 1.5vh, 12px) clamp(16px, 2vw, 24px)", alignSelf: "flex-start", marginTop: 12 }}>
+                  <span style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", letterSpacing: 2 }}>[ INITIALIZE ]</span>
+                </div>
+              </div>
+
+              {/* Example 4: Typography Grid */}
+              <div style={{ 
+                background: BLACK, 
+                border: `1px solid ${GRAY2}`, 
+                padding: "clamp(16px, 2vh, 24px)", 
+                display: "flex", 
+                flexDirection: "column", 
+                justifyContent: "space-between",
+                minHeight: 0
+              }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1 }}>
+                  {[1,2,3,4,5,6,7,8].map(i => (
+                    <div key={i} style={{ border: `1px solid ${GRAY2}`, aspectRatio: "1/1", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'PP Neue Machina', sans-serif", fontSize: "clamp(8px, 1vh, 12px)", color: GRAY1 }}>
+                      {i < 10 ? `0${i}` : i}
+                    </div>
+                  ))}
+                </div>
+                <div style={{ marginTop: "auto", paddingTop: 12 }}>
+                  <p style={{ fontFamily: "'PP Neue Machina', sans-serif", fontSize: "clamp(14px, 2vh, 18px)", fontWeight: 900, color: BLUE }}>TYPE SYSTEM GRID V.02</p>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", color: GRAY1 }}>STRUCTURAL ALIGNMENT</p>
+                </div>
+              </div>
             </div>
           </ScrollSection>
           <ScrollSection index={7} setActive={setActive}>
             <PageHeader number="8.0" title="APPLICATIONS" />
-            <div style={{ border: `1px solid ${GRAY2}`, padding: 64, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 300 }}>
+            <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, padding: 64, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 300 }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: GRAY2, letterSpacing: 2 }}>8.0 APPLICATIONS — CONTENT TBD</p>
             </div>
           </ScrollSection>

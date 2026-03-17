@@ -599,7 +599,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
             <div style={{ marginBottom: 24, maxWidth: "800px" }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>DESIGN DIRECTION</p>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
-                The visual language of Open Netizen is rooted in the principles of the International Typographic Style. By employing rigid Swiss grids, we create a structured environment where technical data and bold brand statements coexist with mathematical precision. This approach reflects the brand's commitment to transparency, decentralization, and the architectural integrity of the open web. Every layout is a balance of asymmetric white space and disciplined typographic alignment, ensuring clarity and objectivity across all digital and physical touchpoints.
+                Open Netizen follows the International Typographic Style: strict Swiss grids, asymmetric white space, and objective typography. Layouts prioritize repeatable modules and clear hierarchy so technical information stays legible across screens.
               </p>
             </div>
 
@@ -607,7 +607,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               display: "grid", 
               gridTemplateColumns: "1fr 1fr", 
               gap: "clamp(16px, 2.5vw, 32px)", 
-              gridAutoRows: "1fr",
+              gridAutoRows: "var(--on-layout-row-h)",
               width: "100%",
             }}>
               {/* Example 1: Technical Dashboard UI */}
@@ -618,7 +618,8 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                 color: WHITE,
                 display: "flex",
                 flexDirection: "column",
-                minHeight: 0
+                minHeight: 0,
+                height: "100%"
               }}>
                 <div style={{ display: "flex", justifyContent: "space-between", borderBottom: `1px solid ${GRAY2}`, paddingBottom: 12, marginBottom: "clamp(12px, 2vh, 24px)" }}>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", letterSpacing: 1 }}>NETWORK_NODE_V.01</span>
@@ -648,7 +649,8 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                 overflow: "hidden",
                 display: "flex",
                 flexDirection: "column",
-                minHeight: 0
+                minHeight: 0,
+                height: "100%"
               }}>
                 <div style={{ display: "flex", gap: "clamp(12px, 2vw, 24px)", flex: 1 }}>
                   <div style={{ width: "45%" }}>
@@ -679,7 +681,8 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                 display: "flex", 
                 flexDirection: "column", 
                 justifyContent: "space-between",
-                minHeight: 0
+                minHeight: 0,
+                height: "100%"
               }}>
                 <div>
                   <LogoMark size="clamp(32px, 5vh, 48px)" color={WHITE} bg="transparent" />
@@ -698,7 +701,8 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                 display: "flex", 
                 flexDirection: "column", 
                 justifyContent: "space-between",
-                minHeight: 0
+                minHeight: 0,
+                height: "100%"
               }}>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1 }}>
                   {[1,2,3,4,5,6,7,8].map(i => (
@@ -726,12 +730,14 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
       <style>{`
         :root {
           --on-logo-size: clamp(50px, 7vh, 120px);
+          --on-layout-row-h: clamp(260px, 24vh, 340px);
         }
 
         /* Large Screen / iMac Optimizations only apply to wide, tall viewports */
         @media (min-width: 1800px) and (min-height: 900px) {
           :root {
             --on-logo-size: clamp(80px, 12vh, 180px);
+            --on-layout-row-h: clamp(300px, 26vh, 380px);
           }
         }
 

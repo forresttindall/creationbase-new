@@ -689,7 +689,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                 { src: "/images/photo4.jpg", label: "04" },
                 { src: "/images/photo5.jpg", label: "05" },
               ].map((img) => (
-                <div key={img.src} style={{ background: WHITE, position: "relative", overflow: "hidden", aspectRatio: "1/1" }}>
+                <div key={img.src} style={{ background: WHITE, position: "relative", overflow: "hidden", aspectRatio: isMobile ? "1 / 1" : "var(--on-photo-tile-ar)" }}>
                   <img src={img.src} alt={`Open Netizen photography ${img.label}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                 </div>
               ))}
@@ -886,13 +886,20 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
         :root {
           --on-logo-size: clamp(50px, 7vh, 120px);
           --on-layout-row-h: clamp(260px, 24vh, 340px);
+          --on-photo-tile-ar: 1 / 1;
+        }
+
+        @media (min-width: 1800px) and (min-aspect-ratio: 16/9) {
+          :root {
+            --on-photo-tile-ar: 3 / 2;
+          }
         }
 
         /* Large Screen / iMac Optimizations only apply to wide, tall viewports */
         @media (min-width: 1800px) and (min-height: 900px) {
           :root {
             --on-logo-size: clamp(80px, 12vh, 180px);
-            --on-layout-row-h: clamp(300px, 26vh, 380px);
+            --on-layout-row-h: clamp(360px, 30vh, 460px);
           }
         }
 

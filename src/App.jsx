@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { ArrowUpLeft, ArrowUpRight } from '@phosphor-icons/react';
 import BoiseAnalogClubCaseStudy from './components/BoiseAnalogClubCaseStudy';
@@ -235,9 +235,25 @@ function App() {
   const [activeCaseStudy, setActiveCaseStudy] = useState(() => {
     return localStorage.getItem('activeCaseStudy') || null;
   });
+  const homeScrollYRef = useRef(0);
+  const pendingHomeScrollRestoreRef = useRef(false);
 
   const { scrollY } = useScroll();
   const [activeWord, setActiveWord] = useState('visual');
+  const openCaseStudy = (id) => {
+    const y = window.scrollY || 0;
+    homeScrollYRef.current = y;
+    sessionStorage.setItem('homeScrollY', String(y));
+    pendingHomeScrollRestoreRef.current = true;
+    setActiveCaseStudy(id);
+  };
+
+  const closeCaseStudy = () => setActiveCaseStudy(null);
+  const restoreHomeScroll = () => {
+    const stored = sessionStorage.getItem('homeScrollY');
+    const y = stored ? Number(stored) : homeScrollYRef.current;
+    window.scrollTo(0, Number.isFinite(y) ? y : 0);
+  };
 
   // Update localStorage when activeCaseStudy changes
   useEffect(() => {
@@ -295,7 +311,7 @@ function App() {
             <motion.button
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              onClick={() => setActiveCaseStudy(null)}
+              onClick={closeCaseStudy}
               whileHover={{ opacity: 0.7 }}
               aria-label="Back to case studies"
               style={{
@@ -325,11 +341,19 @@ function App() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence
+        mode="wait"
+        onExitComplete={() => {
+          if (!activeCaseStudy && pendingHomeScrollRestoreRef.current) {
+            requestAnimationFrame(() => requestAnimationFrame(() => restoreHomeScroll()));
+            pendingHomeScrollRestoreRef.current = false;
+          }
+        }}
+      >
         {activeCaseStudy === 'bac' ? (
-          <BoiseAnalogClubCaseStudy key="bac" onBack={() => setActiveCaseStudy(null)} />
+          <BoiseAnalogClubCaseStudy key="bac" onBack={closeCaseStudy} />
         ) : activeCaseStudy === 'on' ? (
-          <OpenNetizenCaseStudy key="on" onBack={() => setActiveCaseStudy(null)} />
+          <OpenNetizenCaseStudy key="on" onBack={closeCaseStudy} />
         ) : (
           <motion.div
             key="homepage"
@@ -540,7 +564,7 @@ function App() {
                 cursor: 'pointer'
               }}
               whileHover="hover"
-              onClick={() => setActiveCaseStudy('on')}
+              onClick={() => openCaseStudy('on')}
             >
               <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline', background: '#000' }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>

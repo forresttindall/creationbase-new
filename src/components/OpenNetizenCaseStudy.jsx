@@ -272,7 +272,6 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
     if (mainRef.current) {
       mainRef.current.scrollTop = 0;
     }
-    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {

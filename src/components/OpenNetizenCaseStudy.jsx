@@ -74,7 +74,7 @@ function SectionNav({ active, isMobile }) {
   );
 }
 
-function PageHeader({ number, title }) {
+function PageHeader({ number, title, isMobile }) {
   return (
     <div style={{ marginBottom: "clamp(16px, 3vh, 24px)" }}>
       <h2 style={{
@@ -85,7 +85,7 @@ function PageHeader({ number, title }) {
         lineHeight: 0.85,
         color: BLACK,
         margin: 0,
-        whiteSpace: 'nowrap',
+        whiteSpace: isMobile ? "normal" : "nowrap",
         textTransform: 'uppercase'
       }}>
         {number} {title}
@@ -289,6 +289,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
         background: WHITE,
         height: "100vh",
         overflowY: "auto",
+        overflowX: "hidden",
         scrollSnapType: isMobile ? "none" : "y mandatory",
         fontFamily: "'SF Mono', monospace",
         color: BLACK,
@@ -333,7 +334,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              padding: '0 56px',
+              padding: isMobile ? '0 20px' : '0 56px',
             }}
           >
             <div style={{ marginTop: 'auto', marginBottom: '48px' }}>
@@ -349,7 +350,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                 lineHeight: 0.85,
                 margin: 0,
                 textTransform: 'uppercase',
-                whiteSpace: 'nowrap'
+                whiteSpace: isMobile ? 'normal' : 'nowrap'
               }}>
                 Open Netizen
               </h1>
@@ -371,7 +372,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                     lineHeight: 0.85,
                     color: BLACK,
                     margin: 0,
-                    whiteSpace: "nowrap",
+                    whiteSpace: isMobile ? "normal" : "nowrap",
                     textTransform: "uppercase"
                   }}>
                     0.0 VISUAL SYSTEM NOTES
@@ -421,7 +422,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
         <main>
           {/* 1.0 BRAND OVERVIEW */}
           <ScrollSection index={0} setActive={setActive} isMobile={isMobile}>
-            <PageHeader number="1.0" title="BRAND OVERVIEW" />
+            <PageHeader number="1.0" title="BRAND OVERVIEW" isMobile={isMobile} />
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 24 : 48 }}>
               <div>
                 <div style={{
@@ -467,7 +468,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   { n: "3", label: "OPTIMISTIC", subs: ["Firm Convictions", "Grounded in Values", "Justice for All"] },
                   { n: "4", label: "INDEPENDENT", subs: ["Firm Convictions", "Grounded in Values", "Justice for All"] },
                 ].map((p) => (
-                  <div key={p.n} style={{ background: WHITE, padding: "24px 20px" }}>
+                  <div key={p.n} style={{ background: WHITE, padding: isMobile ? "18px 14px" : "24px 20px" }}>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
                       <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontSize: 28, fontWeight: 900, color: BLUE }}>{p.n}</span>
                       <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: BLACK, letterSpacing: 1 }}>{p.label}</span>
@@ -483,7 +484,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
 
           {/* 2.0 LOGO SYSTEM */}
           <ScrollSection index={1} setActive={setActive} isMobile={isMobile}>
-            <PageHeader number="2.0" title="LOGO SYSTEM" />
+            <PageHeader number="2.0" title="LOGO SYSTEM" isMobile={isMobile} />
 
             <div style={{ marginBottom: "clamp(12px, 2vh, 20px)", maxWidth: 820 }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8, margin: 0 }}>
@@ -512,9 +513,9 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: "clamp(16px, 3vh, 32px)",
+                    padding: isMobile ? 10 : "clamp(16px, 3vh, 32px)",
                   }}>
-                    <LogoMark size="var(--on-logo-size)" color={v.color} bg="transparent" />
+                    <LogoMark size={isMobile ? "min(52px, 15vw)" : "var(--on-logo-size)"} color={v.color} bg="transparent" />
                   </div>
                 ))}
               </div>
@@ -567,7 +568,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
 
           {/* 3.0 COLOR PALETTE */}
           <ScrollSection index={2} setActive={setActive} isMobile={isMobile}>
-            <PageHeader number="3.0" title="COLOR PALETTE" />
+            <PageHeader number="3.0" title="COLOR PALETTE" isMobile={isMobile} />
             <div style={{ marginBottom: "clamp(12px, 2vh, 20px)", maxWidth: 820 }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8, margin: 0 }}>
                 The palette pairs an electric blue signal with neutral whites and grays—bold meets calm, blending technical clarity with human warmth.
@@ -614,7 +615,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
 
           {/* 4.0 TYPOGRAPHY */}
           <ScrollSection index={3} setActive={setActive} isMobile={isMobile}>
-            <PageHeader number="4.0" title="TYPOGRAPHY" />
+            <PageHeader number="4.0" title="TYPOGRAPHY" isMobile={isMobile} />
             <FontCard
               num="1" name="PP Neue Machina" label="Primary Font"
               description="A contemporary grotesque typeface that blends mechanical precision with expressive character. Its slightly unconventional proportions and technical tone give it a strong, modern presence for bold headlines and brand moments."
@@ -631,9 +632,9 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
 
           {/* 5.0 GRAPHIC ELEMENTS */}
           <ScrollSection index={4} setActive={setActive} isMobile={isMobile}>
-            <PageHeader number="5.0" title="GRAPHIC ELEMENTS" />
+            <PageHeader number="5.0" title="GRAPHIC ELEMENTS" isMobile={isMobile} />
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 1, background: GRAY2 }}>
-              <div style={{ background: WHITE, padding: isMobile ? 20 : 40 }}>
+              <div style={{ background: WHITE, padding: isMobile ? 16 : 40 }}>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>{isMobile ? "5.1 — PHOSPHOR REACT ICONS" : "1 — PHOSPHOR REACT ICONS"}</p>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
                   {[
@@ -644,8 +645,8 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                     { Icon: ShieldCheck, label: "SECURITY" },
                     { Icon: Code, label: "CODE" },
                   ].map(({ Icon, label }) => (
-                    <div key={label} style={{ background: WHITE, padding: "18px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
-                      <Icon size={34} color={BLUE} weight="regular" />
+                    <div key={label} style={{ background: WHITE, padding: isMobile ? "14px 12px" : "18px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+                      <Icon size={isMobile ? 30 : 34} color={BLUE} weight="regular" />
                       <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1 }}>{label}</span>
                     </div>
                   ))}
@@ -654,13 +655,13 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   Phosphor is a flexible icon family for interfaces, diagrams, and presentations. Consistent stroke weight and clear metaphors align with the brand's technical clarity.
                 </p>
               </div>
-              <div style={{ background: WHITE, padding: isMobile ? 20 : 40 }}>
+              <div style={{ background: WHITE, padding: isMobile ? 16 : 40 }}>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>{isMobile ? "5.2 — ISOMETRIC ILLUSTRATION" : "2 — ISOMETRIC ILLUSTRATION"}</p>
                 <div style={{ border: `1px solid ${GRAY2}`, overflow: "hidden", background: WHITE }}>
                   <img
                     src="/images/isometric-city-blue.svg"
                     alt="Isometric city illustration"
-                    style={{ width: "100%", height: 200, objectFit: "cover", display: "block" }}
+                    style={{ width: "100%", height: isMobile ? 160 : 200, objectFit: "cover", display: "block" }}
                   />
                 </div>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: GRAY1, lineHeight: 1.8, marginTop: 24 }}>
@@ -672,7 +673,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
 
           {/* Placeholder Sections */}
           <ScrollSection index={5} setActive={setActive} isMobile={isMobile}>
-            <PageHeader number="6.0" title="PHOTOGRAPHY DIRECTION" />
+            <PageHeader number="6.0" title="PHOTOGRAPHY DIRECTION" isMobile={isMobile} />
             <div style={{ marginBottom: 16, maxWidth: 820 }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>DIRECTION</p>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
@@ -696,7 +697,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
             </div>
           </ScrollSection>
           <ScrollSection index={6} setActive={setActive} isMobile={isMobile}>
-            <PageHeader number="7.0" title="LAYOUTS" />
+            <PageHeader number="7.0" title="LAYOUTS" isMobile={isMobile} />
             
             <div style={{ marginBottom: 24, maxWidth: "800px" }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>DESIGN DIRECTION</p>
@@ -828,7 +829,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
             </div>
           </ScrollSection>
           <ScrollSection index={7} setActive={setActive} isMobile={isMobile}>
-            <PageHeader number="8.0" title="APPLICATIONS" />
+            <PageHeader number="8.0" title="APPLICATIONS" isMobile={isMobile} />
             <div style={{ display: "flex", flexDirection: "column", gap: "clamp(16px, 2.5vw, 32px)" }}>
               <div style={{ maxWidth: 820 }}>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, margin: "0 0 12px" }}>SIGNAGE & ADVERTISING</p>

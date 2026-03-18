@@ -20,11 +20,8 @@ const GRAY2 = "#353535";
 
 function SectionNav({ active }) {
   const scrollToSection = (index) => {
-    // Each ScrollSection is 150vh, starting after the hero (100vh) and brand info (approx 200px)
-    // Actually, it's better to just let the scroll tracking work and make the nav look correct.
-    // The user wants it to LOOK like the provided snippet.
     const sectionsElements = document.querySelectorAll('section, [data-section]');
-    if (sectionsElements[index + 1]) { // +1 because hero is index 0 in DOM usually
+    if (sectionsElements[index + 1]) {
       sectionsElements[index + 1].scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -352,6 +349,66 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           </div>
         </section>
 
+        <div style={{ background: WHITE, height: "100vh", scrollSnapAlign: "start", display: "flex", alignItems: "center" }}>
+          <div style={{ padding: "clamp(32px, 6vh, 64px) 56px", width: "100%" }}>
+            <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "clamp(16px, 2.5vw, 32px)", marginBottom: "clamp(16px, 2.5vh, 24px)" }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, margin: "0 0 12px", textTransform: "uppercase" }}>CASE STUDY SUMMARY</p>
+                  <h2 style={{
+                    fontFamily: "var(--font-display)",
+                    fontWeight: 400,
+                    fontSize: "var(--fs-xl)",
+                    letterSpacing: "-0.04em",
+                    lineHeight: 0.85,
+                    color: BLACK,
+                    margin: 0,
+                    whiteSpace: "nowrap",
+                    textTransform: "uppercase"
+                  }}>
+                    0.0 VISUAL SYSTEM NOTES
+                  </h2>
+                  <div style={{ height: 1, background: GRAY2, marginTop: 12 }} />
+                </div>
+                <div style={{ width: "clamp(84px, 10vw, 140px)", aspectRatio: "1/1", border: `1px solid ${GRAY2}`, overflow: "hidden", background: WHITE, flex: "0 0 auto" }}>
+                  <img
+                    src="/images/sign mockup open netizen.png"
+                    alt="Open Netizen applications preview"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: GRAY2 }}>
+                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>What Is The Problem?</p>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                    A civic non-profit needed a modern identity that signals the open web without reading as a startup, government agency, or corporate platform.
+                  </p>
+                </div>
+                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>What Constraints?</p>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                    High contrast accessibility, fast legibility at distance, and a system that works across print, signage, and UI with minimal production complexity.
+                  </p>
+                </div>
+                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Decisions & Why</p>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                    Swiss grid discipline, a single electric blue anchor, and a modular mark/typemark system to keep the brand objective, repeatable, and scalable.
+                  </p>
+                </div>
+                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Outcome</p>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                    A technical, civic-forward visual system that stays consistent across screens and environments while leaving space for future campaigns and programs.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Continuous Scroll Sections */}
         <main>
           {/* 1.0 BRAND OVERVIEW */}
@@ -589,8 +646,26 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           {/* Placeholder Sections */}
           <ScrollSection index={5} setActive={setActive}>
             <PageHeader number="6.0" title="PHOTOGRAPHY DIRECTION" />
-            <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, padding: 64, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 300 }}>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: GRAY2, letterSpacing: 2 }}>6.0 PHOTOGRAPHY DIRECTION — CONTENT TBD</p>
+            <div style={{ marginBottom: 16, maxWidth: 820 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>DIRECTION</p>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
+                Photography should balance cybercore infrastructure with humanist presence. Use high-contrast, low-light environments, screen glow, and hard edges—then anchor it with candid, real people and tactile moments. The result feels technical, civic, and alive.
+              </p>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
+              {[
+                { src: "/images/open netizen background.jpg", label: "00" },
+                { src: "/images/photo1.jpg", label: "01" },
+                { src: "/images/photo2.jpg", label: "02" },
+                { src: "/images/photo3.jpg", label: "03" },
+                { src: "/images/photo4.jpg", label: "04" },
+                { src: "/images/photo5.jpg", label: "05" },
+              ].map((img) => (
+                <div key={img.src} style={{ background: WHITE, position: "relative", overflow: "hidden", aspectRatio: "1/1" }}>
+                  <img src={img.src} alt={`Open Netizen photography ${img.label}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                </div>
+              ))}
             </div>
           </ScrollSection>
           <ScrollSection index={6} setActive={setActive}>

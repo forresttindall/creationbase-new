@@ -20,7 +20,8 @@ const BLACK = "#000000";
 const GRAY1 = "#676767";
 const GRAY2 = "#353535";
 
-function SectionNav({ active }) {
+function SectionNav({ active, isMobile }) {
+  if (isMobile) return null;
   const scrollToSection = (index) => {
     const sectionsElements = document.querySelectorAll('section, [data-section]');
     if (sectionsElements[index + 1]) {
@@ -204,7 +205,7 @@ function FontCard({ num, name, label, description }) {
   );
 }
 
-const ScrollSection = ({ children, index, setActive }) => {
+const ScrollSection = ({ children, index, setActive, isMobile }) => {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -226,17 +227,17 @@ const ScrollSection = ({ children, index, setActive }) => {
 
   return (
     <div ref={containerRef} style={{ 
-      height: "100vh", 
-      scrollSnapAlign: "start",
+      height: isMobile ? "auto" : "100vh", 
+      scrollSnapAlign: isMobile ? "unset" : "start",
       position: "relative"
     }}>
       <motion.section
         style={{
-          height: "100vh",
-          padding: "clamp(32px, 6vh, 64px) 56px",
-          perspective: "1200px",
-          transformStyle: "preserve-3d",
-          rotateX,
+          height: isMobile ? "auto" : "100vh",
+          padding: isMobile ? "clamp(24px, 5vh, 48px) 20px" : "clamp(32px, 6vh, 64px) 56px",
+          perspective: isMobile ? "none" : "1200px",
+          transformStyle: isMobile ? "flat" : "preserve-3d",
+          rotateX: isMobile ? 0 : rotateX,
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
@@ -253,9 +254,18 @@ const ScrollSection = ({ children, index, setActive }) => {
 
 const OpenNetizenCaseStudy = ({ onBack }) => {
   const [active, setActive] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const mainRef = useRef(null);
   const summaryRef = useRef(null);
   const summaryInView = useInView(summaryRef, { amount: 0.5 });
+
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 900px)");
+    const onChange = (e) => setIsMobile(e.matches);
+    setIsMobile(mql.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     // Force scroll to top on mount
@@ -279,14 +289,14 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
         background: WHITE,
         height: "100vh",
         overflowY: "auto",
-        scrollSnapType: "y mandatory",
+        scrollSnapType: isMobile ? "none" : "y mandatory",
         fontFamily: "'SF Mono', monospace",
         color: BLACK,
         position: 'relative'
       }}>
-      <SectionNav active={active} />
+      <SectionNav active={active} isMobile={isMobile} />
 
-      <div style={{ marginRight: 260 }}>
+      <div style={{ marginRight: isMobile ? 0 : 260 }}>
         {/* Hero Section */}
         <section style={{
           position: 'relative',
@@ -294,7 +304,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           width: '100%',
           overflow: 'hidden',
           background: BLACK,
-          scrollSnapAlign: "start"
+          scrollSnapAlign: isMobile ? "unset" : "start"
         }}>
           <div 
             style={{
@@ -347,10 +357,10 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           </div>
         </section>
 
-        <section ref={summaryRef} style={{ background: WHITE, height: "100vh", scrollSnapAlign: "start", display: "flex", alignItems: "center" }}>
-          <div style={{ padding: "clamp(32px, 6vh, 64px) 56px", width: "100%" }}>
+        <section ref={summaryRef} style={{ background: WHITE, minHeight: "100vh", height: isMobile ? "auto" : "100vh", scrollSnapAlign: isMobile ? "unset" : "start", display: "flex", alignItems: "center" }}>
+          <div style={{ padding: isMobile ? "clamp(24px, 5vh, 48px) 20px" : "clamp(32px, 6vh, 64px) 56px", width: "100%" }}>
             <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "clamp(16px, 2.5vw, 32px)", marginBottom: "clamp(16px, 2.5vh, 24px)" }}>
+              <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", alignItems: "flex-start", gap: "clamp(16px, 2.5vw, 32px)", marginBottom: "clamp(16px, 2.5vh, 24px)" }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, margin: "0 0 12px", textTransform: "uppercase" }}>CASE STUDY SUMMARY</p>
                   <h2 style={{
@@ -368,7 +378,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   </h2>
                   <div style={{ height: 1, background: GRAY2, marginTop: 12 }} />
                 </div>
-                <div style={{ width: "clamp(84px, 10vw, 140px)", aspectRatio: "1/1", border: `1px solid ${GRAY2}`, overflow: "hidden", background: WHITE, flex: "0 0 auto" }}>
+                <div style={{ width: isMobile ? "100%" : "clamp(84px, 10vw, 140px)", maxWidth: isMobile ? 220 : undefined, aspectRatio: "1/1", border: `1px solid ${GRAY2}`, overflow: "hidden", background: WHITE, flex: "0 0 auto" }}>
                   <img
                     src="/images/sign mockup open netizen.png"
                     alt="Open Netizen applications preview"
@@ -410,13 +420,13 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
         {/* Continuous Scroll Sections */}
         <main>
           {/* 1.0 BRAND OVERVIEW */}
-          <ScrollSection index={0} setActive={setActive}>
+          <ScrollSection index={0} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="1.0" title="BRAND OVERVIEW" />
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 24 : 48 }}>
               <div>
                 <div style={{
                   background: BLUE,
-                  padding: 48,
+                  padding: isMobile ? 24 : 48,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -448,9 +458,9 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               </div>
             </div>
 
-            <div style={{ marginTop: 48 }}>
+            <div style={{ marginTop: isMobile ? 24 : 48 }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>1.3 BRAND PERSONALITY</p>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1, background: GRAY2 }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: 1, background: GRAY2 }}>
                 {[
                   { n: "1", label: "PRINCIPLED", subs: ["Firm Convictions", "Grounded in Values", "Justice for All"] },
                   { n: "2", label: "ACCESSIBLE", subs: ["Open Means Everyone", "Easy to Understand", "Welcoming of All"] },
@@ -472,7 +482,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           </ScrollSection>
 
           {/* 2.0 LOGO SYSTEM */}
-          <ScrollSection index={1} setActive={setActive}>
+          <ScrollSection index={1} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="2.0" title="LOGO SYSTEM" />
             
             {/* 2.1 LOGOMARK GRID */}
@@ -550,7 +560,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           </ScrollSection>
 
           {/* 3.0 COLOR PALETTE */}
-          <ScrollSection index={2} setActive={setActive}>
+          <ScrollSection index={2} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="3.0" title="COLOR PALETTE" />
             <div style={{ display: "flex", flexDirection: "column" }}>
               <ColorSwatch
@@ -592,7 +602,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           </ScrollSection>
 
           {/* 4.0 TYPOGRAPHY */}
-          <ScrollSection index={3} setActive={setActive}>
+          <ScrollSection index={3} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="4.0" title="TYPOGRAPHY" />
             <FontCard
               num="1" name="PP Neue Machina" label="Primary Font"
@@ -609,11 +619,11 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           </ScrollSection>
 
           {/* 5.0 GRAPHIC ELEMENTS */}
-          <ScrollSection index={4} setActive={setActive}>
+          <ScrollSection index={4} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="5.0" title="GRAPHIC ELEMENTS" />
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: GRAY2 }}>
-              <div style={{ background: WHITE, padding: 40 }}>
-                <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>1 — PHOSPHOR REACT ICONS</p>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 1, background: GRAY2 }}>
+              <div style={{ background: WHITE, padding: isMobile ? 20 : 40 }}>
+                <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>{isMobile ? "5.1 — PHOSPHOR REACT ICONS" : "1 — PHOSPHOR REACT ICONS"}</p>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
                   {[
                     { Icon: GlobeHemisphereWest, label: "GLOBE" },
@@ -633,8 +643,8 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   Phosphor is a flexible icon family for interfaces, diagrams, and presentations. Consistent stroke weight and clear metaphors align with the brand's technical clarity.
                 </p>
               </div>
-              <div style={{ background: WHITE, padding: 40 }}>
-                <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>2 — ISOMETRIC ILLUSTRATION</p>
+              <div style={{ background: WHITE, padding: isMobile ? 20 : 40 }}>
+                <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>{isMobile ? "5.2 — ISOMETRIC ILLUSTRATION" : "2 — ISOMETRIC ILLUSTRATION"}</p>
                 <div style={{ border: `1px solid ${GRAY2}`, overflow: "hidden", background: WHITE }}>
                   <img
                     src="/images/isometric-city-blue.svg"
@@ -650,7 +660,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           </ScrollSection>
 
           {/* Placeholder Sections */}
-          <ScrollSection index={5} setActive={setActive}>
+          <ScrollSection index={5} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="6.0" title="PHOTOGRAPHY DIRECTION" />
             <div style={{ marginBottom: 16, maxWidth: 820 }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>DIRECTION</p>
@@ -659,7 +669,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               </p>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
               {[
                 { src: "/images/open netizen background.jpg", label: "00" },
                 { src: "/images/photo1.jpg", label: "01" },
@@ -674,7 +684,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               ))}
             </div>
           </ScrollSection>
-          <ScrollSection index={6} setActive={setActive}>
+          <ScrollSection index={6} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="7.0" title="LAYOUTS" />
             
             <div style={{ marginBottom: 24, maxWidth: "800px" }}>
@@ -686,21 +696,23 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
 
             <div style={{ 
               display: "grid", 
-              gridTemplateColumns: "1fr 1fr", 
+              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", 
               gap: "clamp(16px, 2.5vw, 32px)", 
-              gridAutoRows: "var(--on-layout-row-h)",
+              gridAutoRows: isMobile ? "auto" : "var(--on-layout-row-h)",
               width: "100%",
             }}>
               {/* Example 1: Technical Dashboard UI */}
               <div style={{ 
                 background: BLACK, 
-                padding: "clamp(16px, 2vh, 24px)", 
+                padding: isMobile ? 16 : "clamp(16px, 2vh, 24px)", 
                 border: `1px solid ${GRAY2}`, 
                 color: WHITE,
                 display: "flex",
                 flexDirection: "column",
                 minHeight: 0,
-                height: "100%"
+                height: isMobile ? "auto" : "100%",
+                aspectRatio: isMobile ? "4/3" : undefined,
+                overflow: "hidden"
               }}>
                 <div style={{ display: "flex", justifyContent: "space-between", borderBottom: `1px solid ${GRAY2}`, paddingBottom: 12, marginBottom: "clamp(12px, 2vh, 24px)" }}>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", letterSpacing: 1 }}>NETWORK_NODE_V.01</span>
@@ -716,7 +728,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                     <p style={{ fontFamily: "'PP Neue Machina', sans-serif", fontSize: "clamp(16px, 2.5vh, 24px)", fontWeight: 900 }}>99.9%</p>
                   </div>
                 </div>
-                <div style={{ marginTop: "auto", height: "clamp(40px, 6vh, 60px)", background: `linear-gradient(90deg, ${BLUE} 0%, transparent 100%)`, opacity: 0.2 }} />
+                <div style={{ marginTop: "auto", height: isMobile ? 40 : "clamp(40px, 6vh, 60px)", background: `linear-gradient(90deg, ${BLUE} 0%, transparent 100%)`, opacity: 0.2 }} />
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", marginTop: 8, color: GRAY1 }}>0x172EFF...A4B2</p>
               </div>
 
@@ -731,7 +743,8 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                 display: "flex",
                 flexDirection: "column",
                 minHeight: 0,
-                height: "100%"
+                height: isMobile ? "auto" : "100%",
+                aspectRatio: isMobile ? "4/3" : undefined
               }}>
                 <div style={{ display: "flex", gap: "clamp(12px, 2vw, 24px)", flex: 1 }}>
                   <div style={{ width: "45%" }}>
@@ -740,7 +753,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   </div>
                   <div style={{ flex: 1, background: BLUE, position: "relative", marginBottom: "clamp(24px, 4vh, 40px)" }}>
                     <div style={{ position: "absolute", bottom: 8, right: 8 }}>
-                      <LogoMark size="clamp(24px, 3vh, 32px)" color={WHITE} bg="transparent" />
+                      <LogoMark size={isMobile ? 40 : "clamp(24px, 3vh, 32px)"} color={WHITE} bg="transparent" />
                     </div>
                   </div>
                 </div>
@@ -756,18 +769,20 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               {/* Example 3: Mobile UI / App Mockup */}
               <div style={{ 
                 background: BLUE, 
-                padding: "clamp(24px, 4vh, 48px) clamp(16px, 3vw, 32px)", 
+                padding: isMobile ? "24px 20px" : "clamp(24px, 4vh, 48px) clamp(16px, 3vw, 32px)", 
                 border: `1px solid ${GRAY2}`, 
                 color: WHITE, 
                 display: "flex", 
                 flexDirection: "column", 
                 justifyContent: "space-between",
                 minHeight: 0,
-                height: "100%"
+                height: isMobile ? "auto" : "100%",
+                aspectRatio: isMobile ? "4/3" : undefined,
+                overflow: "hidden"
               }}>
                 <div>
                   <LogoMark size="clamp(32px, 5vh, 48px)" color={WHITE} bg="transparent" />
-                  <h4 style={{ fontFamily: "'PP Neue Machina', sans-serif", fontSize: "clamp(24px, 4vh, 40px)", fontWeight: 900, lineHeight: 0.85, marginTop: "clamp(12px, 2vh, 24px)" }}>CONNECT<br/>TO THE<br/>NETIZEN.</h4>
+                  <h4 style={{ fontFamily: "'PP Neue Machina', sans-serif", fontSize: isMobile ? "clamp(24px, 9vw, 36px)" : "clamp(24px, 4vh, 40px)", fontWeight: 900, lineHeight: 0.85, marginTop: isMobile ? 12 : "clamp(12px, 2vh, 24px)" }}>CONNECT<br/>TO THE<br/>NETIZEN.</h4>
                 </div>
                 <div style={{ border: `1px solid ${WHITE}`, padding: "clamp(8px, 1.5vh, 12px) clamp(16px, 2vw, 24px)", alignSelf: "flex-start", marginTop: 12 }}>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", letterSpacing: 2 }}>[ INITIALIZE ]</span>
@@ -778,12 +793,14 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               <div style={{ 
                 background: BLACK, 
                 border: `1px solid ${GRAY2}`, 
-                padding: "clamp(16px, 2vh, 24px)", 
+                padding: isMobile ? 16 : "clamp(16px, 2vh, 24px)", 
                 display: "flex", 
                 flexDirection: "column", 
                 justifyContent: "space-between",
                 minHeight: 0,
-                height: "100%"
+                height: isMobile ? "auto" : "100%",
+                aspectRatio: isMobile ? "4/3" : undefined,
+                overflow: "hidden"
               }}>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1 }}>
                   {[1,2,3,4,5,6,7,8].map(i => (
@@ -799,7 +816,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               </div>
             </div>
           </ScrollSection>
-          <ScrollSection index={7} setActive={setActive}>
+          <ScrollSection index={7} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="8.0" title="APPLICATIONS" />
             <div style={{ display: "flex", flexDirection: "column", gap: "clamp(16px, 2.5vw, 32px)" }}>
               <div style={{ maxWidth: 820 }}>
@@ -809,8 +826,8 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                 </p>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(16px, 2.5vw, 32px)", minHeight: "clamp(320px, 44vh, 480px)" }}>
-                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "clamp(16px, 2.5vw, 32px)", minHeight: isMobile ? "auto" : "clamp(320px, 44vh, 480px)" }}>
+                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column", aspectRatio: isMobile ? "4/3" : undefined }}>
                   <div style={{ flex: 1, minHeight: 0 }}>
                     <img
                       src="/images/sign mockup open netizen.png"
@@ -824,7 +841,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   </div>
                 </div>
 
-                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column", aspectRatio: isMobile ? "4/3" : undefined }}>
                   <div style={{ flex: 1, minHeight: 0 }}>
                     <img
                       src="/images/OPEN NETIZEN.jpg"

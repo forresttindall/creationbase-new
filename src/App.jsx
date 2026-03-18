@@ -469,7 +469,7 @@ function App() {
             <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
-                  WEB DESIGN
+                  UI/UX DESIGN
                 </h2>
                 <span className="small-text">Index (02)</span>
               </div>
@@ -529,66 +529,6 @@ function App() {
               </div>
             </section>
 
-            {/* About Section */}
-            <section style={{ 
-              padding: '0',
-              background: '#ffffff',
-              color: '#000',
-              minHeight: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-              position: 'relative',
-              overflow: 'hidden'
-            }}>
-              {/* Top Split Layout */}
-              <div className="studio-split-layout">
-                {/* Left: Typography */}
-                <div className="studio-typography-column">
-                  <div>
-                    <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
-                      <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-                        STUDIO PRACTICE
-                      </h2>
-                      <span className="small-text">Index (03)</span>
-                    </div>
-
-                    <div className="small-text" style={{ maxWidth: '300px', marginTop: 'var(--spacing-lg)' }}>
-                      J. F. Tindall is a Fullstack Creative from Boise, Idaho, raised in the wide landscapes of the American West. His work spans photography, design, art, and web development, blending technical precision with visual storytelling. He began making art early, first through drawing and writing, then discovering film photography at thirteen. In 2012, he began designing logos, websites, and he launched <em>Tindall Knives</em>, beginning an over decade-long career as a bladesmith. Around the same time, he started a parallel path in photography, focusing on outdoor and product photography for the knife and tool industry. His photography has been featured in multiple publications, including <em>Popular Mechanics Magazine</em>. Years spent shaping steel by hand in the mountains became a study in patience, discipline, and craftsmanship, qualities that continue to define his creative work today. Through photography, design, writing, illustration, and mixed media, Tindall explores identity, society, and the subtle contradictions of modern life, examining the space between what we call things and what they truly are. His work has appeared in exhibitions, global publications, and bespoke retailers, reflecting an ongoing effort to bridge the personal and the universal.
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right: Image */}
-                <div className="studio-portrait-wrapper">
-                  <img 
-                    src="/images/me2.jpg" 
-                    alt="Portrait" 
-                    style={{ 
-                      width: '100%', 
-                      height: '100%', 
-                      objectFit: 'cover',
-                      filter: 'grayscale(100%) contrast(1.1)',
-                      display: 'block'
-                    }} 
-                  />
-                  <div style={{
-                    position: 'absolute',
-                    bottom: 'var(--spacing-md)',
-                    left: 'var(--spacing-md)',
-                    background: '#000',
-                    color: '#fff',
-                    padding: 'var(--spacing-xs) var(--spacing-sm)',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 'var(--fs-xs)',
-                    textTransform: 'uppercase'
-                  }}>
-                    Figure 01. Portrait
-                  </div>
-                </div>
-              </div>
-
-            </section>
-
             {/* Featured Case Study: Open Netizen */}
             <motion.section 
               style={{ 
@@ -602,11 +542,11 @@ function App() {
               whileHover="hover"
               onClick={() => setActiveCaseStudy('on')}
             >
-              <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline' }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+              <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline', background: '#000' }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
                   CASE STUDY
                 </h2>
-                <span className="small-text">Index (04)</span>
+                <span className="small-text" style={{ color: '#fff' }}>Index (03)</span>
               </div>
 
               {/* Full Bleed Image for Open Netizen */}
@@ -680,6 +620,66 @@ function App() {
                 </div>
               </div>
             </motion.section>
+
+            {/* About Section */}
+            <section style={{ 
+              padding: '0',
+              background: '#ffffff',
+              color: '#000',
+              minHeight: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
+              {/* Top Split Layout */}
+              <div className="studio-split-layout">
+                {/* Left: Typography */}
+                <div className="studio-typography-column">
+                  <div>
+                    <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
+                      <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+                        STUDIO PRACTICE
+                      </h2>
+                      <span className="small-text">Index (04)</span>
+                    </div>
+
+                    <div className="small-text" style={{ maxWidth: '300px', marginTop: 'var(--spacing-lg)' }}>
+                      J. F. Tindall is a Fullstack Creative from Boise, Idaho, raised in the wide landscapes of the American West. His work spans photography, design, art, and web development, blending technical precision with visual storytelling. He began making art early, first through drawing and writing, then discovering film photography at thirteen. In 2012, he began designing logos, websites, and he launched <em>Tindall Knives</em>, beginning an over decade-long career as a bladesmith. Around the same time, he started a parallel path in photography, focusing on outdoor and product photography for the knife and tool industry. His photography has been featured in multiple publications, including <em>Popular Mechanics Magazine</em>. Years spent shaping steel by hand in the mountains became a study in patience, discipline, and craftsmanship, qualities that continue to define his creative work today. Through photography, design, writing, illustration, and mixed media, Tindall explores identity, society, and the subtle contradictions of modern life, examining the space between what we call things and what they truly are. His work has appeared in exhibitions, global publications, and bespoke retailers, reflecting an ongoing effort to bridge the personal and the universal.
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Image */}
+                <div className="studio-portrait-wrapper">
+                  <img 
+                    src="/images/me2.jpg" 
+                    alt="Portrait" 
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'cover',
+                      filter: 'grayscale(100%) contrast(1.1)',
+                      display: 'block'
+                    }} 
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 'var(--spacing-md)',
+                    left: 'var(--spacing-md)',
+                    background: '#000',
+                    color: '#fff',
+                    padding: 'var(--spacing-xs) var(--spacing-sm)',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 'var(--fs-xs)',
+                    textTransform: 'uppercase'
+                  }}>
+                    Figure 01. Portrait
+                  </div>
+                </div>
+              </div>
+
+            </section>
 
             {/* Selected Clients & Testimonials */}
             <section style={{ 

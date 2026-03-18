@@ -653,7 +653,7 @@ function App() {
                 {/* Right: Image */}
                 <div className="studio-portrait-wrapper">
                   <img 
-                    src="/images/me2.jpg" 
+                    src="/images/me1.jpg" 
                     alt="Portrait" 
                     style={{ 
                       width: '100%', 

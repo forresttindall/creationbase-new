@@ -720,8 +720,54 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           </ScrollSection>
           <ScrollSection index={7} setActive={setActive}>
             <PageHeader number="8.0" title="APPLICATIONS" />
-            <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, padding: 64, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 300 }}>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: GRAY2, letterSpacing: 2 }}>8.0 APPLICATIONS — CONTENT TBD</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "clamp(16px, 2.5vw, 32px)" }}>
+              <div style={{ maxWidth: 820 }}>
+                <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, margin: "0 0 12px" }}>SIGNAGE & ADVERTISING</p>
+                <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                  Applications should feel like modern civic signage: blunt hierarchy, strict grid alignment, and high-contrast color pairing. Use the logomark as a repeatable stamp and let the typemark carry scale—cropped, oversized, and always locked to a consistent baseline.
+                </p>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(16px, 2.5vw, 32px)", minHeight: "clamp(320px, 44vh, 480px)" }}>
+                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                  <div style={{ flex: 1, minHeight: 0 }}>
+                    <img
+                      src="/images/sign mockup open netizen.png"
+                      alt="Open Netizen signage mockup"
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    />
+                  </div>
+                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>01</span>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>AD APPLICATION</span>
+                  </div>
+                </div>
+
+                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                  <div style={{ flex: 1, minHeight: 0 }}>
+                    <img
+                      src="/images/OPEN NETIZEN.jpg"
+                      alt="Open Netizen advertising application"
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    />
+                  </div>
+                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>02</span>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>SIGN MOCKUP</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ borderTop: `1px solid ${GRAY2}`, paddingTop: 16 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                  <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontWeight: 900, fontSize: "clamp(32px, 4vw, 56px)", letterSpacing: -1, color: BLACK, lineHeight: 0.9 }}>
+                    OPEN NETIZEN
+                  </span>
+                  <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1 }}>
+                    GRID / 12 COL
+                  </span>
+                </div>
+              </div>
             </div>
           </ScrollSection>
         </main>

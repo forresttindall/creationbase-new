@@ -117,6 +117,10 @@ ul {
   margin: 0 auto;
 }
 
+.project-grid.project-grid--tight {
+  gap: var(--spacing-md);
+}
+
 /* Studio Practice Responsive Styles */
 .studio-split-layout {
   display: grid;

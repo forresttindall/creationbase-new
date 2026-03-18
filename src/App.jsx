@@ -23,7 +23,7 @@ const projects = [
     title: "Clearfeed",
     category: "UI/UX Design & Dev",
     image: "/images/clearfeed.png",
-    description: "Desktop RSS feed reader interface design in figma and dev in ELECTRON",
+    description: "Desktop application design in figma and dev in ELECTRON",
     year: "2025"
   },
   {
@@ -409,7 +409,7 @@ function App() {
                 <span className="small-text">Index (01)</span>
               </div>
 
-              <div className="project-grid" style={{ alignItems: 'start' }}>
+              <div className="project-grid project-grid--tight" style={{ alignItems: 'start' }}>
                 {graphicDesign.map((project, i) => (
                   <motion.article 
                     key={i} 
@@ -421,43 +421,43 @@ function App() {
                     onClick={() => setSelectedProject(project)}
                     style={{ cursor: 'pointer' }}
                   >
+                    <div style={{ border: '1px solid #000', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                       <div style={{ 
-                      marginBottom: 'var(--spacing-sm)', 
-                      overflow: 'hidden',
-                      border: '1px solid #000',
-                      aspectRatio: '1/1',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backgroundColor: 'transparent'
-                    }}>
-                      <img 
-                          src={project.image} 
-                          alt={project.title} 
-                          style={{ 
-                            width: 'auto',
-                            height: '100%',
-                            maxWidth: 'none',
-                            display: 'block',
-                            transition: 'all 0.5s ease'
-                          }} 
-                          onMouseOver={(e) => {
-                            e.currentTarget.style.transform = 'scale(1.05)';
-                          }}
-                          onMouseOut={(e) => {
-                            e.currentTarget.style.transform = 'scale(1)';
-                          }}
-                          loading="lazy" 
-                        />
-                    </div>
-                    <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #000', paddingTop: 'var(--spacing-xs)' }}>
-                      <div>
-                        <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
-                        <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
+                        overflow: 'hidden',
+                        aspectRatio: '1/1',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: 'transparent'
+                      }}>
+                        <img 
+                            src={project.image} 
+                            alt={project.title} 
+                            style={{ 
+                              width: 'auto',
+                              height: '100%',
+                              maxWidth: 'none',
+                              display: 'block',
+                              transition: 'all 0.5s ease'
+                            }} 
+                            onMouseOver={(e) => {
+                              e.currentTarget.style.transform = 'scale(1.05)';
+                            }}
+                            onMouseOut={(e) => {
+                              e.currentTarget.style.transform = 'scale(1)';
+                            }}
+                            loading="lazy" 
+                          />
                       </div>
-                      <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
-                        <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
-                        <div>{project.year}</div>
+                      <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #000', padding: '10px 12px', alignItems: 'baseline' }}>
+                        <div>
+                          <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
+                          <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
+                        </div>
+                        <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
+                          <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
+                          <div>{project.year}</div>
+                        </div>
                       </div>
                     </div>
                   </motion.article>
@@ -474,7 +474,7 @@ function App() {
                 <span className="small-text">Index (02)</span>
               </div>
               
-              <div className="project-grid">
+              <div className="project-grid project-grid--tight">
                 {projects.map((project, index) => (
                   <motion.article 
                     key={index} 
@@ -486,42 +486,42 @@ function App() {
                     onClick={() => setSelectedProject(project)}
                     style={{ cursor: 'pointer' }}
                   >
-                    <div style={{ 
-                      marginBottom: 'var(--spacing-sm)', 
-                      overflow: 'hidden',
-                      border: '1px solid #333',
-                      aspectRatio: '1/1',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backgroundColor: '#000'
-                    }}>
-                      <img 
-                        src={project.image} 
-                        alt={project.title}
-                        style={{ 
-                          width: 'auto',
-                          height: '100%',
-                          maxWidth: 'none',
-                          display: 'block',
-                          transition: 'all 0.5s ease'
-                        }}
-                        onMouseOver={(e) => {
-                          e.currentTarget.style.transform = 'scale(1.05)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.currentTarget.style.transform = 'scale(1)';
-                        }}
-                      />
-                    </div>
-                    <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #333', paddingTop: 'var(--spacing-xs)' }}>
-                      <div>
-                        <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
-                        <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
+                    <div style={{ border: '1px solid #333', overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: '#000' }}>
+                      <div style={{ 
+                        overflow: 'hidden',
+                        aspectRatio: '1/1',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#000'
+                      }}>
+                        <img 
+                          src={project.image} 
+                          alt={project.title}
+                          style={{ 
+                            width: 'auto',
+                            height: '100%',
+                            maxWidth: 'none',
+                            display: 'block',
+                            transition: 'all 0.5s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.05)';
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                          }}
+                        />
                       </div>
-                      <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
-                        <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
-                        <div>{project.year}</div>
+                      <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #333', padding: '10px 12px', alignItems: 'baseline' }}>
+                        <div>
+                          <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
+                          <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
+                        </div>
+                        <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
+                          <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
+                          <div>{project.year}</div>
+                        </div>
                       </div>
                     </div>
                   </motion.article>

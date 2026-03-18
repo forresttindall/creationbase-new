@@ -484,6 +484,12 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           {/* 2.0 LOGO SYSTEM */}
           <ScrollSection index={1} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="2.0" title="LOGO SYSTEM" />
+
+            <div style={{ marginBottom: "clamp(12px, 2vh, 20px)", maxWidth: 820 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                The logo bridges technical systems and human form—precise geometry softened into a civic mark that feels both infrastructural and personal.
+              </p>
+            </div>
             
             {/* 2.1 LOGOMARK GRID */}
             <div style={{ marginBottom: "clamp(12px, 2vh, 24px)" }}>
@@ -562,6 +568,11 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           {/* 3.0 COLOR PALETTE */}
           <ScrollSection index={2} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="3.0" title="COLOR PALETTE" />
+            <div style={{ marginBottom: "clamp(12px, 2vh, 20px)", maxWidth: 820 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                The palette pairs an electric blue signal with neutral whites and grays—bold meets calm, blending technical clarity with human warmth.
+              </p>
+            </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <ColorSwatch
                 letter="A" num="01" label="Primary"

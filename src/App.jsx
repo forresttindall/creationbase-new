@@ -58,13 +58,7 @@ const graphicDesign = [
     description: "Promotional Asset Design",
     year: "2026"
   },
-      {
-    title: "Boise Analog Club",
-    category: "Brand Identity",
-    image: "/images/BAC March.jpg",
-    description: "Event Flyer Design",
-    year: "2026"
-  },
+ 
   {
     title: "Boise Analog Club",
     category: "Brand Identity",
@@ -73,21 +67,6 @@ const graphicDesign = [
     year: "2026"
   },
  
-
-    {
-    title: "Boise Analog Club",
-    category: "Brand Identity",
-    image: "/images/BAC january.png",
-    description: "Event Flyer Design",
-    year: "2026"
-  },
-  {
-    title: "Gee Tee",
-    category: "Album Art Design",
-    image: "/images/geetee.jpg",
-    description: "Concept album artwork design.",
-    year: "2025"
-  },
   {
     title: "Creationbase",
     category: "Asset Design",
@@ -104,13 +83,6 @@ const graphicDesign = [
     year: "2025"
   },
 
-  {
-    title: "Open Netizen",
-    category: "Brand Identity",
-    image: "/images/OPEN NETIZEN.jpg",
-    description: "Logo, Branding and visual system.",
-    year: "2025"
-  },
   {
     title: "Paradox Labs",
     category: "Brand Identity",

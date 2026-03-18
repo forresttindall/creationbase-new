@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { Broadcast, Code, GlobeHemisphereWest, ShieldCheck, UsersThree, WifiHigh } from '@phosphor-icons/react';
 
 const sections = [
+  "0.0 VISUAL SYSTEM NOTES",
   "1.0 BRAND OVERVIEW",
   "2.0 LOGO SYSTEM",
   "3.0 COLOR PALETTE",
@@ -215,7 +217,7 @@ const ScrollSection = ({ children, index, setActive }) => {
 
   useEffect(() => {
     if (isInView) {
-      setActive(index);
+      setActive(index + 1);
     }
   }, [isInView, index, setActive]);
 
@@ -252,6 +254,8 @@ const ScrollSection = ({ children, index, setActive }) => {
 const OpenNetizenCaseStudy = ({ onBack }) => {
   const [active, setActive] = useState(0);
   const mainRef = useRef(null);
+  const summaryRef = useRef(null);
+  const summaryInView = useInView(summaryRef, { amount: 0.5 });
 
   useEffect(() => {
     // Force scroll to top on mount
@@ -260,6 +264,10 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
     }
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    if (summaryInView) setActive(0);
+  }, [summaryInView]);
 
   return (
     <motion.div 
@@ -319,37 +327,27 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
             }}
           >
             <div style={{ marginTop: 'auto', marginBottom: '48px' }}>
-              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 24, marginBottom: 16 }}>
-                <LogoMark size={56} color={WHITE} bg="transparent" />
-                <h1 style={{
-                  fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
-                  fontWeight: 900,
-                  fontSize: "clamp(48px, 6vw, 96px)",
-                  color: WHITE,
-                  letterSpacing: -2,
-                  lineHeight: 0.85,
-                  margin: 0,
-                  textTransform: 'uppercase',
-                  whiteSpace: 'nowrap'
-                }}>
-                  Open Netizen
-                </h1>
-              </div>
-              <p style={{ 
-                fontFamily: "'SF Mono', monospace", 
-                fontSize: 14, 
-                color: WHITE, 
-                maxWidth: '600px',
-                lineHeight: 1.6,
-                letterSpacing: 0
-              }}>
-                A 501(c)(3) non-profit established to promote the free web, decentralized infrastructure, and open-source principles. Protecting the web as a public commons.
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: WHITE, letterSpacing: 2, margin: "0 0 14px", textTransform: "uppercase" }}>
+                FREE THE WEB
               </p>
+              <h1 style={{
+                fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
+                fontWeight: 900,
+                fontSize: "clamp(48px, 6vw, 96px)",
+                color: WHITE,
+                letterSpacing: -2,
+                lineHeight: 0.85,
+                margin: 0,
+                textTransform: 'uppercase',
+                whiteSpace: 'nowrap'
+              }}>
+                Open Netizen
+              </h1>
             </div>
           </div>
         </section>
 
-        <div style={{ background: WHITE, height: "100vh", scrollSnapAlign: "start", display: "flex", alignItems: "center" }}>
+        <section ref={summaryRef} style={{ background: WHITE, height: "100vh", scrollSnapAlign: "start", display: "flex", alignItems: "center" }}>
           <div style={{ padding: "clamp(32px, 6vh, 64px) 56px", width: "100%" }}>
             <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "clamp(16px, 2.5vw, 32px)", marginBottom: "clamp(16px, 2.5vh, 24px)" }}>
@@ -407,7 +405,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
         {/* Continuous Scroll Sections */}
         <main>
@@ -616,9 +614,19 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: GRAY2 }}>
               <div style={{ background: WHITE, padding: 40 }}>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>1 — PHOSPHOR REACT ICONS</p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
-                  {["⬡", "◈", "⬢", "◉", "⬟", "◎", "⬠", "◈"].map((ic, i) => (
-                    <span key={i} style={{ fontSize: 32, color: BLUE }}>{ic}</span>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
+                  {[
+                    { Icon: GlobeHemisphereWest, label: "GLOBE" },
+                    { Icon: WifiHigh, label: "WIFI" },
+                    { Icon: Broadcast, label: "BROADCAST" },
+                    { Icon: UsersThree, label: "PEOPLE" },
+                    { Icon: ShieldCheck, label: "SECURITY" },
+                    { Icon: Code, label: "CODE" },
+                  ].map(({ Icon, label }) => (
+                    <div key={label} style={{ background: WHITE, padding: "18px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+                      <Icon size={34} color={BLUE} weight="regular" />
+                      <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1 }}>{label}</span>
+                    </div>
                   ))}
                 </div>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: GRAY1, lineHeight: 1.8, marginTop: 24 }}>
@@ -627,14 +635,12 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               </div>
               <div style={{ background: WHITE, padding: 40 }}>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>2 — ISOMETRIC ILLUSTRATION</p>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 120 }}>
-                  <svg viewBox="0 0 120 80" width="180" height="120">
-                    <polygon points="60,5 110,32 110,58 60,85 10,58 10,32" fill="none" stroke={BLUE} strokeWidth="1.5"/>
-                    <polygon points="60,20 95,38 95,58 60,75 25,58 25,38" fill="none" stroke={BLUE} strokeWidth="1" opacity="0.5"/>
-                    <line x1="60" y1="5" x2="60" y2="85" stroke={BLUE} strokeWidth="0.5" opacity="0.3"/>
-                    <line x1="10" y1="32" x2="110" y2="58" stroke={BLUE} strokeWidth="0.5" opacity="0.3"/>
-                    <line x1="110" y1="32" x2="10" y2="58" stroke={BLUE} strokeWidth="0.5" opacity="0.3"/>
-                  </svg>
+                <div style={{ border: `1px solid ${GRAY2}`, overflow: "hidden", background: WHITE }}>
+                  <img
+                    src="/images/isometric-city-blue.svg"
+                    alt="Isometric city illustration"
+                    style={{ width: "100%", height: 200, objectFit: "cover", display: "block" }}
+                  />
                 </div>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: GRAY1, lineHeight: 1.8, marginTop: 24 }}>
                   Isometric illustration brings technical concepts to life with geometric precision. Used for conceptual diagrams representing network infrastructure, data flows, and open systems.

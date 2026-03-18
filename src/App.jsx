@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
+import { ArrowUpLeft, ArrowUpRight } from '@phosphor-icons/react';
 import BoiseAnalogClubCaseStudy from './components/BoiseAnalogClubCaseStudy';
 import OpenNetizenCaseStudy from './components/OpenNetizenCaseStudy';
 
@@ -324,13 +325,10 @@ function App() {
               animate={{ opacity: 1, x: 0 }}
               onClick={() => setActiveCaseStudy(null)}
               whileHover={{ opacity: 0.7 }}
+              aria-label="Back to case studies"
               style={{
                 background: 'none',
                 border: 'none',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '10px',
-                letterSpacing: '2px',
-                textTransform: 'uppercase',
                 cursor: 'pointer',
                 color: '#fff',
                 padding: 0,
@@ -339,7 +337,7 @@ function App() {
                 transition: 'opacity 0.3s ease'
               }}
             >
-              [ BACK TO CASE STUDIES ]
+              <ArrowUpLeft size={30} weight="thin" />
             </motion.button>
           )}
         </div>
@@ -700,15 +698,11 @@ function App() {
                       }}
                       style={{
                         color: '#fff',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '10px',
-                        letterSpacing: '2px',
-                        textTransform: 'uppercase',
                         whiteSpace: 'nowrap',
                         transition: 'opacity 0.3s ease'
                       }}
                     >
-                      [ VIEW CASE STUDY ]
+                      <ArrowUpRight size={34} weight="thin" aria-hidden="true" focusable="false" />
                     </motion.div>
                   </div>
                 </div>

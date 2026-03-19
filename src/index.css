@@ -125,8 +125,29 @@ ul {
 .studio-split-layout {
   display: grid;
   grid-template-columns: 1fr;
+  grid-template-areas:
+    "studioHeader"
+    "studioImage"
+    "studioBody";
   min-height: 60vh;
   border-bottom: 2px solid #000;
+}
+
+.studio-practice-header {
+  grid-area: studioHeader;
+  padding: var(--spacing-xxl) var(--spacing-md) 0 var(--spacing-md);
+}
+
+.studio-practice-image {
+  grid-area: studioImage;
+  border-bottom: 2px solid #000;
+}
+
+.studio-practice-body {
+  grid-area: studioBody;
+  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md) var(--spacing-md);
+  border-bottom: 0;
+  min-height: auto;
 }
 
 .studio-typography-column {
@@ -164,12 +185,29 @@ ul {
 @media (min-width: 768px) {
   .studio-split-layout {
     grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "studioHeader studioImage"
+      "studioBody studioImage";
   }
   
   .studio-typography-column {
     border-right: 2px solid #000;
     border-bottom: 0;
     min-height: auto;
+  }
+
+  .studio-practice-header {
+    border-right: 2px solid #000;
+    padding: var(--spacing-xxl) var(--spacing-md) 0 var(--spacing-md);
+  }
+
+  .studio-practice-image {
+    border-bottom: 0;
+  }
+
+  .studio-practice-body {
+    border-right: 2px solid #000;
+    padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
   }
   
   .studio-title {
@@ -194,5 +232,114 @@ ul {
   
   .studio-client-grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.passion-projects-block {
+  margin-top: var(--spacing-xl);
+  border-top: 1px solid #000;
+  padding-top: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+  max-width: 560px;
+}
+
+.passion-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+.passion-projects-item--left {
+  padding-right: var(--spacing-md);
+  border-right: 1px solid #000;
+}
+
+.passion-projects-item--right {
+  padding-left: var(--spacing-md);
+}
+
+@media (max-width: 639px) {
+  .passion-projects-block {
+    max-width: 300px;
+  }
+
+  .passion-projects-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .passion-projects-item--left {
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  .passion-projects-item--right {
+    padding-left: 0;
+    border-top: 1px solid #000;
+    padding-top: var(--spacing-md);
+  }
+}
+
+.full-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+.mosaic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+}
+
+.mosaic-tile {
+  position: relative;
+  overflow: hidden;
+}
+
+.mosaic-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 640px) {
+  .mosaic-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.mosaic-masonry {
+  column-count: 1;
+  column-gap: 0;
+  line-height: 0;
+}
+
+.mosaic-masonry .mosaic-tile {
+  display: inline-block;
+  width: 100%;
+  break-inside: avoid;
+  margin: 0;
+  vertical-align: top;
+}
+
+.mosaic-masonry .mosaic-tile img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.mosaic-masonry--bw img {
+  filter: grayscale(100%) contrast(1.1);
+}
+
+@media (min-width: 640px) {
+  .mosaic-masonry {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mosaic-masonry {
+    column-count: 3;
   }
 }

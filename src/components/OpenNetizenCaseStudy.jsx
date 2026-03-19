@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { Broadcast, Code, GlobeHemisphereWest, ShieldCheck, UsersThree, WifiHigh } from '@phosphor-icons/react';
 
@@ -129,7 +129,7 @@ function LogoMark({ size = 80, color = WHITE, bg = BLUE }) {
   );
 }
 
-function ColorSwatch({ label, letter, num, hex, cmyk, rgb, bg, textColor }) {
+function ColorSwatch({ letter, num, hex, cmyk, rgb, bg, textColor }) {
   return (
     <div style={{
       background: bg,
@@ -295,6 +295,30 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
         position: 'relative'
       }}>
       <SectionNav active={active} isMobile={isMobile} />
+      <button
+        onClick={onBack}
+        type="button"
+        aria-label="Back to case studies"
+        style={{
+          position: 'fixed',
+          top: 16,
+          left: 16,
+          zIndex: 300,
+          background: BLACK,
+          border: `1px solid ${BLACK}`,
+          padding: '10px 12px',
+          cursor: 'pointer',
+          fontFamily: "var(--font-mono)",
+          fontSize: "var(--fs-xs)",
+          textTransform: "uppercase",
+          color: '#fff',
+          minHeight: 44,
+          minWidth: 44,
+          outlineOffset: 4,
+        }}
+      >
+        [ BACK ]
+      </button>
 
       <div style={{ marginRight: isMobile ? 0 : 260 }}>
         {/* Hero Section */}
@@ -446,13 +470,13 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                 <div>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>1.1 MISSION</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
-                    Open Netizen exists to protect the web as a public commons. Open to everyone, owned by no one, built to last beyond any single company's interests.
+                    Open Netizen exists to protect the web as a public commons. Open to everyone, owned by no one, built to last beyond any single company&apos;s interests.
                   </p>
                 </div>
                 <div>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>1.2 POSITIONING</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
-                    Open Netizen is the civic voice of the open web. Not a tech startup. Not a government agency. A community organization that holds the web's future accountable to the public.
+                    Open Netizen is the civic voice of the open web. Not a tech startup. Not a government agency. A community organization that holds the web&apos;s future accountable to the public.
                   </p>
                 </div>
               </div>
@@ -651,7 +675,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   ))}
                 </div>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: GRAY1, lineHeight: 1.8, marginTop: 24 }}>
-                  Phosphor is a flexible icon family for interfaces, diagrams, and presentations. Consistent stroke weight and clear metaphors align with the brand's technical clarity.
+                  Phosphor is a flexible icon family for interfaces, diagrams, and presentations. Consistent stroke weight and clear metaphors align with the brand&apos;s technical clarity.
                 </p>
               </div>
               <div style={{ background: WHITE, padding: isMobile ? 16 : 40 }}>

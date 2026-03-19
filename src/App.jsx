@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpLeft, ArrowUpRight } from '@phosphor-icons/react';
 import BoiseAnalogClubCaseStudy from './components/BoiseAnalogClubCaseStudy';
 import OpenNetizenCaseStudy from './components/OpenNetizenCaseStudy';
+import Portraits from './components/Portraits';
+import StreetPhotography from './components/StreetPhotography';
 
 const projects = [
   {
@@ -237,9 +239,6 @@ function App() {
   });
   const homeScrollYRef = useRef(0);
   const pendingHomeScrollRestoreRef = useRef(false);
-
-  const { scrollY } = useScroll();
-  const [activeWord, setActiveWord] = useState('visual');
   const openCaseStudy = (id) => {
     const y = window.scrollY || 0;
     homeScrollYRef.current = y;
@@ -264,20 +263,12 @@ function App() {
     }
   }, [activeCaseStudy]);
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    if (latest < 180) {
-      setActiveWord('visual');
-    } else if (latest < 350) {
-      setActiveWord('system');
-    } else {
-      setActiveWord('design');
-    }
-  });
-
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
     return () => clearInterval(timer);
   }, []);
+
+  const isStreetPhotography = activeCaseStudy === 'street';
 
   return (
     <div className="app">
@@ -296,18 +287,18 @@ function App() {
           justifyContent: 'space-between',
           alignItems: 'flex-start',
           zIndex: 100,
-          mixBlendMode: 'difference',
-          color: '#fff',
+          mixBlendMode: isStreetPhotography ? 'normal' : 'difference',
+          color: isStreetPhotography ? '#000' : '#fff',
           pointerEvents: 'none'
         }}
       >
-        <div className="logo small-text" style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-lg)' }}>
+        <div className="logo small-text" style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-lg)', color: isStreetPhotography ? '#fff' : undefined }}>
           <div>
             Forrest Tindall<br />
             Design & Dev
           </div>
           
-          {activeCaseStudy === 'on' && (
+          {(activeCaseStudy === 'on' || activeCaseStudy === 'portraits' || activeCaseStudy === 'street') && (
             <motion.button
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -329,7 +320,7 @@ function App() {
             </motion.button>
           )}
         </div>
-        <div className="small-text" style={{ textAlign: 'right', pointerEvents: 'auto' }}>
+        <div className="small-text" style={{ textAlign: 'right', pointerEvents: 'auto', color: isStreetPhotography ? '#fff' : undefined }}>
           Boise, ID<br />
           {time}
         </div>
@@ -354,6 +345,10 @@ function App() {
           <BoiseAnalogClubCaseStudy key="bac" onBack={closeCaseStudy} />
         ) : activeCaseStudy === 'on' ? (
           <OpenNetizenCaseStudy key="on" onBack={closeCaseStudy} />
+        ) : activeCaseStudy === 'portraits' ? (
+          <Portraits key="portraits" onBack={closeCaseStudy} />
+        ) : activeCaseStudy === 'street' ? (
+          <StreetPhotography key="street" />
         ) : (
           <motion.div
             key="homepage"
@@ -658,24 +653,16 @@ function App() {
             }}>
               {/* Top Split Layout */}
               <div className="studio-split-layout">
-                {/* Left: Typography */}
-                <div className="studio-typography-column">
-                  <div>
-                    <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
-                      <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-                        STUDIO PRACTICE
-                      </h2>
-                      <span className="small-text">Index (04)</span>
-                    </div>
-
-                    <div className="small-text" style={{ maxWidth: '300px', marginTop: 'var(--spacing-lg)' }}>
-                      J. F. Tindall is a Fullstack Creative from Boise, Idaho, raised in the wide landscapes of the American West. His work spans photography, design, art, and web development, blending technical precision with visual storytelling. He began making art early, first through drawing and writing, then discovering film photography at thirteen. In 2012, he began designing logos, websites, and he launched <em>Tindall Knives</em>, beginning an over decade-long career as a bladesmith. Around the same time, he started a parallel path in photography, focusing on outdoor and product photography for the knife and tool industry. His photography has been featured in multiple publications, including <em>Popular Mechanics Magazine</em>. Years spent shaping steel by hand in the mountains became a study in patience, discipline, and craftsmanship, qualities that continue to define his creative work today. Through photography, design, writing, illustration, and mixed media, Tindall explores identity, society, and the subtle contradictions of modern life, examining the space between what we call things and what they truly are. His work has appeared in exhibitions, global publications, and bespoke retailers, reflecting an ongoing effort to bridge the personal and the universal.
-                    </div>
+                <div className="studio-practice-header">
+                  <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
+                    <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+                      STUDIO PRACTICE
+                    </h2>
+                    <span className="small-text">Index (04)</span>
                   </div>
                 </div>
 
-                {/* Right: Image */}
-                <div className="studio-portrait-wrapper">
+                <div className="studio-portrait-wrapper studio-practice-image">
                   <img 
                     src="/images/me1.jpg" 
                     alt="Portrait" 
@@ -699,6 +686,81 @@ function App() {
                     textTransform: 'uppercase'
                   }}>
                     Figure 01. Portrait
+                  </div>
+                </div>
+
+                <div className="studio-typography-column studio-practice-body">
+                  <div>
+                    <div className="small-text" style={{ maxWidth: '300px', marginTop: 'var(--spacing-lg)' }}>
+                      J. F. Tindall is a Fullstack Creative from Boise, Idaho, raised in the wide landscapes of the American West. His work spans photography, design, art, web development, sculpture, knife making, and illustration, blending technical precision with visual storytelling. He began making art early, first through drawing and writing, then discovering film photography at thirteen. In 2012, he began designing logos, websites, and he launched <em>Tindall Knives</em>, beginning an over decade-long career as a bladesmith. Around the same time, he started a parallel path in photography, focusing on outdoor and product photography for the knife and tool industry. His photography has been featured in multiple publications, including <em>Popular Mechanics Magazine</em>. Years spent shaping steel by hand in the mountains became a study in patience, discipline, and craftsmanship, qualities that continue to define his creative work today. Through photography, design, writing, illustration, and mixed media, Tindall explores identity, society, and the subtle contradictions of modern life, examining the space between what we call things and what they truly are. His work has appeared in exhibitions, global publications, and bespoke retailers, reflecting an ongoing effort to bridge the personal and the universal.
+                    </div>
+
+                    <div className="flex" style={{ justifyContent: 'space-between', marginTop: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
+                      <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+                        PASSION PROJECTS
+                      </h2>
+                      <span className="small-text">Index (04.1)</span>
+                    </div>
+
+                    <div className="passion-projects-block">
+                      <div className="passion-projects-grid">
+                        <div className="passion-projects-item passion-projects-item--left">
+                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
+                            <div className="small-text">PORTRAITS</div>
+                            <motion.button
+                              onClick={() => openCaseStudy('portraits')}
+                              whileHover={{ opacity: 0.7 }}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                padding: 0,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 'var(--spacing-sm)',
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: 'var(--fs-xs)',
+                                textTransform: 'uppercase',
+                              }}
+                            >
+                              [VIEW]
+                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
+                            </motion.button>
+                          </div>
+                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+                            Portrait photography studies in light—texture, gesture, and presence.
+                          </div>
+                        </div>
+
+                        <div className="passion-projects-item passion-projects-item--right">
+                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
+                            <div className="small-text">STREET PHOTOGRAPHY</div>
+                            <motion.button
+                              onClick={() => openCaseStudy('street')}
+                              whileHover={{ opacity: 0.7 }}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                padding: 0,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 'var(--spacing-sm)',
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: 'var(--fs-xs)',
+                                textTransform: 'uppercase',
+                              }}
+                            >
+                              [VIEW]
+                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
+                            </motion.button>
+                          </div>
+                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+                            Black and white street photographs—signage, movement, and chance.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -771,7 +833,7 @@ function App() {
                       Ramboll
                     </h4>
                     <p className="small-text" style={{ maxWidth: '90%' }}>
-                      Built a custom data migration system for Ramboll North America's Air Quality division and provide ongoing system administration for data migration servers. Delivering a robust full-stack solution to ensure data integrity and streamline complex environmental reporting workflows.
+                      Built a custom data migration system for Ramboll North America&apos;s Air Quality division and provide ongoing system administration for data migration servers. Delivering a robust full-stack solution to ensure data integrity and streamline complex environmental reporting workflows.
                     </p>
                     <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
                       [FULL STACK] [SYSTEM ADMIN] [DATA MIGRATION]
@@ -921,7 +983,7 @@ function App() {
                             textTransform: 'none',
                             maxWidth: '90%'
                         }}>
-                            "{testimonial.text}"
+                            “{testimonial.text}”
                         </p>
                       </div>
                     </motion.div>
@@ -939,7 +1001,7 @@ function App() {
               style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
             >
               <div>
-                <h2 className="section-title">Let's Work<br />Together</h2>
+                <h2 className="section-title">Let&apos;s Work<br />Together</h2>
               </div>
               
               <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-xl)' }}>

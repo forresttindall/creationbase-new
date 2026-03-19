@@ -419,135 +419,6 @@ function App() {
 
 
 
-            {/* Graphic Design */}
-            <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
-              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-                  GRAPHIC DESIGN
-                </h2>
-                <span className="small-text">Index (01)</span>
-              </div>
-
-              <div className="project-grid project-grid--tight" style={{ alignItems: 'start' }}>
-                {graphicDesign.map((project, i) => (
-                  <motion.article 
-                    key={i} 
-                    className="project-card"
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-10%" }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
-                    onClick={() => setSelectedProject(project)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <div style={{ border: '1px solid #000', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                      <div style={{ 
-                        overflow: 'hidden',
-                        aspectRatio: '1/1',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: 'transparent'
-                      }}>
-                        <img 
-                            src={project.image} 
-                            alt={project.title} 
-                            style={{ 
-                              width: 'auto',
-                              height: '100%',
-                              maxWidth: 'none',
-                              display: 'block',
-                              transition: 'all 0.5s ease'
-                            }} 
-                            onMouseOver={(e) => {
-                              e.currentTarget.style.transform = 'scale(1.05)';
-                            }}
-                            onMouseOut={(e) => {
-                              e.currentTarget.style.transform = 'scale(1)';
-                            }}
-                            loading="lazy" 
-                          />
-                      </div>
-                      <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #000', padding: '10px 12px', alignItems: 'baseline' }}>
-                        <div>
-                          <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
-                          <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
-                        </div>
-                        <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
-                          <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
-                          <div>{project.year}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.article>
-                ))}
-              </div>
-            </section>
-
-            {/* Selected Work */}
-            <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
-              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
-                  UI/UX DESIGN
-                </h2>
-                <span className="small-text">Index (02)</span>
-              </div>
-              
-              <div className="project-grid project-grid--tight">
-                {projects.map((project, index) => (
-                  <motion.article 
-                    key={index} 
-                    className="project-card"
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-10%" }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
-                    onClick={() => setSelectedProject(project)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <div style={{ border: '1px solid #333', overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: '#000' }}>
-                      <div style={{ 
-                        overflow: 'hidden',
-                        aspectRatio: '1/1',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: '#000'
-                      }}>
-                        <img 
-                          src={project.image} 
-                          alt={project.title}
-                          style={{ 
-                            width: 'auto',
-                            height: '100%',
-                            maxWidth: 'none',
-                            display: 'block',
-                            transition: 'all 0.5s ease'
-                          }}
-                          onMouseOver={(e) => {
-                            e.currentTarget.style.transform = 'scale(1.05)';
-                          }}
-                          onMouseOut={(e) => {
-                            e.currentTarget.style.transform = 'scale(1)';
-                          }}
-                        />
-                      </div>
-                      <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #333', padding: '10px 12px', alignItems: 'baseline' }}>
-                        <div>
-                          <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
-                          <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
-                        </div>
-                        <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
-                          <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
-                          <div>{project.year}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.article>
-                ))}
-              </div>
-            </section>
-
             {/* Featured Case Study: Open Netizen */}
             <motion.section 
               style={{ 
@@ -561,11 +432,11 @@ function App() {
               whileHover="hover"
               onClick={() => openCaseStudy('on')}
             >
-              <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline', background: '#000' }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+              <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline', background: '#fff' }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#000' }}>
                   CASE STUDY
                 </h2>
-                <span className="small-text" style={{ color: '#fff' }}>Index (03)</span>
+                <span className="small-text" style={{ color: '#000' }}>Index (01)</span>
               </div>
 
               {/* Full Bleed Image for Open Netizen */}
@@ -640,133 +511,6 @@ function App() {
               </div>
             </motion.section>
 
-            {/* About Section */}
-            <section style={{ 
-              padding: '0',
-              background: '#ffffff',
-              color: '#000',
-              minHeight: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-              position: 'relative',
-              overflow: 'hidden'
-            }}>
-              {/* Top Split Layout */}
-              <div className="studio-split-layout">
-                <div className="studio-practice-header">
-                  <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
-                    <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-                      STUDIO PRACTICE
-                    </h2>
-                    <span className="small-text">Index (04)</span>
-                  </div>
-                </div>
-
-                <div className="studio-portrait-wrapper studio-practice-image">
-                  <img 
-                    src="/images/me1.jpg" 
-                    alt="Portrait" 
-                    style={{ 
-                      width: '100%', 
-                      height: '100%', 
-                      objectFit: 'cover',
-                      filter: 'grayscale(100%) contrast(1.1)',
-                      display: 'block'
-                    }} 
-                  />
-                  <div style={{
-                    position: 'absolute',
-                    bottom: 'var(--spacing-md)',
-                    left: 'var(--spacing-md)',
-                    background: '#000',
-                    color: '#fff',
-                    padding: 'var(--spacing-xs) var(--spacing-sm)',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 'var(--fs-xs)',
-                    textTransform: 'uppercase'
-                  }}>
-                    Figure 01. Portrait
-                  </div>
-                </div>
-
-                <div className="studio-typography-column studio-practice-body">
-                  <div>
-                    <div className="small-text" style={{ maxWidth: '300px', marginTop: 'var(--spacing-lg)' }}>
-                      J. F. Tindall is a Fullstack Creative from Boise, Idaho, raised in the wide landscapes of the American West. His work spans photography, design, art, web development, sculpture, knife making, and illustration, blending technical precision with visual storytelling. He began making art early, first through drawing and writing, then discovering film photography at thirteen. In 2012, he began designing logos, websites, and he launched <em>Tindall Knives</em>, beginning an over decade-long career as a bladesmith. Around the same time, he started a parallel path in photography, focusing on outdoor and product photography for the knife and tool industry. His photography has been featured in multiple publications, including <em>Popular Mechanics Magazine</em>. Years spent shaping steel by hand in the mountains became a study in patience, discipline, and craftsmanship, qualities that continue to define his creative work today. Through photography, design, writing, illustration, and mixed media, Tindall explores identity, society, and the subtle contradictions of modern life, examining the space between what we call things and what they truly are. His work has appeared in exhibitions, global publications, and bespoke retailers, reflecting an ongoing effort to bridge the personal and the universal.
-                    </div>
-
-                    <div className="flex" style={{ justifyContent: 'space-between', marginTop: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
-                      <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-                        PASSION PROJECTS
-                      </h2>
-                      <span className="small-text">Index (04.1)</span>
-                    </div>
-
-                    <div className="passion-projects-block">
-                      <div className="passion-projects-grid">
-                        <div className="passion-projects-item passion-projects-item--left">
-                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
-                            <div className="small-text">PORTRAITS</div>
-                            <motion.button
-                              onClick={() => openCaseStudy('portraits')}
-                              whileHover={{ opacity: 0.7 }}
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                padding: 0,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 'var(--spacing-sm)',
-                                fontFamily: 'var(--font-mono)',
-                                fontSize: 'var(--fs-xs)',
-                                textTransform: 'uppercase',
-                              }}
-                            >
-                              [VIEW]
-                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
-                            </motion.button>
-                          </div>
-                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                            Portrait photography studies in light—texture, gesture, and presence.
-                          </div>
-                        </div>
-
-                        <div className="passion-projects-item passion-projects-item--right">
-                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
-                            <div className="small-text">STREET PHOTOGRAPHY</div>
-                            <motion.button
-                              onClick={() => openCaseStudy('street')}
-                              whileHover={{ opacity: 0.7 }}
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                padding: 0,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 'var(--spacing-sm)',
-                                fontFamily: 'var(--font-mono)',
-                                fontSize: 'var(--fs-xs)',
-                                textTransform: 'uppercase',
-                              }}
-                            >
-                              [VIEW]
-                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
-                            </motion.button>
-                          </div>
-                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                            Black and white street photographs—signage, movement, and chance.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </section>
-
             {/* Selected Clients & Testimonials */}
             <section style={{ 
               padding: '0',
@@ -784,7 +528,7 @@ function App() {
                   <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
                     CLIENTS & PARTNERS
                   </h2>
-                  <span className="small-text">Index (05)</span>
+                  <span className="small-text">Index (02)</span>
                 </div>
 
                 <div className="studio-client-grid">
@@ -990,6 +734,282 @@ function App() {
                   ))}
                 </div>
               </div>
+            </section>
+
+            <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
+              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: '1px solid #000' }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+                  SERVICES
+                </h2>
+                <span className="small-text">Index (03)</span>
+              </div>
+              <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--spacing-md)', marginTop: 'var(--spacing-lg)' }}>
+                <div>
+                  <p className="small-text" style={{ maxWidth: '420px', textTransform: 'none' }}>
+                    Freelance designer for product teams and design studios. I build clear, modern systems that scale across brand and interface.
+                  </p>
+                </div>
+                <div>
+                  <ul className="small-text" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
+                    <li>UI/UX DESIGN</li>
+                    <li>GRAPHIC DESIGN</li>
+                    <li>ART DIRECTION</li>
+                    <li>VISUAL SYSTEM DESIGN</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
+              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+                  UI/UX DESIGN
+                </h2>
+                <span className="small-text">Index (04)</span>
+              </div>
+              
+              <div className="project-grid project-grid--tight">
+                {projects.map((project, index) => (
+                  <motion.article 
+                    key={index} 
+                    className="project-card"
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    onClick={() => setSelectedProject(project)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div style={{ border: '1px solid #333', overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: '#000' }}>
+                      <div style={{ 
+                        overflow: 'hidden',
+                        aspectRatio: '1/1',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#000'
+                      }}>
+                        <img 
+                          src={project.image} 
+                          alt={project.title}
+                          style={{ 
+                            width: 'auto',
+                            height: '100%',
+                            maxWidth: 'none',
+                            display: 'block',
+                            transition: 'all 0.5s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.05)';
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                          }}
+                        />
+                      </div>
+                      <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #333', padding: '10px 12px', alignItems: 'baseline' }}>
+                        <div>
+                          <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
+                          <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
+                        </div>
+                        <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
+                          <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
+                          <div>{project.year}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            </section>
+
+            <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
+              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+                  GRAPHIC DESIGN
+                </h2>
+                <span className="small-text">Index (05)</span>
+              </div>
+
+              <div className="project-grid project-grid--tight" style={{ alignItems: 'start' }}>
+                {graphicDesign.map((project, i) => (
+                  <motion.article 
+                    key={i} 
+                    className="project-card"
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    onClick={() => setSelectedProject(project)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div style={{ border: '1px solid #000', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ 
+                        overflow: 'hidden',
+                        aspectRatio: '1/1',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: 'transparent'
+                      }}>
+                        <img 
+                            src={project.image} 
+                            alt={project.title} 
+                            style={{ 
+                              width: 'auto',
+                              height: '100%',
+                              maxWidth: 'none',
+                              display: 'block',
+                              transition: 'all 0.5s ease'
+                            }} 
+                            onMouseOver={(e) => {
+                              e.currentTarget.style.transform = 'scale(1.05)';
+                            }}
+                            onMouseOut={(e) => {
+                              e.currentTarget.style.transform = 'scale(1)';
+                            }}
+                            loading="lazy" 
+                          />
+                      </div>
+                      <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #000', padding: '10px 12px', alignItems: 'baseline' }}>
+                        <div>
+                          <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
+                          <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
+                        </div>
+                        <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
+                          <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
+                          <div>{project.year}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            </section>
+
+            <section style={{ 
+              padding: '0',
+              background: '#ffffff',
+              color: '#000',
+              minHeight: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
+              <div className="studio-split-layout">
+                <div className="studio-practice-header">
+                  <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
+                    <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+                      STUDIO PRACTICE
+                    </h2>
+                    <span className="small-text">Index (06)</span>
+                  </div>
+                </div>
+
+                <div className="studio-portrait-wrapper studio-practice-image">
+                  <img 
+                    src="/images/me1.jpg" 
+                    alt="Portrait" 
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'cover',
+                      filter: 'grayscale(100%) contrast(1.1)',
+                      display: 'block'
+                    }} 
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 'var(--spacing-md)',
+                    left: 'var(--spacing-md)',
+                    background: '#000',
+                    color: '#fff',
+                    padding: 'var(--spacing-xs) var(--spacing-sm)',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 'var(--fs-xs)',
+                    textTransform: 'uppercase'
+                  }}>
+                    Figure 01. Portrait
+                  </div>
+                </div>
+
+                <div className="studio-typography-column studio-practice-body">
+                  <div>
+                    <div className="small-text" style={{ maxWidth: '300px', marginTop: 'var(--spacing-lg)' }}>
+                      J. F. Tindall is a Fullstack Creative from Boise, Idaho, raised in the wide landscapes of the American West. His work spans photography, design, art, web development, sculpture, knife making, and illustration, blending technical precision with visual storytelling. He began making art early, first through drawing and writing, then discovering film photography at thirteen. In 2012, he began designing logos, websites, and he launched <em>Tindall Knives</em>, beginning an over decade-long career as a bladesmith. Around the same time, he started a parallel path in photography, focusing on outdoor and product photography for the knife and tool industry. His photography has been featured in multiple publications, including <em>Popular Mechanics Magazine</em>. Years spent shaping steel by hand in the mountains became a study in patience, discipline, and craftsmanship, qualities that continue to define his creative work today. Through photography, design, writing, illustration, and mixed media, Tindall explores identity, society, and the subtle contradictions of modern life, examining the space between what we call things and what they truly are. His work has appeared in exhibitions, global publications, and bespoke retailers, reflecting an ongoing effort to bridge the personal and the universal.
+                    </div>
+
+                    <div className="flex" style={{ justifyContent: 'space-between', marginTop: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
+                      <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+                        PASSION PROJECTS
+                      </h2>
+                      <span className="small-text">Index (06.1)</span>
+                    </div>
+
+                    <div className="passion-projects-block">
+                      <div className="passion-projects-grid">
+                        <div className="passion-projects-item passion-projects-item--left">
+                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
+                            <div className="small-text">PORTRAITS</div>
+                            <motion.button
+                              onClick={() => openCaseStudy('portraits')}
+                              whileHover={{ opacity: 0.7 }}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                padding: 0,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 'var(--spacing-sm)',
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: 'var(--fs-xs)',
+                                textTransform: 'uppercase',
+                              }}
+                            >
+                              [VIEW]
+                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
+                            </motion.button>
+                          </div>
+                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+                            Portrait photography studies in light—texture, gesture, and presence.
+                          </div>
+                        </div>
+
+                        <div className="passion-projects-item passion-projects-item--right">
+                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
+                            <div className="small-text">STREET PHOTOGRAPHY</div>
+                            <motion.button
+                              onClick={() => openCaseStudy('street')}
+                              whileHover={{ opacity: 0.7 }}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                padding: 0,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 'var(--spacing-sm)',
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: 'var(--fs-xs)',
+                                textTransform: 'uppercase',
+                              }}
+                            >
+                              [VIEW]
+                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
+                            </motion.button>
+                          </div>
+                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+                            Black and white street photographs—signage, movement, and chance.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </section>
 
             {/* Footer / Contact */}

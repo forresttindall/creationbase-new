@@ -413,6 +413,27 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   </p>
                 </div>
               </div>
+
+              <div style={{ marginTop: "clamp(12px, 2vh, 20px)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, margin: 0, textTransform: "uppercase" }}>0.1 ROLE / SCOPE / DELIVERABLES</p>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, color: GRAY1, letterSpacing: 2, margin: 0, textTransform: "uppercase" }}>[ HANDOFF READY ]</p>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
+                  <div style={{ background: WHITE, padding: 14 }}>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Role</p>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Visual identity + system design.</p>
+                  </div>
+                  <div style={{ background: WHITE, padding: 14 }}>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Scope</p>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Logo, type, color, layout rules, icon + illustration direction, photography direction.</p>
+                  </div>
+                  <div style={{ background: WHITE, padding: 14 }}>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Deliverables</p>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Logo suite, usage rules, palette specs, layout modules, application templates.</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -433,7 +454,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   aspectRatio: '1/1',
                   width: '100%',
                 }}>
-                  <LogoMark size={120} color={WHITE} bg="transparent" />
+                  <LogoMark size="var(--on-brand-logo-size)" color={WHITE} bg="transparent" />
                 </div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
@@ -508,11 +529,11 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                 ].map((v, i) => (
                   <div key={i} style={{
                     background: v.bg,
-                    aspectRatio: "1/1",
+                    aspectRatio: "var(--on-logomark-ar)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: isMobile ? 10 : "clamp(16px, 3vh, 32px)",
+                    padding: isMobile ? 10 : "var(--on-logomark-pad)",
                   }}>
                     <LogoMark size={isMobile ? "min(52px, 15vw)" : "var(--on-logo-size)"} color={v.color} bg="transparent" />
                   </div>
@@ -532,11 +553,11 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   <div key={i} style={{
                     background: v.bg,
                     border: `1px solid ${GRAY2}`,
-                    padding: "0 28px",
+                    padding: "0 var(--on-typemark-pad-x)",
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    height: "clamp(60px, 9vh, 120px)",
+                    height: "var(--on-typemark-h)",
                     marginTop: "-1px",
                   }}>
                     <span style={{ 
@@ -561,6 +582,30 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            <div style={{ marginTop: "clamp(16px, 2.5vh, 28px)" }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: "clamp(6px, 1vh, 12px)" }}>2.3 USAGE RULES</p>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
+                <div style={{ background: WHITE, padding: "clamp(14px, 2vh, 18px)" }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Clearspace</p>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
+                    Maintain minimum clearspace equal to the mark&apos;s inner aperture. Never let type or edges crowd the icon.
+                  </p>
+                </div>
+                <div style={{ background: WHITE, padding: "clamp(14px, 2vh, 18px)" }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Minimum Size</p>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
+                    Digital: 24px height. Print: 6mm height. Below minimum, use the typemark only.
+                  </p>
+                </div>
+                <div style={{ background: WHITE, padding: "clamp(14px, 2vh, 18px)" }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Files</p>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
+                    Use vector for print/signage. Use PNG for UI when transparency is needed. Keep colors locked to the palette.
+                  </p>
+                </div>
               </div>
             </div>
           </ScrollSection>
@@ -885,8 +930,13 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
       <style>{`
         :root {
           --on-logo-size: clamp(50px, 7vh, 120px);
+          --on-brand-logo-size: 120px;
           --on-layout-row-h: clamp(260px, 24vh, 340px);
           --on-photo-tile-ar: 1 / 1;
+          --on-logomark-ar: 1 / 1;
+          --on-logomark-pad: clamp(16px, 3vh, 32px);
+          --on-typemark-h: clamp(60px, 9vh, 120px);
+          --on-typemark-pad-x: 28px;
         }
 
         @media (min-width: 1800px) and (min-aspect-ratio: 16/9) {
@@ -898,8 +948,13 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
         /* Large Screen / iMac Optimizations only apply to wide, tall viewports */
         @media (min-width: 1800px) and (min-height: 900px) {
           :root {
-            --on-logo-size: clamp(80px, 12vh, 180px);
             --on-layout-row-h: clamp(360px, 30vh, 460px);
+            --on-logo-size: clamp(80px, 12vh, 180px);
+            --on-brand-logo-size: 140px;
+            --on-logomark-ar: 6 / 5;
+            --on-logomark-pad: clamp(10px, 1.6vh, 18px);
+            --on-typemark-h: clamp(52px, 6.5vh, 96px);
+            --on-typemark-pad-x: 20px;
           }
         }
 

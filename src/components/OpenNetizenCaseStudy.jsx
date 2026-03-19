@@ -295,30 +295,6 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
         position: 'relative'
       }}>
       <SectionNav active={active} isMobile={isMobile} />
-      <button
-        onClick={onBack}
-        type="button"
-        aria-label="Back to case studies"
-        style={{
-          position: 'fixed',
-          top: 16,
-          left: 16,
-          zIndex: 300,
-          background: BLACK,
-          border: `1px solid ${BLACK}`,
-          padding: '10px 12px',
-          cursor: 'pointer',
-          fontFamily: "var(--font-mono)",
-          fontSize: "var(--fs-xs)",
-          textTransform: "uppercase",
-          color: '#fff',
-          minHeight: 44,
-          minWidth: 44,
-          outlineOffset: 4,
-        }}
-      >
-        [ BACK ]
-      </button>
 
       <div style={{ marginRight: isMobile ? 0 : 260 }}>
         {/* Hero Section */}

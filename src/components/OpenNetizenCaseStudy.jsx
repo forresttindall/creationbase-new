@@ -877,12 +877,12 @@ const OpenNetizenCaseStudy = () => {
                   </div>
                 </div>
 
-                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column", aspectRatio: isMobile ? "4/3" : undefined }}>
-                <div style={{ flex: 1, minHeight: 0, background: BLACK }}>
+                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                  <div style={{ position: "relative", width: "100%", aspectRatio: "1 / 1", background: BLACK, overflow: "hidden" }}>
                     <img
                       src="/images/OPEN NETIZEN.jpg"
                       alt="Open Netizen advertising application"
-                    style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
                     />
                   </div>
                   <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>

@@ -1113,7 +1113,7 @@ function App() {
                             </motion.button>
                           </div>
                           <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                            Black and white street photographs—signage, movement, and chance.
+                            Mostly shot on film in black and white—protest, movement, and chance.
                           </div>
                         </div>
                       </div>

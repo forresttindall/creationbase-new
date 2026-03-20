@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { Broadcast, Code, GlobeHemisphereWest, ShieldCheck, UsersThree, WifiHigh } from '@phosphor-icons/react';
 
 const sections = [
@@ -207,10 +207,6 @@ function FontCard({ num, name, label, description }) {
 
 const ScrollSection = ({ children, index, setActive, isMobile }) => {
   const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
 
   const isInView = useInView(containerRef, { 
     amount: 0.5,
@@ -222,29 +218,21 @@ const ScrollSection = ({ children, index, setActive, isMobile }) => {
     }
   }, [isInView, index, setActive]);
 
-  // Restore simple "Card Flip" without extra dwell time
-  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [5, 0, -5]);
-
   return (
     <div ref={containerRef} style={{ 
-      height: isMobile ? "auto" : "100vh", 
-      scrollSnapAlign: isMobile ? "unset" : "start",
       position: "relative"
     }}>
       <motion.section
         style={{
-          height: isMobile ? "auto" : "100vh",
           padding: isMobile ? "clamp(24px, 5vh, 48px) 20px" : "clamp(32px, 6vh, 64px) 56px",
-          perspective: isMobile ? "none" : "1200px",
-          transformStyle: isMobile ? "flat" : "preserve-3d",
-          rotateX: isMobile ? 0 : rotateX,
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
           background: WHITE,
+          marginBottom: "clamp(28px, 6vh, 72px)",
         }}
       >
-        <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{ width: "100%", maxWidth: "var(--on-inner-max-w)", margin: "0 auto" }}>
           {children}
         </div>
       </motion.section>
@@ -252,10 +240,9 @@ const ScrollSection = ({ children, index, setActive, isMobile }) => {
   );
 };
 
-const OpenNetizenCaseStudy = ({ onBack }) => {
+const OpenNetizenCaseStudy = () => {
   const [active, setActive] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const mainRef = useRef(null);
   const summaryRef = useRef(null);
   const summaryInView = useInView(summaryRef, { amount: 0.5 });
 
@@ -268,10 +255,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
   }, []);
 
   useEffect(() => {
-    // Force scroll to top on mount
-    if (mainRef.current) {
-      mainRef.current.scrollTop = 0;
-    }
+    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
@@ -280,16 +264,12 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
 
   return (
     <motion.div 
-      ref={mainRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       style={{ 
         background: WHITE,
-        height: "100vh",
-        overflowY: "auto",
         overflowX: "hidden",
-        scrollSnapType: isMobile ? "none" : "y mandatory",
         fontFamily: "'SF Mono', monospace",
         color: BLACK,
         position: 'relative'
@@ -304,7 +284,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           width: '100%',
           overflow: 'hidden',
           background: BLACK,
-          scrollSnapAlign: isMobile ? "unset" : "start"
+          marginBottom: "clamp(28px, 6vh, 72px)",
         }}>
           <div 
             style={{
@@ -357,9 +337,9 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           </div>
         </section>
 
-        <section ref={summaryRef} style={{ background: WHITE, minHeight: "100vh", height: isMobile ? "auto" : "100vh", scrollSnapAlign: isMobile ? "unset" : "start", display: "flex", alignItems: "center" }}>
+        <section ref={summaryRef} style={{ background: WHITE, display: "flex", alignItems: "flex-start", marginBottom: "clamp(28px, 6vh, 72px)" }}>
           <div style={{ padding: isMobile ? "clamp(24px, 5vh, 48px) 20px" : "clamp(32px, 6vh, 64px) 56px", width: "100%" }}>
-            <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
+            <div style={{ width: "100%", maxWidth: "var(--on-inner-max-w)", margin: "0 auto" }}>
               <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", alignItems: "flex-start", gap: "clamp(16px, 2.5vw, 32px)", marginBottom: "clamp(16px, 2.5vh, 24px)" }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, margin: "0 0 12px", textTransform: "uppercase" }}>CASE STUDY SUMMARY</p>
@@ -378,11 +358,11 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                   </h2>
                   <div style={{ height: 1, background: GRAY2, marginTop: 12 }} />
                 </div>
-                <div style={{ width: isMobile ? "100%" : "clamp(84px, 10vw, 140px)", maxWidth: isMobile ? 220 : undefined, aspectRatio: "1/1", border: `1px solid ${GRAY2}`, overflow: "hidden", background: WHITE, flex: "0 0 auto" }}>
+                <div style={{ width: isMobile ? "100%" : "clamp(84px, 10vw, 140px)", maxWidth: isMobile ? 220 : undefined, aspectRatio: "1/1", border: `1px solid ${GRAY2}`, overflow: "hidden", background: BLACK, flex: "0 0 auto" }}>
                   <img
-                    src="/images/sign mockup open netizen.png"
-                    alt="Open Netizen applications preview"
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    src="/images/OPEN NETIZEN.jpg"
+                    alt="Open Netizen preview"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
                   />
                 </div>
               </div>
@@ -734,8 +714,8 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                 { src: "/images/photo4.jpg", label: "04" },
                 { src: "/images/photo5.jpg", label: "05" },
               ].map((img) => (
-                <div key={img.src} style={{ background: WHITE, position: "relative", overflow: "hidden", aspectRatio: isMobile ? "1 / 1" : "var(--on-photo-tile-ar)" }}>
-                  <img src={img.src} alt={`Open Netizen photography ${img.label}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                <div key={img.src} style={{ background: BLACK, position: "relative", overflow: "hidden", aspectRatio: "1 / 1" }}>
+                  <img src={img.src} alt={`Open Netizen photography ${img.label}`} style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
                 </div>
               ))}
             </div>
@@ -883,12 +863,12 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "clamp(16px, 2.5vw, 32px)", minHeight: isMobile ? "auto" : "clamp(320px, 44vh, 480px)" }}>
-                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column", aspectRatio: isMobile ? "4/3" : undefined }}>
-                  <div style={{ flex: 1, minHeight: 0 }}>
+                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                  <div style={{ position: "relative", width: "100%", aspectRatio: "1 / 1", background: BLACK, overflow: "hidden" }}>
                     <img
                       src="/images/sign mockup open netizen.png"
                       alt="Open Netizen signage mockup"
-                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
                     />
                   </div>
                   <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
@@ -898,11 +878,11 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
                 </div>
 
                 <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column", aspectRatio: isMobile ? "4/3" : undefined }}>
-                  <div style={{ flex: 1, minHeight: 0 }}>
+                <div style={{ flex: 1, minHeight: 0, background: BLACK }}>
                     <img
                       src="/images/OPEN NETIZEN.jpg"
                       alt="Open Netizen advertising application"
-                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
                     />
                   </div>
                   <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
@@ -929,6 +909,7 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
 
       <style>{`
         :root {
+          --on-inner-max-w: 1200px;
           --on-logo-size: clamp(50px, 7vh, 120px);
           --on-brand-logo-size: 120px;
           --on-layout-row-h: clamp(260px, 24vh, 340px);
@@ -939,9 +920,29 @@ const OpenNetizenCaseStudy = ({ onBack }) => {
           --on-typemark-pad-x: 28px;
         }
 
-        @media (min-width: 1800px) and (min-aspect-ratio: 16/9) {
+        @media (max-width: 1680px), (max-height: 980px) {
           :root {
-            --on-photo-tile-ar: 3 / 2;
+            --on-inner-max-w: 1060px;
+          }
+        }
+
+        @media (max-width: 1536px), (max-height: 920px) {
+          :root {
+            --on-inner-max-w: 980px;
+          }
+        }
+
+        @media (max-width: 1440px), (max-height: 900px) {
+          :root {
+            --on-inner-max-w: 880px;
+            --on-layout-row-h: clamp(300px, 34vh, 460px);
+          }
+        }
+
+        @media (max-width: 1280px), (max-height: 820px) {
+          :root {
+            --on-inner-max-w: 780px;
+            --on-layout-row-h: clamp(280px, 32vh, 420px);
           }
         }
 

@@ -8,6 +8,17 @@ export default [
   { ignores: ['dist/**'] },
   js.configs.recommended,
   {
+    files: ['api/**/*.js', 'scripts/**/*.mjs'],
+    languageOptions: {
+      ecmaVersion: 2023,
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+        fetch: 'readonly',
+      },
+    },
+  },
+  {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 2023,

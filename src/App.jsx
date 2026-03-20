@@ -12,8 +12,7 @@ const projects = [
     category: "UI/UX Design",
     image: "/images/ricochet mockup.png",
     description: "SaaS website design and prototyping at Superbase",
-    year: "2026",
-    url: "https://www.ricocosign.com"
+    year: "2026"
   },
   {
     title: "Amore",
@@ -27,8 +26,7 @@ const projects = [
     category: "UI/UX Design & Dev",
     image: "/images/clearfeed.png",
     description: "Desktop application design in figma and dev in ELECTRON",
-    year: "2025",
-    url: "https://github.com/forresttindall/ClearFeed-RSS-Reader"
+    year: "2025"
   },
   {
     title: "Fastburger",
@@ -43,13 +41,6 @@ const projects = [
     image: "/images/arrowleaf.png",
     description: "Website design in figma and dev in REACT",
     year: "2024"
-  },
-  {
-    title: "Portfolio",
-    category: "UI/UX Design & Dev",
-    image: "/images/typography portfolio.png",
-    description: "Personal portfolio system design and development",
-    year: "2026"
   },
 
 ];
@@ -151,9 +142,6 @@ const testimonials = [
 const ProjectModal = ({ project, onClose }) => {
   if (!project) return null;
 
-  const url = project.url;
-  const linkLabel = typeof url === 'string' && url.includes('github.com') ? 'VIEW REPO' : 'VIEW LIVE';
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -234,27 +222,6 @@ const ProjectModal = ({ project, onClose }) => {
           <div className="small-text" style={{ textAlign: 'right' }}>
             <div>{project.category}</div>
             <div>{project.year}</div>
-            {url ? (
-              <a
-                href={url}
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                style={{
-                  marginTop: 10,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  color: '#fff',
-                  textDecoration: 'none',
-                  borderBottom: '1px solid rgba(255,255,255,0.6)',
-                  paddingBottom: 2
-                }}
-              >
-                {linkLabel}
-                <ArrowUpRight size={16} weight="thin" aria-hidden="true" focusable="false" />
-              </a>
-            ) : null}
           </div>
         </div>
       </motion.div>
@@ -268,10 +235,7 @@ function App() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState('idle');
   
-  // Initialize from localStorage or null
-  const [activeCaseStudy, setActiveCaseStudy] = useState(() => {
-    return localStorage.getItem('activeCaseStudy') || null;
-  });
+  const [activeCaseStudy, setActiveCaseStudy] = useState(null);
   const homeScrollYRef = useRef(0);
   const pendingHomeScrollRestoreRef = useRef(false);
   const openCaseStudy = (id) => {
@@ -288,15 +252,6 @@ function App() {
     const y = stored ? Number(stored) : homeScrollYRef.current;
     window.scrollTo(0, Number.isFinite(y) ? y : 0);
   };
-
-  // Update localStorage when activeCaseStudy changes
-  useEffect(() => {
-    if (activeCaseStudy) {
-      localStorage.setItem('activeCaseStudy', activeCaseStudy);
-    } else {
-      localStorage.removeItem('activeCaseStudy');
-    }
-  }, [activeCaseStudy]);
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
@@ -394,9 +349,9 @@ function App() {
         }}
       >
         {activeCaseStudy === 'bac' ? (
-          <BoiseAnalogClubCaseStudy key="bac" onBack={closeCaseStudy} />
+          <BoiseAnalogClubCaseStudy key="bac" />
         ) : activeCaseStudy === 'on' ? (
-          <OpenNetizenCaseStudy key="on" onBack={closeCaseStudy} />
+          <OpenNetizenCaseStudy key="on" />
         ) : activeCaseStudy === 'portraits' ? (
           <Portraits key="portraits" onBack={closeCaseStudy} />
         ) : activeCaseStudy === 'street' ? (
@@ -423,7 +378,7 @@ function App() {
                 lineHeight: 1,
                 textTransform: 'uppercase',
                 letterSpacing: '-0.04em',
-                marginBottom: 'var(--spacing-lg)'
+                marginBottom: 'var(--home-hero-h1-mb)'
               }}>
                 <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
                   <motion.div

@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, useInView, useScroll, useTransform } from 'framer-motion';
-import { Broadcast, Code, GlobeHemisphereWest, ShieldCheck, UsersThree, WifiHigh } from '@phosphor-icons/react';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
 
 const sections = [
   "0.0 VISUAL SYSTEM NOTES",
@@ -91,36 +90,6 @@ function PageHeader({ number, title, isMobile }) {
         {number} {title}
       </h2>
       <div style={{ height: 1, background: GRAY2, marginTop: 12 }} />
-    </div>
-  );
-}
-
-function LogoMark({ size = 80, color = WHITE, bg = RED }) {
-  const logoSrc = '/images/analog2.png';
-  const filter = color === WHITE ? 'invert(1)' : 'none';
-
-  return (
-    <div style={{
-      width: size,
-      height: bg === 'transparent' ? 'auto' : size * 1.15,
-      background: bg,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: bg === 'transparent' ? 0 : size * 0.12,
-      boxSizing: "border-box",
-    }}>
-      <img
-        src={logoSrc}
-        alt="Boise Analog Club Mark"
-        style={{
-          width: '100%',
-          height: 'auto',
-          display: 'block',
-          filter
-        }}
-      />
     </div>
   );
 }
@@ -222,10 +191,6 @@ function FontCard({ num, name, label, description, isMobile }) {
 
 const ScrollSection = ({ children, index, setActive, isMobile }) => {
   const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
 
   const isInView = useInView(containerRef, {
     amount: 0.5,
@@ -237,28 +202,21 @@ const ScrollSection = ({ children, index, setActive, isMobile }) => {
     }
   }, [isInView, index, setActive]);
 
-  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [5, 0, -5]);
-
   return (
     <div ref={containerRef} style={{
-      height: isMobile ? "auto" : "100vh",
-      scrollSnapAlign: isMobile ? "unset" : "start",
       position: "relative"
     }}>
       <motion.section
         style={{
-          height: isMobile ? "auto" : "100vh",
           padding: isMobile ? "clamp(24px, 5vh, 48px) 20px" : "clamp(32px, 6vh, 64px) 56px",
-          perspective: isMobile ? "none" : "1200px",
-          transformStyle: isMobile ? "flat" : "preserve-3d",
-          rotateX: isMobile ? 0 : rotateX,
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
           background: WHITE,
+          marginBottom: "clamp(28px, 6vh, 72px)",
         }}
       >
-        <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{ width: "100%", maxWidth: "var(--bac-inner-max-w)", margin: "0 auto" }}>
           {children}
         </div>
       </motion.section>
@@ -266,10 +224,9 @@ const ScrollSection = ({ children, index, setActive, isMobile }) => {
   );
 };
 
-const BoiseAnalogClubCaseStudy = ({ onBack }) => {
+const BoiseAnalogClubCaseStudy = () => {
   const [active, setActive] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const mainRef = useRef(null);
   const summaryRef = useRef(null);
   const summaryInView = useInView(summaryRef, { amount: 0.5 });
 
@@ -282,9 +239,7 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
   }, []);
 
   useEffect(() => {
-    if (mainRef.current) {
-      mainRef.current.scrollTop = 0;
-    }
+    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
@@ -293,16 +248,12 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
 
   return (
     <motion.div
-      ref={mainRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       style={{
         background: WHITE,
-        height: "100vh",
-        overflowY: "auto",
         overflowX: "hidden",
-        scrollSnapType: isMobile ? "none" : "y mandatory",
         fontFamily: "'SF Mono', monospace",
         color: BLACK,
         position: 'relative'
@@ -316,7 +267,7 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
           width: '100%',
           overflow: 'hidden',
           background: BLACK,
-          scrollSnapAlign: isMobile ? "unset" : "start"
+          marginBottom: "clamp(28px, 6vh, 72px)",
         }}>
           <div style={{ width: '100%', height: '100%' }}>
             <img
@@ -368,9 +319,9 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
           </div>
         </section>
 
-        <section ref={summaryRef} style={{ background: WHITE, minHeight: "100vh", height: isMobile ? "auto" : "100vh", scrollSnapAlign: isMobile ? "unset" : "start", display: "flex", alignItems: "center" }}>
+        <section ref={summaryRef} style={{ background: WHITE, display: "flex", alignItems: "flex-start", marginBottom: "clamp(28px, 6vh, 72px)" }}>
           <div style={{ padding: isMobile ? "clamp(24px, 5vh, 48px) 20px" : "clamp(32px, 6vh, 64px) 56px", width: "100%" }}>
-            <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
+            <div style={{ width: "100%", maxWidth: "var(--bac-inner-max-w)", margin: "0 auto" }}>
               <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", alignItems: "flex-start", gap: "clamp(16px, 2.5vw, 32px)", marginBottom: "clamp(16px, 2.5vh, 24px)" }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, margin: "0 0 12px", textTransform: "uppercase" }}>CASE STUDY SUMMARY</p>
@@ -391,9 +342,9 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
                 </div>
                 <div style={{ width: isMobile ? "100%" : "clamp(84px, 10vw, 140px)", maxWidth: isMobile ? 220 : undefined, aspectRatio: "1/1", border: `1px solid ${GRAY2}`, overflow: "hidden", background: WHITE, flex: "0 0 auto" }}>
                   <img
-                    src="/images/propagranda 3.png"
-                    alt="Boise Analog Club flyer preview"
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    src="/images/analog2.png"
+                    alt="Boise Analog Club mark"
+                    style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
                   />
                 </div>
               </div>
@@ -464,7 +415,7 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
                   <img
                     src="/images/analog2.png"
                     alt="Boise Analog Club mark"
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
                   />
                 </div>
               </div>
@@ -549,7 +500,7 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
                       <img
                         src={item.src}
                         alt={item.alt}
-                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
                       />
                     ) : (
                       <span style={{
@@ -713,7 +664,7 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
                   <img
                     src="/images/IMG_5153.JPG"
                     alt="Grain reference"
-                    style={{ width: "100%", height: isMobile ? "var(--bac-elements-media-h-mobile)" : "var(--bac-elements-media-h)", objectFit: "var(--bac-elements-media-fit)", display: "block", filter: "grayscale(100%) contrast(1.1)" }}
+                    style={{ width: "100%", height: isMobile ? "var(--bac-elements-media-h-mobile)" : "var(--bac-elements-media-h)", objectFit: "cover", display: "block", filter: "grayscale(100%) contrast(1.1)" }}
                   />
                 </div>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: GRAY1, lineHeight: 1.8, marginTop: 24 }}>
@@ -754,7 +705,7 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
                 { src: "/images/IMG_2418 4.jpg", label: "04" },
                 { src: "/images/IMG_1679.JPG", label: "05" },
               ].map((img) => (
-                <div key={img.src} style={{ background: WHITE, position: "relative", overflow: "hidden", aspectRatio: isMobile ? "1 / 1" : "var(--bac-photo-tile-ar)" }}>
+                <div key={img.src} style={{ background: WHITE, position: "relative", overflow: "hidden", aspectRatio: "1 / 1" }}>
                   <img src={img.src} alt={`Boise Analog Club photography ${img.label}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(100%) contrast(1.1)" }} />
                 </div>
               ))}
@@ -779,7 +730,7 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
               alignItems: "start",
             }}>
               <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                <div style={isMobile ? { position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" } : { height: "clamp(320px, 48vh, 520px)" }}>
+                <div style={isMobile ? { position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" } : { position: "relative", width: "100%", aspectRatio: "var(--bac-layout-media-ar)", overflow: "hidden" }}>
                   <img
                     src="/images/BAC january.png"
                     alt="Meetup flyer layout example"
@@ -793,7 +744,7 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
               </div>
 
               <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                <div style={isMobile ? { position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" } : { height: "clamp(320px, 48vh, 520px)" }}>
+                <div style={isMobile ? { position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" } : { position: "relative", width: "100%", aspectRatio: "var(--bac-layout-media-ar)", overflow: "hidden" }}>
                   <img
                     src="/images/propagranda 3.png"
                     alt="Promotional social post layout example"
@@ -837,11 +788,11 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
 
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "clamp(16px, 2.5vw, 32px)" }}>
                 <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                  <div style={{ position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" }}>
+                  <div style={isMobile ? { position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" } : { position: "relative", width: "100%", aspectRatio: "var(--bac-layout-media-ar)", overflow: "hidden" }}>
                     <img
                       src="/images/BAC march 2026.png"
                       alt="Boise Analog Club flyer application"
-                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" }}
+                      style={isMobile ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" } : { width: "100%", height: "100%", objectFit: "var(--bac-application-media-fit)", objectPosition: "center", display: "block" }}
                     />
                   </div>
                   <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
@@ -851,11 +802,11 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
                 </div>
 
                 <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                  <div style={{ position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" }}>
+                  <div style={isMobile ? { position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" } : { position: "relative", width: "100%", aspectRatio: "var(--bac-layout-media-ar)", overflow: "hidden" }}>
                     <img
                       src="/images/bac 2.png"
                       alt="Boise Analog Club social application"
-                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" }}
+                      style={isMobile ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" } : { width: "100%", height: "100%", objectFit: "var(--bac-application-media-fit)", objectPosition: "center", display: "block" }}
                     />
                   </div>
                   <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
@@ -882,20 +833,64 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
 
       <style>{`
         :root {
+          --bac-inner-max-w: 1200px;
+          --bac-section-h: 100vh;
+          --bac-snap-type: y mandatory;
+          --bac-snap-align: start;
           --bac-logo-size: clamp(50px, 7vh, 120px);
           --bac-brand-logo-size: 120px;
           --bac-layout-row-h: clamp(260px, 24vh, 340px);
+          --bac-layout-media-ar: 4 / 5;
           --bac-photo-tile-ar: 1 / 1;
           --bac-logomark-ar: 1 / 1;
           --bac-logomark-pad: clamp(16px, 3vh, 32px);
           --bac-typemark-h: clamp(60px, 9vh, 120px);
           --bac-typemark-pad-x: 28px;
-          --bac-app-media-fit: cover;
+          --bac-app-media-fit: contain;
+          --bac-application-media-fit: contain;
           --bac-applications-grid-h: 56vh;
           --bac-applications-grid-offset: 340px;
           --bac-elements-media-h-mobile: clamp(240px, 38vh, 360px);
           --bac-elements-media-h: 200px;
           --bac-elements-media-fit: cover;
+        }
+
+        @media (max-width: 1680px), (max-height: 980px) {
+          :root {
+            --bac-inner-max-w: 1060px;
+          }
+        }
+
+        @media (max-width: 1536px), (max-height: 920px) {
+          :root {
+            --bac-inner-max-w: 980px;
+          }
+        }
+
+        @media (max-width: 1440px), (max-height: 900px) {
+          :root {
+            --bac-inner-max-w: 880px;
+            --bac-layout-row-h: clamp(220px, 22vh, 320px);
+            --bac-layout-media-ar: 4 / 5;
+            --bac-applications-grid-h: 52vh;
+            --bac-applications-grid-offset: 320px;
+            --bac-section-h: auto;
+            --bac-snap-type: none;
+            --bac-snap-align: unset;
+          }
+        }
+
+        @media (max-width: 1280px), (max-height: 820px) {
+          :root {
+            --bac-inner-max-w: 780px;
+            --bac-layout-row-h: clamp(200px, 20vh, 300px);
+            --bac-layout-media-ar: 4 / 5;
+            --bac-applications-grid-h: 48vh;
+            --bac-applications-grid-offset: 300px;
+            --bac-section-h: auto;
+            --bac-snap-type: none;
+            --bac-snap-align: unset;
+          }
         }
 
         @media (min-width: 1800px) and (min-aspect-ratio: 16/9) {
@@ -905,7 +900,7 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
             --bac-applications-grid-h: 62vh;
             --bac-applications-grid-offset: 320px;
             --bac-elements-media-h: 260px;
-            --bac-elements-media-fit: contain;
+            --bac-elements-media-fit: cover;
           }
         }
 

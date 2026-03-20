@@ -175,6 +175,12 @@ ul {
   line-height: 1.6;
 }
 
+@media (min-width: 1280px) and (max-width: 1728px) {
+  :root {
+    --fs-display: clamp(60px, 13vw, 240px);
+  }
+}
+
 .project-grid {
   display: grid;
   gap: var(--spacing-xl);

@@ -177,7 +177,7 @@ function ColorSwatch({ letter, num, hex, cmyk, rgb, bg, textColor }) {
   );
 }
 
-function FontCard({ num, name, label, description }) {
+function FontCard({ num, name, label, description, isMobile }) {
   const normalizedName = String(name).toLowerCase();
   const fontFamily =
     normalizedName === "bucklane script" ? "'Bucklane Script', 'Caveat', 'Helvetica Neue', Arial, sans-serif"
@@ -189,10 +189,10 @@ function FontCard({ num, name, label, description }) {
   return (
     <div style={{
       border: `1px solid ${GRAY2}`,
-      padding: "24px 24px",
+      padding: isMobile ? "16px" : "24px 24px",
       display: "grid",
-      gridTemplateColumns: "minmax(220px, 1fr) minmax(0, 520px)",
-      gap: 24,
+      gridTemplateColumns: isMobile ? "minmax(120px, 160px) minmax(0, 1fr)" : "minmax(220px, 1fr) minmax(0, 520px)",
+      gap: isMobile ? 14 : 24,
       marginTop: "-1px",
     }}>
       <div>
@@ -201,18 +201,18 @@ function FontCard({ num, name, label, description }) {
         </p>
         <p style={{
           fontFamily,
-          fontSize: 24,
+          fontSize: isMobile ? 18 : 24,
           fontWeight: normalizedName === "impact" ? 400 : 900,
           margin: 0,
           color: BLACK,
-          whiteSpace: "nowrap",
+          whiteSpace: isMobile ? "normal" : "nowrap",
           textTransform: normalizedName === "geist" ? "uppercase" : "none",
         }}>
           {name}
         </p>
       </div>
       <div>
-        <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontFamily: "'SF Mono', monospace", fontSize: isMobile ? 12 : 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
           {description}
         </p>
       </div>
@@ -685,18 +685,22 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
             <FontCard
               num="1" name="Bucklane Script" label="Primary Font"
               description="Display script used for the typemark and select headline moments. Adds analog character and a hand-made feel without sacrificing legibility."
+              isMobile={isMobile}
             />
             <FontCard
               num="2" name="Impact" label="Secondary Font"
               description="All-caps poster voice for emphasis and callouts. Used sparingly for maximum contrast and immediate recognition."
+              isMobile={isMobile}
             />
             <FontCard
               num="3" name="Geist" label="Tertiary Font"
               description="All-caps utility font for details, metadata, and structured information blocks across flyers and social posts."
+              isMobile={isMobile}
             />
             <FontCard
               num="4" name="Caveat" label="Quaternary Font"
               description="Handwritten accent used selectively for notes, highlights, and informal callouts to reinforce the community tone."
+              isMobile={isMobile}
             />
           </ScrollSection>
 
@@ -709,7 +713,7 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
                   <img
                     src="/images/IMG_5153.JPG"
                     alt="Grain reference"
-                    style={{ width: "100%", height: isMobile ? 160 : "var(--bac-elements-media-h)", objectFit: "var(--bac-elements-media-fit)", display: "block", filter: "grayscale(100%) contrast(1.1)" }}
+                    style={{ width: "100%", height: isMobile ? "var(--bac-elements-media-h-mobile)" : "var(--bac-elements-media-h)", objectFit: "var(--bac-elements-media-fit)", display: "block", filter: "grayscale(100%) contrast(1.1)" }}
                   />
                 </div>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: GRAY1, lineHeight: 1.8, marginTop: 24 }}>
@@ -722,7 +726,7 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
                   <img
                     src="/images/paper.jpg"
                     alt="Paper texture"
-                    style={{ width: "100%", height: isMobile ? 160 : "var(--bac-elements-media-h)", objectFit: "var(--bac-elements-media-fit)", display: "block" }}
+                    style={{ width: "100%", height: isMobile ? "var(--bac-elements-media-h-mobile)" : "var(--bac-elements-media-h)", objectFit: "var(--bac-elements-media-fit)", display: "block" }}
                   />
                 </div>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: GRAY1, lineHeight: 1.8, marginTop: 24 }}>
@@ -775,11 +779,11 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
               alignItems: "start",
             }}>
               <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                <div style={{ height: isMobile ? "clamp(260px, 44vh, 420px)" : "clamp(320px, 48vh, 520px)" }}>
+                <div style={isMobile ? { position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" } : { height: "clamp(320px, 48vh, 520px)" }}>
                   <img
                     src="/images/BAC january.png"
                     alt="Meetup flyer layout example"
-                    style={{ width: "100%", height: "100%", objectFit: "var(--bac-app-media-fit)", objectPosition: "center", display: "block" }}
+                    style={isMobile ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" } : { width: "100%", height: "100%", objectFit: "var(--bac-app-media-fit)", objectPosition: "center", display: "block" }}
                   />
                 </div>
                 <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
@@ -789,11 +793,11 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
               </div>
 
               <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                <div style={{ height: isMobile ? "clamp(260px, 44vh, 420px)" : "clamp(320px, 48vh, 520px)" }}>
+                <div style={isMobile ? { position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" } : { height: "clamp(320px, 48vh, 520px)" }}>
                   <img
                     src="/images/propagranda 3.png"
                     alt="Promotional social post layout example"
-                    style={{ width: "100%", height: "100%", objectFit: "var(--bac-app-media-fit)", objectPosition: "center", display: "block" }}
+                    style={isMobile ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" } : { width: "100%", height: "100%", objectFit: "var(--bac-app-media-fit)", objectPosition: "center", display: "block" }}
                   />
                 </div>
                 <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
@@ -889,6 +893,7 @@ const BoiseAnalogClubCaseStudy = ({ onBack }) => {
           --bac-app-media-fit: cover;
           --bac-applications-grid-h: 56vh;
           --bac-applications-grid-offset: 340px;
+          --bac-elements-media-h-mobile: clamp(240px, 38vh, 360px);
           --bac-elements-media-h: 200px;
           --bac-elements-media-fit: cover;
         }

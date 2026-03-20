@@ -265,6 +265,8 @@ const ProjectModal = ({ project, onClose }) => {
 function App() {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
   const [selectedProject, setSelectedProject] = useState(null);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState('idle');
   
   // Initialize from localStorage or null
   const [activeCaseStudy, setActiveCaseStudy] = useState(() => {
@@ -302,6 +304,23 @@ function App() {
   }, []);
 
   const isStreetPhotography = activeCaseStudy === 'street';
+  const submitNewsletter = async (e) => {
+    e.preventDefault();
+    if (newsletterStatus === 'loading') return;
+    setNewsletterStatus('loading');
+    try {
+      const resp = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newsletterEmail }),
+      });
+      if (!resp.ok) throw new Error('Subscribe failed');
+      setNewsletterStatus('success');
+      setNewsletterEmail('');
+    } catch {
+      setNewsletterStatus('error');
+    }
+  };
 
   return (
     <div className="app">
@@ -1154,6 +1173,44 @@ function App() {
                     <li>ART DIRECTION</li>
                   
                   </ul>
+                </div>
+              </div>
+
+              <div className="newsletter-block">
+                <div className="newsletter-inner">
+                  <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>NEWSLETTER</p>
+                  <form onSubmit={submitNewsletter} className="newsletter-form">
+                    <input
+                      type="email"
+                      value={newsletterEmail}
+                      onChange={(ev) => setNewsletterEmail(ev.target.value)}
+                      placeholder="Email"
+                      required
+                      className="newsletter-input"
+                    />
+                    <button
+                      type="submit"
+                      disabled={newsletterStatus === 'loading'}
+                      className="newsletter-button"
+                      style={{
+                        cursor: newsletterStatus === 'loading' ? 'default' : 'pointer',
+                        opacity: newsletterStatus === 'loading' ? 0.6 : 1,
+                      }}
+                    >
+                      {newsletterStatus === 'loading' ? '...' : 'Sign Up'}
+                    </button>
+                  </form>
+
+                  {newsletterStatus === 'success' && (
+                    <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+                      Submitted.
+                    </div>
+                  )}
+                  {newsletterStatus === 'error' && (
+                    <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+                      Error. Try again.
+                    </div>
+                  )}
                 </div>
               </div>
 

@@ -435,7 +435,6 @@ function App() {
                 display: 'flex',
                 flexDirection: 'column',
               }}
-              whileHover="hover"
             >
               <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline', background: '#fff' }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#000' }}>
@@ -446,6 +445,7 @@ function App() {
 
               <motion.div
                 onClick={() => openCaseStudy('on')}
+                whileHover="hover"
                 style={{ 
                   position: 'relative', 
                   height: 'var(--case-study-cover-h)', 
@@ -520,6 +520,7 @@ function App() {
 
               <motion.div
                 onClick={() => openCaseStudy('bac')}
+                whileHover="hover"
                 style={{ 
                   position: 'relative', 
                   height: 'var(--case-study-cover-h)', 

@@ -12,7 +12,8 @@ const projects = [
     category: "UI/UX Design",
     image: "/images/ricochet mockup.png",
     description: "SaaS website design and prototyping at Superbase",
-    year: "2026"
+    year: "2026",
+    url: "https://www.ricocosign.com"
   },
   {
     title: "Amore",
@@ -26,7 +27,8 @@ const projects = [
     category: "UI/UX Design & Dev",
     image: "/images/clearfeed.png",
     description: "Desktop application design in figma and dev in ELECTRON",
-    year: "2025"
+    year: "2025",
+    url: "https://github.com/forresttindall/ClearFeed-RSS-Reader"
   },
   {
     title: "Fastburger",
@@ -41,6 +43,13 @@ const projects = [
     image: "/images/arrowleaf.png",
     description: "Website design in figma and dev in REACT",
     year: "2024"
+  },
+  {
+    title: "Portfolio",
+    category: "UI/UX Design & Dev",
+    image: "/images/typography portfolio.png",
+    description: "Personal portfolio system design and development",
+    year: "2026"
   },
 
 ];
@@ -142,6 +151,9 @@ const testimonials = [
 const ProjectModal = ({ project, onClose }) => {
   if (!project) return null;
 
+  const url = project.url;
+  const linkLabel = typeof url === 'string' && url.includes('github.com') ? 'VIEW REPO' : 'VIEW LIVE';
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -222,6 +234,27 @@ const ProjectModal = ({ project, onClose }) => {
           <div className="small-text" style={{ textAlign: 'right' }}>
             <div>{project.category}</div>
             <div>{project.year}</div>
+            {url ? (
+              <a
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  marginTop: 10,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  color: '#fff',
+                  textDecoration: 'none',
+                  borderBottom: '1px solid rgba(255,255,255,0.6)',
+                  paddingBottom: 2
+                }}
+              >
+                {linkLabel}
+                <ArrowUpRight size={16} weight="thin" aria-hidden="true" focusable="false" />
+              </a>
+            ) : null}
           </div>
         </div>
       </motion.div>
@@ -298,7 +331,7 @@ function App() {
             Design & Dev
           </div>
           
-          {(activeCaseStudy === 'on' || activeCaseStudy === 'portraits' || activeCaseStudy === 'street') && (
+          {(activeCaseStudy === 'on' || activeCaseStudy === 'bac' || activeCaseStudy === 'portraits' || activeCaseStudy === 'street') && (
             <motion.button
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -427,10 +460,8 @@ function App() {
                 minHeight: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
-                cursor: 'pointer'
               }}
               whileHover="hover"
-              onClick={() => openCaseStudy('on')}
             >
               <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline', background: '#fff' }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#000' }}>
@@ -439,13 +470,16 @@ function App() {
                 <span className="small-text" style={{ color: '#000' }}>Index (01)</span>
               </div>
 
-              {/* Full Bleed Image for Open Netizen */}
-              <div style={{ 
-                position: 'relative', 
-                height: '80vh', 
-                width: '100%',
-                overflow: 'hidden'
-              }}>
+              <motion.div
+                onClick={() => openCaseStudy('on')}
+                style={{ 
+                  position: 'relative', 
+                  height: 'var(--case-study-cover-h)', 
+                  width: '100%',
+                  overflow: 'hidden',
+                  cursor: 'pointer'
+                }}
+              >
                 <motion.div
                   variants={{
                     hover: { scale: 1.05 }
@@ -508,7 +542,82 @@ function App() {
                     </motion.div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
+
+              <motion.div
+                onClick={() => openCaseStudy('bac')}
+                style={{ 
+                  position: 'relative', 
+                  height: 'var(--case-study-cover-h)', 
+                  width: '100%',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  borderTop: '1px solid #000'
+                }}
+              >
+                <motion.div
+                  variants={{
+                    hover: { scale: 1.05 }
+                  }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ width: '100%', height: '100%' }}
+                >
+                  <img 
+                    src="/images/IMG_3141.JPG" 
+                    alt="Boise Analog Club Case Study" 
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'cover',
+                      display: 'block'
+                    }} 
+                  />
+                </motion.div>
+                
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'flex-end',
+                  padding: '0 var(--spacing-md) var(--spacing-xl)',
+                  pointerEvents: 'none'
+                }}>
+                  <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                    <div>
+                      <h3 style={{ 
+                        fontFamily: 'var(--font-display)', 
+                        fontSize: 'var(--fs-xl)', 
+                        lineHeight: 1,
+                        color: '#676767',
+                        margin: '0 0 var(--spacing-sm) 0',
+                        textTransform: 'uppercase'
+                      }}>
+                        Boise Analog Club
+                      </h3>
+                      <p className="small-text" style={{ color: '#000', maxWidth: '420px', margin: 0 }}>
+                        Flyer design and brand identity system for a community film photography club.
+                      </p>
+                    </div>
+
+                    <motion.div 
+                      variants={{
+                        hover: { opacity: 0.7 }
+                      }}
+                      style={{
+                        color: '#676767',
+                        whiteSpace: 'nowrap',
+                        transition: 'opacity 0.3s ease'
+                      }}
+                    >
+                      <ArrowUpRight size={34} weight="thin" aria-hidden="true" focusable="false" />
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.div>
             </motion.section>
 
             {/* Selected Clients & Testimonials */}
@@ -748,6 +857,9 @@ function App() {
                   <p className="small-text" style={{ maxWidth: '420px', textTransform: 'none' }}>
                     Freelance designer for product teams and design studios. I build clear, modern systems that scale across brand and interface.
                   </p>
+                  <div className="small-text" style={{ marginTop: 'var(--spacing-md)' }}>
+                    Available contract, project-based, or retainer.
+                  </div>
                 </div>
                 <div>
                   <ul className="small-text" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>

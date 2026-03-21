@@ -554,7 +554,7 @@ function App() {
                   style={{ width: '100%', height: '100%' }}
                 >
                   <img 
-                    src="/images/IMG_3141.JPG" 
+                    src="/images/IMG_3141 2.JPG" 
                     alt="Boise Analog Club Case Study" 
                     style={{ 
                       width: '100%', 

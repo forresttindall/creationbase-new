@@ -6,6 +6,85 @@ import BoiseAnalogClubCaseStudy from './components/BoiseAnalogClubCaseStudy';
 import OpenNetizenCaseStudy from './components/OpenNetizenCaseStudy';
 import Portraits from './components/Portraits';
 import StreetPhotography from './components/StreetPhotography';
+import Blog from './components/Blog';
+
+const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange, onSubmitNewsletter }) => (
+  <motion.section
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.8 }}
+    style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+  >
+    <div>
+      <h2 className="section-title">Let&apos;s Work<br />Together</h2>
+    </div>
+    
+    <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-xl)' }}>
+      <div>
+        <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>CONTACT</p>
+        <ul className="small-text">
+          <li><a href="mailto:hello@forresttindall.com" style={{ wordBreak: 'break-all' }}>FORREST.TINDALL@GMAIL.COM</a></li>
+          <li><a href="https://instagram.com/forrest.designer/">INSTAGRAM</a></li>
+          <li><a href="https://www.linkedin.com/in/forrest-tindall/">LINKEDIN</a></li>
+        </ul>
+      </div>
+      <div>
+        <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>SERVICES</p>
+        <ul className="small-text">
+          <li>VISUAL SYSTEM DESIGN</li>
+          <li>WEB DEVELOPMENT</li>
+          <li>BRAND IDENTITY</li>
+          <li>ART DIRECTION</li>
+        
+        </ul>
+      </div>
+    </div>
+
+    <div className="newsletter-block">
+      <div className="newsletter-inner">
+        <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>NEWSLETTER</p>
+        <form onSubmit={onSubmitNewsletter} className="newsletter-form">
+          <input
+            type="email"
+            value={newsletterEmail}
+            onChange={onNewsletterEmailChange}
+            placeholder="Email"
+            required
+            className="newsletter-input"
+          />
+          <button
+            type="submit"
+            disabled={newsletterStatus === 'loading'}
+            className="newsletter-button"
+            style={{
+              cursor: newsletterStatus === 'loading' ? 'default' : 'pointer',
+              opacity: newsletterStatus === 'loading' ? 0.6 : 1,
+            }}
+          >
+            {newsletterStatus === 'loading' ? '...' : 'Sign Up'}
+          </button>
+        </form>
+
+        {newsletterStatus === 'success' && (
+          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+            Submitted.
+          </div>
+        )}
+        {newsletterStatus === 'error' && (
+          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+            Error. Try again.
+          </div>
+        )}
+      </div>
+    </div>
+
+    <div style={{ marginTop: 'var(--spacing-xxl)', borderTop: '1px solid #000', paddingTop: 'var(--spacing-sm)' }} className="flex">
+      <p className="small-text" style={{ flex: 1 }}>© 2026 FORREST TINDALL</p>
+      <p className="small-text">DESIGNED & CODED IN BOISE, ID</p>
+    </div>
+  </motion.section>
+);
 
 const projects = [
   {
@@ -251,6 +330,7 @@ function App() {
     else if (id === 'bac') navigate('/boise-analog-club');
     else if (id === 'portraits') navigate('/portraits');
     else if (id === 'street') navigate('/street-photography');
+    else if (id === 'blog') navigate('/blog');
   };
 
   const closeCaseStudy = () => navigate('/');
@@ -266,6 +346,7 @@ function App() {
     else if (pathname === '/boise-analog-club') setActiveCaseStudy('bac');
     else if (pathname === '/portraits') setActiveCaseStudy('portraits');
     else if (pathname === '/street-photography') setActiveCaseStudy('street');
+    else if (pathname === '/blog' || pathname.startsWith('/blog/')) setActiveCaseStudy('blog');
     else setActiveCaseStudy(null);
   }, [location.pathname]);
 
@@ -321,7 +402,7 @@ function App() {
             Design & Dev
           </div>
           
-          {(activeCaseStudy === 'on' || activeCaseStudy === 'bac' || activeCaseStudy === 'portraits' || activeCaseStudy === 'street') && (
+          {(activeCaseStudy === 'on' || activeCaseStudy === 'bac' || activeCaseStudy === 'portraits' || activeCaseStudy === 'street' || activeCaseStudy === 'blog') && (
             <motion.button
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -364,7 +445,9 @@ function App() {
           }
         }}
       >
-        {activeCaseStudy === 'bac' ? (
+        {activeCaseStudy === 'blog' ? (
+          <Blog key="blog" />
+        ) : activeCaseStudy === 'bac' ? (
           <BoiseAnalogClubCaseStudy key="bac" />
         ) : activeCaseStudy === 'on' ? (
           <OpenNetizenCaseStudy key="on" />
@@ -1107,6 +1190,34 @@ function App() {
                             Mostly shot on film in black and white—protest, movement, and chance.
                           </div>
                         </div>
+
+                        <div className="passion-projects-item passion-projects-item--full">
+                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
+                            <div className="small-text">BLOG</div>
+                            <motion.button
+                              onClick={() => openCaseStudy('blog')}
+                              whileHover={{ opacity: 0.7 }}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                padding: 0,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 'var(--spacing-sm)',
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: 'var(--fs-xs)',
+                                textTransform: 'uppercase',
+                              }}
+                            >
+                              [VIEW]
+                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
+                            </motion.button>
+                          </div>
+                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+                            Writing, ideas, and notes—short essays and working thoughts.
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1114,86 +1225,15 @@ function App() {
               </div>
 
             </section>
-
-            {/* Footer / Contact */}
-            <motion.section 
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-            >
-              <div>
-                <h2 className="section-title">Let&apos;s Work<br />Together</h2>
-              </div>
-              
-              <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-xl)' }}>
-                <div>
-                  <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>CONTACT</p>
-                  <ul className="small-text">
-                    <li><a href="mailto:hello@forresttindall.com" style={{ wordBreak: 'break-all' }}>FORREST.TINDALL@GMAIL.COM</a></li>
-                    <li><a href="https://instagram.com/forrest.designer/">INSTAGRAM</a></li>
-                    <li><a href="https://www.linkedin.com/in/forrest-tindall/">LINKEDIN</a></li>
-                  </ul>
-                </div>
-                <div>
-                  <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>SERVICES</p>
-                  <ul className="small-text">
-                    <li>VISUAL SYSTEM DESIGN</li>
-                    <li>WEB DEVELOPMENT</li>
-                    <li>BRAND IDENTITY</li>
-                    <li>ART DIRECTION</li>
-                  
-                  </ul>
-                </div>
-              </div>
-
-              <div className="newsletter-block">
-                <div className="newsletter-inner">
-                  <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>NEWSLETTER</p>
-                  <form onSubmit={submitNewsletter} className="newsletter-form">
-                    <input
-                      type="email"
-                      value={newsletterEmail}
-                      onChange={(ev) => setNewsletterEmail(ev.target.value)}
-                      placeholder="Email"
-                      required
-                      className="newsletter-input"
-                    />
-                    <button
-                      type="submit"
-                      disabled={newsletterStatus === 'loading'}
-                      className="newsletter-button"
-                      style={{
-                        cursor: newsletterStatus === 'loading' ? 'default' : 'pointer',
-                        opacity: newsletterStatus === 'loading' ? 0.6 : 1,
-                      }}
-                    >
-                      {newsletterStatus === 'loading' ? '...' : 'Sign Up'}
-                    </button>
-                  </form>
-
-                  {newsletterStatus === 'success' && (
-                    <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                      Submitted.
-                    </div>
-                  )}
-                  {newsletterStatus === 'error' && (
-                    <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                      Error. Try again.
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div style={{ marginTop: 'var(--spacing-xxl)', borderTop: '1px solid #000', paddingTop: 'var(--spacing-sm)' }} className="flex">
-                <p className="small-text" style={{ flex: 1 }}>© 2026 FORREST TINDALL</p>
-                <p className="small-text">DESIGNED & CODED IN BOISE, ID</p>
-              </div>
-            </motion.section>
           </motion.div>
         )}
       </AnimatePresence>
+      <SiteFooter
+        newsletterEmail={newsletterEmail}
+        newsletterStatus={newsletterStatus}
+        onNewsletterEmailChange={(ev) => setNewsletterEmail(ev.target.value)}
+        onSubmitNewsletter={submitNewsletter}
+      />
     </div>
   )
 }

@@ -43,6 +43,7 @@
   --fs-display: clamp(64px, 14vw, 260px);
 
   --case-study-cover-h: 80vh;
+  --case-study-app-label-pad: 6px 10px;
 }
 
 * {
@@ -307,6 +308,7 @@ ul {
 @media (min-width: 1800px) and (min-height: 900px) {
   :root {
     --case-study-cover-h: 80vh;
+    --case-study-app-label-pad: 10px 12px;
   }
 }
 

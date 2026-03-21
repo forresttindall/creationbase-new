@@ -243,15 +243,26 @@ const ScrollSection = ({ children, index, setActive, isMobile }) => {
 const OpenNetizenCaseStudy = () => {
   const [active, setActive] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [isNavHidden, setIsNavHidden] = useState(false);
   const summaryRef = useRef(null);
   const summaryInView = useInView(summaryRef, { amount: 0.5 });
 
   useEffect(() => {
-    const mql = window.matchMedia("(max-width: 900px)");
-    const onChange = (e) => setIsMobile(e.matches);
-    setIsMobile(mql.matches);
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
+    const mobileMql = window.matchMedia("(max-width: 900px)");
+    const navMql = window.matchMedia("(max-width: 1100px)");
+
+    const onMobileChange = (e) => setIsMobile(e.matches);
+    const onNavChange = (e) => setIsNavHidden(e.matches);
+
+    setIsMobile(mobileMql.matches);
+    setIsNavHidden(navMql.matches);
+
+    mobileMql.addEventListener("change", onMobileChange);
+    navMql.addEventListener("change", onNavChange);
+    return () => {
+      mobileMql.removeEventListener("change", onMobileChange);
+      navMql.removeEventListener("change", onNavChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -274,9 +285,9 @@ const OpenNetizenCaseStudy = () => {
         color: BLACK,
         position: 'relative'
       }}>
-      <SectionNav active={active} isMobile={isMobile} />
+      <SectionNav active={active} isMobile={isMobile || isNavHidden} />
 
-      <div style={{ marginRight: isMobile ? 0 : 260 }}>
+      <div style={{ marginRight: isMobile || isNavHidden ? 0 : 260 }}>
         {/* Hero Section */}
         <section style={{
           position: 'relative',
@@ -714,8 +725,8 @@ const OpenNetizenCaseStudy = () => {
                 { src: "/images/photo4.jpg", label: "04" },
                 { src: "/images/photo5.jpg", label: "05" },
               ].map((img) => (
-                <div key={img.src} style={{ background: BLACK, position: "relative", overflow: "hidden", aspectRatio: "1 / 1" }}>
-                  <img src={img.src} alt={`Open Netizen photography ${img.label}`} style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
+                <div key={img.src} style={{ background: WHITE, position: "relative", overflow: "hidden", aspectRatio: "1 / 1" }}>
+                  <img src={img.src} alt={`Open Netizen photography ${img.label}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                 </div>
               ))}
             </div>
@@ -862,7 +873,7 @@ const OpenNetizenCaseStudy = () => {
                 </p>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "clamp(16px, 2.5vw, 32px)", minHeight: isMobile ? "auto" : "clamp(320px, 44vh, 480px)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "clamp(16px, 2.5vw, 32px)", minHeight: isMobile ? "auto" : "clamp(320px, 44vh, 480px)", alignItems: "start" }}>
                 <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
                   <div style={{ position: "relative", width: "100%", aspectRatio: "1 / 1", background: BLACK, overflow: "hidden" }}>
                     <img
@@ -871,7 +882,7 @@ const OpenNetizenCaseStudy = () => {
                       style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
                     />
                   </div>
-                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>01</span>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>AD APPLICATION</span>
                   </div>
@@ -885,7 +896,7 @@ const OpenNetizenCaseStudy = () => {
                       style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
                     />
                   </div>
-                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>02</span>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>SIGN MOCKUP</span>
                   </div>
@@ -958,6 +969,7 @@ const OpenNetizenCaseStudy = () => {
             --on-typemark-pad-x: 20px;
           }
         }
+
 
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(8px); }

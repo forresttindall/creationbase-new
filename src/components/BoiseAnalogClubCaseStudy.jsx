@@ -227,15 +227,26 @@ const ScrollSection = ({ children, index, setActive, isMobile }) => {
 const BoiseAnalogClubCaseStudy = () => {
   const [active, setActive] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [isNavHidden, setIsNavHidden] = useState(false);
   const summaryRef = useRef(null);
   const summaryInView = useInView(summaryRef, { amount: 0.5 });
 
   useEffect(() => {
-    const mql = window.matchMedia("(max-width: 900px)");
-    const onChange = (e) => setIsMobile(e.matches);
-    setIsMobile(mql.matches);
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
+    const mobileMql = window.matchMedia("(max-width: 900px)");
+    const navMql = window.matchMedia("(max-width: 1100px)");
+
+    const onMobileChange = (e) => setIsMobile(e.matches);
+    const onNavChange = (e) => setIsNavHidden(e.matches);
+
+    setIsMobile(mobileMql.matches);
+    setIsNavHidden(navMql.matches);
+
+    mobileMql.addEventListener("change", onMobileChange);
+    navMql.addEventListener("change", onNavChange);
+    return () => {
+      mobileMql.removeEventListener("change", onMobileChange);
+      navMql.removeEventListener("change", onNavChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -258,9 +269,9 @@ const BoiseAnalogClubCaseStudy = () => {
         color: BLACK,
         position: 'relative'
       }}>
-      <SectionNav active={active} isMobile={isMobile} />
+      <SectionNav active={active} isMobile={isMobile || isNavHidden} />
 
-      <div style={{ marginRight: isMobile ? 0 : 260 }}>
+      <div style={{ marginRight: isMobile || isNavHidden ? 0 : 260 }}>
         <section style={{
           position: 'relative',
           height: '100vh',
@@ -737,7 +748,7 @@ const BoiseAnalogClubCaseStudy = () => {
                     style={isMobile ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" } : { width: "100%", height: "100%", objectFit: "var(--bac-app-media-fit)", objectPosition: "center", display: "block" }}
                   />
                 </div>
-                <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>01</span>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>MEETUP FLYER LAYOUT</span>
                 </div>
@@ -751,7 +762,7 @@ const BoiseAnalogClubCaseStudy = () => {
                     style={isMobile ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" } : { width: "100%", height: "100%", objectFit: "var(--bac-app-media-fit)", objectPosition: "center", display: "block" }}
                   />
                 </div>
-                <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>02</span>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>SOCIAL PROMO LAYOUT</span>
                 </div>
@@ -795,7 +806,7 @@ const BoiseAnalogClubCaseStudy = () => {
                       style={isMobile ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" } : { width: "100%", height: "100%", objectFit: "var(--bac-application-media-fit)", objectPosition: "center", display: "block" }}
                     />
                   </div>
-                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
+                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>01</span>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>EVENT FLYER</span>
                   </div>
@@ -809,7 +820,7 @@ const BoiseAnalogClubCaseStudy = () => {
                       style={isMobile ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" } : { width: "100%", height: "100%", objectFit: "var(--bac-application-media-fit)", objectPosition: "center", display: "block" }}
                     />
                   </div>
-                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "10px 12px", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
+                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>02</span>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>POSTER SERIES</span>
                   </div>

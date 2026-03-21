@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpLeft, ArrowUpRight } from '@phosphor-icons/react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import BoiseAnalogClubCaseStudy from './components/BoiseAnalogClubCaseStudy';
 import OpenNetizenCaseStudy from './components/OpenNetizenCaseStudy';
 import Portraits from './components/Portraits';
@@ -235,6 +236,9 @@ function App() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState('idle');
   
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [activeCaseStudy, setActiveCaseStudy] = useState(null);
   const homeScrollYRef = useRef(0);
   const pendingHomeScrollRestoreRef = useRef(false);
@@ -243,15 +247,27 @@ function App() {
     homeScrollYRef.current = y;
     sessionStorage.setItem('homeScrollY', String(y));
     pendingHomeScrollRestoreRef.current = true;
-    setActiveCaseStudy(id);
+    if (id === 'on') navigate('/open-netizen');
+    else if (id === 'bac') navigate('/boise-analog-club');
+    else if (id === 'portraits') navigate('/portraits');
+    else if (id === 'street') navigate('/street-photography');
   };
 
-  const closeCaseStudy = () => setActiveCaseStudy(null);
+  const closeCaseStudy = () => navigate('/');
   const restoreHomeScroll = () => {
     const stored = sessionStorage.getItem('homeScrollY');
     const y = stored ? Number(stored) : homeScrollYRef.current;
     window.scrollTo(0, Number.isFinite(y) ? y : 0);
   };
+
+  useEffect(() => {
+    const pathname = location.pathname;
+    if (pathname === '/open-netizen') setActiveCaseStudy('on');
+    else if (pathname === '/boise-analog-club') setActiveCaseStudy('bac');
+    else if (pathname === '/portraits') setActiveCaseStudy('portraits');
+    else if (pathname === '/street-photography') setActiveCaseStudy('street');
+    else setActiveCaseStudy(null);
+  }, [location.pathname]);
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
@@ -353,7 +369,7 @@ function App() {
         ) : activeCaseStudy === 'on' ? (
           <OpenNetizenCaseStudy key="on" />
         ) : activeCaseStudy === 'portraits' ? (
-          <Portraits key="portraits" onBack={closeCaseStudy} />
+          <Portraits key="portraits" />
         ) : activeCaseStudy === 'street' ? (
           <StreetPhotography key="street" />
         ) : (

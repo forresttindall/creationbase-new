@@ -318,6 +318,14 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (location.pathname !== '/') return;
+    const params = new URLSearchParams(location.search);
+    const redirect = params.get('redirect');
+    if (!redirect) return;
+    navigate(redirect, { replace: true });
+  }, [location.pathname, location.search, navigate]);
+
   const [activeCaseStudy, setActiveCaseStudy] = useState(null);
   const homeScrollYRef = useRef(0);
   const pendingHomeScrollRestoreRef = useRef(false);

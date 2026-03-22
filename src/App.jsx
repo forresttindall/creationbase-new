@@ -314,6 +314,7 @@ function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState('idle');
+  const [headerTheme, setHeaderTheme] = useState('light');
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -325,6 +326,76 @@ function App() {
     if (!redirect) return;
     navigate(redirect, { replace: true });
   }, [location.pathname, location.search, navigate]);
+
+  useEffect(() => {
+    const parseRgb = (value) => {
+      if (!value) return null;
+      const m = value.match(/rgba?\(\s*([0-9.]+)\s*,\s*([0-9.]+)\s*,\s*([0-9.]+)(?:\s*,\s*([0-9.]+))?\s*\)/i);
+      if (!m) return null;
+      const r = Number(m[1]);
+      const g = Number(m[2]);
+      const b = Number(m[3]);
+      const a = m[4] !== undefined ? Number(m[4]) : 1;
+      if (![r, g, b, a].every((n) => Number.isFinite(n))) return null;
+      return { r, g, b, a };
+    };
+
+    const isTransparent = (value) => value === 'transparent' || value === 'rgba(0, 0, 0, 0)' || value === 'rgba(0,0,0,0)';
+
+    const luminance = ({ r, g, b }) => {
+      const toLinear = (v) => {
+        const s = v / 255;
+        return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+      };
+      const R = toLinear(r);
+      const G = toLinear(g);
+      const B = toLinear(b);
+      return 0.2126 * R + 0.7152 * G + 0.0722 * B;
+    };
+
+    const getThemeFromElement = (startEl) => {
+      let el = startEl;
+      while (el && el !== document.documentElement) {
+        if (el.getAttribute) {
+          const explicit = el.getAttribute('data-header-theme');
+          if (explicit === 'dark' || explicit === 'light') return explicit;
+        }
+        if (el instanceof Element) {
+          const bg = window.getComputedStyle(el).backgroundColor;
+          if (bg && !isTransparent(bg)) {
+            const rgb = parseRgb(bg);
+            if (rgb && rgb.a > 0) return luminance(rgb) < 0.4 ? 'dark' : 'light';
+          }
+        }
+        el = el.parentElement;
+      }
+      return 'light';
+    };
+
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const x = Math.floor(window.innerWidth / 2);
+      const y = 2;
+      const el = document.elementFromPoint(x, y);
+      if (!el) return;
+      setHeaderTheme(getThemeFromElement(el));
+    };
+
+    const schedule = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    schedule();
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
+  }, [location.pathname]);
 
   const [activeCaseStudy, setActiveCaseStudy] = useState(null);
   const homeScrollYRef = useRef(0);
@@ -364,6 +435,8 @@ function App() {
   }, []);
 
   const isStreetPhotography = activeCaseStudy === 'street';
+  const headerColor = headerTheme === 'dark' ? '#fff' : '#000';
+  const headerLogoSrc = headerTheme === 'dark' ? '/images/logowhite.png' : '/images/logoblack.png';
   const submitNewsletter = async (e) => {
     e.preventDefault();
     if (newsletterStatus === 'loading') return;
@@ -399,15 +472,21 @@ function App() {
           justifyContent: 'space-between',
           alignItems: 'flex-start',
           zIndex: 100,
-          mixBlendMode: isStreetPhotography ? 'normal' : 'difference',
-          color: isStreetPhotography ? '#000' : '#fff',
           pointerEvents: 'none'
         }}
       >
-        <div className="logo small-text" style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-lg)', color: isStreetPhotography ? '#fff' : undefined }}>
-          <div>
-            Forrest Tindall<br />
-            Design & Dev
+        <div className="logo small-text" style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 'var(--spacing-lg)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+            <img
+              src={headerLogoSrc}
+              alt=""
+              aria-hidden="true"
+              style={{ height: 'clamp(21px, 3vw, 23px)', width: 'auto', display: 'block' }}
+            />
+            <div style={{ lineHeight: 1.6, color: headerColor }}>
+              Forrest Tindall<br />
+              Design & Dev
+            </div>
           </div>
           
           {(activeCaseStudy === 'on' || activeCaseStudy === 'bac' || activeCaseStudy === 'portraits' || activeCaseStudy === 'street' || activeCaseStudy === 'blog') && (
@@ -421,7 +500,7 @@ function App() {
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                color: '#fff',
+                color: headerColor,
                 padding: 0,
                 marginTop: '2px', // Align with the first line of text
                 whiteSpace: 'nowrap',
@@ -432,7 +511,7 @@ function App() {
             </motion.button>
           )}
         </div>
-        <div className="small-text" style={{ textAlign: 'right', pointerEvents: 'auto', color: isStreetPhotography ? '#fff' : undefined }}>
+        <div className="small-text" style={{ textAlign: 'right', pointerEvents: 'auto', color: headerColor }}>
           Boise, ID<br />
           {time}
         </div>
@@ -561,6 +640,7 @@ function App() {
                   cursor: 'pointer'
                 }}
               >
+                <div data-header-theme="dark" style={{ position: 'absolute', inset: 0 }} />
                 <motion.div
                   variants={{
                     hover: { scale: 1.05 }

@@ -481,7 +481,7 @@ function App() {
               src={headerLogoSrc}
               alt=""
               aria-hidden="true"
-              style={{ height: 'clamp(21px, 3vw, 23px)', width: 'auto', display: 'block' }}
+              style={{ height: 'clamp(22px, 3vw, 23px)', width: 'auto', display: 'block' }}
             />
             <div style={{ lineHeight: 1.6, color: headerColor }}>
               Forrest Tindall<br />

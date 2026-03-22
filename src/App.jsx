@@ -8,83 +8,144 @@ import Portraits from './components/Portraits';
 import StreetPhotography from './components/StreetPhotography';
 import Blog from './components/Blog';
 
-const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange, onSubmitNewsletter }) => (
-  <motion.section
-    initial={{ opacity: 0 }}
-    whileInView={{ opacity: 1 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.8 }}
-    style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-  >
-    <div>
-      <h2 className="section-title">Let&apos;s Work<br />Together</h2>
-    </div>
-    
-    <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-xl)' }}>
-      <div>
-        <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>CONTACT</p>
-        <ul className="small-text">
-          <li><a href="mailto:hello@forresttindall.com" style={{ wordBreak: 'break-all' }}>FORREST.TINDALL@GMAIL.COM</a></li>
-          <li><a href="https://instagram.com/forrest.designer/">INSTAGRAM</a></li>
-          <li><a href="https://www.linkedin.com/in/forrest-tindall/">LINKEDIN</a></li>
-        </ul>
-      </div>
-      <div>
-        <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>SERVICES</p>
-        <ul className="small-text">
-          <li>VISUAL SYSTEM DESIGN</li>
-          <li>WEB DEVELOPMENT</li>
-          <li>BRAND IDENTITY</li>
-          <li>ART DIRECTION</li>
+const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange, onSubmitNewsletter }) => {
+  const footerVantaElRef = useRef(null);
+  const footerVantaEffectRef = useRef(null);
+
+  useEffect(() => {
+    const el = footerVantaElRef.current;
+    if (!el) return;
+
+    let initTimer = 0;
+    let resetTimer = 0;
+
+    const destroy = () => {
+      if (!footerVantaEffectRef.current) return;
+      try {
+        footerVantaEffectRef.current.destroy();
+      } catch {
+      }
+      footerVantaEffectRef.current = null;
+    };
+
+    const init = () => {
+      if (!window.VANTA || typeof window.VANTA.TOPOLOGY !== 'function') return false;
+      destroy();
+      footerVantaEffectRef.current = window.VANTA.TOPOLOGY({
+        el,
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.0,
+        minWidth: 200.0,
+        scale: 1.0,
+        scaleMobile: 1.0,
+        color: 0x4f4f4f,
+        backgroundColor: 0x0,
+      });
+      return true;
+    };
+
+    if (!init()) {
+      initTimer = window.setInterval(() => {
+        if (init()) window.clearInterval(initTimer);
+      }, 100);
+    } else {
+      resetTimer = window.setInterval(() => {
+        init();
+      }, 12000);
+    }
+
+    return () => {
+      if (initTimer) window.clearInterval(initTimer);
+      if (resetTimer) window.clearInterval(resetTimer);
+      destroy();
+    };
+  }, []);
+
+  return (
+    <motion.section
+      data-header-theme="dark"
+      className="footer-vanta"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8 }}
+      style={{ position: 'relative', overflow: 'hidden', background: '#000' }}
+    >
+      <div ref={footerVantaElRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
+      <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
+        <div>
+          <h2 className="section-title">Let&apos;s Work<br />Together</h2>
+        </div>
         
-        </ul>
-      </div>
-    </div>
-
-    <div className="newsletter-block">
-      <div className="newsletter-inner">
-        <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>NEWSLETTER</p>
-        <form onSubmit={onSubmitNewsletter} className="newsletter-form">
-          <input
-            type="email"
-            value={newsletterEmail}
-            onChange={onNewsletterEmailChange}
-            placeholder="Email"
-            required
-            className="newsletter-input"
-          />
-          <button
-            type="submit"
-            disabled={newsletterStatus === 'loading'}
-            className="newsletter-button"
-            style={{
-              cursor: newsletterStatus === 'loading' ? 'default' : 'pointer',
-              opacity: newsletterStatus === 'loading' ? 0.6 : 1,
-            }}
-          >
-            {newsletterStatus === 'loading' ? '...' : 'Sign Up'}
-          </button>
-        </form>
-
-        {newsletterStatus === 'success' && (
-          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-            Submitted.
+        <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-xl)' }}>
+          <div>
+            <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>CONTACT</p>
+            <ul className="small-text">
+              <li><a href="mailto:hello@forresttindall.com" style={{ wordBreak: 'break-all' }}>FORREST.TINDALL@GMAIL.COM</a></li>
+              <li><a href="https://instagram.com/forrest.designer/">INSTAGRAM</a></li>
+              <li><a href="https://www.linkedin.com/in/forrest-tindall/">LINKEDIN</a></li>
+            </ul>
           </div>
-        )}
-        {newsletterStatus === 'error' && (
-          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-            Error. Try again.
+          <div>
+            <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>SERVICES</p>
+            <ul className="small-text">
+              <li>VISUAL SYSTEM DESIGN</li>
+              <li>WEB DEVELOPMENT</li>
+              <li>BRAND IDENTITY</li>
+              <li>ART DIRECTION</li>
+            
+            </ul>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
 
-    <div style={{ marginTop: 'var(--spacing-xxl)', borderTop: '1px solid #000', paddingTop: 'var(--spacing-sm)' }} className="flex">
-      <p className="small-text" style={{ flex: 1 }}>© 2026 FORREST TINDALL</p>
-      <p className="small-text">DESIGNED & CODED IN BOISE, ID</p>
-    </div>
-  </motion.section>
-);
+        <div className="newsletter-block">
+          <div className="newsletter-inner">
+            <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>NEWSLETTER</p>
+            <form onSubmit={onSubmitNewsletter} className="newsletter-form">
+              <input
+                type="email"
+                value={newsletterEmail}
+                onChange={onNewsletterEmailChange}
+                placeholder="Email"
+                required
+                className="newsletter-input"
+              />
+              <button
+                type="submit"
+                disabled={newsletterStatus === 'loading'}
+                className="newsletter-button"
+                style={{
+                  cursor: newsletterStatus === 'loading' ? 'default' : 'pointer',
+                  opacity: newsletterStatus === 'loading' ? 0.6 : 1,
+                }}
+              >
+                {newsletterStatus === 'loading' ? '...' : 'Sign Up'}
+              </button>
+            </form>
+
+            {newsletterStatus === 'success' && (
+              <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+                Submitted.
+              </div>
+            )}
+            {newsletterStatus === 'error' && (
+              <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+                Error. Try again.
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div style={{ marginTop: 'var(--spacing-xxl)', borderTop: '1px solid rgba(255,255,255,0.22)', paddingTop: 'var(--spacing-sm)' }} className="flex">
+          <p className="small-text" style={{ flex: 1 }}>© 2026 FORREST TINDALL</p>
+          <p className="small-text">DESIGNED & CODED IN BOISE, ID</p>
+        </div>
+      </div>
+    </motion.section>
+  );
+};
 
 const projects = [
   {
@@ -315,6 +376,8 @@ function App() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState('idle');
   const [headerTheme, setHeaderTheme] = useState('light');
+  const heroVantaElRef = useRef(null);
+  const heroVantaEffectRef = useRef(null);
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -437,6 +500,69 @@ function App() {
   const isStreetPhotography = activeCaseStudy === 'street';
   const headerColor = headerTheme === 'dark' ? '#fff' : '#000';
   const headerLogoSrc = headerTheme === 'dark' ? '/images/logowhite.png' : '/images/logoblack.png';
+
+  useEffect(() => {
+    if (activeCaseStudy !== null) {
+      if (heroVantaEffectRef.current) {
+        try {
+          heroVantaEffectRef.current.destroy();
+        } catch {
+        }
+        heroVantaEffectRef.current = null;
+      }
+      return;
+    }
+
+    const el = heroVantaElRef.current;
+    if (!el) return;
+
+    let initTimer = 0;
+    let resetTimer = 0;
+
+    const destroy = () => {
+      if (!heroVantaEffectRef.current) return;
+      try {
+        heroVantaEffectRef.current.destroy();
+      } catch {
+      }
+      heroVantaEffectRef.current = null;
+    };
+
+    const init = () => {
+      if (!window.VANTA || typeof window.VANTA.TOPOLOGY !== 'function') return false;
+      destroy();
+      heroVantaEffectRef.current = window.VANTA.TOPOLOGY({
+        el,
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.0,
+        minWidth: 200.0,
+        scale: 1.0,
+        scaleMobile: 1.0,
+        color: 0x4f4f4f,
+        backgroundColor: 0x0,
+      });
+      return true;
+    };
+
+    if (!init()) {
+      initTimer = window.setInterval(() => {
+        if (init()) window.clearInterval(initTimer);
+      }, 100);
+    } else {
+      resetTimer = window.setInterval(() => {
+        init();
+      }, 12000);
+    }
+
+    return () => {
+      if (initTimer) window.clearInterval(initTimer);
+      if (resetTimer) window.clearInterval(resetTimer);
+      destroy();
+    };
+  }, [activeCaseStudy]);
+
   const submitNewsletter = async (e) => {
     e.preventDefault();
     if (newsletterStatus === 'loading') return;
@@ -550,64 +676,67 @@ function App() {
             exit={{ opacity: 0 }}
           >
             {/* Hero */}
-            <section style={{ 
-              minHeight: '100vh', 
-              display: 'flex', 
-              flexDirection: 'column', 
-              justifyContent: 'flex-end', 
-              padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-xl)',
-              borderBottom: '1px solid #000'
-            }}>
-              <h1 style={{ 
-                fontFamily: 'var(--font-display)', 
-                fontSize: 'var(--fs-display)', 
-                lineHeight: 1,
-                textTransform: 'uppercase',
-                letterSpacing: '-0.04em',
-                marginBottom: 'var(--home-hero-h1-mb)'
-              }}>
-                <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-                  <motion.div
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                  >
-                    Visual
-                  </motion.div>
-                </div>
-                <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
-                  <motion.div
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-                  >
-                    System
-                  </motion.div>
-                </div>
-                <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
-                  <motion.div
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-                  >
-                    Design
-                  </motion.div>
-                </div>
-              </h1>
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.8 }}
-                className="flex" 
-                style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}
-              >
-                <p className="small-text" style={{ maxWidth: '300px' }}>
-                  Specializing in brand identity, interface design, and full-stack development. Creating cutting-edge digital experiences with a focus on typography and performance.
-                </p>
-                <div className="small-text">
-                  (SCROLL)
-                </div>
-              </motion.div>
+            <section data-header-theme="dark" style={{ position: 'relative', overflow: 'hidden', background: '#000', color: '#fff' }}>
+              <div ref={heroVantaElRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
+              <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-xl)', position: 'relative', zIndex: 1 }}>
+                <h1 style={{ 
+                  fontFamily: 'var(--font-display)', 
+                  fontSize: 'var(--fs-display)', 
+                  lineHeight: 1,
+                  textTransform: 'uppercase',
+                  letterSpacing: '-0.04em',
+                  marginBottom: 'var(--home-hero-h1-mb)'
+                }}>
+                  <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
+                    <motion.div
+                      initial={{ y: "100%" }}
+                      animate={{ y: 0 }}
+                      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                    >
+                      Visual
+                    </motion.div>
+                  </div>
+                  <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
+                    <motion.div
+                      initial={{ y: "100%" }}
+                      animate={{ y: 0 }}
+                      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+                    >
+                      System
+                    </motion.div>
+                  </div>
+                  <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
+                    <motion.div
+                      initial={{ y: "100%" }}
+                      animate={{ y: 0 }}
+                      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+                    >
+                      Design
+                    </motion.div>
+                  </div>
+                </h1>
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.8 }}
+                  className="flex" 
+                  style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}
+                >
+                  <p className="small-text" style={{ maxWidth: '300px' }}>
+                    Specializing in brand identity, interface design, and full-stack development. Creating cutting-edge digital experiences with a focus on typography and performance.
+                  </p>
+                  <div className="small-text">
+                    (SCROLL)
+                  </div>
+                </motion.div>
+              </div>
+
+              <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline', background: 'transparent', position: 'relative', zIndex: 1 }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+                  CASE STUDY
+                </h2>
+                <span className="small-text" style={{ color: '#fff' }}>Index (01)</span>
+              </div>
             </section>
 
 
@@ -622,13 +751,6 @@ function App() {
                 flexDirection: 'column',
               }}
             >
-              <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline', background: '#fff' }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#000' }}>
-                  CASE STUDY
-                </h2>
-                <span className="small-text" style={{ color: '#000' }}>Index (01)</span>
-              </div>
-
               <motion.div
                 onClick={() => openCaseStudy('on')}
                 whileHover="hover"

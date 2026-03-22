@@ -17,9 +17,14 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
     if (!el) return;
 
     let initTimer = 0;
-    let resetTimer = 0;
+    let resizeHandler = null;
+    let lastWidth = window.innerWidth;
 
     const destroy = () => {
+      if (resizeHandler) {
+        window.removeEventListener('resize', resizeHandler);
+        resizeHandler = null;
+      }
       if (!footerVantaEffectRef.current) return;
       try {
         footerVantaEffectRef.current.destroy();
@@ -43,6 +48,27 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
         color: 0x4f4f4f,
         backgroundColor: 0x0,
       });
+
+      const effect = footerVantaEffectRef.current;
+      if (effect && typeof effect.resize === 'function') {
+        try {
+          window.removeEventListener('resize', effect.resize);
+        } catch {
+        }
+        lastWidth = window.innerWidth;
+        resizeHandler = () => {
+          const w = window.innerWidth;
+          if (w !== lastWidth) {
+            lastWidth = w;
+            try {
+              effect.resize();
+            } catch {
+            }
+          }
+        };
+        window.addEventListener('resize', resizeHandler);
+      }
+
       return true;
     };
 
@@ -50,15 +76,10 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
       initTimer = window.setInterval(() => {
         if (init()) window.clearInterval(initTimer);
       }, 100);
-    } else {
-      resetTimer = window.setInterval(() => {
-        init();
-      }, 12000);
     }
 
     return () => {
       if (initTimer) window.clearInterval(initTimer);
-      if (resetTimer) window.clearInterval(resetTimer);
       destroy();
     };
   }, []);
@@ -517,9 +538,14 @@ function App() {
     if (!el) return;
 
     let initTimer = 0;
-    let resetTimer = 0;
+    let resizeHandler = null;
+    let lastWidth = window.innerWidth;
 
     const destroy = () => {
+      if (resizeHandler) {
+        window.removeEventListener('resize', resizeHandler);
+        resizeHandler = null;
+      }
       if (!heroVantaEffectRef.current) return;
       try {
         heroVantaEffectRef.current.destroy();
@@ -543,6 +569,27 @@ function App() {
         color: 0x4f4f4f,
         backgroundColor: 0x0,
       });
+
+      const effect = heroVantaEffectRef.current;
+      if (effect && typeof effect.resize === 'function') {
+        try {
+          window.removeEventListener('resize', effect.resize);
+        } catch {
+        }
+        lastWidth = window.innerWidth;
+        resizeHandler = () => {
+          const w = window.innerWidth;
+          if (w !== lastWidth) {
+            lastWidth = w;
+            try {
+              effect.resize();
+            } catch {
+            }
+          }
+        };
+        window.addEventListener('resize', resizeHandler);
+      }
+
       return true;
     };
 
@@ -550,15 +597,10 @@ function App() {
       initTimer = window.setInterval(() => {
         if (init()) window.clearInterval(initTimer);
       }, 100);
-    } else {
-      resetTimer = window.setInterval(() => {
-        init();
-      }, 12000);
     }
 
     return () => {
       if (initTimer) window.clearInterval(initTimer);
-      if (resetTimer) window.clearInterval(resetTimer);
       destroy();
     };
   }, [activeCaseStudy]);

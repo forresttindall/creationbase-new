@@ -72,6 +72,14 @@
 
   --case-study-cover-h: 80vh;
   --case-study-app-label-pad: 6px 10px;
+
+  --vh-stable: 100vh;
+}
+
+@supports (height: 100svh) {
+  :root {
+    --vh-stable: 100svh;
+  }
 }
 
 * {

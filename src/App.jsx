@@ -404,6 +404,23 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let lastWidth = window.innerWidth;
+    const setStableVh = () => {
+      document.documentElement.style.setProperty('--vh-stable', `${window.innerHeight}px`);
+    };
+    const onResize = () => {
+      const w = window.innerWidth;
+      if (w !== lastWidth) {
+        lastWidth = w;
+        setStableVh();
+      }
+    };
+    setStableVh();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  useEffect(() => {
     if (location.pathname !== '/') return;
     const params = new URLSearchParams(location.search);
     const redirect = params.get('redirect');
@@ -720,7 +737,7 @@ function App() {
             {/* Hero */}
             <section data-header-theme="dark" style={{ position: 'relative', overflow: 'hidden', background: '#000', color: '#fff' }}>
               <div ref={heroVantaElRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
-              <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-xl)', position: 'relative', zIndex: 1 }}>
+              <div style={{ minHeight: 'var(--vh-stable)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-xl)', position: 'relative', zIndex: 1 }}>
                 <h1 style={{ 
                   fontFamily: 'var(--font-display)', 
                   fontSize: 'var(--fs-display)', 

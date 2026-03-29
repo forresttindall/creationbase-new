@@ -669,7 +669,7 @@ function App() {
               style={{ height: 'clamp(22px, 3vw, 23px)', width: 'auto', display: 'block' }}
             />
             <div style={{ lineHeight: 1.6, color: headerColor }}>
-              Forrest Tindall<br />
+              Forrest Tindall Studio<br />
               Design & Dev
             </div>
           </div>

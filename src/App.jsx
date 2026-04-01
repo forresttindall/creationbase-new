@@ -216,10 +216,10 @@ const graphicDesign = [
     year: "2025"
   },
      {
-    title: "Local Photographer",
-    category: "Social Media",
-    image: "/images/getportraits.jpg",
-    description: "Promotional Asset Design",
+    title: "Open Netizen",
+    category: "Brand Identity",
+    image: "/images/Open-Netizen.jpg",
+    description: "Brand Identity and Logo Design",
     year: "2026"
   },
  

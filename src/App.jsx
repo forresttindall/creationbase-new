@@ -1381,7 +1381,7 @@ function App() {
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
                   COMMERCIAL PHOTOGRAPHY
                 </h2>
-                <span className="small-text" style={{ color: '#fff' }}>Index (05.1)</span>
+                <span className="small-text" style={{ color: '#fff' }}>Index (06)</span>
               </div>
               <div className="full-bleed">
                 <div className="mosaic-masonry">
@@ -1410,7 +1410,7 @@ function App() {
                     <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                       STUDIO PRACTICE
                     </h2>
-                    <span className="small-text">Index (06)</span>
+                    <span className="small-text">Index (07)</span>
                   </div>
                 </div>
 
@@ -1451,7 +1451,7 @@ function App() {
                       <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                         PASSION PROJECTS
                       </h2>
-                      <span className="small-text">Index (06.1)</span>
+                      <span className="small-text">Index (07.1)</span>
                     </div>
 
                     <div className="passion-projects-block">

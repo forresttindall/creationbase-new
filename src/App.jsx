@@ -112,10 +112,10 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
           <div>
             <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>SERVICES</p>
             <ul className="small-text">
-              <li>VISUAL SYSTEM DESIGN</li>
-              <li>WEB DEVELOPMENT</li>
-              <li>BRAND IDENTITY</li>
-              <li>ART DIRECTION</li>
+              <li>DESIGN</li>
+              <li>DEVELOPMENT</li>
+              <li>PHOTOGRAPHY</li>
+              <li>VISUAL SYSTEMS</li>
             
             </ul>
           </div>
@@ -275,6 +275,40 @@ const graphicDesign = [
     description: "Promotional Poster Design",
     year: "2025"
   }
+];
+
+const commercialPhotographyImages = [
+  '/images/campfire.JPG',
+  '/images/_DSC8090.jpg',
+  '/images/_DSC4685-2.jpg',
+  '/images/_DSC1226-2.jpg',
+  '/images/_DSC1672-2.jpg',
+  '/images/_DSC9069-2.jpg',
+  '/images/_DSC1574.jpg',
+  '/images/_DSC4390.jpg',
+  '/images/_DSC2842.jpg',
+  '/images/_DSC1706-3.jpg',
+  '/images/_DSC1636.jpg',
+  '/images/_DSC6969.jpg',
+  '/images/_DSC8589.jpg',
+  '/images/fish.jpg',
+  '/images/_DSC3525.jpg',
+  '/images/_DSC1375-2.jpg',
+  '/images/_DSC9182.jpg',
+  '/images/_DSC2866-2.jpg',
+  '/images/_DSC2807-2.jpg',
+  '/images/_DSC1954-2.jpg',
+  '/images/_DSC7392.jpg',
+  '/images/_DSC7951-2.jpg',
+  '/images/_DSC7142.jpg',
+  '/images/_DSC6942.jpg',
+  '/images/_DSC6840.jpg',
+  '/images/_DSC4988.jpg',
+  '/images/_DSC4899.jpg',
+  '/images/_DSC3991.jpg',
+  '/images/_DSC3168-2.jpg',
+  '/images/_DSC2016.jpg',
+  
 ];
 
 const testimonials = [
@@ -670,7 +704,7 @@ function App() {
             />
             <div style={{ lineHeight: 1.6, color: headerColor }}>
               Forrest Tindall Studio<br />
-              Design & Dev
+              Design + Dev + Photo
             </div>
           </div>
           
@@ -752,7 +786,7 @@ function App() {
                       animate={{ y: 0 }}
                       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
                     >
-                      Visual
+                      Full
                     </motion.div>
                   </div>
                   <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
@@ -761,7 +795,7 @@ function App() {
                       animate={{ y: 0 }}
                       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
                     >
-                      System
+                      Stack
                     </motion.div>
                   </div>
                   <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
@@ -770,7 +804,7 @@ function App() {
                       animate={{ y: 0 }}
                       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
                     >
-                      Design
+                      Creative
                     </motion.div>
                   </div>
                 </h1>
@@ -782,7 +816,7 @@ function App() {
                   style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}
                 >
                   <p className="small-text" style={{ maxWidth: '300px' }}>
-                    Specializing in brand identity, interface design, and full-stack development. Creating cutting-edge digital experiences with a focus on typography and performance.
+                    Design, development, and photography for brands and creators—building visual systems, fast websites, and image-driven stories with a focus on typography and craft.
                   </p>
                   <div className="small-text">
                     (SCROLL)
@@ -1198,7 +1232,7 @@ function App() {
               <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--spacing-md)', marginTop: 'var(--spacing-lg)' }}>
                 <div>
                   <p className="small-text" style={{ maxWidth: '420px', textTransform: 'none' }}>
-                    Freelance designer for product teams and design studios. I build clear, modern systems that scale across brand and interface.
+                    Full-stack creative for brands and teams. I design visual systems, build fast websites, and create photography that supports the story.
                   </p>
                   <div className="small-text" style={{ marginTop: 'var(--spacing-md)' }}>
                     Available contract, project-based, or retainer.
@@ -1206,10 +1240,10 @@ function App() {
                 </div>
                 <div>
                   <ul className="small-text" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-                    <li>UI/UX DESIGN</li>
-                    <li>GRAPHIC DESIGN</li>
-                    <li>ART DIRECTION</li>
-                    <li>VISUAL SYSTEM DESIGN</li>
+                    <li>DESIGN</li>
+                    <li>DEVELOPMENT</li>
+                    <li>PHOTOGRAPHY</li>
+                    <li>VISUAL SYSTEMS</li>
                   </ul>
                 </div>
               </div>
@@ -1218,7 +1252,7 @@ function App() {
             <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
-                  UI/UX DESIGN
+                  UI/UX DESIGN + DEV
                 </h2>
                 <span className="small-text">Index (04)</span>
               </div>
@@ -1339,6 +1373,24 @@ function App() {
                     </div>
                   </motion.article>
                 ))}
+              </div>
+            </section>
+
+            <section style={{ padding: 0, background: '#000', color: '#fff' }}>
+              <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline' }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+                  COMMERCIAL PHOTOGRAPHY
+                </h2>
+                <span className="small-text" style={{ color: '#fff' }}>Index (05.1)</span>
+              </div>
+              <div className="full-bleed">
+                <div className="mosaic-masonry">
+                  {commercialPhotographyImages.map((src) => (
+                    <div className="mosaic-tile" key={src}>
+                      <img src={src} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+                    </div>
+                  ))}
+                </div>
               </div>
             </section>
 

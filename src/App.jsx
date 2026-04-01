@@ -243,7 +243,7 @@ const graphicDesign = [
     title: "Boise Analog Club",
     category: "Flyer Design",
     image: "/images/BAC january.png",
-    description: "Promotional poster design.",
+    description: "Promotional flyer design.",
     year: "2025"
   },
 

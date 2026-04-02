@@ -15,7 +15,8 @@ const sections = [
 
 const RED = "#ED1C23";
 const WHITE = "#FFFFFF";
-const BLACK = "#000000";
+const BLACK = "#0F0F0F";
+const PAGE_BG = "#E2E2E0";
 const GRAY1 = "#676767";
 const GRAY2 = "#353535";
 
@@ -35,7 +36,7 @@ function SectionNav({ active, isMobile }) {
       right: 0,
       width: 260,
       height: "100vh",
-      background: WHITE,
+      background: PAGE_BG,
       borderLeft: `1px solid ${GRAY2}`,
       padding: "48px 24px",
       zIndex: 100,
@@ -212,7 +213,7 @@ const ScrollSection = ({ children, index, setActive, isMobile }) => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
-          background: WHITE,
+          background: PAGE_BG,
           marginBottom: "clamp(28px, 6vh, 72px)",
         }}
       >
@@ -263,7 +264,7 @@ const BoiseAnalogClubCaseStudy = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       style={{
-        background: WHITE,
+        background: PAGE_BG,
         overflowX: "hidden",
         fontFamily: "'SF Mono', monospace",
         color: BLACK,
@@ -330,7 +331,7 @@ const BoiseAnalogClubCaseStudy = () => {
           </div>
         </section>
 
-        <section ref={summaryRef} style={{ background: WHITE, display: "flex", alignItems: "flex-start", marginBottom: "clamp(28px, 6vh, 72px)" }}>
+        <section ref={summaryRef} style={{ background: PAGE_BG, display: "flex", alignItems: "flex-start", marginBottom: "clamp(28px, 6vh, 72px)" }}>
           <div style={{ padding: isMobile ? "clamp(24px, 5vh, 48px) 20px" : "clamp(32px, 6vh, 64px) 56px", width: "100%" }}>
             <div style={{ width: "100%", maxWidth: "var(--bac-inner-max-w)", margin: "0 auto" }}>
               <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", alignItems: "flex-start", gap: "clamp(16px, 2.5vw, 32px)", marginBottom: "clamp(16px, 2.5vh, 24px)" }}>
@@ -361,25 +362,25 @@ const BoiseAnalogClubCaseStudy = () => {
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: GRAY2 }}>
-                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>What Is The Problem?</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
                     A growing film photography community needed consistent event promotion that could scale across flyers, social assets, and recurring meetups.
                   </p>
                 </div>
-                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>What Constraints?</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
                     Rapid turnarounds, print readiness, and repeatable templates that stay legible in dark venues and on mobile screens.
                   </p>
                 </div>
-                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Decisions & Why</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
                     A strict grid, high-contrast black/white photography, and a single red accent to keep the system bold, fast, and unmistakable across formats.
                   </p>
                 </div>
-                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Outcome</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
                     A flyer-first identity system that supports consistent promotion month after month without losing character.
@@ -393,15 +394,15 @@ const BoiseAnalogClubCaseStudy = () => {
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, color: GRAY1, letterSpacing: 2, margin: 0, textTransform: "uppercase" }}>[ PRINT READY ]</p>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
-                  <div style={{ background: WHITE, padding: 14 }}>
+                  <div style={{ background: PAGE_BG, padding: 14 }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Role</p>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Brand identity + flyer system.</p>
                   </div>
-                  <div style={{ background: WHITE, padding: 14 }}>
+                  <div style={{ background: PAGE_BG, padding: 14 }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Scope</p>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Logo, type hierarchy, color rules, poster/flyer layouts, social posts.</p>
                   </div>
-                  <div style={{ background: WHITE, padding: 14 }}>
+                  <div style={{ background: PAGE_BG, padding: 14 }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Deliverables</p>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Flyer templates, print-ready exports, brand assets, and a repeatable promo kit.</p>
                   </div>
@@ -461,7 +462,7 @@ const BoiseAnalogClubCaseStudy = () => {
                   { n: "3", label: "COMMUNITY", subs: ["Welcoming", "Local", "Inclusive"] },
                   { n: "4", label: "RAW", subs: ["Real Photos", "Grain", "Truthful"] },
                 ].map((p) => (
-                  <div key={p.n} style={{ background: WHITE, padding: isMobile ? "18px 14px" : "24px 20px" }}>
+                  <div key={p.n} style={{ background: PAGE_BG, padding: isMobile ? "18px 14px" : "24px 20px" }}>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
                       <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontSize: 28, fontWeight: 900, color: RED }}>{p.n}</span>
                       <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: BLACK, letterSpacing: 1 }}>{p.label}</span>
@@ -576,19 +577,19 @@ const BoiseAnalogClubCaseStudy = () => {
             <div style={{ marginTop: "clamp(16px, 2.5vh, 28px)" }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: "clamp(6px, 1vh, 12px)" }}>2.3 USAGE RULES</p>
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
-                <div style={{ background: WHITE, padding: "clamp(14px, 2vh, 18px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(14px, 2vh, 18px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Clearspace</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
                     Maintain clearspace equal to the mark&apos;s inner ring thickness. Keep it off the trim and off the photo subject.
                   </p>
                 </div>
-                <div style={{ background: WHITE, padding: "clamp(14px, 2vh, 18px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(14px, 2vh, 18px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Minimum Size</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
                     Digital: 24px height. Print: 7mm height. For micro use, default to the typemark only.
                   </p>
                 </div>
-                <div style={{ background: WHITE, padding: "clamp(14px, 2vh, 18px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(14px, 2vh, 18px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Production</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
                     Red is the primary brand color and the contrast accent for flyers. Keep the rest of the system black and white for clarity.
@@ -669,9 +670,9 @@ const BoiseAnalogClubCaseStudy = () => {
           <ScrollSection index={4} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="5.0" title="GRAPHIC ELEMENTS" isMobile={isMobile} />
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 1, background: GRAY2 }}>
-              <div style={{ background: WHITE, padding: isMobile ? 16 : 40 }}>
+              <div style={{ background: PAGE_BG, padding: isMobile ? 16 : 40 }}>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>5.1 — GRAIN</p>
-                <div style={{ border: `1px solid ${GRAY2}`, overflow: "hidden", background: WHITE }}>
+                <div style={{ border: `1px solid ${GRAY2}`, overflow: "hidden", background: PAGE_BG }}>
                   <img
                     src="/images/IMG_5153.JPG"
                     alt="Grain reference"
@@ -682,9 +683,9 @@ const BoiseAnalogClubCaseStudy = () => {
                   Grain is intentional—both film grain and digital grain. It keeps the work tactile, imperfect, and consistent across photography, flyers, and social posts.
                 </p>
               </div>
-              <div style={{ background: WHITE, padding: isMobile ? 16 : 40 }}>
+              <div style={{ background: PAGE_BG, padding: isMobile ? 16 : 40 }}>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>5.2 — PAPER TEXTURES</p>
-                <div style={{ border: `1px solid ${GRAY2}`, overflow: "hidden", background: WHITE }}>
+                <div style={{ border: `1px solid ${GRAY2}`, overflow: "hidden", background: PAGE_BG }}>
                   <img
                     src="/images/paper.jpg"
                     alt="Paper texture"
@@ -716,7 +717,7 @@ const BoiseAnalogClubCaseStudy = () => {
                 { src: "/images/IMG_2418 4.jpg", label: "04" },
                 { src: "/images/IMG_1679.JPG", label: "05" },
               ].map((img) => (
-                <div key={img.src} style={{ background: WHITE, position: "relative", overflow: "hidden", aspectRatio: "1 / 1" }}>
+                <div key={img.src} style={{ background: PAGE_BG, position: "relative", overflow: "hidden", aspectRatio: "1 / 1" }}>
                   <img src={img.src} alt={`Boise Analog Club photography ${img.label}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(100%) contrast(1.1)" }} />
                 </div>
               ))}
@@ -740,7 +741,7 @@ const BoiseAnalogClubCaseStudy = () => {
               width: "100%",
               alignItems: "start",
             }}>
-              <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              <div style={{ background: PAGE_BG, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
                 <div style={isMobile ? { position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" } : { position: "relative", width: "100%", aspectRatio: "var(--bac-layout-media-ar)", overflow: "hidden" }}>
                   <img
                     src="/images/BAC january.png"
@@ -748,13 +749,13 @@ const BoiseAnalogClubCaseStudy = () => {
                     style={isMobile ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" } : { width: "100%", height: "100%", objectFit: "var(--bac-app-media-fit)", objectPosition: "center", display: "block" }}
                   />
                 </div>
-                <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
+                <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>01</span>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>MEETUP FLYER LAYOUT</span>
                 </div>
               </div>
 
-              <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              <div style={{ background: PAGE_BG, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
                 <div style={isMobile ? { position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" } : { position: "relative", width: "100%", aspectRatio: "var(--bac-layout-media-ar)", overflow: "hidden" }}>
                   <img
                     src="/images/propagranda 3.png"
@@ -762,7 +763,7 @@ const BoiseAnalogClubCaseStudy = () => {
                     style={isMobile ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" } : { width: "100%", height: "100%", objectFit: "var(--bac-app-media-fit)", objectPosition: "center", display: "block" }}
                   />
                 </div>
-                <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
+                <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>02</span>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>SOCIAL PROMO LAYOUT</span>
                 </div>
@@ -771,13 +772,13 @@ const BoiseAnalogClubCaseStudy = () => {
 
             <div style={{ marginTop: "clamp(16px, 2.5vh, 28px)" }}>
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 1, background: GRAY2 }}>
-                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Meetup Flyers</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
                     The flyer system evolves month to month while keeping the same structure: event name first, then date/time/location, then supporting details. Photography and headline treatments change to match each meetup, while type stays locked to consistent margins and a repeatable hierarchy.
                   </p>
                 </div>
-                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Social Posts</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
                     Social layouts reuse the same hierarchy in tighter crops. The system is designed to export quickly for feed, story, and square formats without redesigning each time.
@@ -798,7 +799,7 @@ const BoiseAnalogClubCaseStudy = () => {
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "clamp(16px, 2.5vw, 32px)" }}>
-                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                <div style={{ background: PAGE_BG, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
                   <div style={isMobile ? { position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" } : { position: "relative", width: "100%", aspectRatio: "var(--bac-layout-media-ar)", overflow: "hidden" }}>
                     <img
                       src="/images/BAC march 2026.png"
@@ -806,13 +807,13 @@ const BoiseAnalogClubCaseStudy = () => {
                       style={isMobile ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" } : { width: "100%", height: "100%", objectFit: "var(--bac-application-media-fit)", objectPosition: "center", display: "block" }}
                     />
                   </div>
-                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
+                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>01</span>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>EVENT FLYER</span>
                   </div>
                 </div>
 
-                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                <div style={{ background: PAGE_BG, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
                   <div style={isMobile ? { position: "relative", width: "100%", aspectRatio: "4 / 5", overflow: "hidden" } : { position: "relative", width: "100%", aspectRatio: "var(--bac-layout-media-ar)", overflow: "hidden" }}>
                     <img
                       src="/images/bac 2.png"
@@ -820,7 +821,7 @@ const BoiseAnalogClubCaseStudy = () => {
                       style={isMobile ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", display: "block" } : { width: "100%", height: "100%", objectFit: "var(--bac-application-media-fit)", objectPosition: "center", display: "block" }}
                     />
                   </div>
-                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
+                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>02</span>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>POSTER SERIES</span>
                   </div>

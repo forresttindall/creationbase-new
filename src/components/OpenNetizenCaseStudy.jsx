@@ -16,7 +16,8 @@ const sections = [
 
 const BLUE = "#172EFF";
 const WHITE = "#FFFFFF";
-const BLACK = "#000000";
+const BLACK = "#0F0F0F";
+const PAGE_BG = "#E2E2E0";
 const GRAY1 = "#676767";
 const GRAY2 = "#353535";
 
@@ -36,7 +37,7 @@ function SectionNav({ active, isMobile }) {
       right: 0,
       width: 260,
       height: "100vh",
-      background: WHITE,
+      background: PAGE_BG,
       borderLeft: `1px solid ${GRAY2}`,
       padding: "48px 24px",
       zIndex: 100,
@@ -228,7 +229,7 @@ const ScrollSection = ({ children, index, setActive, isMobile }) => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
-          background: WHITE,
+          background: PAGE_BG,
           marginBottom: "clamp(28px, 6vh, 72px)",
         }}
       >
@@ -279,7 +280,7 @@ const OpenNetizenCaseStudy = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       style={{ 
-        background: WHITE,
+      background: PAGE_BG,
         overflowX: "hidden",
         fontFamily: "'SF Mono', monospace",
         color: BLACK,
@@ -348,7 +349,7 @@ const OpenNetizenCaseStudy = () => {
           </div>
         </section>
 
-        <section ref={summaryRef} style={{ background: WHITE, display: "flex", alignItems: "flex-start", marginBottom: "clamp(28px, 6vh, 72px)" }}>
+        <section ref={summaryRef} style={{ background: PAGE_BG, display: "flex", alignItems: "flex-start", marginBottom: "clamp(28px, 6vh, 72px)" }}>
           <div style={{ padding: isMobile ? "clamp(24px, 5vh, 48px) 20px" : "clamp(32px, 6vh, 64px) 56px", width: "100%" }}>
             <div style={{ width: "100%", maxWidth: "var(--on-inner-max-w)", margin: "0 auto" }}>
               <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", alignItems: "flex-start", gap: "clamp(16px, 2.5vw, 32px)", marginBottom: "clamp(16px, 2.5vh, 24px)" }}>
@@ -379,25 +380,25 @@ const OpenNetizenCaseStudy = () => {
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: GRAY2 }}>
-                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>What Is The Problem?</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
                     A civic non-profit needed a modern identity that signals the open web without reading as a startup, government agency, or corporate platform.
                   </p>
                 </div>
-                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>What Constraints?</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
                     High contrast accessibility, fast legibility at distance, and a system that works across print, signage, and UI with minimal production complexity.
                   </p>
                 </div>
-                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Decisions & Why</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
                     Swiss grid discipline, a single electric blue anchor, and a modular mark/typemark system to keep the brand objective, repeatable, and scalable.
                   </p>
                 </div>
-                <div style={{ background: WHITE, padding: "clamp(16px, 2.5vw, 24px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Outcome</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
                     A technical, civic-forward visual system that stays consistent across screens and environments while leaving space for future campaigns and programs.
@@ -411,15 +412,15 @@ const OpenNetizenCaseStudy = () => {
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, color: GRAY1, letterSpacing: 2, margin: 0, textTransform: "uppercase" }}>[ HANDOFF READY ]</p>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
-                  <div style={{ background: WHITE, padding: 14 }}>
+                  <div style={{ background: PAGE_BG, padding: 14 }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Role</p>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Visual identity + system design.</p>
                   </div>
-                  <div style={{ background: WHITE, padding: 14 }}>
+                  <div style={{ background: PAGE_BG, padding: 14 }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Scope</p>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Logo, type, color, layout rules, icon + illustration direction, photography direction.</p>
                   </div>
-                  <div style={{ background: WHITE, padding: 14 }}>
+                  <div style={{ background: PAGE_BG, padding: 14 }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Deliverables</p>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Logo suite, usage rules, palette specs, layout modules, application templates.</p>
                   </div>
@@ -479,7 +480,7 @@ const OpenNetizenCaseStudy = () => {
                   { n: "3", label: "OPTIMISTIC", subs: ["Firm Convictions", "Grounded in Values", "Justice for All"] },
                   { n: "4", label: "INDEPENDENT", subs: ["Firm Convictions", "Grounded in Values", "Justice for All"] },
                 ].map((p) => (
-                  <div key={p.n} style={{ background: WHITE, padding: isMobile ? "18px 14px" : "24px 20px" }}>
+                  <div key={p.n} style={{ background: PAGE_BG, padding: isMobile ? "18px 14px" : "24px 20px" }}>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
                       <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontSize: 28, fontWeight: 900, color: BLUE }}>{p.n}</span>
                       <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: BLACK, letterSpacing: 1 }}>{p.label}</span>
@@ -579,19 +580,19 @@ const OpenNetizenCaseStudy = () => {
             <div style={{ marginTop: "clamp(16px, 2.5vh, 28px)" }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: "clamp(6px, 1vh, 12px)" }}>2.3 USAGE RULES</p>
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
-                <div style={{ background: WHITE, padding: "clamp(14px, 2vh, 18px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(14px, 2vh, 18px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Clearspace</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
                     Maintain minimum clearspace equal to the mark&apos;s inner aperture. Never let type or edges crowd the icon.
                   </p>
                 </div>
-                <div style={{ background: WHITE, padding: "clamp(14px, 2vh, 18px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(14px, 2vh, 18px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Minimum Size</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
                     Digital: 24px height. Print: 6mm height. Below minimum, use the typemark only.
                   </p>
                 </div>
-                <div style={{ background: WHITE, padding: "clamp(14px, 2vh, 18px)" }}>
+                <div style={{ background: PAGE_BG, padding: "clamp(14px, 2vh, 18px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Files</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
                     Use vector for print/signage. Use PNG for UI when transparency is needed. Keep colors locked to the palette.
@@ -669,7 +670,7 @@ const OpenNetizenCaseStudy = () => {
           <ScrollSection index={4} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="5.0" title="GRAPHIC ELEMENTS" isMobile={isMobile} />
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 1, background: GRAY2 }}>
-              <div style={{ background: WHITE, padding: isMobile ? 16 : 40 }}>
+              <div style={{ background: PAGE_BG, padding: isMobile ? 16 : 40 }}>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>{isMobile ? "5.1 — PHOSPHOR REACT ICONS" : "1 — PHOSPHOR REACT ICONS"}</p>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
                   {[
@@ -680,7 +681,7 @@ const OpenNetizenCaseStudy = () => {
                     { Icon: ShieldCheck, label: "SECURITY" },
                     { Icon: Code, label: "CODE" },
                   ].map(({ Icon, label }) => (
-                    <div key={label} style={{ background: WHITE, padding: isMobile ? "14px 12px" : "18px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+                    <div key={label} style={{ background: PAGE_BG, padding: isMobile ? "14px 12px" : "18px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
                       <Icon size={isMobile ? 30 : 34} color={BLUE} weight="regular" />
                       <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1 }}>{label}</span>
                     </div>
@@ -690,9 +691,9 @@ const OpenNetizenCaseStudy = () => {
                   Phosphor is a flexible icon family for interfaces, diagrams, and presentations. Consistent stroke weight and clear metaphors align with the brand&apos;s technical clarity.
                 </p>
               </div>
-              <div style={{ background: WHITE, padding: isMobile ? 16 : 40 }}>
+              <div style={{ background: PAGE_BG, padding: isMobile ? 16 : 40 }}>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 24 }}>{isMobile ? "5.2 — ISOMETRIC ILLUSTRATION" : "2 — ISOMETRIC ILLUSTRATION"}</p>
-                <div style={{ border: `1px solid ${GRAY2}`, overflow: "hidden", background: WHITE }}>
+                <div style={{ border: `1px solid ${GRAY2}`, overflow: "hidden", background: PAGE_BG }}>
                   <img
                     src="/images/isometric-city-blue.svg"
                     alt="Isometric city illustration"
@@ -725,7 +726,7 @@ const OpenNetizenCaseStudy = () => {
                 { src: "/images/photo4.jpg", label: "04" },
                 { src: "/images/photo5.jpg", label: "05" },
               ].map((img) => (
-                <div key={img.src} style={{ background: WHITE, position: "relative", overflow: "hidden", aspectRatio: "1 / 1" }}>
+                <div key={img.src} style={{ background: PAGE_BG, position: "relative", overflow: "hidden", aspectRatio: "1 / 1" }}>
                   <img src={img.src} alt={`Open Netizen photography ${img.label}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                 </div>
               ))}
@@ -781,7 +782,7 @@ const OpenNetizenCaseStudy = () => {
 
               {/* Example 2: Swiss Editorial Layout */}
               <div style={{ 
-                background: WHITE, 
+                background: PAGE_BG, 
                 padding: "clamp(16px, 2vh, 24px)", 
                 border: `1px solid ${GRAY2}`, 
                 color: BLACK, 
@@ -874,7 +875,7 @@ const OpenNetizenCaseStudy = () => {
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "clamp(16px, 2.5vw, 32px)", minHeight: isMobile ? "auto" : "clamp(320px, 44vh, 480px)", alignItems: "start" }}>
-                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                <div style={{ background: PAGE_BG, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
                   <div style={{ position: "relative", width: "100%", aspectRatio: "1 / 1", background: BLACK, overflow: "hidden" }}>
                     <img
                       src="/images/sign mockup open netizen.png"
@@ -882,13 +883,13 @@ const OpenNetizenCaseStudy = () => {
                       style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
                     />
                   </div>
-                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
+                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>01</span>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>AD APPLICATION</span>
                   </div>
                 </div>
 
-                <div style={{ background: WHITE, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                <div style={{ background: PAGE_BG, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
                   <div style={{ position: "relative", width: "100%", aspectRatio: "1 / 1", background: BLACK, overflow: "hidden" }}>
                     <img
                       src="/images/OPEN NETIZEN.jpg"
@@ -896,7 +897,7 @@ const OpenNetizenCaseStudy = () => {
                       style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
                     />
                   </div>
-                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: WHITE }}>
+                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>02</span>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>SIGN MOCKUP</span>
                   </div>

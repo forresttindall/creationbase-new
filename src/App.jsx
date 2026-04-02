@@ -443,11 +443,25 @@ function App() {
     if (p === '/' || p === '/portraits' || p === '/street-photography') return 'dark';
     return 'light';
   });
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const heroVantaElRef = useRef(null);
   const heroVantaEffectRef = useRef(null);
   
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setMobileNavOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileNavOpen]);
 
   useEffect(() => {
     let lastWidth = window.innerWidth;
@@ -585,6 +599,7 @@ function App() {
   };
 
   const openContact = () => {
+    setMobileNavOpen(false);
     if (location.pathname === '/') {
       const y = window.scrollY || 0;
       homeScrollYRef.current = y;
@@ -597,6 +612,7 @@ function App() {
   };
 
   const goToSection = (id) => {
+    setMobileNavOpen(false);
     pendingHomeScrollRestoreRef.current = false;
     if (location.pathname !== '/') {
       navigate(`/#${id}`);
@@ -612,6 +628,7 @@ function App() {
   };
 
   const closeCaseStudy = () => {
+    setMobileNavOpen(false);
     navigate('/');
   };
   const restoreHomeScroll = () => {
@@ -649,6 +666,7 @@ function App() {
   const isHome = location.pathname === '/';
   const headerColor = isHome ? (headerTheme === 'dark' ? '#fff' : '#000') : '#000';
   const headerLogoSrc = isHome ? (headerTheme === 'dark' ? '/images/logowhite.png' : '/images/logoblack.png') : '/images/logoblack.png';
+  const mobileNavBg = headerColor === '#fff' ? 'rgba(0,0,0,0.96)' : 'rgba(255,255,255,0.96)';
 
   useEffect(() => {
     if (activeCaseStudy !== null) {
@@ -759,6 +777,7 @@ function App() {
     <div className="app">
       <motion.header 
         className="site-header"
+        data-mobile-nav-open={mobileNavOpen ? 'true' : 'false'}
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
@@ -821,11 +840,63 @@ function App() {
             Contact
           </button>
         </nav>
-        <div className="small-text site-header__right">
-          Boise, ID<br />
-          {time}
+        <div className="site-header__right">
+          <div className="small-text site-header__meta">
+            Boise, ID<br />
+            {time}
+          </div>
+          <button
+            type="button"
+            className="mobile-nav-toggle"
+            aria-label={mobileNavOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileNavOpen}
+            aria-controls="mobile-nav-panel"
+            onClick={() => setMobileNavOpen((v) => !v)}
+          >
+            <span className={`mobile-nav-icon${mobileNavOpen ? ' is-open' : ''}`} aria-hidden="true">
+              <span className="mobile-nav-line mobile-nav-line--top" />
+              <span className="mobile-nav-line mobile-nav-line--bottom" />
+            </span>
+          </button>
         </div>
       </motion.header>
+
+      <AnimatePresence>
+        {mobileNavOpen && (
+          <motion.div
+            id="mobile-nav-panel"
+            key="mobile-nav"
+            className="mobile-nav-panel"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setMobileNavOpen(false)}
+            style={{ background: mobileNavBg, color: headerColor }}
+          >
+            <motion.div
+              className="mobile-nav-panel__inner"
+              initial={{ y: -10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -10, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={(ev) => ev.stopPropagation()}
+            >
+              <button type="button" className="mobile-nav-link" onClick={() => goToSection('design')}>
+                Design
+              </button>
+              <button type="button" className="mobile-nav-link" onClick={() => goToSection('dev')}>
+                Dev
+              </button>
+              <button type="button" className="mobile-nav-link" onClick={() => goToSection('photo')}>
+                Photo
+              </button>
+              <button type="button" className="mobile-nav-link" onClick={openContact}>
+                Contact
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {selectedProject && (

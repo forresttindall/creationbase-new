@@ -244,7 +244,7 @@ ul {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 300;
   padding: var(--spacing-md);
   display: flex;
   justify-content: space-between;
@@ -287,10 +287,17 @@ ul {
 }
 
 .site-header__right {
-  text-align: right;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
   line-height: 1.6;
   white-space: nowrap;
   pointer-events: auto;
+}
+
+.site-header__meta {
+  text-align: right;
 }
 
 .site-header__back {
@@ -331,6 +338,114 @@ ul {
 
 .site-nav__link:hover {
   text-decoration: underline;
+}
+
+.mobile-nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  pointer-events: auto;
+}
+
+.mobile-nav-icon {
+  position: relative;
+  width: 22px;
+  height: 12px;
+  display: block;
+}
+
+.mobile-nav-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: currentColor;
+  transform-origin: center;
+  transition: transform 180ms ease, top 180ms ease;
+}
+
+.mobile-nav-line--top {
+  top: 0;
+}
+
+.mobile-nav-line--bottom {
+  top: 10px;
+}
+
+.mobile-nav-icon.is-open .mobile-nav-line--top {
+  top: 5px;
+  transform: rotate(45deg);
+}
+
+.mobile-nav-icon.is-open .mobile-nav-line--bottom {
+  top: 5px;
+  transform: rotate(-45deg);
+}
+
+.mobile-nav-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: auto;
+}
+
+.mobile-nav-panel__inner {
+  padding: 90px var(--spacing-md) var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.mobile-nav-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 8vw, 56px);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.mobile-nav-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .site-nav {
+    display: none;
+  }
+
+  .mobile-nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+  }
+
+  .site-header__meta {
+    display: none;
+  }
+
+  .site-header[data-mobile-nav-open="true"] .site-header__left {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .site-header {
+    align-items: center;
+  }
+
+  .site-header__left {
+    gap: var(--spacing-md);
+  }
 }
 
 /* Utilities */

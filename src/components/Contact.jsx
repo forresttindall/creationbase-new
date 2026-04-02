@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { blastConfetti } from '../utils/confetti';
 
 const BLACK = '#000000';
 const GRAY1 = '#676767';
@@ -20,14 +21,9 @@ const Contact = () => {
     if (status === 'loading') return;
     setStatus('loading');
 
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-    if (!serviceId || !templateId || !publicKey) {
-      setStatus('error');
-      return;
-    }
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_qlqfr28';
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_cc2wh4f';
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'pZtlnSO7NHel0tpbW';
 
     try {
       const resp = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
@@ -40,6 +36,8 @@ const Contact = () => {
           template_params: {
             from_name: name,
             reply_to: email,
+            user_email: email,
+            subject: 'Contact Inquiry',
             message,
           },
         }),
@@ -50,6 +48,7 @@ const Contact = () => {
       setName('');
       setEmail('');
       setMessage('');
+      blastConfetti();
     } catch {
       setStatus('error');
     }
@@ -75,7 +74,7 @@ const Contact = () => {
           </div>
           <div style={{ height: 1, background: '#000', marginTop: 'var(--spacing-sm)' }} />
           <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 680, opacity: 0.85, textTransform: 'none' }}>
-            For project inquiries, collaborations, or availability. Typical response within 1–2 business days.
+            For project inquiries, collaborations, or availability.
           </div>
         </div>
       </section>
@@ -142,7 +141,7 @@ const Contact = () => {
                   )}
                   {status === 'error' && (
                     <div className="small-text" style={{ opacity: 0.85, textTransform: 'none' }}>
-                      Error. Check EmailJS config and try again.
+                      Error. Try again.
                     </div>
                   )}
                 </div>

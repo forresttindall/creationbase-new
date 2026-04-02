@@ -437,7 +437,12 @@ function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState('idle');
-  const [headerTheme, setHeaderTheme] = useState(() => (typeof window !== 'undefined' && window.location && window.location.pathname === '/' ? 'dark' : 'light'));
+  const [headerTheme, setHeaderTheme] = useState(() => {
+    if (typeof window === 'undefined' || !window.location) return 'light';
+    const p = window.location.pathname;
+    if (p === '/' || p === '/portraits' || p === '/street-photography') return 'dark';
+    return 'light';
+  });
   const heroVantaElRef = useRef(null);
   const heroVantaEffectRef = useRef(null);
   
@@ -471,7 +476,11 @@ function App() {
 
   useEffect(() => {
     if (location.pathname !== '/') {
-      setHeaderTheme('light');
+      if (location.pathname === '/portraits' || location.pathname === '/street-photography') {
+        setHeaderTheme('dark');
+      } else {
+        setHeaderTheme('light');
+      }
       return;
     }
 
@@ -522,6 +531,10 @@ function App() {
     };
 
     const sampleBelowHeader = () => {
+      if ((window.scrollY || 0) < 8) {
+        setHeaderTheme('dark');
+        return;
+      }
       const x = Math.floor(window.innerWidth / 2);
       const headerEl = document.querySelector('.site-header');
       let y = 2;
@@ -581,7 +594,6 @@ function App() {
       pendingHomeScrollRestoreRef.current = false;
     }
     navigate('/contact');
-    requestAnimationFrame(() => setHeaderTheme('light'));
   };
 
   const goToSection = (id) => {
@@ -763,9 +775,9 @@ function App() {
               pendingHomeScrollRestoreRef.current = false;
               homeScrollYRef.current = 0;
               sessionStorage.removeItem('homeScrollY');
-              if (location.pathname !== '/') navigate('/');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
               setHeaderTheme('dark');
+              if (location.pathname !== '/') navigate('/');
+              window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
             }}
           >
             <img

@@ -286,15 +286,9 @@ const graphicDesign = [
 
 const commercialPhotographyImages = [
   '/images/campfire.JPG',
-  '/images/_DSC8090.jpg',
   '/images/_DSC4685-2.jpg',
-  '/images/_DSC1226-2.jpg',
-  '/images/_DSC1672-2.jpg',
-  '/images/_DSC9069-2.jpg',
-  '/images/_DSC1574.jpg',
   '/images/_DSC4390.jpg',
   '/images/_DSC2842.jpg',
-  '/images/_DSC1706-3.jpg',
   '/images/_DSC1636.jpg',
   '/images/_DSC6969.jpg',
   '/images/_DSC8589.jpg',
@@ -315,7 +309,6 @@ const commercialPhotographyImages = [
   '/images/_DSC3991.jpg',
   '/images/_DSC3168-2.jpg',
   '/images/_DSC2016.jpg',
-  
 ];
 
 const testimonials = [

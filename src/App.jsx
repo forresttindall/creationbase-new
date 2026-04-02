@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpLeft, ArrowUpRight } from '@phosphor-icons/react';
+import { ArrowUpRight } from '@phosphor-icons/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BoiseAnalogClubCaseStudy from './components/BoiseAnalogClubCaseStudy';
 import OpenNetizenCaseStudy from './components/OpenNetizenCaseStudy';
@@ -102,18 +102,15 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
       <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
         <div className="footer-cta">
           <h2 className="section-title">Let&apos;s Work<br />Together</h2>
-          <button type="button" className="newsletter-button footer-contact-button" onClick={onContactClick}>
-            Contact
-          </button>
         </div>
-        
+
         <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-xl)' }}>
           <div>
-            <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>CONTACT</p>
+            <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>LINKS</p>
             <ul className="small-text">
-              <li><a href="mailto:hello@forresttindall.com" style={{ wordBreak: 'break-all' }}>FORREST.TINDALL@GMAIL.COM</a></li>
-              <li><a href="https://instagram.com/forrest.tindall/">INSTAGRAM</a></li>
-              <li><a href="https://www.linkedin.com/in/forrest-tindall/">LINKEDIN</a></li>
+              <li><a href="/contact" onClick={(ev) => { ev.preventDefault(); onContactClick(); }} style={{ wordBreak: 'break-all' }}>FORREST.TINDALL@GMAIL.COM</a></li>
+              <li><a href="https://instagram.com/forrest.tindall/" target="_blank" rel="noreferrer">INSTAGRAM</a></li>
+              <li><a href="https://www.linkedin.com/in/forrest-tindall/" target="_blank" rel="noreferrer">LINKEDIN</a></li>
             </ul>
           </div>
           <div>
@@ -123,7 +120,6 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
               <li>DEVELOPMENT</li>
               <li>PHOTOGRAPHY</li>
               <li>VISUAL SYSTEMS</li>
-            
             </ul>
           </div>
         </div>
@@ -616,10 +612,6 @@ function App() {
     }
   };
 
-  const closeCaseStudy = () => {
-    setMobileNavOpen(false);
-    navigate('/');
-  };
   const restoreHomeScroll = () => {
     const stored = sessionStorage.getItem('homeScrollY');
     const y = stored ? Number(stored) : homeScrollYRef.current;
@@ -798,21 +790,6 @@ function App() {
               Design + Dev + Photo
             </div>
           </a>
-          
-          {(activeCaseStudy === 'on' || activeCaseStudy === 'bac' || activeCaseStudy === 'portraits' || activeCaseStudy === 'street' || activeCaseStudy === 'blog' || activeCaseStudy === 'contact') && (
-            <motion.button
-              className="site-header__back"
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              onClick={closeCaseStudy}
-              whileHover={{ opacity: 0.7 }}
-              aria-label="Back to case studies"
-              type="button"
-            >
-              <ArrowUpLeft size={30} weight="thin" />
-            </motion.button>
-          )}
-
         </div>
         <nav className="site-nav" aria-label="Primary">
           <button type="button" className="site-nav__link" onClick={() => goToSection('design')}>
@@ -1384,7 +1361,7 @@ function App() {
               </div>
               <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--spacing-md)', marginTop: 'var(--spacing-lg)' }}>
                 <div>
-                  <p className="small-text" style={{ maxWidth: '420px', textTransform: 'none' }}>
+                  <p className="small-text" style={{ maxWidth: '420px' }}>
                     Full-stack creative for brands and teams. I design visual systems, build fast websites, and create photography that supports the story.
                   </p>
                   <div className="small-text" style={{ marginTop: 'var(--spacing-md)' }}>
@@ -1710,7 +1687,7 @@ function App() {
         onContactClick={openContact}
       />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

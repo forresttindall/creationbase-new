@@ -670,9 +670,6 @@ function App() {
       return;
     }
 
-    const el = heroVantaElRef.current;
-    if (!el) return;
-
     let initTimer = 0;
     let resizeHandler = null;
     let lastWidth = window.innerWidth;
@@ -692,6 +689,8 @@ function App() {
     };
 
     const init = () => {
+      const el = heroVantaElRef.current;
+      if (!el) return false;
       if (!window.VANTA || typeof window.VANTA.TOPOLOGY !== 'function') return false;
       destroy();
       heroVantaEffectRef.current = window.VANTA.TOPOLOGY({

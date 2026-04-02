@@ -9,6 +9,9 @@ import StreetPhotography from './components/StreetPhotography';
 import Blog from './components/Blog';
 import Contact from './components/Contact';
 
+const UI_LIGHT = '#E2E2E0';
+const UI_DARK = '#0F0F0F';
+
 const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange, onSubmitNewsletter, onContactClick }) => {
   const footerVantaElRef = useRef(null);
   const footerVantaEffectRef = useRef(null);
@@ -48,7 +51,7 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
         scale: 1.0,
         scaleMobile: 1.0,
         color: 0x4f4f4f,
-        backgroundColor: 0x0,
+        backgroundColor: 0x0f0f0f,
       });
 
       const effect = footerVantaEffectRef.current;
@@ -96,7 +99,7 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
-      style={{ position: 'relative', overflow: 'hidden', background: '#000' }}
+      style={{ position: 'relative', overflow: 'hidden', background: UI_DARK }}
     >
       <div ref={footerVantaElRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
       <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
@@ -375,7 +378,7 @@ const ProjectModal = ({ project, onClose }) => {
             right: 0,
             background: 'none',
             border: 'none',
-            color: '#fff',
+            color: UI_LIGHT,
             fontSize: 'var(--fs-lg)',
             cursor: 'pointer',
             fontFamily: 'var(--font-mono)',
@@ -398,13 +401,13 @@ const ProjectModal = ({ project, onClose }) => {
         </div>
         <div style={{ 
           marginTop: 'var(--spacing-md)', 
-          color: '#fff', 
+          color: UI_LIGHT, 
           display: 'flex', 
           justifyContent: 'space-between',
           alignItems: 'flex-start'
         }}>
           <div>
-            <h2 className="section-title" style={{ fontSize: 'var(--fs-lg)', marginBottom: 'var(--spacing-xs)', color: '#fff' }}>{project.title}</h2>
+            <h2 className="section-title" style={{ fontSize: 'var(--fs-lg)', marginBottom: 'var(--spacing-xs)', color: UI_LIGHT }}>{project.title}</h2>
             <p className="small-text" style={{ opacity: 0.8 }}>{project.description}</p>
           </div>
           <div className="small-text" style={{ textAlign: 'right' }}>
@@ -645,9 +648,9 @@ function App() {
   }, []);
 
   const isHome = location.pathname === '/';
-  const headerColor = isHome ? (headerTheme === 'dark' ? '#fff' : '#000') : '#000';
+  const headerColor = isHome ? (headerTheme === 'dark' ? UI_LIGHT : UI_DARK) : UI_DARK;
   const headerLogoSrc = isHome ? (headerTheme === 'dark' ? '/images/logowhite.png' : '/images/logoblack.png') : '/images/logoblack.png';
-  const mobileNavBg = headerColor === '#fff' ? 'rgba(0,0,0,0.96)' : 'rgba(255,255,255,0.96)';
+  const mobileNavBg = headerColor === UI_LIGHT ? 'rgba(15,15,15,0.96)' : 'rgba(226,226,224,0.96)';
 
   useEffect(() => {
     if (activeCaseStudy !== null) {
@@ -695,7 +698,7 @@ function App() {
         scale: 1.0,
         scaleMobile: 1.0,
         color: 0x4f4f4f,
-        backgroundColor: 0x0,
+        backgroundColor: 0x0f0f0f,
       });
 
       const effect = heroVantaEffectRef.current;
@@ -898,7 +901,7 @@ function App() {
             exit={{ opacity: 0 }}
           >
             {/* Hero */}
-            <section data-header-theme="dark" style={{ position: 'relative', overflow: 'hidden', background: '#000', color: '#fff' }}>
+            <section data-header-theme="dark" style={{ position: 'relative', overflow: 'hidden', background: UI_DARK, color: UI_LIGHT }}>
               <div ref={heroVantaElRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
               <div style={{ minHeight: 'var(--vh-stable)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-xl)', position: 'relative', zIndex: 1 }}>
                 <h1 style={{ 
@@ -954,10 +957,10 @@ function App() {
               </div>
 
               <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline', background: 'transparent', position: 'relative', zIndex: 1 }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
                   CASE STUDY
                 </h2>
-                <span className="small-text" style={{ color: '#fff' }}>Index (01)</span>
+                <span className="small-text" style={{ color: UI_LIGHT }}>Index (01)</span>
               </div>
             </section>
 
@@ -1023,13 +1026,13 @@ function App() {
                         fontFamily: 'var(--font-display)', 
                         fontSize: 'var(--fs-xl)', 
                         lineHeight: 1,
-                        color: '#fff',
+                        color: UI_LIGHT,
                         margin: '0 0 var(--spacing-sm) 0',
                         textTransform: 'uppercase'
                       }}>
                         Open Netizen
                       </h3>
-                      <p className="small-text" style={{ color: '#fff', maxWidth: '400px', margin: 0 }}>
+                      <p className="small-text" style={{ color: UI_LIGHT, maxWidth: '400px', margin: 0 }}>
                         Brand identity and visual system design for a decentralized digital network.
                       </p>
                     </div>
@@ -1039,7 +1042,7 @@ function App() {
                         hover: { opacity: 0.7 }
                       }}
                       style={{
-                        color: '#fff',
+                        color: UI_LIGHT,
                         whiteSpace: 'nowrap',
                         transition: 'opacity 0.3s ease'
                       }}
@@ -1059,7 +1062,7 @@ function App() {
                   width: '100%',
                   overflow: 'hidden',
                   cursor: 'pointer',
-                  borderTop: '1px solid #000'
+                  borderTop: `1px solid ${UI_DARK}`
                 }}
               >
                 <motion.div
@@ -1105,7 +1108,7 @@ function App() {
                       }}>
                         Boise Analog Club
                       </h3>
-                      <p className="small-text" style={{ color: '#000', maxWidth: '420px', margin: 0 }}>
+                      <p className="small-text" style={{ color: UI_DARK, maxWidth: '420px', margin: 0 }}>
                         Flyer design and brand identity system for a community film photography club.
                       </p>
                     </div>
@@ -1130,8 +1133,8 @@ function App() {
             {/* Selected Clients & Testimonials */}
             <section style={{ 
               padding: '0',
-              background: '#000',
-              color: '#fff',
+              background: UI_DARK,
+              color: UI_LIGHT,
               minHeight: '100vh',
               display: 'flex',
               flexDirection: 'column',
@@ -1141,7 +1144,7 @@ function App() {
               {/* Selected Clients Marquee/Grid */}
               <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
                 <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-                  <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+                  <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
                     CLIENTS & PARTNERS
                   </h2>
                   <span className="small-text">Index (02)</span>
@@ -1153,7 +1156,7 @@ function App() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
+                    style={{ borderTop: `1px solid ${UI_LIGHT}`, paddingTop: 'var(--spacing-md)' }}
                   >
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/micron.png" alt="Micron" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
@@ -1179,7 +1182,7 @@ function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.2 }}
-                    style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
+                    style={{ borderTop: `1px solid ${UI_LIGHT}`, paddingTop: 'var(--spacing-md)' }}
                   >
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/ramboll.png" alt="Ramboll" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
@@ -1206,7 +1209,7 @@ function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.4 }}
-                    style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
+                    style={{ borderTop: `1px solid ${UI_LIGHT}`, paddingTop: 'var(--spacing-md)' }}
                   >
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/superbase.jpg" alt="Superbase" style={{ height: '100%', filter: 'grayscale(100%)' }} />
@@ -1233,7 +1236,7 @@ function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.6 }}
-                    style={{ borderTop: '1px solid #fff', paddingTop: 'var(--spacing-md)' }}
+                    style={{ borderTop: `1px solid ${UI_LIGHT}`, paddingTop: 'var(--spacing-md)' }}
                   >
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/cmyk.jpg" alt="CMYK Graffix" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
@@ -1259,7 +1262,7 @@ function App() {
               {/* Testimonials */}
               <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
                 <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
-                  <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+                  <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
                     CLIENT FEEDBACK
                   </h2>
                 </div>
@@ -1280,7 +1283,7 @@ function App() {
                       style={{ 
                         display: 'flex',
                         flexDirection: 'column',
-                        borderTop: '1px solid #fff',
+                        borderTop: `1px solid ${UI_LIGHT}`,
                         paddingTop: 'var(--spacing-md)'
                       }}
                     >
@@ -1293,7 +1296,7 @@ function App() {
                               height: '40px',
                               borderRadius: '50%',
                               overflow: 'hidden',
-                              border: '1px solid #fff'
+                              border: `1px solid ${UI_LIGHT}`
                             }}>
                               <img 
                                 src={testimonial.image} 
@@ -1317,7 +1320,7 @@ function App() {
                         {/* Right: Stars */}
                         <div style={{ 
                             fontSize: 'var(--fs-lg)', 
-                            color: '#fff', 
+                            color: UI_LIGHT, 
                             letterSpacing: '-2px',
                             lineHeight: 1
                           }}>
@@ -1353,7 +1356,7 @@ function App() {
             </section>
 
             <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
-              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: '1px solid #000' }}>
+              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: `1px solid ${UI_DARK}` }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                   SERVICES
                 </h2>
@@ -1379,9 +1382,9 @@ function App() {
               </div>
             </section>
 
-            <section id="dev" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
+            <section id="dev" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
                   UI/UX DESIGN + DEV
                 </h2>
                 <span className="small-text">Index (04)</span>
@@ -1399,14 +1402,14 @@ function App() {
                     onClick={() => setSelectedProject(project)}
                     style={{ cursor: 'pointer' }}
                   >
-                    <div style={{ border: '1px solid #333', overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: '#000' }}>
+                    <div style={{ border: '1px solid #333', overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: UI_DARK }}>
                       <div style={{ 
                         overflow: 'hidden',
                         aspectRatio: '1/1',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: '#000'
+                        backgroundColor: UI_DARK
                       }}>
                         <img 
                           src={project.image} 
@@ -1462,7 +1465,7 @@ function App() {
                     onClick={() => setSelectedProject(project)}
                     style={{ cursor: 'pointer' }}
                   >
-                    <div style={{ border: '1px solid #000', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ border: `1px solid ${UI_DARK}`, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                       <div style={{ 
                         overflow: 'hidden',
                         aspectRatio: '1/1',
@@ -1490,7 +1493,7 @@ function App() {
                             loading="lazy" 
                           />
                       </div>
-                      <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid #000', padding: '10px 12px', alignItems: 'baseline' }}>
+                      <div className="flex" style={{ justifyContent: 'space-between', borderTop: `1px solid ${UI_DARK}`, padding: '10px 12px', alignItems: 'baseline' }}>
                         <div>
                           <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
                           <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
@@ -1506,12 +1509,12 @@ function App() {
               </div>
             </section>
 
-            <section id="photo" style={{ padding: 0, background: '#000', color: '#fff' }}>
+            <section id="photo" style={{ padding: 0, background: UI_DARK, color: UI_LIGHT }}>
               <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline' }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
                   COMMERCIAL PHOTOGRAPHY
                 </h2>
-                <span className="small-text" style={{ color: '#fff' }}>Index (06)</span>
+                <span className="small-text" style={{ color: UI_LIGHT }}>Index (06)</span>
               </div>
               <div className="full-bleed">
                 <div className="mosaic-masonry">
@@ -1526,8 +1529,8 @@ function App() {
 
             <section style={{ 
               padding: '0',
-              background: '#ffffff',
-              color: '#000',
+              background: UI_LIGHT,
+              color: UI_DARK,
               minHeight: 'auto',
               display: 'flex',
               flexDirection: 'column',
@@ -1536,7 +1539,7 @@ function App() {
             }}>
               <div className="studio-split-layout">
                 <div className="studio-practice-header">
-                  <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
+                  <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: `1px solid ${UI_DARK}`, paddingBottom: 'var(--spacing-sm)' }}>
                     <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                       STUDIO PRACTICE
                     </h2>
@@ -1560,8 +1563,8 @@ function App() {
                     position: 'absolute',
                     bottom: 'var(--spacing-md)',
                     left: 'var(--spacing-md)',
-                    background: '#000',
-                    color: '#fff',
+                    background: UI_DARK,
+                    color: UI_LIGHT,
                     padding: 'var(--spacing-xs) var(--spacing-sm)',
                     fontFamily: 'var(--font-mono)',
                     fontSize: 'var(--fs-xs)',
@@ -1577,7 +1580,7 @@ function App() {
                       Forrest Tindall is a Fullstack Creative from Boise, Idaho. His work spans photography, design, art, web development, sculpture, knife making, and illustration, blending technical precision with visual storytelling. He began making art early, first through drawing and writing, then discovering film photography at thirteen. In 2012, he began designing logos, websites, and he launched <em>Tindall Knives</em>, beginning an over decade-long career as a bladesmith. Around the same time, he started a parallel path in photography, focusing on outdoor and product photography for the knife and tool industry. His photography has been featured in multiple publications, including <em>Popular Mechanics Magazine</em>. Years spent shaping steel by hand in the mountains became a study in patience, discipline, and craftsmanship, qualities that continue to define his creative work today. Through photography, design, writing, illustration, and mixed media, Tindall explores identity, society, and the subtle contradictions of modern life, examining the space between what we call things and what they truly are. His work has appeared in exhibitions, global publications, and bespoke retailers, reflecting an ongoing effort to bridge the personal and the universal.
                     </div>
 
-                    <div className="flex" style={{ justifyContent: 'space-between', marginTop: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid #000', paddingBottom: 'var(--spacing-sm)' }}>
+                    <div className="flex" style={{ justifyContent: 'space-between', marginTop: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: `1px solid ${UI_DARK}`, paddingBottom: 'var(--spacing-sm)' }}>
                       <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                         PASSION PROJECTS
                       </h2>

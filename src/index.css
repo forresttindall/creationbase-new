@@ -51,8 +51,8 @@
   --font-display: 'Neue Machina', sans-serif;
   --font-mono: 'SF Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
   
-  --color-bg: #ffffff;
-  --color-text: #000000;
+  --color-bg: #E2E2E0;
+  --color-text: #0F0F0F;
   --color-accent: #2a2a2a;
   
   --spacing-xs: 4px;
@@ -115,7 +115,7 @@ ul {
 
 .newsletter-block {
   margin-top: var(--spacing-xl);
-  border-top: 1px solid #000;
+  border-top: 1px solid var(--color-text);
   padding-top: var(--spacing-md);
 }
 
@@ -137,7 +137,7 @@ ul {
 .newsletter-input {
   width: 100%;
   background: transparent;
-  border: 1px solid #000;
+  border: 1px solid var(--color-text);
   padding: 12px 12px;
   font-family: var(--font-mono);
   font-size: var(--fs-xs);
@@ -147,14 +147,14 @@ ul {
 }
 
 .newsletter-input::placeholder {
-  color: #000;
+  color: var(--color-text);
   opacity: 0.55;
 }
 
 .newsletter-button {
-  background: #000;
-  color: #fff;
-  border: 1px solid #000;
+  background: var(--color-text);
+  color: var(--color-bg);
+  border: 1px solid var(--color-text);
   padding: 12px 14px;
   font-family: var(--font-mono);
   font-size: var(--fs-xs);
@@ -165,27 +165,27 @@ ul {
 }
 
 .footer-vanta {
-  color: #fff;
+  color: var(--color-bg);
 }
 
 .footer-vanta .newsletter-block {
-  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1px solid rgba(226, 226, 224, 0.22);
 }
 
 .footer-vanta .newsletter-input {
-  border: 1px solid #fff;
-  color: #fff;
+  border: 1px solid var(--color-bg);
+  color: var(--color-bg);
 }
 
 .footer-vanta .newsletter-input::placeholder {
-  color: #fff;
+  color: var(--color-bg);
   opacity: 0.55;
 }
 
 .footer-vanta .newsletter-button {
-  background: #fff;
-  color: #000;
-  border: 1px solid #fff;
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-bg);
 }
 
 .footer-cta {
@@ -507,8 +507,8 @@ ul {
     "studioImage"
     "studioBody";
   min-height: 60vh;
-  border-top: 2px solid #000;
-  border-bottom: 2px solid #000;
+  border-top: 2px solid var(--color-text);
+  border-bottom: 2px solid var(--color-text);
 }
 
 .studio-practice-header {
@@ -518,7 +518,7 @@ ul {
 
 .studio-practice-image {
   grid-area: studioImage;
-  border-bottom: 2px solid #000;
+  border-bottom: 2px solid var(--color-text);
 }
 
 .studio-practice-body {
@@ -531,7 +531,7 @@ ul {
 .studio-typography-column {
   padding: var(--spacing-xxl) var(--spacing-md) var(--spacing-md) var(--spacing-md);
   border-right: 0;
-  border-bottom: 2px solid #000;
+  border-bottom: 2px solid var(--color-text);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -569,13 +569,13 @@ ul {
   }
   
   .studio-typography-column {
-    border-right: 2px solid #000;
+    border-right: 2px solid var(--color-text);
     border-bottom: 0;
     min-height: auto;
   }
 
   .studio-practice-header {
-    border-right: 2px solid #000;
+    border-right: 2px solid var(--color-text);
     padding: var(--spacing-xxl) var(--spacing-md) 0 var(--spacing-md);
   }
 
@@ -584,7 +584,7 @@ ul {
   }
 
   .studio-practice-body {
-    border-right: 2px solid #000;
+    border-right: 2px solid var(--color-text);
     padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
   }
   
@@ -628,7 +628,7 @@ ul {
 
 .passion-projects-block {
   margin-top: var(--spacing-xl);
-  border-top: 1px solid #000;
+  border-top: 1px solid var(--color-text);
   padding-top: var(--spacing-md);
   padding-bottom: var(--spacing-md);
   max-width: 560px;
@@ -642,7 +642,7 @@ ul {
 
 .passion-projects-item--left {
   padding-right: var(--spacing-md);
-  border-right: 1px solid #000;
+  border-right: 1px solid var(--color-text);
 }
 
 .passion-projects-item--right {
@@ -652,7 +652,7 @@ ul {
 .passion-projects-item--full {
   grid-column: 1 / -1;
   margin-top: var(--spacing-md);
-  border-top: 1px solid #000;
+  border-top: 1px solid var(--color-text);
   padding-top: var(--spacing-md);
 }
 
@@ -673,7 +673,7 @@ ul {
 
   .passion-projects-item--right {
     padding-left: 0;
-    border-top: 1px solid #000;
+    border-top: 1px solid var(--color-text);
     padding-top: var(--spacing-md);
   }
 

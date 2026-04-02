@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { blastConfetti } from '../utils/confetti';
 
-const BLACK = '#000000';
+const BLACK = '#0F0F0F';
 const GRAY1 = '#676767';
-const WHITE = '#FFFFFF';
+const WHITE = '#E2E2E0';
 
 const Contact = () => {
   const [name, setName] = useState('');
@@ -62,7 +62,7 @@ const Contact = () => {
       data-header-theme="light"
       style={{ background: WHITE, color: BLACK, minHeight: '100vh' }}
     >
-      <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: '1px solid #000' }}>
+      <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: `1px solid ${BLACK}` }}>
         <div className="container" style={{ maxWidth: 1200 }}>
           <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
             <h1 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
@@ -72,7 +72,7 @@ const Contact = () => {
               INDEX (08)
             </div>
           </div>
-          <div style={{ height: 1, background: '#000', marginTop: 'var(--spacing-sm)' }} />
+          <div style={{ height: 1, background: BLACK, marginTop: 'var(--spacing-sm)' }} />
           <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 680, opacity: 0.85, textTransform: 'none' }}>
             For project inquiries, collaborations, or availability.
           </div>

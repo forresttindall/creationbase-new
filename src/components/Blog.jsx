@@ -4,10 +4,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowUpRight } from '@phosphor-icons/react';
 import { blogPosts } from '../blog/posts';
 
-const BLACK = '#000000';
+const BLACK = '#0F0F0F';
 const GRAY1 = '#676767';
 const GRAY2 = '#353535';
-const WHITE = '#FFFFFF';
+const WHITE = '#E2E2E0';
 
 const Blog = () => {
   const location = useLocation();
@@ -36,13 +36,13 @@ const Blog = () => {
       exit={{ opacity: 0 }}
       style={{ background: WHITE, color: BLACK, minHeight: '100vh' }}
     >
-      <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: '1px solid #000' }}>
+      <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: `1px solid ${BLACK}` }}>
         <div className="container" style={{ maxWidth: 1200 }}>
           <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
             <h1 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>BLOG</h1>
             <div className="small-text" style={{ color: GRAY1 }}>INDEX (06.2)</div>
           </div>
-          <div style={{ height: 1, background: '#000', marginTop: 'var(--spacing-sm)' }} />
+          <div style={{ height: 1, background: BLACK, marginTop: 'var(--spacing-sm)' }} />
           <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 680, opacity: 0.85 }}>
             Writing, ideas, notes. Short essays and working thoughts.
           </div>

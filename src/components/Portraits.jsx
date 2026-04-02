@@ -35,8 +35,8 @@ const Portraits = () => {
       exit={{ opacity: 0 }}
       style={{
         padding: 0,
-        background: '#fff',
-        color: '#000',
+        background: '#E2E2E0',
+        color: '#0F0F0F',
         minHeight: '100vh',
       }}
     >

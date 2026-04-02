@@ -7,8 +7,9 @@ import OpenNetizenCaseStudy from './components/OpenNetizenCaseStudy';
 import Portraits from './components/Portraits';
 import StreetPhotography from './components/StreetPhotography';
 import Blog from './components/Blog';
+import Contact from './components/Contact';
 
-const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange, onSubmitNewsletter }) => {
+const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange, onSubmitNewsletter, onContactClick }) => {
   const footerVantaElRef = useRef(null);
   const footerVantaEffectRef = useRef(null);
 
@@ -29,6 +30,7 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
       try {
         footerVantaEffectRef.current.destroy();
       } catch {
+        void 0;
       }
       footerVantaEffectRef.current = null;
     };
@@ -54,6 +56,7 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
         try {
           window.removeEventListener('resize', effect.resize);
         } catch {
+          void 0;
         }
         lastWidth = window.innerWidth;
         resizeHandler = () => {
@@ -63,6 +66,7 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
             try {
               effect.resize();
             } catch {
+              void 0;
             }
           }
         };
@@ -96,8 +100,11 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
     >
       <div ref={footerVantaElRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
       <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
-        <div>
+        <div className="footer-cta">
           <h2 className="section-title">Let&apos;s Work<br />Together</h2>
+          <button type="button" className="newsletter-button footer-contact-button" onClick={onContactClick}>
+            Contact
+          </button>
         </div>
         
         <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-xl)' }}>
@@ -430,7 +437,7 @@ function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState('idle');
-  const [headerTheme, setHeaderTheme] = useState('light');
+  const [headerTheme, setHeaderTheme] = useState(() => (typeof window !== 'undefined' && window.location && window.location.pathname === '/' ? 'dark' : 'light'));
   const heroVantaElRef = useRef(null);
   const heroVantaEffectRef = useRef(null);
   
@@ -463,9 +470,15 @@ function App() {
   }, [location.pathname, location.search, navigate]);
 
   useEffect(() => {
+    if (location.pathname !== '/') {
+      setHeaderTheme('light');
+      return;
+    }
+
     const parseRgb = (value) => {
-      if (!value) return null;
-      const m = value.match(/rgba?\(\s*([0-9.]+)\s*,\s*([0-9.]+)\s*,\s*([0-9.]+)(?:\s*,\s*([0-9.]+))?\s*\)/i);
+      const m =
+        value &&
+        value.match(/rgba?\(\s*([0-9.]+)\s*,\s*([0-9.]+)\s*,\s*([0-9.]+)(?:\s*,\s*([0-9.]+))?\s*\)/i);
       if (!m) return null;
       const r = Number(m[1]);
       const g = Number(m[2]);
@@ -475,7 +488,8 @@ function App() {
       return { r, g, b, a };
     };
 
-    const isTransparent = (value) => value === 'transparent' || value === 'rgba(0, 0, 0, 0)' || value === 'rgba(0,0,0,0)';
+    const isTransparent = (value) =>
+      value === 'transparent' || value === 'rgba(0, 0, 0, 0)' || value === 'rgba(0,0,0,0)';
 
     const luminance = ({ r, g, b }) => {
       const toLinear = (v) => {
@@ -507,24 +521,34 @@ function App() {
       return 'light';
     };
 
-    let raf = 0;
-    const update = () => {
-      raf = 0;
+    const sampleBelowHeader = () => {
       const x = Math.floor(window.innerWidth / 2);
-      const y = 2;
+      const headerEl = document.querySelector('.site-header');
+      let y = 2;
+      if (headerEl) {
+        const rect = headerEl.getBoundingClientRect();
+        y = Math.max(2, Math.ceil(rect.bottom + 2));
+      }
       const el = document.elementFromPoint(x, y);
       if (!el) return;
       setHeaderTheme(getThemeFromElement(el));
     };
 
+    let raf = 0;
     const schedule = () => {
       if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(update);
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        sampleBelowHeader();
+      });
     };
 
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
-    schedule();
+
+    setHeaderTheme('dark');
+    requestAnimationFrame(() => requestAnimationFrame(sampleBelowHeader));
+
     return () => {
       if (raf) cancelAnimationFrame(raf);
       window.removeEventListener('scroll', schedule);
@@ -547,12 +571,52 @@ function App() {
     else if (id === 'blog') navigate('/blog');
   };
 
-  const closeCaseStudy = () => navigate('/');
+  const openContact = () => {
+    if (location.pathname === '/') {
+      const y = window.scrollY || 0;
+      homeScrollYRef.current = y;
+      sessionStorage.setItem('homeScrollY', String(y));
+      pendingHomeScrollRestoreRef.current = true;
+    } else {
+      pendingHomeScrollRestoreRef.current = false;
+    }
+    navigate('/contact');
+    requestAnimationFrame(() => setHeaderTheme('light'));
+  };
+
+  const goToSection = (id) => {
+    pendingHomeScrollRestoreRef.current = false;
+    if (location.pathname !== '/') {
+      navigate(`/#${id}`);
+      return;
+    }
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.history.replaceState(null, '', `/#${id}`);
+    } else {
+      window.location.hash = id;
+    }
+  };
+
+  const closeCaseStudy = () => {
+    navigate('/');
+  };
   const restoreHomeScroll = () => {
     const stored = sessionStorage.getItem('homeScrollY');
     const y = stored ? Number(stored) : homeScrollYRef.current;
     window.scrollTo(0, Number.isFinite(y) ? y : 0);
   };
+
+  useEffect(() => {
+    if (location.pathname !== '/') return;
+    const hash = (location.hash || '').replace('#', '');
+    if (!hash) return;
+    requestAnimationFrame(() => {
+      const el = document.getElementById(hash);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }, [location.pathname, location.hash]);
 
   useEffect(() => {
     const pathname = location.pathname;
@@ -561,6 +625,7 @@ function App() {
     else if (pathname === '/portraits') setActiveCaseStudy('portraits');
     else if (pathname === '/street-photography') setActiveCaseStudy('street');
     else if (pathname === '/blog' || pathname.startsWith('/blog/')) setActiveCaseStudy('blog');
+    else if (pathname === '/contact') setActiveCaseStudy('contact');
     else setActiveCaseStudy(null);
   }, [location.pathname]);
 
@@ -569,9 +634,9 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
-  const isStreetPhotography = activeCaseStudy === 'street';
-  const headerColor = headerTheme === 'dark' ? '#fff' : '#000';
-  const headerLogoSrc = headerTheme === 'dark' ? '/images/logowhite.png' : '/images/logoblack.png';
+  const isHome = location.pathname === '/';
+  const headerColor = isHome ? (headerTheme === 'dark' ? '#fff' : '#000') : '#000';
+  const headerLogoSrc = isHome ? (headerTheme === 'dark' ? '/images/logowhite.png' : '/images/logoblack.png') : '/images/logoblack.png';
 
   useEffect(() => {
     if (activeCaseStudy !== null) {
@@ -579,6 +644,7 @@ function App() {
         try {
           heroVantaEffectRef.current.destroy();
         } catch {
+          void 0;
         }
         heroVantaEffectRef.current = null;
       }
@@ -601,6 +667,7 @@ function App() {
       try {
         heroVantaEffectRef.current.destroy();
       } catch {
+        void 0;
       }
       heroVantaEffectRef.current = null;
     };
@@ -626,6 +693,7 @@ function App() {
         try {
           window.removeEventListener('resize', effect.resize);
         } catch {
+          void 0;
         }
         lastWidth = window.innerWidth;
         resizeHandler = () => {
@@ -635,6 +703,7 @@ function App() {
             try {
               effect.resize();
             } catch {
+              void 0;
             }
           }
         };
@@ -676,61 +745,71 @@ function App() {
 
   return (
     <div className="app">
-      {/* Header */}
       <motion.header 
+        className="site-header"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         style={{ 
-          position: 'fixed', 
-          top: 0, 
-          left: 0, 
-          right: 0, 
-          padding: 'var(--spacing-md)', 
-          display: 'flex', 
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          zIndex: 100,
-          pointerEvents: 'none'
+          color: headerColor
         }}
       >
-        <div className="logo small-text" style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 'var(--spacing-lg)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+        <div className="site-header__left">
+          <a
+            href="/"
+            className="site-header__brand-link small-text"
+            onClick={(ev) => {
+              ev.preventDefault();
+              pendingHomeScrollRestoreRef.current = false;
+              homeScrollYRef.current = 0;
+              sessionStorage.removeItem('homeScrollY');
+              if (location.pathname !== '/') navigate('/');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setHeaderTheme('dark');
+            }}
+          >
             <img
               src={headerLogoSrc}
               alt=""
               aria-hidden="true"
-              style={{ height: 'clamp(22px, 3vw, 23px)', width: 'auto', display: 'block' }}
+              className="site-header__logo"
             />
-            <div style={{ lineHeight: 1.6, color: headerColor }}>
+            <div className="site-header__brand-text" style={{ color: headerColor }}>
               Forrest Tindall Studio<br />
               Design + Dev + Photo
             </div>
-          </div>
+          </a>
           
-          {(activeCaseStudy === 'on' || activeCaseStudy === 'bac' || activeCaseStudy === 'portraits' || activeCaseStudy === 'street' || activeCaseStudy === 'blog') && (
+          {(activeCaseStudy === 'on' || activeCaseStudy === 'bac' || activeCaseStudy === 'portraits' || activeCaseStudy === 'street' || activeCaseStudy === 'blog' || activeCaseStudy === 'contact') && (
             <motion.button
+              className="site-header__back"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               onClick={closeCaseStudy}
               whileHover={{ opacity: 0.7 }}
               aria-label="Back to case studies"
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: headerColor,
-                padding: 0,
-                marginTop: '2px', // Align with the first line of text
-                whiteSpace: 'nowrap',
-                transition: 'opacity 0.3s ease'
-              }}
+              type="button"
             >
               <ArrowUpLeft size={30} weight="thin" />
             </motion.button>
           )}
+
         </div>
-        <div className="small-text" style={{ textAlign: 'right', pointerEvents: 'auto', color: headerColor }}>
+        <nav className="site-nav" aria-label="Primary">
+          <button type="button" className="site-nav__link" onClick={() => goToSection('design')}>
+            Design
+          </button>
+          <button type="button" className="site-nav__link" onClick={() => goToSection('dev')}>
+            Dev
+          </button>
+          <button type="button" className="site-nav__link" onClick={() => goToSection('photo')}>
+            Photo
+          </button>
+          <button type="button" className="site-nav__link site-nav__link--primary" onClick={openContact}>
+            Contact
+          </button>
+        </nav>
+        <div className="small-text site-header__right">
           Boise, ID<br />
           {time}
         </div>
@@ -753,6 +832,8 @@ function App() {
       >
         {activeCaseStudy === 'blog' ? (
           <Blog key="blog" />
+        ) : activeCaseStudy === 'contact' ? (
+          <Contact key="contact" />
         ) : activeCaseStudy === 'bac' ? (
           <BoiseAnalogClubCaseStudy key="bac" />
         ) : activeCaseStudy === 'on' ? (
@@ -845,6 +926,7 @@ function App() {
               }}
             >
               <motion.div
+                data-header-theme="dark"
                 onClick={() => openCaseStudy('on')}
                 whileHover="hover"
                 style={{ 
@@ -1249,7 +1331,7 @@ function App() {
               </div>
             </section>
 
-            <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
+            <section id="dev" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: '#000', color: '#fff' }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
                   UI/UX DESIGN + DEV
@@ -1312,7 +1394,7 @@ function App() {
               </div>
             </section>
 
-            <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
+            <section id="design" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                   GRAPHIC DESIGN
@@ -1376,7 +1458,7 @@ function App() {
               </div>
             </section>
 
-            <section style={{ padding: 0, background: '#000', color: '#fff' }}>
+            <section id="photo" style={{ padding: 0, background: '#000', color: '#fff' }}>
               <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline' }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: '#fff' }}>
                   COMMERCIAL PHOTOGRAPHY
@@ -1554,6 +1636,7 @@ function App() {
         newsletterStatus={newsletterStatus}
         onNewsletterEmailChange={(ev) => setNewsletterEmail(ev.target.value)}
         onSubmitNewsletter={submitNewsletter}
+        onContactClick={openContact}
       />
     </div>
   )

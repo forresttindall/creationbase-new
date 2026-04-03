@@ -217,13 +217,6 @@ const graphicDesign = [
     description: "Logo Design, Animation Design",
     year: "2025"
   },
-     {
-    title: "Open Netizen",
-    category: "Brand Identity",
-    image: "/images/Open-Netizen.jpg",
-    description: "Brand Identity and Logo Design",
-    year: "2026"
-  },
  
   {
     title: "Boise Analog Club",
@@ -238,22 +231,6 @@ const graphicDesign = [
     category: "Asset Design",
     image: "/images/launch art.png",
     description: "Digital assets for launch campaign.",
-    year: "2025"
-  },
-
-    {
-    title: "Boise Analog Club",
-    category: "Flyer Design",
-    image: "/images/BAC january.png",
-    description: "Promotional flyer design.",
-    year: "2025"
-  },
-
-  {
-    title: "Paradox Labs",
-    category: "Brand Identity",
-    image: "/images/paradoxlabscard.jpg",
-    description: "Logo and Visual Identity System",
     year: "2025"
   },
   {
@@ -283,19 +260,11 @@ const commercialPhotographyImages = [
   '/images/campfire.JPG',
   '/images/_DSC4685-2.jpg',
   '/images/_DSC4390.jpg',
-  '/images/_DSC2842.jpg',
-  '/images/_DSC1636.jpg',
   '/images/_DSC6969.jpg',
-  '/images/_DSC8589.jpg',
   '/images/fish.jpg',
-  '/images/_DSC3525.jpg',
   '/images/_DSC9182.jpg',
-  '/images/_DSC1954-2.jpg',
-  '/images/_DSC7392.jpg',
   '/images/_DSC7142.jpg',
-  '/images/_DSC6942.jpg',
   '/images/_DSC6840.jpg',
-  '/images/_DSC4988.jpg',
   '/images/_DSC4899.jpg',
   '/images/_DSC3991.jpg',
   '/images/_DSC3168-2.jpg',

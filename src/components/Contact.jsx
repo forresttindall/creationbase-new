@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { blastConfetti } from '../utils/confetti';
 
 const BLACK = '#0F0F0F';
-const GRAY1 = '#676767';
+const GRAY1 = 'rgba(226, 226, 224, 0.66)';
 const WHITE = '#E2E2E0';
 
 const Contact = () => {
@@ -59,10 +59,10 @@ const Contact = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      data-header-theme="light"
-      style={{ background: WHITE, color: BLACK, minHeight: '100vh' }}
+      data-header-theme="dark"
+      style={{ background: BLACK, color: WHITE, minHeight: '100vh' }}
     >
-      <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: `1px solid ${BLACK}` }}>
+      <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: '1px solid var(--color-border)' }}>
         <div className="container" style={{ maxWidth: 1200 }}>
           <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
             <h1 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
@@ -72,7 +72,7 @@ const Contact = () => {
               INDEX (08)
             </div>
           </div>
-          <div style={{ height: 1, background: BLACK, marginTop: 'var(--spacing-sm)' }} />
+          <div style={{ height: 1, background: 'var(--color-border)', marginTop: 'var(--spacing-sm)' }} />
           <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 680, opacity: 0.85, textTransform: 'none' }}>
             For project inquiries, collaborations, or availability.
           </div>

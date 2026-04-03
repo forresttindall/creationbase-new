@@ -33,10 +33,11 @@ const Portraits = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      data-header-theme="dark"
       style={{
         padding: 0,
-        background: '#E2E2E0',
-        color: '#0F0F0F',
+        background: '#0F0F0F',
+        color: '#E2E2E0',
         minHeight: '100vh',
       }}
     >

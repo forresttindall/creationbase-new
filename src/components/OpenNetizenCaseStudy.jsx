@@ -17,8 +17,9 @@ const sections = [
 const BLUE = "#172EFF";
 const WHITE = "#FFFFFF";
 const BLACK = "#0F0F0F";
-const PAGE_BG = "#E2E2E0";
-const GRAY1 = "#676767";
+const UI_LIGHT = "#E2E2E0";
+const PAGE_BG = BLACK;
+const GRAY1 = "rgba(226, 226, 224, 0.66)";
 const GRAY2 = "#353535";
 
 function SectionNav({ active, isMobile }) {
@@ -60,7 +61,7 @@ function SectionNav({ active, isMobile }) {
             fontSize: 11,
             letterSpacing: 1,
             cursor: "pointer",
-            color: active === i ? BLACK : GRAY1,
+            color: active === i ? UI_LIGHT : GRAY1,
             display: "flex",
             alignItems: "center",
             gap: 8,
@@ -84,7 +85,7 @@ function PageHeader({ number, title, isMobile }) {
         fontSize: "var(--fs-xl)", // Match site section title size
         letterSpacing: "-0.04em",
         lineHeight: 0.85,
-        color: BLACK,
+        color: UI_LIGHT,
         margin: 0,
         whiteSpace: isMobile ? "normal" : "nowrap",
         textTransform: 'uppercase'
@@ -195,7 +196,7 @@ function FontCard({ num, name, label, description }) {
           : "'Geist', 'Helvetica Neue', sans-serif",
         fontWeight: name === "PP Neue Machina" ? 900 : 400,
         fontSize: 48,
-        color: BLACK,
+        color: UI_LIGHT,
         margin: "0 0 16px",
         letterSpacing: name === "PP Neue Machina" ? -1 : 0,
       }}>
@@ -283,7 +284,7 @@ const OpenNetizenCaseStudy = () => {
       background: PAGE_BG,
         overflowX: "hidden",
         fontFamily: "'SF Mono', monospace",
-        color: BLACK,
+        color: UI_LIGHT,
         position: 'relative'
       }}>
       <SectionNav active={active} isMobile={isMobile || isNavHidden} />
@@ -305,7 +306,7 @@ const OpenNetizenCaseStudy = () => {
             }}
           >
             <img 
-              src="/images/open netizen background.jpg" 
+              src="/images/OPEN NETIZEN CARD.jpg" 
               alt="Open Netizen Background" 
               style={{
                 width: '100%',
@@ -361,7 +362,7 @@ const OpenNetizenCaseStudy = () => {
                     fontSize: "var(--fs-xl)",
                     letterSpacing: "-0.04em",
                     lineHeight: 0.85,
-                    color: BLACK,
+                    color: UI_LIGHT,
                     margin: 0,
                     whiteSpace: isMobile ? "normal" : "nowrap",
                     textTransform: "uppercase"
@@ -382,25 +383,25 @@ const OpenNetizenCaseStudy = () => {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: GRAY2 }}>
                 <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>What Is The Problem?</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                     A civic non-profit needed a modern identity that signals the open web without reading as a startup, government agency, or corporate platform.
                   </p>
                 </div>
                 <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>What Constraints?</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                     High contrast accessibility, fast legibility at distance, and a system that works across print, signage, and UI with minimal production complexity.
                   </p>
                 </div>
                 <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Decisions & Why</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                     Swiss grid discipline, a single electric blue anchor, and a modular mark/typemark system to keep the brand objective, repeatable, and scalable.
                   </p>
                 </div>
                 <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Outcome</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                     A technical, civic-forward visual system that stays consistent across screens and environments while leaving space for future campaigns and programs.
                   </p>
                 </div>
@@ -414,15 +415,15 @@ const OpenNetizenCaseStudy = () => {
                 <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
                   <div style={{ background: PAGE_BG, padding: 14 }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Role</p>
-                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Visual identity + system design.</p>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.6, margin: 0 }}>Visual identity + system design.</p>
                   </div>
                   <div style={{ background: PAGE_BG, padding: 14 }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Scope</p>
-                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Logo, type, color, layout rules, icon + illustration direction, photography direction.</p>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.6, margin: 0 }}>Logo, type, color, layout rules, icon + illustration direction, photography direction.</p>
                   </div>
                   <div style={{ background: PAGE_BG, padding: 14 }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Deliverables</p>
-                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Logo suite, usage rules, palette specs, layout modules, application templates.</p>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.6, margin: 0 }}>Logo suite, usage rules, palette specs, layout modules, application templates.</p>
                   </div>
                 </div>
               </div>
@@ -452,19 +453,19 @@ const OpenNetizenCaseStudy = () => {
               <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
                 <div>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>ABOUT</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8 }}>
                     OPEN NETIZEN is a 501(c)(3) non-profit organization established in 2023 to promote the free web, decentralized web and open source web.
                   </p>
                 </div>
                 <div>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>1.1 MISSION</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8 }}>
                     Open Netizen exists to protect the web as a public commons. Open to everyone, owned by no one, built to last beyond any single company&apos;s interests.
                   </p>
                 </div>
                 <div>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>1.2 POSITIONING</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8 }}>
                     Open Netizen is the civic voice of the open web. Not a tech startup. Not a government agency. A community organization that holds the web&apos;s future accountable to the public.
                   </p>
                 </div>
@@ -483,7 +484,7 @@ const OpenNetizenCaseStudy = () => {
                   <div key={p.n} style={{ background: PAGE_BG, padding: isMobile ? "18px 14px" : "24px 20px" }}>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
                       <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontSize: 28, fontWeight: 900, color: BLUE }}>{p.n}</span>
-                      <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: BLACK, letterSpacing: 1 }}>{p.label}</span>
+                      <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: UI_LIGHT, letterSpacing: 1 }}>{p.label}</span>
                     </div>
                     {p.subs.map((s, i) => (
                       <p key={i} style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, color: GRAY1, margin: "4px 0" }}>{s}</p>
@@ -499,7 +500,7 @@ const OpenNetizenCaseStudy = () => {
             <PageHeader number="2.0" title="LOGO SYSTEM" isMobile={isMobile} />
 
             <div style={{ marginBottom: "clamp(12px, 2vh, 20px)", maxWidth: 820 }}>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                 The logo bridges technical systems and human form—precise geometry softened into a civic mark that feels both infrastructural and personal.
               </p>
             </div>
@@ -582,19 +583,19 @@ const OpenNetizenCaseStudy = () => {
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
                 <div style={{ background: PAGE_BG, padding: "clamp(14px, 2vh, 18px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Clearspace</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.7, margin: 0 }}>
                     Maintain minimum clearspace equal to the mark&apos;s inner aperture. Never let type or edges crowd the icon.
                   </p>
                 </div>
                 <div style={{ background: PAGE_BG, padding: "clamp(14px, 2vh, 18px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Minimum Size</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.7, margin: 0 }}>
                     Digital: 24px height. Print: 6mm height. Below minimum, use the typemark only.
                   </p>
                 </div>
                 <div style={{ background: PAGE_BG, padding: "clamp(14px, 2vh, 18px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Files</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.7, margin: 0 }}>
                     Use vector for print/signage. Use PNG for UI when transparency is needed. Keep colors locked to the palette.
                   </p>
                 </div>
@@ -606,7 +607,7 @@ const OpenNetizenCaseStudy = () => {
           <ScrollSection index={2} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="3.0" title="COLOR PALETTE" isMobile={isMobile} />
             <div style={{ marginBottom: "clamp(12px, 2vh, 20px)", maxWidth: 820 }}>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                 The palette pairs an electric blue signal with neutral whites and grays—bold meets calm, blending technical clarity with human warmth.
               </p>
             </div>
@@ -712,7 +713,7 @@ const OpenNetizenCaseStudy = () => {
             <PageHeader number="6.0" title="PHOTOGRAPHY DIRECTION" isMobile={isMobile} />
             <div style={{ marginBottom: 16, maxWidth: 820 }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>DIRECTION</p>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8 }}>
                 Photography should balance cybercore infrastructure with humanist presence. Use high-contrast, low-light environments, screen glow, and hard edges—then anchor it with candid, real people and tactile moments. The result feels technical, civic, and alive.
               </p>
             </div>
@@ -737,7 +738,7 @@ const OpenNetizenCaseStudy = () => {
             
             <div style={{ marginBottom: 24, maxWidth: "800px" }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>DESIGN DIRECTION</p>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8 }}>
                 Open Netizen follows the International Typographic Style: strict Swiss grids, asymmetric white space, and objective typography. Layouts prioritize repeatable modules and clear hierarchy so technical information stays legible across screens.
               </p>
             </div>
@@ -785,7 +786,7 @@ const OpenNetizenCaseStudy = () => {
                 background: PAGE_BG, 
                 padding: "clamp(16px, 2vh, 24px)", 
                 border: `1px solid ${GRAY2}`, 
-                color: BLACK, 
+                color: UI_LIGHT, 
                 position: "relative", 
                 overflow: "hidden",
                 display: "flex",
@@ -808,7 +809,7 @@ const OpenNetizenCaseStudy = () => {
                 <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(32px, 5vh, 48px)", fontWeight: 900, color: "#EEE", position: "absolute", bottom: -8, left: 8 }}>01</span>
                   <div style={{ width: "50%", marginLeft: "auto" }}>
-                    <div style={{ height: 1, background: BLACK, marginBottom: 6 }} />
+                    <div style={{ height: 1, background: UI_LIGHT, marginBottom: 6 }} />
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 8, letterSpacing: 1 }}>PAGE REF. 42-A</p>
                   </div>
                 </div>
@@ -869,7 +870,7 @@ const OpenNetizenCaseStudy = () => {
             <div style={{ display: "flex", flexDirection: "column", gap: "clamp(16px, 2.5vw, 32px)" }}>
               <div style={{ maxWidth: 820 }}>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, margin: "0 0 12px" }}>SIGNAGE & ADVERTISING</p>
-                <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                   Applications should feel like modern civic signage: blunt hierarchy, strict grid alignment, and high-contrast color pairing. Use the logomark as a repeatable stamp and let the typemark carry scale—cropped, oversized, and always locked to a consistent baseline.
                 </p>
               </div>
@@ -884,7 +885,7 @@ const OpenNetizenCaseStudy = () => {
                     />
                   </div>
                   <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
-                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>01</span>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: UI_LIGHT }}>01</span>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>AD APPLICATION</span>
                   </div>
                 </div>
@@ -898,15 +899,29 @@ const OpenNetizenCaseStudy = () => {
                     />
                   </div>
                   <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
-                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>02</span>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: UI_LIGHT }}>02</span>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>SIGN MOCKUP</span>
+                  </div>
+                </div>
+
+                <div style={{ background: PAGE_BG, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column", gridColumn: isMobile ? undefined : "1 / -1" }}>
+                  <div style={{ position: "relative", width: "100%", aspectRatio: "7 / 4", background: BLACK, overflow: "hidden" }}>
+                    <img
+                      src="/images/OPEN NETIZEN CARD.jpg"
+                      alt="Open Netizen business card"
+                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
+                    />
+                  </div>
+                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: UI_LIGHT }}>03</span>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>BUSINESS CARD</span>
                   </div>
                 </div>
               </div>
 
               <div style={{ borderTop: `1px solid ${GRAY2}`, paddingTop: 16 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                  <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontWeight: 900, fontSize: "clamp(32px, 4vw, 56px)", letterSpacing: -1, color: BLACK, lineHeight: 0.9 }}>
+                  <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontWeight: 900, fontSize: "clamp(32px, 4vw, 56px)", letterSpacing: -1, color: UI_LIGHT, lineHeight: 0.9 }}>
                     OPEN NETIZEN
                   </span>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1 }}>

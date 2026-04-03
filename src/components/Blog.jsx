@@ -5,7 +5,7 @@ import { ArrowUpRight } from '@phosphor-icons/react';
 import { blogPosts } from '../blog/posts';
 
 const BLACK = '#0F0F0F';
-const GRAY1 = '#676767';
+const GRAY1 = 'rgba(226, 226, 224, 0.66)';
 const GRAY2 = '#353535';
 const WHITE = '#E2E2E0';
 
@@ -34,15 +34,16 @@ const Blog = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{ background: WHITE, color: BLACK, minHeight: '100vh' }}
+      data-header-theme="dark"
+      style={{ background: BLACK, color: WHITE, minHeight: '100vh' }}
     >
-      <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: `1px solid ${BLACK}` }}>
+      <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: '1px solid var(--color-border)' }}>
         <div className="container" style={{ maxWidth: 1200 }}>
           <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
             <h1 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>BLOG</h1>
             <div className="small-text" style={{ color: GRAY1 }}>INDEX (06.2)</div>
           </div>
-          <div style={{ height: 1, background: BLACK, marginTop: 'var(--spacing-sm)' }} />
+          <div style={{ height: 1, background: 'var(--color-border)', marginTop: 'var(--spacing-sm)' }} />
           <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 680, opacity: 0.85 }}>
             Writing, ideas, notes. Short essays and working thoughts.
           </div>
@@ -52,18 +53,18 @@ const Blog = () => {
       <section style={{ padding: 'var(--spacing-xl) var(--spacing-md) var(--spacing-xxl)' }}>
         <div className="container" style={{ maxWidth: 1200 }}>
           {route.isList ? (
-            <div style={{ display: 'grid', gap: 0, borderTop: `1px solid ${BLACK}` }}>
+            <div style={{ display: 'grid', gap: 0, borderTop: '1px solid var(--color-border)' }}>
               {blogPosts.map((p, idx) => (
                 <motion.button
                   key={p.slug}
                   onClick={() => navigate(`/blog/${p.slug}`)}
-                  whileHover={{ backgroundColor: 'rgba(0,0,0,0.04)' }}
-                  whileTap={{ backgroundColor: 'rgba(0,0,0,0.06)' }}
+                  whileHover={{ backgroundColor: 'rgba(226,226,224,0.06)' }}
+                  whileTap={{ backgroundColor: 'rgba(226,226,224,0.08)' }}
                   style={{
                     background: 'transparent',
                     border: 'none',
                     padding: 'var(--spacing-md) var(--spacing-sm)',
-                    borderBottom: `1px solid ${BLACK}`,
+                    borderBottom: '1px solid var(--color-border)',
                     cursor: 'pointer',
                     textAlign: 'left',
                     width: '100%',
@@ -74,7 +75,7 @@ const Blog = () => {
                       {idx < 9 ? `0${idx + 1}` : idx + 1}
                     </div>
                     <div>
-                      <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 0.95, fontSize: 'clamp(18px, 4vw, 28px)' }}>
+                      <div style={{ fontFamily: 'var(--font-display)', color: WHITE, textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 0.95, fontSize: 'clamp(18px, 4vw, 28px)' }}>
                         {p.title}
                       </div>
                       <div className="small-text" style={{ marginTop: 8, color: GRAY1, maxWidth: 760 }}>
@@ -83,7 +84,7 @@ const Blog = () => {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--spacing-md)', justifySelf: 'end' }}>
                       <div className="small-text" style={{ color: GRAY1, whiteSpace: 'nowrap' }}>{p.date}</div>
-                      <div className="small-text" style={{ color: BLACK, whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                      <div className="small-text" style={{ color: WHITE, whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
                         [READ]
                         <ArrowUpRight size={16} weight="thin" aria-hidden="true" focusable="false" />
                       </div>
@@ -102,7 +103,7 @@ const Blog = () => {
                 [BACK]
               </button>
 
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 6vw, 56px)', lineHeight: 0.92, letterSpacing: '-0.04em', textTransform: 'uppercase', margin: 'var(--spacing-md) 0 var(--spacing-sm)' }}>
+              <h2 style={{ fontFamily: 'var(--font-display)', color: WHITE, fontSize: 'clamp(28px, 6vw, 56px)', lineHeight: 0.92, letterSpacing: '-0.04em', textTransform: 'uppercase', margin: 'var(--spacing-md) 0 var(--spacing-sm)' }}>
                 {post.title}
               </h2>
               <div className="small-text" style={{ color: GRAY1, marginBottom: 'var(--spacing-lg)' }}>BLOG ENTRY / {post.date}</div>
@@ -124,8 +125,8 @@ const Blog = () => {
               >
                 [BACK]
               </button>
-              <div style={{ marginTop: 'var(--spacing-md)', borderTop: `1px solid ${BLACK}`, paddingTop: 'var(--spacing-md)' }}>
-                <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', fontSize: 'clamp(18px, 4vw, 28px)' }}>
+              <div style={{ marginTop: 'var(--spacing-md)', borderTop: '1px solid var(--color-border)', paddingTop: 'var(--spacing-md)' }}>
+                <div style={{ fontFamily: 'var(--font-display)', color: WHITE, textTransform: 'uppercase', letterSpacing: '-0.04em', fontSize: 'clamp(18px, 4vw, 28px)' }}>
                   Not Found
                 </div>
                 <div className="small-text" style={{ marginTop: 8, color: GRAY1 }}>

@@ -16,8 +16,9 @@ const sections = [
 const RED = "#ED1C23";
 const WHITE = "#FFFFFF";
 const BLACK = "#0F0F0F";
-const PAGE_BG = "#E2E2E0";
-const GRAY1 = "#676767";
+const UI_LIGHT = "#E2E2E0";
+const PAGE_BG = BLACK;
+const GRAY1 = "rgba(226, 226, 224, 0.66)";
 const GRAY2 = "#353535";
 
 function SectionNav({ active, isMobile }) {
@@ -59,7 +60,7 @@ function SectionNav({ active, isMobile }) {
             fontSize: 11,
             letterSpacing: 1,
             cursor: "pointer",
-            color: active === i ? BLACK : GRAY1,
+            color: active === i ? UI_LIGHT : GRAY1,
             display: "flex",
             alignItems: "center",
             gap: 8,
@@ -83,7 +84,7 @@ function PageHeader({ number, title, isMobile }) {
         fontSize: "var(--fs-xl)",
         letterSpacing: "-0.04em",
         lineHeight: 0.85,
-        color: BLACK,
+        color: UI_LIGHT,
         margin: 0,
         whiteSpace: isMobile ? "normal" : "nowrap",
         textTransform: 'uppercase'
@@ -174,7 +175,7 @@ function FontCard({ num, name, label, description, isMobile }) {
           fontSize: isMobile ? 18 : 24,
           fontWeight: normalizedName === "impact" ? 400 : 900,
           margin: 0,
-          color: BLACK,
+          color: UI_LIGHT,
           whiteSpace: isMobile ? "normal" : "nowrap",
           textTransform: normalizedName === "geist" ? "uppercase" : "none",
         }}>
@@ -182,7 +183,7 @@ function FontCard({ num, name, label, description, isMobile }) {
         </p>
       </div>
       <div>
-        <p style={{ fontFamily: "'SF Mono', monospace", fontSize: isMobile ? 12 : 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+        <p style={{ fontFamily: "'SF Mono', monospace", fontSize: isMobile ? 12 : 12, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
           {description}
         </p>
       </div>
@@ -267,7 +268,7 @@ const BoiseAnalogClubCaseStudy = () => {
         background: PAGE_BG,
         overflowX: "hidden",
         fontFamily: "'SF Mono', monospace",
-        color: BLACK,
+        color: UI_LIGHT,
         position: 'relative'
       }}>
       <SectionNav active={active} isMobile={isMobile || isNavHidden} />
@@ -283,14 +284,13 @@ const BoiseAnalogClubCaseStudy = () => {
         }}>
           <div style={{ width: '100%', height: '100%' }}>
             <img
-              src="/images/IMG_3141 2.JPG"
+              src="/images/analogmockup 2.png"
               alt="Boise Analog Club Background"
               style={{
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                display: 'block',
-                filter: "grayscale(100%) contrast(1.1)"
+                display: 'block'
               }}
             />
           </div>
@@ -308,14 +308,14 @@ const BoiseAnalogClubCaseStudy = () => {
             }}
           >
             <div style={{ marginTop: 'auto', marginBottom: '48px' }}>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: BLACK, letterSpacing: 2, margin: "0 0 14px", textTransform: "uppercase" }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: UI_LIGHT, letterSpacing: 2, margin: "0 0 14px", textTransform: "uppercase" }}>
                 KEEP FILM ALIVE
               </p>
               <h1 style={{
                 fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
                 fontWeight: 900,
                 fontSize: "clamp(48px, 6vw, 96px)",
-                color: BLACK,
+                color: UI_LIGHT,
                 letterSpacing: -2,
                 lineHeight: 0.85,
                 margin: 0,
@@ -324,7 +324,7 @@ const BoiseAnalogClubCaseStudy = () => {
               }}>
                 Boise Analog Club
               </h1>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, marginTop: 14, maxWidth: 720 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.8, marginTop: 14, maxWidth: 720 }}>
                 Visual identity and flyer system for a community film photography club—built for repeatable event promotion and print consistency.
               </p>
             </div>
@@ -343,7 +343,7 @@ const BoiseAnalogClubCaseStudy = () => {
                     fontSize: "var(--fs-xl)",
                     letterSpacing: "-0.04em",
                     lineHeight: 0.85,
-                    color: BLACK,
+                    color: UI_LIGHT,
                     margin: 0,
                     whiteSpace: isMobile ? "normal" : "nowrap",
                     textTransform: "uppercase"
@@ -364,25 +364,25 @@ const BoiseAnalogClubCaseStudy = () => {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: GRAY2 }}>
                 <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>What Is The Problem?</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                     A growing film photography community needed consistent event promotion that could scale across flyers, social assets, and recurring meetups.
                   </p>
                 </div>
                 <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>What Constraints?</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                     Rapid turnarounds, print readiness, and repeatable templates that stay legible in dark venues and on mobile screens.
                   </p>
                 </div>
                 <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Decisions & Why</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                     A strict grid, high-contrast black/white photography, and a single red accent to keep the system bold, fast, and unmistakable across formats.
                   </p>
                 </div>
                 <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Outcome</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                     A flyer-first identity system that supports consistent promotion month after month without losing character.
                   </p>
                 </div>
@@ -396,15 +396,15 @@ const BoiseAnalogClubCaseStudy = () => {
                 <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
                   <div style={{ background: PAGE_BG, padding: 14 }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Role</p>
-                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Brand identity + flyer system.</p>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.6, margin: 0 }}>Brand identity + flyer system.</p>
                   </div>
                   <div style={{ background: PAGE_BG, padding: 14 }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Scope</p>
-                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Logo, type hierarchy, color rules, poster/flyer layouts, social posts.</p>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.6, margin: 0 }}>Logo, type hierarchy, color rules, poster/flyer layouts, social posts.</p>
                   </div>
                   <div style={{ background: PAGE_BG, padding: 14 }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 8px", textTransform: "uppercase" }}>Deliverables</p>
-                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.6, margin: 0 }}>Flyer templates, print-ready exports, brand assets, and a repeatable promo kit.</p>
+                    <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.6, margin: 0 }}>Flyer templates, print-ready exports, brand assets, and a repeatable promo kit.</p>
                   </div>
                 </div>
               </div>
@@ -434,19 +434,19 @@ const BoiseAnalogClubCaseStudy = () => {
               <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
                 <div>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>ABOUT</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8 }}>
                     BOISE ANALOG CLUB is a community for film photography enthusiasts—meetups, photo walks, events, and shared practice.
                   </p>
                 </div>
                 <div>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>1.1 MISSION</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8 }}>
                     Keep analog photography alive through community, education, and consistent event programming.
                   </p>
                 </div>
                 <div>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>1.2 POSITIONING</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8 }}>
                     A local culture club for film photography: community-led, approachable, and built around real meetups and shared practice. The visual system stays bold and poster-forward while keeping event details clear and consistent.
                   </p>
                 </div>
@@ -465,7 +465,7 @@ const BoiseAnalogClubCaseStudy = () => {
                   <div key={p.n} style={{ background: PAGE_BG, padding: isMobile ? "18px 14px" : "24px 20px" }}>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
                       <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontSize: 28, fontWeight: 900, color: RED }}>{p.n}</span>
-                      <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: BLACK, letterSpacing: 1 }}>{p.label}</span>
+                      <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: UI_LIGHT, letterSpacing: 1 }}>{p.label}</span>
                     </div>
                     {p.subs.map((s, i) => (
                       <p key={i} style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, color: GRAY1, margin: "4px 0" }}>{s}</p>
@@ -480,7 +480,7 @@ const BoiseAnalogClubCaseStudy = () => {
             <PageHeader number="2.0" title="LOGO SYSTEM" isMobile={isMobile} />
 
             <div style={{ marginBottom: "clamp(12px, 2vh, 20px)", maxWidth: 820 }}>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                 The mark bridges analog heritage and modern clarity—graphic enough for posters, simple enough to live on every event template.
               </p>
             </div>
@@ -579,19 +579,19 @@ const BoiseAnalogClubCaseStudy = () => {
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 1, background: GRAY2 }}>
                 <div style={{ background: PAGE_BG, padding: "clamp(14px, 2vh, 18px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Clearspace</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.7, margin: 0 }}>
                     Maintain clearspace equal to the mark&apos;s inner ring thickness. Keep it off the trim and off the photo subject.
                   </p>
                 </div>
                 <div style={{ background: PAGE_BG, padding: "clamp(14px, 2vh, 18px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Minimum Size</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.7, margin: 0 }}>
                     Digital: 24px height. Print: 7mm height. For micro use, default to the typemark only.
                   </p>
                 </div>
                 <div style={{ background: PAGE_BG, padding: "clamp(14px, 2vh, 18px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Production</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.7, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.7, margin: 0 }}>
                     Red is the primary brand color and the contrast accent for flyers. Keep the rest of the system black and white for clarity.
                   </p>
                 </div>
@@ -602,7 +602,7 @@ const BoiseAnalogClubCaseStudy = () => {
           <ScrollSection index={2} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="3.0" title="COLOR PALETTE" isMobile={isMobile} />
             <div style={{ marginBottom: "clamp(12px, 2vh, 20px)", maxWidth: 820 }}>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                 A minimal black-and-white foundation keeps photography honest and legible; a single red accent (#ED1C23) brings poster energy and instant recognition.
               </p>
             </div>
@@ -641,7 +641,7 @@ const BoiseAnalogClubCaseStudy = () => {
           <ScrollSection index={3} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="4.0" title="TYPOGRAPHY" isMobile={isMobile} />
             <div style={{ marginBottom: "clamp(12px, 2vh, 20px)", maxWidth: 820 }}>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                 The typography system bridges retro and modern—timeless, hand-made character paired with bold, structured utility type. Together, the fonts keep the identity loud enough for flyers and still clean enough to feel contemporary across digital posts.
               </p>
             </div>
@@ -703,7 +703,7 @@ const BoiseAnalogClubCaseStudy = () => {
             <PageHeader number="6.0" title="PHOTOGRAPHY DIRECTION" isMobile={isMobile} />
             <div style={{ marginBottom: 16, maxWidth: 820 }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>DIRECTION</p>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8 }}>
                 Photography centers on black and white group photos and candid event moments—members laughing, shooting, and socializing. The goal is human and documentary: real people, real film culture, and a sense of community you can feel at a glance.
               </p>
             </div>
@@ -729,7 +729,7 @@ const BoiseAnalogClubCaseStudy = () => {
 
             <div style={{ marginBottom: 24, maxWidth: "800px" }}>
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: 12 }}>DESIGN DIRECTION</p>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8 }}>
                 Layouts are built around a flyer-first system with social posts in mind. Each meetup uses the same core grid, type hierarchy, and information modules so details stay consistent while imagery and headlines change week to week.
               </p>
             </div>
@@ -750,7 +750,7 @@ const BoiseAnalogClubCaseStudy = () => {
                   />
                 </div>
                 <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
-                  <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>01</span>
+                  <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: UI_LIGHT }}>01</span>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>MEETUP FLYER LAYOUT</span>
                 </div>
               </div>
@@ -764,7 +764,7 @@ const BoiseAnalogClubCaseStudy = () => {
                   />
                 </div>
                 <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
-                  <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>02</span>
+                  <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: UI_LIGHT }}>02</span>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>SOCIAL PROMO LAYOUT</span>
                 </div>
               </div>
@@ -774,13 +774,13 @@ const BoiseAnalogClubCaseStudy = () => {
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 1, background: GRAY2 }}>
                 <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Meetup Flyers</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                     The flyer system evolves month to month while keeping the same structure: event name first, then date/time/location, then supporting details. Photography and headline treatments change to match each meetup, while type stays locked to consistent margins and a repeatable hierarchy.
                   </p>
                 </div>
                 <div style={{ background: PAGE_BG, padding: "clamp(16px, 2.5vw, 24px)" }}>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1, margin: "0 0 10px", textTransform: "uppercase" }}>Social Posts</p>
-                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                  <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                     Social layouts reuse the same hierarchy in tighter crops. The system is designed to export quickly for feed, story, and square formats without redesigning each time.
                   </p>
                 </div>
@@ -793,7 +793,7 @@ const BoiseAnalogClubCaseStudy = () => {
             <div style={{ display: "flex", flexDirection: "column", gap: "clamp(16px, 2.5vw, 32px)" }}>
               <div style={{ maxWidth: 820 }}>
                 <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, margin: "0 0 12px" }}>FLYERS & SOCIAL</p>
-                <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: BLACK, lineHeight: 1.8, margin: 0 }}>
+                <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 13, color: UI_LIGHT, lineHeight: 1.8, margin: 0 }}>
                   Applications are built for rapid iteration: posters, event flyers, and social posts share the same core grid, type hierarchy, and color rules.
                 </p>
               </div>
@@ -808,7 +808,7 @@ const BoiseAnalogClubCaseStudy = () => {
                     />
                   </div>
                   <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
-                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>01</span>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: UI_LIGHT }}>01</span>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>EVENT FLYER</span>
                   </div>
                 </div>
@@ -822,7 +822,7 @@ const BoiseAnalogClubCaseStudy = () => {
                     />
                   </div>
                   <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
-                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: BLACK }}>02</span>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: UI_LIGHT }}>02</span>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>POSTER SERIES</span>
                   </div>
                 </div>
@@ -830,7 +830,7 @@ const BoiseAnalogClubCaseStudy = () => {
 
               <div style={{ borderTop: `1px solid ${GRAY2}`, paddingTop: 16 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                  <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontWeight: 900, fontSize: "clamp(32px, 4vw, 56px)", letterSpacing: -1, color: BLACK, lineHeight: 0.9 }}>
+                  <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontWeight: 900, fontSize: "clamp(32px, 4vw, 56px)", letterSpacing: -1, color: UI_LIGHT, lineHeight: 0.9 }}>
                     BOISE ANALOG CLUB
                   </span>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1 }}>

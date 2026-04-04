@@ -168,7 +168,7 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
           </div>
         </div>
 
-        <div style={{ marginTop: 'var(--spacing-xxl)', borderTop: '1px solid var(--color-border)', paddingTop: 'var(--spacing-sm)' }} className="flex">
+        <div style={{ marginTop: 'var(--spacing-xxl)', borderTop: '1px solid rgba(255,255,255,0.22)', paddingTop: 'var(--spacing-sm)' }} className="flex">
           <p className="small-text" style={{ flex: 1 }}>© 2026 FORREST TINDALL</p>
           <p className="small-text">DESIGNED & CODED IN BOISE, ID</p>
         </div>
@@ -178,6 +178,13 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
 };
 
 const projects = [
+  {
+    title: "Ricochet",
+    category: "UI/UX Design",
+    image: "/images/ricochet mockup.png",
+    description: "SaaS website design and prototyping at Superbase",
+    year: "2026"
+  },
   {
     title: "Amore",
     category: "UI/UX Design & Dev",
@@ -217,6 +224,13 @@ const graphicDesign = [
     description: "Logo Design, Animation Design",
     year: "2025"
   },
+     {
+    title: "Open Netizen",
+    category: "Brand Identity",
+    image: "/images/Open-Netizen.jpg",
+    description: "Brand Identity and Logo Design",
+    year: "2026"
+  },
  
   {
     title: "Boise Analog Club",
@@ -231,6 +245,22 @@ const graphicDesign = [
     category: "Asset Design",
     image: "/images/launch art.png",
     description: "Digital assets for launch campaign.",
+    year: "2025"
+  },
+
+    {
+    title: "Boise Analog Club",
+    category: "Flyer Design",
+    image: "/images/BAC january.png",
+    description: "Promotional flyer design.",
+    year: "2025"
+  },
+
+  {
+    title: "Paradox Labs",
+    category: "Brand Identity",
+    image: "/images/paradoxlabscard.jpg",
+    description: "Logo and Visual Identity System",
     year: "2025"
   },
   {
@@ -260,11 +290,19 @@ const commercialPhotographyImages = [
   '/images/campfire.JPG',
   '/images/_DSC4685-2.jpg',
   '/images/_DSC4390.jpg',
+  '/images/_DSC2842.jpg',
+  '/images/_DSC1636.jpg',
   '/images/_DSC6969.jpg',
+  '/images/_DSC8589.jpg',
   '/images/fish.jpg',
+  '/images/_DSC3525.jpg',
   '/images/_DSC9182.jpg',
+  '/images/_DSC1954-2.jpg',
+  '/images/_DSC7392.jpg',
   '/images/_DSC7142.jpg',
+  '/images/_DSC6942.jpg',
   '/images/_DSC6840.jpg',
+  '/images/_DSC4988.jpg',
   '/images/_DSC4899.jpg',
   '/images/_DSC3991.jpg',
   '/images/_DSC3168-2.jpg',
@@ -547,7 +585,7 @@ function App() {
     if (id === 'on') navigate('/open-netizen');
     else if (id === 'bac') navigate('/boise-analog-club');
     else if (id === 'ricochet') navigate('/ricochet');
-    else if (id === 'micron') navigate('/micron');
+    else if (id === 'micron') navigate('/work-sharp-drill-doctor');
     else if (id === 'playground') navigate('/playground');
     else if (id === 'portraits') navigate('/portraits');
     else if (id === 'street') navigate('/street-photography');
@@ -604,7 +642,7 @@ function App() {
     if (pathname === '/open-netizen') setActiveCaseStudy('on');
     else if (pathname === '/boise-analog-club') setActiveCaseStudy('bac');
     else if (pathname === '/ricochet') setActiveCaseStudy('ricochet');
-    else if (pathname === '/micron') setActiveCaseStudy('micron');
+    else if (pathname === '/work-sharp-drill-doctor') setActiveCaseStudy('micron');
     else if (pathname === '/playground') setActiveCaseStudy('playground');
     else if (pathname === '/portraits') setActiveCaseStudy('portraits');
     else if (pathname === '/street-photography') setActiveCaseStudy('street');
@@ -619,8 +657,18 @@ function App() {
   }, []);
 
   const isHome = location.pathname === '/';
-  const headerColor = isHome ? (headerTheme === 'dark' ? UI_LIGHT : UI_DARK) : UI_LIGHT;
-  const headerLogoSrc = isHome ? (headerTheme === 'dark' ? '/images/logowhite.png' : '/images/logoblack.png') : '/images/logowhite.png';
+  const lightHeaderPaths = new Set([
+    '/ricochet',
+    '/open-netizen',
+    '/work-sharp-drill-doctor',
+    '/boise-analog-club',
+    '/playground',
+    '/portraits',
+    '/street-photography',
+  ]);
+  const useLightHeader = isHome ? headerTheme === 'dark' : lightHeaderPaths.has(location.pathname);
+  const headerColor = useLightHeader ? UI_LIGHT : UI_DARK;
+  const headerLogoSrc = useLightHeader ? '/images/logowhite.png' : '/images/logoblack.png';
   const mobileNavBg = headerColor === UI_LIGHT ? 'rgba(15,15,15,0.96)' : 'rgba(226,226,224,0.96)';
 
   useEffect(() => {
@@ -943,7 +991,7 @@ function App() {
 
 
 
-            {/* Featured Case Study: Open Netizen */}
+            {/* Featured Case Studies */}
             <motion.section 
               data-header-theme="dark"
               style={{ 
@@ -961,8 +1009,8 @@ function App() {
                 className="home-case-study-item"
                 style={{ 
                   position: 'relative', 
-                  height: 'var(--case-study-cover-h)', 
                   width: '100%',
+                  aspectRatio: '16 / 10',
                   overflow: 'hidden',
                   cursor: 'pointer'
                 }}
@@ -979,7 +1027,7 @@ function App() {
                     alt="Ricochet Project" 
                     style={{ 
                       width: '100%', 
-                      height: '100%', 
+                      height: '100%',
                       objectFit: 'cover',
                       display: 'block'
                     }} 
@@ -1037,8 +1085,8 @@ function App() {
                 className="home-case-study-item"
                 style={{ 
                   position: 'relative', 
-                  height: 'var(--case-study-cover-h)', 
                   width: '100%',
+                  aspectRatio: '16 / 10',
                   overflow: 'hidden',
                   cursor: 'pointer'
                 }}
@@ -1055,7 +1103,7 @@ function App() {
                     alt="Open Netizen Case Study" 
                     style={{ 
                       width: '100%', 
-                      height: '100%', 
+                      height: '100%',
                       objectFit: 'cover',
                       display: 'block'
                     }} 
@@ -1113,8 +1161,8 @@ function App() {
                 className="home-case-study-item"
                 style={{ 
                   position: 'relative', 
-                  height: 'var(--case-study-cover-h)', 
                   width: '100%',
+                  aspectRatio: '16 / 10',
                   overflow: 'hidden',
                   cursor: 'pointer'
                 }}
@@ -1127,11 +1175,11 @@ function App() {
                   style={{ width: '100%', height: '100%' }}
                 >
                   <img 
-                    src="/images/MICRON.JPG" 
-                    alt="Micron Project" 
+                    src="/images/_DSC6969.jpg" 
+                    alt="Work Sharp and Drill Doctor Popular Mechanics photoshoot" 
                     style={{ 
                       width: '100%', 
-                      height: '100%', 
+                      height: '100%',
                       objectFit: 'cover',
                       display: 'block'
                     }} 
@@ -1160,10 +1208,10 @@ function App() {
                         margin: '0 0 var(--spacing-sm) 0',
                         textTransform: 'uppercase'
                       }}>
-                        Micron
+                        Work Sharp + Drill Doctor
                       </h3>
                       <p className="small-text" style={{ color: UI_LIGHT, maxWidth: '420px', margin: 0 }}>
-                        Designed over 1000 ADA-compliant signs for the 2026 Boise expansion.
+                        Combined product photoshoot for Popular Mechanics featuring Work Sharp and Drill Doctor.
                       </p>
                     </div>
 
@@ -1189,8 +1237,8 @@ function App() {
                 className="home-case-study-item"
                 style={{ 
                   position: 'relative', 
-                  height: 'var(--case-study-cover-h)', 
                   width: '100%',
+                  aspectRatio: '16 / 10',
                   overflow: 'hidden',
                   cursor: 'pointer'
                 }}
@@ -1207,7 +1255,7 @@ function App() {
                     alt="Boise Analog Club Case Study" 
                     style={{ 
                       width: '100%', 
-                      height: '100%', 
+                      height: '100%',
                       objectFit: 'cover',
                       display: 'block'
                     }} 
@@ -1287,7 +1335,7 @@ function App() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    style={{ borderTop: '1px solid var(--color-border)', paddingTop: 'var(--spacing-md)' }}
+                    style={{ borderTop: `1px solid ${UI_LIGHT}`, paddingTop: 'var(--spacing-md)' }}
                   >
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/micron.png" alt="Micron" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
@@ -1313,7 +1361,7 @@ function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.2 }}
-                    style={{ borderTop: '1px solid var(--color-border)', paddingTop: 'var(--spacing-md)' }}
+                    style={{ borderTop: `1px solid ${UI_LIGHT}`, paddingTop: 'var(--spacing-md)' }}
                   >
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/ramboll.png" alt="Ramboll" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
@@ -1340,7 +1388,7 @@ function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.4 }}
-                    style={{ borderTop: '1px solid var(--color-border)', paddingTop: 'var(--spacing-md)' }}
+                    style={{ borderTop: `1px solid ${UI_LIGHT}`, paddingTop: 'var(--spacing-md)' }}
                   >
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/superbase.jpg" alt="Superbase" style={{ height: '100%', filter: 'grayscale(100%)' }} />
@@ -1367,7 +1415,7 @@ function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.6 }}
-                    style={{ borderTop: '1px solid var(--color-border)', paddingTop: 'var(--spacing-md)' }}
+                    style={{ borderTop: `1px solid ${UI_LIGHT}`, paddingTop: 'var(--spacing-md)' }}
                   >
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/cmyk.jpg" alt="CMYK Graffix" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
@@ -1414,7 +1462,7 @@ function App() {
                       style={{ 
                         display: 'flex',
                         flexDirection: 'column',
-                        borderTop: '1px solid var(--color-border)',
+                        borderTop: `1px solid ${UI_LIGHT}`,
                         paddingTop: 'var(--spacing-md)'
                       }}
                     >
@@ -1427,7 +1475,7 @@ function App() {
                               height: '40px',
                               borderRadius: '50%',
                               overflow: 'hidden',
-                              border: '1px solid var(--color-border)'
+                              border: `1px solid ${UI_LIGHT}`
                             }}>
                               <img 
                                 src={testimonial.image} 
@@ -1487,7 +1535,7 @@ function App() {
             </section>
 
             <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
-              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: '1px solid var(--color-border)' }}>
+              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: `1px solid ${UI_DARK}` }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                   SERVICES
                 </h2>
@@ -1660,8 +1708,8 @@ function App() {
 
             <section style={{ 
               padding: '0',
-              background: UI_DARK,
-              color: UI_LIGHT,
+              background: UI_LIGHT,
+              color: UI_DARK,
               minHeight: 'auto',
               display: 'flex',
               flexDirection: 'column',
@@ -1670,7 +1718,7 @@ function App() {
             }}>
               <div className="studio-split-layout">
                 <div className="studio-practice-header">
-                  <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid var(--color-border)', paddingBottom: 'var(--spacing-sm)' }}>
+                  <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: `1px solid ${UI_DARK}`, paddingBottom: 'var(--spacing-sm)' }}>
                     <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                       STUDIO PRACTICE
                     </h2>
@@ -1711,7 +1759,7 @@ function App() {
                       Forrest Tindall is a Fullstack Creative from Boise, Idaho. His work spans photography, design, art, web development, sculpture, knife making, and illustration, blending technical precision with visual storytelling. He began making art early, first through drawing and writing, then discovering film photography at thirteen. In 2012, he began designing logos, websites, and he launched <em>Tindall Knives</em>, beginning an over decade-long career as a bladesmith. Around the same time, he started a parallel path in photography, focusing on outdoor and product photography for the knife and tool industry. His photography has been featured in multiple publications, including <em>Popular Mechanics Magazine</em>. Years spent shaping steel by hand in the mountains became a study in patience, discipline, and craftsmanship, qualities that continue to define his creative work today. Through photography, design, writing, illustration, and mixed media, Tindall explores identity, society, and the subtle contradictions of modern life, examining the space between what we call things and what they truly are. His work has appeared in exhibitions, global publications, and bespoke retailers, reflecting an ongoing effort to bridge the personal and the universal.
                     </div>
 
-                    <div className="flex" style={{ justifyContent: 'space-between', marginTop: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid var(--color-border)', paddingBottom: 'var(--spacing-sm)' }}>
+                    <div className="flex" style={{ justifyContent: 'space-between', marginTop: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: `1px solid ${UI_DARK}`, paddingBottom: 'var(--spacing-sm)' }}>
                       <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                         PASSION PROJECTS
                       </h2>
@@ -1721,6 +1769,62 @@ function App() {
                     <div className="passion-projects-block">
                       <div className="passion-projects-grid">
                         <div className="passion-projects-item passion-projects-item--left">
+                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
+                            <div className="small-text">PORTRAITS</div>
+                            <motion.button
+                              onClick={() => openCaseStudy('portraits')}
+                              whileHover={{ opacity: 0.7 }}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                padding: 0,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 'var(--spacing-sm)',
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: 'var(--fs-xs)',
+                                textTransform: 'uppercase',
+                              }}
+                            >
+                              [VIEW]
+                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
+                            </motion.button>
+                          </div>
+                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+                            Portrait photography studies in light—texture, gesture, and presence.
+                          </div>
+                        </div>
+
+                        <div className="passion-projects-item passion-projects-item--right">
+                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
+                            <div className="small-text">STREET PHOTOGRAPHY</div>
+                            <motion.button
+                              onClick={() => openCaseStudy('street')}
+                              whileHover={{ opacity: 0.7 }}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                padding: 0,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 'var(--spacing-sm)',
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: 'var(--fs-xs)',
+                                textTransform: 'uppercase',
+                              }}
+                            >
+                              [VIEW]
+                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
+                            </motion.button>
+                          </div>
+                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+                            Mostly shot on film in black and white—protest, movement, and chance.
+                          </div>
+                        </div>
+
+                        <div className="passion-projects-item passion-projects-item--full">
                           <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
                             <div className="small-text">PLAYGROUND</div>
                             <motion.button
@@ -1737,7 +1841,6 @@ function App() {
                                 fontFamily: 'var(--font-mono)',
                                 fontSize: 'var(--fs-xs)',
                                 textTransform: 'uppercase',
-                                color: 'inherit',
                               }}
                             >
                               [VIEW]
@@ -1745,36 +1848,7 @@ function App() {
                             </motion.button>
                           </div>
                           <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                            Design, art, and development explorations—product renders, studies, and prototypes.
-                          </div>
-                        </div>
-
-                        <div className="passion-projects-item passion-projects-item--right">
-                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
-                            <div className="small-text">BLOG</div>
-                            <motion.button
-                              onClick={() => openCaseStudy('blog')}
-                              whileHover={{ opacity: 0.7 }}
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                padding: 0,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 'var(--spacing-sm)',
-                                fontFamily: 'var(--font-mono)',
-                                fontSize: 'var(--fs-xs)',
-                                textTransform: 'uppercase',
-                                color: 'inherit',
-                              }}
-                            >
-                              [VIEW]
-                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
-                            </motion.button>
-                          </div>
-                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                            Writing, ideas, and notes—short essays and working thoughts.
+                            Experiments in design, art, development, and image-making.
                           </div>
                         </div>
                       </div>

@@ -7,15 +7,11 @@ const GRAY1 = 'rgba(226, 226, 224, 0.66)';
 const GRAY2 = '#353535';
 
 const SPEC_IMAGES = [
-  { src: '/images/C1 - Specs Restroom identity.png', label: 'C1' },
-  { src: '/images/C2 - Specs Exit Stair.png', label: 'C2' },
-  { src: '/images/C3 - Specs Maximum Occupency.png', label: 'C3' },
-  { src: '/images/C4 - Specs Stairwell Landing Identification.png', label: 'C4' },
-  { src: '/images/C5 - Specs Stairwell Landing Identification.png', label: 'C5' },
-  { src: '/images/N4 - Specs Blade Identity.png', label: 'N4' },
-  { src: '/images/N6 - Specs Room Identity.png', label: 'N6' },
-  { src: '/images/N7 - Specs Office Idenity.png', label: 'N7' },
-  { src: '/images/N9 - Specs Focus Room Identity.png', label: 'N9' },
+  { src: '/images/_DSC4026.jpg', label: '01' },
+  { src: '/images/_DSC7142.jpg', label: '02' },
+  { src: '/images/_DSC3935-2.jpg', label: '03' },
+  { src: '/images/_DSC6840.jpg', label: '04' },
+  { src: '/images/IMG_3004.jpg', label: '05' },
 ];
 
 const MicronProject = () => {
@@ -35,15 +31,15 @@ const MicronProject = () => {
         <div className="container" style={{ maxWidth: 1200 }}>
           <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
             <h1 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-              MICRON
+              WORK SHARP + DRILL DOCTOR
             </h1>
             <div className="small-text" style={{ color: GRAY1 }}>
-              WAYFINDING / ENVIRONMENTAL
+              POPULAR MECHANICS / PHOTOGRAPHY
             </div>
           </div>
           <div style={{ height: 1, background: GRAY2, marginTop: 'var(--spacing-sm)' }} />
           <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 860, opacity: 0.9, textTransform: 'none' }}>
-            Ongoing project. Designed over 1000 ADA-compliant signs for the massive 2026 Boise expansion—building a cohesive wayfinding system that merges strict regulatory standards with architectural harmony.
+            Editorial product photoshoot for Popular Mechanics featuring Work Sharp and Drill Doctor—built around clean lighting, rugged material detail, and a sharp magazine-ready product story.
           </div>
         </div>
       </section>
@@ -53,8 +49,8 @@ const MicronProject = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)', gap: 'var(--spacing-xl)', alignItems: 'start' }}>
             <div style={{ border: `1px solid ${GRAY2}`, overflow: 'hidden' }}>
               <img
-                src="/images/MICRON.JPG"
-                alt="Micron wayfinding specifications"
+                src="/images/_DSC6969.jpg"
+                alt="Work Sharp and Drill Doctor Popular Mechanics cover image"
                 style={{ width: '100%', height: 'auto', display: 'block' }}
               />
             </div>
@@ -65,7 +61,7 @@ const MicronProject = () => {
                   ROLE
                 </div>
                 <div className="small-text" style={{ marginTop: 8, textTransform: 'none' }}>
-                  Graphic Designer
+                  Photographer
                 </div>
               </div>
 
@@ -74,7 +70,7 @@ const MicronProject = () => {
                   FOCUS
                 </div>
                 <div className="small-text" style={{ marginTop: 8, textTransform: 'none' }}>
-                  ADA compliance, wayfinding hierarchy, and environmental signage systems.
+                  Editorial product photography, lighting control, texture, and durable tool-focused detail.
                 </div>
               </div>
 
@@ -83,9 +79,9 @@ const MicronProject = () => {
                   DELIVERABLES
                 </div>
                 <div className="small-text" style={{ marginTop: 8, textTransform: 'none', display: 'grid', gap: 6 }}>
-                  <div>Specs + documentation</div>
-                  <div>Sign family system</div>
-                  <div>Production-ready files</div>
+                  <div>Hero cover image</div>
+                  <div>Editorial selects</div>
+                  <div>Magazine-ready product photography</div>
                 </div>
               </div>
 
@@ -94,7 +90,7 @@ const MicronProject = () => {
                   TAGS
                 </div>
                 <div className="small-text" style={{ marginTop: 8, textTransform: 'none' }}>
-                  [WAYFINDING] [ENVIRONMENTAL] [ADA]
+                  [EDITORIAL] [PRODUCT] [PHOTOGRAPHY]
                 </div>
               </div>
             </div>
@@ -103,23 +99,23 @@ const MicronProject = () => {
           <div style={{ borderTop: `1px solid ${GRAY2}`, paddingTop: 'var(--spacing-xl)', marginTop: 'var(--spacing-xxl)' }}>
             <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
               <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-                DESIGN MOCKUPS
+                PHOTO SELECTS
               </h2>
               <div className="small-text" style={{ color: GRAY1 }}>
-                SIGN FAMILY DETAILS
+                POPULAR MECHANICS FEATURE
               </div>
             </div>
             <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 860, textTransform: 'none', opacity: 0.9 }}>
-              A selection of design mockups covering room IDs, stair/exit identifiers, occupancy signage, restroom identity, and focus-room/office variants.
+              Supporting selects from the combined Work Sharp + Drill Doctor shoot, balancing utility, material realism, and editorial clarity across the spread.
             </div>
           </div>
 
-          <div className="micron-specs-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 'var(--spacing-md)', marginTop: 'var(--spacing-xl)' }}>
+          <div className="micron-specs-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 'var(--spacing-md)', marginTop: 'var(--spacing-xl)' }}>
             {SPEC_IMAGES.map((img) => (
               <div key={img.src} style={{ border: `1px solid ${GRAY2}`, overflow: 'hidden', background: BLACK }}>
                 <img
                   src={img.src}
-                  alt={`Micron design mockup ${img.label}`}
+                  alt={`Work Sharp and Drill Doctor photo ${img.label}`}
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
                   decoding="async"

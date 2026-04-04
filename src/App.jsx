@@ -225,10 +225,10 @@ const graphicDesign = [
     year: "2025"
   },
      {
-    title: "Open Netizen",
-    category: "Brand Identity",
-    image: "/images/Open-Netizen.jpg",
-    description: "Brand Identity and Logo Design",
+    title: "Micron Technology",
+    category: "Environmental Signage",
+    image: "/images/MICRON.JPG",
+    description: "Desiging over 1000 ada compliant signs for the 2026 Boise expansion.",
     year: "2026"
   },
  
@@ -248,13 +248,7 @@ const graphicDesign = [
     year: "2025"
   },
 
-    {
-    title: "Boise Analog Club",
-    category: "Flyer Design",
-    image: "/images/BAC january.png",
-    description: "Promotional flyer design.",
-    year: "2025"
-  },
+  
 
   {
     title: "Paradox Labs",
@@ -1710,8 +1704,8 @@ function App() {
 
             <section style={{ 
               padding: '0',
-              background: UI_LIGHT,
-              color: UI_DARK,
+              background: UI_DARK,
+              color: UI_LIGHT,
               minHeight: 'auto',
               display: 'flex',
               flexDirection: 'column',
@@ -1720,7 +1714,7 @@ function App() {
             }}>
               <div className="studio-split-layout">
                 <div className="studio-practice-header">
-                  <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: `1px solid ${UI_DARK}`, paddingBottom: 'var(--spacing-sm)' }}>
+                  <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid var(--color-border)', paddingBottom: 'var(--spacing-sm)' }}>
                     <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                       STUDIO PRACTICE
                     </h2>
@@ -1761,7 +1755,7 @@ function App() {
                       Forrest Tindall is a Fullstack Creative from Boise, Idaho. His work spans photography, design, art, web development, sculpture, knife making, and illustration, blending technical precision with visual storytelling. He began making art early, first through drawing and writing, then discovering film photography at thirteen. In 2012, he began designing logos, websites, and he launched <em>Tindall Knives</em>, beginning an over decade-long career as a bladesmith. Around the same time, he started a parallel path in photography, focusing on outdoor and product photography for the knife and tool industry. His photography has been featured in multiple publications, including <em>Popular Mechanics Magazine</em>. Years spent shaping steel by hand in the mountains became a study in patience, discipline, and craftsmanship, qualities that continue to define his creative work today. Through photography, design, writing, illustration, and mixed media, Tindall explores identity, society, and the subtle contradictions of modern life, examining the space between what we call things and what they truly are. His work has appeared in exhibitions, global publications, and bespoke retailers, reflecting an ongoing effort to bridge the personal and the universal.
                     </div>
 
-                    <div className="flex" style={{ justifyContent: 'space-between', marginTop: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: `1px solid ${UI_DARK}`, paddingBottom: 'var(--spacing-sm)' }}>
+                    <div className="flex" style={{ justifyContent: 'space-between', marginTop: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: '1px solid var(--color-border)', paddingBottom: 'var(--spacing-sm)' }}>
                       <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                         PASSION PROJECTS
                       </h2>
@@ -1787,6 +1781,7 @@ function App() {
                                 fontFamily: 'var(--font-mono)',
                                 fontSize: 'var(--fs-xs)',
                                 textTransform: 'uppercase',
+                                color: UI_LIGHT,
                               }}
                             >
                               [VIEW]
@@ -1815,6 +1810,7 @@ function App() {
                                 fontFamily: 'var(--font-mono)',
                                 fontSize: 'var(--fs-xs)',
                                 textTransform: 'uppercase',
+                                color: UI_LIGHT,
                               }}
                             >
                               [VIEW]
@@ -1843,6 +1839,7 @@ function App() {
                                 fontFamily: 'var(--font-mono)',
                                 fontSize: 'var(--fs-xs)',
                                 textTransform: 'uppercase',
+                                color: UI_LIGHT,
                               }}
                             >
                               [VIEW]

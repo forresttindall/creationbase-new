@@ -900,7 +900,21 @@ const OpenNetizenCaseStudy = () => {
                   </div>
                   <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: UI_LIGHT }}>02</span>
-                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>SIGN MOCKUP</span>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>AD APPLICATION</span>
+                  </div>
+                </div>
+
+                <div style={{ background: PAGE_BG, border: `1px solid ${GRAY2}`, overflow: "hidden", display: "flex", flexDirection: "column", gridColumn: isMobile ? undefined : "1 / -1" }}>
+                  <div style={{ position: "relative", width: "100%", aspectRatio: "1 / 1", background: BLACK, overflow: "hidden" }}>
+                    <img
+                      src="/images/OPEN NETIZEN WEBSITE MOCKUP.jpg"
+                      alt="Open Netizen website mockup"
+                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
+                    />
+                  </div>
+                  <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: UI_LIGHT }}>03</span>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>WEBSITE</span>
                   </div>
                 </div>
 
@@ -913,7 +927,7 @@ const OpenNetizenCaseStudy = () => {
                     />
                   </div>
                   <div style={{ borderTop: `1px solid ${GRAY2}`, padding: "var(--case-study-app-label-pad)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: PAGE_BG }}>
-                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: UI_LIGHT }}>03</span>
+                    <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: UI_LIGHT }}>04</span>
                     <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 1, color: GRAY1 }}>BUSINESS CARD</span>
                   </div>
                 </div>

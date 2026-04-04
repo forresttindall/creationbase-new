@@ -665,8 +665,10 @@ function App() {
     '/playground',
     '/portraits',
     '/street-photography',
+    '/contact',
+    '/blog',
   ]);
-  const useLightHeader = isHome ? headerTheme === 'dark' : lightHeaderPaths.has(location.pathname);
+  const useLightHeader = isHome ? headerTheme === 'dark' : lightHeaderPaths.has(location.pathname) || location.pathname.startsWith('/blog/');
   const headerColor = useLightHeader ? UI_LIGHT : UI_DARK;
   const headerLogoSrc = useLightHeader ? '/images/logowhite.png' : '/images/logoblack.png';
   const mobileNavBg = headerColor === UI_LIGHT ? 'rgba(15,15,15,0.96)' : 'rgba(226,226,224,0.96)';

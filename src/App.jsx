@@ -228,7 +228,7 @@ const graphicDesign = [
     title: "Micron Technology",
     category: "Environmental Signage",
     image: "/images/MICRON.JPG",
-    description: "Desiging over 1000 ada compliant signs for the 2026 Boise expansion.",
+    description: "Desiging over 1000 ada signs for the 2026 expansion.",
     year: "2026"
   },
  
@@ -1318,7 +1318,7 @@ function App() {
             }}>
               {/* Selected Clients Marquee/Grid */}
               <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
-                <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
+                <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: '1px solid rgba(226, 226, 224, 0.22)' }}>
                   <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
                     CLIENTS & PARTNERS
                   </h2>
@@ -1331,8 +1331,11 @@ function App() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    style={{ borderTop: `1px solid ${UI_LIGHT}`, paddingTop: 'var(--spacing-md)' }}
+                    style={{ borderTop: '1px solid rgba(226, 226, 224, 0.12)', paddingTop: 'var(--spacing-md)' }}
                   >
+                    <div className="small-text" style={{ marginBottom: 'var(--spacing-md)', opacity: 0.55 }}>
+                      A01
+                    </div>
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/micron.png" alt="Micron" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
                     </div>
@@ -1357,8 +1360,11 @@ function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.2 }}
-                    style={{ borderTop: `1px solid ${UI_LIGHT}`, paddingTop: 'var(--spacing-md)' }}
+                    style={{ borderTop: '1px solid rgba(226, 226, 224, 0.12)', paddingTop: 'var(--spacing-md)' }}
                   >
+                    <div className="small-text" style={{ marginBottom: 'var(--spacing-md)', opacity: 0.55 }}>
+                      A02
+                    </div>
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/ramboll.png" alt="Ramboll" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
                     </div>
@@ -1384,8 +1390,11 @@ function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.4 }}
-                    style={{ borderTop: `1px solid ${UI_LIGHT}`, paddingTop: 'var(--spacing-md)' }}
+                    style={{ borderTop: '1px solid rgba(226, 226, 224, 0.12)', paddingTop: 'var(--spacing-md)' }}
                   >
+                    <div className="small-text" style={{ marginBottom: 'var(--spacing-md)', opacity: 0.55 }}>
+                      A03
+                    </div>
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/superbase.jpg" alt="Superbase" style={{ height: '100%', filter: 'grayscale(100%)' }} />
                     </div>
@@ -1411,8 +1420,11 @@ function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.6 }}
-                    style={{ borderTop: `1px solid ${UI_LIGHT}`, paddingTop: 'var(--spacing-md)' }}
+                    style={{ borderTop: '1px solid rgba(226, 226, 224, 0.12)', paddingTop: 'var(--spacing-md)' }}
                   >
+                    <div className="small-text" style={{ marginBottom: 'var(--spacing-md)', opacity: 0.55 }}>
+                      A04
+                    </div>
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/cmyk.jpg" alt="CMYK Graffix" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
                     </div>
@@ -1436,10 +1448,11 @@ function App() {
 
               {/* Testimonials */}
               <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
-                <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline' }}>
+                <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: '1px solid rgba(226, 226, 224, 0.22)' }}>
                   <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
                     CLIENT FEEDBACK
                   </h2>
+                  <span className="small-text">Index (03)</span>
                 </div>
 
                 <div style={{ 
@@ -1458,10 +1471,13 @@ function App() {
                       style={{ 
                         display: 'flex',
                         flexDirection: 'column',
-                        borderTop: `1px solid ${UI_LIGHT}`,
+                        borderTop: '1px solid rgba(226, 226, 224, 0.12)',
                         paddingTop: 'var(--spacing-md)'
                       }}
                     >
+                      <div className="small-text" style={{ marginBottom: 'var(--spacing-md)', opacity: 0.55 }}>
+                        {`A${String(i + 5).padStart(2, '0')}`}
+                      </div>
                       {/* Header: User Info + Stars */}
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--spacing-md)' }}>
                         {/* Left: Image + Name */}
@@ -1530,39 +1546,74 @@ function App() {
               </div>
             </section>
 
-            <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
-              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: `1px solid ${UI_DARK}` }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+            <section
+              data-header-theme="dark"
+              style={{
+                padding: 'var(--spacing-xxl) var(--spacing-md)',
+                backgroundColor: UI_DARK,
+                color: UI_LIGHT,
+              }}
+            >
+              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-lg)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: '1px solid rgba(226, 226, 224, 0.22)' }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
                   SERVICES
                 </h2>
-                <span className="small-text">Index (03)</span>
+                <span className="small-text" style={{ color: UI_LIGHT }}>Index (04)</span>
               </div>
-              <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--spacing-md)', marginTop: 'var(--spacing-lg)' }}>
-                <div>
-                  <p className="small-text" style={{ maxWidth: '420px' }}>
+              <div
+                className="grid"
+                style={{
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                  gap: 'var(--spacing-xl)',
+                  alignItems: 'start',
+                }}
+              >
+                <div style={{ maxWidth: '520px' }}>
+                  <p
+                    className="small-text"
+                    style={{
+                      color: UI_LIGHT,
+                      fontSize: 'var(--fs-sm)',
+                      lineHeight: 1.6,
+                      textTransform: 'none',
+                      letterSpacing: '0.02em',
+                    }}
+                  >
                     Full-stack creative for brands and teams. I design visual systems, build fast websites, and create photography that supports the story.
                   </p>
-                  <div className="small-text" style={{ marginTop: 'var(--spacing-md)' }}>
+                  <div className="small-text" style={{ marginTop: 'var(--spacing-md)', color: 'rgba(226, 226, 224, 0.7)' }}>
                     Available contract, project-based, or retainer.
                   </div>
                 </div>
                 <div>
-                  <ul className="small-text" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-                    <li>DESIGN</li>
-                    <li>DEVELOPMENT</li>
-                    <li>PHOTOGRAPHY</li>
-                    <li>VISUAL SYSTEMS</li>
+                  <ul className="small-text" style={{ listStyle: 'none', display: 'grid', gap: 0, color: UI_LIGHT }}>
+                    <li className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', padding: '10px 0', borderTop: '1px solid rgba(226, 226, 224, 0.22)' }}>
+                      <span>DESIGN</span>
+                      <span style={{ opacity: 0.55 }}>01</span>
+                    </li>
+                    <li className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', padding: '10px 0', borderTop: '1px solid rgba(226, 226, 224, 0.22)' }}>
+                      <span>DEVELOPMENT</span>
+                      <span style={{ opacity: 0.55 }}>02</span>
+                    </li>
+                    <li className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', padding: '10px 0', borderTop: '1px solid rgba(226, 226, 224, 0.22)' }}>
+                      <span>PHOTOGRAPHY</span>
+                      <span style={{ opacity: 0.55 }}>03</span>
+                    </li>
+                    <li className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', padding: '10px 0', borderTop: '1px solid rgba(226, 226, 224, 0.22)' }}>
+                      <span>VISUAL SYSTEMS</span>
+                      <span style={{ opacity: 0.55 }}>04</span>
+                    </li>
                   </ul>
                 </div>
               </div>
             </section>
 
             <section id="dev" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
-              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
+              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: '1px solid rgba(226, 226, 224, 0.22)' }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
                   UI/UX DESIGN + DEV
                 </h2>
-                <span className="small-text">Index (04)</span>
+                <span className="small-text">Index (05)</span>
               </div>
               
               <div className="project-grid project-grid--tight">
@@ -1621,11 +1672,11 @@ function App() {
             </section>
 
             <section id="design" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
-              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)' }}>
+              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: '1px solid rgba(226, 226, 224, 0.22)' }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
                   GRAPHIC DESIGN
                 </h2>
-                <span className="small-text">Index (05)</span>
+                <span className="small-text">Index (06)</span>
               </div>
 
               <div className="project-grid project-grid--tight" style={{ alignItems: 'start' }}>
@@ -1689,7 +1740,7 @@ function App() {
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
                   COMMERCIAL PHOTOGRAPHY
                 </h2>
-                <span className="small-text" style={{ color: UI_LIGHT }}>Index (06)</span>
+                <span className="small-text" style={{ color: UI_LIGHT }}>Index (07)</span>
               </div>
               <div className="full-bleed">
                 <div className="mosaic-masonry">
@@ -1718,7 +1769,7 @@ function App() {
                     <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                       STUDIO PRACTICE
                     </h2>
-                    <span className="small-text">Index (07)</span>
+                    <span className="small-text">Index (08)</span>
                   </div>
                 </div>
 

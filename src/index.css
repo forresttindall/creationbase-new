@@ -54,6 +54,7 @@
   --color-bg: #E2E2E0;
   --color-text: #0F0F0F;
   --color-accent: #2a2a2a;
+  --color-border: #353535;
 
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -493,6 +494,19 @@ ul {
   gap: var(--spacing-md);
 }
 
+.home-case-study-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border-top: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
+}
+
+.home-case-study-item {
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
 .studio-split-layout {
   display: grid;
   grid-template-columns: 1fr;
@@ -620,9 +634,15 @@ ul {
   }
 }
 
+@media (min-width: 640px) {
+  .home-case-study-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 .passion-projects-block {
   margin-top: var(--spacing-xl);
-  border-top: 1px solid var(--color-text);
+  border-top: 1px solid var(--color-border);
   padding-top: var(--spacing-md);
   padding-bottom: var(--spacing-md);
   max-width: 560px;
@@ -636,7 +656,7 @@ ul {
 
 .passion-projects-item--left {
   padding-right: var(--spacing-md);
-  border-right: 1px solid var(--color-text);
+  border-right: 1px solid var(--color-border);
 }
 
 .passion-projects-item--right {
@@ -646,7 +666,7 @@ ul {
 .passion-projects-item--full {
   grid-column: 1 / -1;
   margin-top: var(--spacing-md);
-  border-top: 1px solid var(--color-text);
+  border-top: 1px solid var(--color-border);
   padding-top: var(--spacing-md);
 }
 
@@ -667,7 +687,7 @@ ul {
 
   .passion-projects-item--right {
     padding-left: 0;
-    border-top: 1px solid var(--color-text);
+    border-top: 1px solid var(--color-border);
     padding-top: var(--spacing-md);
   }
 

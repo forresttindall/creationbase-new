@@ -1039,7 +1039,7 @@ function App() {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'flex-end',
-                  padding: '0 var(--spacing-md) var(--spacing-xl)',
+                  padding: '0 var(--spacing-md) var(--spacing-md)',
                   pointerEvents: 'none'
                 }}>
                   <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -1115,7 +1115,7 @@ function App() {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'flex-end',
-                  padding: '0 var(--spacing-md) var(--spacing-xl)',
+                  padding: '0 var(--spacing-md) var(--spacing-md)',
                   pointerEvents: 'none'
                 }}>
                   <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -1191,7 +1191,7 @@ function App() {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'flex-end',
-                  padding: '0 var(--spacing-md) var(--spacing-xl)',
+                  padding: '0 var(--spacing-md) var(--spacing-md)',
                   pointerEvents: 'none'
                 }}>
                   <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -1267,7 +1267,7 @@ function App() {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'flex-end',
-                  padding: '0 var(--spacing-md) var(--spacing-xl)',
+                  padding: '0 var(--spacing-md) var(--spacing-md)',
                   pointerEvents: 'none'
                 }}>
                   <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>

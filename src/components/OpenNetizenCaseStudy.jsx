@@ -191,14 +191,14 @@ function FontCard({ num, name, label, description }) {
         <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, textTransform: "uppercase", letterSpacing: 2 }}>{label}</span>
       </div>
       <h3 style={{
-        fontFamily: name === "PP Neue Machina" ? "'PP Neue Machina', 'Arial Black', sans-serif"
+        fontFamily: name === "Bitcount Single" ? "'Bitcount Single', 'Arial Black', sans-serif"
           : name === "SF Mono" ? "'SF Mono', 'Courier New', monospace"
           : "'Geist', 'Helvetica Neue', sans-serif",
-        fontWeight: name === "PP Neue Machina" ? 900 : 400,
+        fontWeight: name === "Bitcount Single" ? 900 : 400,
         fontSize: 48,
         color: UI_LIGHT,
         margin: "0 0 16px",
-        letterSpacing: name === "PP Neue Machina" ? -1 : 0,
+        letterSpacing: name === "Bitcount Single" ? -1 : 0,
       }}>
         {name}
       </h3>
@@ -334,7 +334,7 @@ const OpenNetizenCaseStudy = () => {
                 FREE THE WEB
               </p>
               <h1 style={{
-                fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
+                fontFamily: "'Bitcount Single', 'Arial Black', sans-serif",
                 fontWeight: 900,
                 fontSize: "clamp(48px, 6vw, 96px)",
                 color: WHITE,
@@ -483,7 +483,7 @@ const OpenNetizenCaseStudy = () => {
                 ].map((p) => (
                   <div key={p.n} style={{ background: PAGE_BG, padding: isMobile ? "18px 14px" : "24px 20px" }}>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
-                      <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontSize: 28, fontWeight: 900, color: BLUE }}>{p.n}</span>
+                      <span style={{ fontFamily: "'Bitcount Single', 'Arial Black', sans-serif", fontSize: 28, fontWeight: 900, color: BLUE }}>{p.n}</span>
                       <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: UI_LIGHT, letterSpacing: 1 }}>{p.label}</span>
                     </div>
                     {p.subs.map((s, i) => (
@@ -564,7 +564,7 @@ const OpenNetizenCaseStudy = () => {
                     }}>{i + 1}</span>
                     <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
                       <span style={{
-                        fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
+                        fontFamily: "'Bitcount Single', 'Arial Black', sans-serif",
                         fontWeight: 900,
                         fontSize: "clamp(20px, 3.8vw, 44px)",
                         color: v.color,
@@ -654,7 +654,7 @@ const OpenNetizenCaseStudy = () => {
           <ScrollSection index={3} setActive={setActive} isMobile={isMobile}>
             <PageHeader number="4.0" title="TYPOGRAPHY" isMobile={isMobile} />
             <FontCard
-              num="1" name="PP Neue Machina" label="Primary Font"
+              num="1" name="Bitcount Single" label="Primary Font"
               description="A contemporary grotesque typeface that blends mechanical precision with expressive character. Its slightly unconventional proportions and technical tone give it a strong, modern presence for bold headlines and brand moments."
             />
             <FontCard
@@ -770,11 +770,11 @@ const OpenNetizenCaseStudy = () => {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(8px, 1.5vh, 16px)" }}>
                   <div style={{ border: `1px solid ${GRAY2}`, padding: "clamp(8px, 1.5vh, 16px)" }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(7px, 1vh, 9px)", color: GRAY1, marginBottom: 4 }}>LATENCY</p>
-                    <p style={{ fontFamily: "'PP Neue Machina', sans-serif", fontSize: "clamp(16px, 2.5vh, 24px)", fontWeight: 900 }}>24ms</p>
+                    <p style={{ fontFamily: "'Bitcount Single', sans-serif", fontSize: "clamp(16px, 2.5vh, 24px)", fontWeight: 900 }}>24ms</p>
                   </div>
                   <div style={{ border: `1px solid ${GRAY2}`, padding: "clamp(8px, 1.5vh, 16px)" }}>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(7px, 1vh, 9px)", color: GRAY1, marginBottom: 4 }}>UPTIME</p>
-                    <p style={{ fontFamily: "'PP Neue Machina', sans-serif", fontSize: "clamp(16px, 2.5vh, 24px)", fontWeight: 900 }}>99.9%</p>
+                    <p style={{ fontFamily: "'Bitcount Single', sans-serif", fontSize: "clamp(16px, 2.5vh, 24px)", fontWeight: 900 }}>99.9%</p>
                   </div>
                 </div>
                 <div style={{ marginTop: "auto", height: isMobile ? 40 : "clamp(40px, 6vh, 60px)", background: `linear-gradient(90deg, ${BLUE} 0%, transparent 100%)`, opacity: 0.2 }} />
@@ -797,7 +797,7 @@ const OpenNetizenCaseStudy = () => {
               }}>
                 <div style={{ display: "flex", gap: "clamp(12px, 2vw, 24px)", flex: 1 }}>
                   <div style={{ width: "45%" }}>
-                    <h4 style={{ fontFamily: "'PP Neue Machina', sans-serif", fontSize: "clamp(20px, 3vh, 32px)", fontWeight: 900, lineHeight: 0.9, marginBottom: 12 }}>THE OPEN WEB</h4>
+                    <h4 style={{ fontFamily: "'Bitcount Single', sans-serif", fontSize: "clamp(20px, 3vh, 32px)", fontWeight: 900, lineHeight: 0.9, marginBottom: 12 }}>THE OPEN WEB</h4>
                     <p style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", lineHeight: 1.5 }}>Built on the principles of transparency and decentralization.</p>
                   </div>
                   <div style={{ flex: 1, background: BLUE, position: "relative", marginBottom: "clamp(24px, 4vh, 40px)" }}>
@@ -831,7 +831,7 @@ const OpenNetizenCaseStudy = () => {
               }}>
                 <div>
                   <LogoMark size="clamp(32px, 5vh, 48px)" color={WHITE} bg="transparent" />
-                  <h4 style={{ fontFamily: "'PP Neue Machina', sans-serif", fontSize: isMobile ? "clamp(24px, 9vw, 36px)" : "clamp(24px, 4vh, 40px)", fontWeight: 900, lineHeight: 0.85, marginTop: isMobile ? 12 : "clamp(12px, 2vh, 24px)" }}>CONNECT<br/>TO THE<br/>NETIZEN.</h4>
+                  <h4 style={{ fontFamily: "'Bitcount Single', sans-serif", fontSize: isMobile ? "clamp(24px, 9vw, 36px)" : "clamp(24px, 4vh, 40px)", fontWeight: 900, lineHeight: 0.85, marginTop: isMobile ? 12 : "clamp(12px, 2vh, 24px)" }}>CONNECT<br/>TO THE<br/>NETIZEN.</h4>
                 </div>
                 <div style={{ border: `1px solid ${WHITE}`, padding: "clamp(8px, 1.5vh, 12px) clamp(16px, 2vw, 24px)", alignSelf: "flex-start", marginTop: 12 }}>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", letterSpacing: 2 }}>[ INITIALIZE ]</span>
@@ -853,13 +853,13 @@ const OpenNetizenCaseStudy = () => {
               }}>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1 }}>
                   {[1,2,3,4,5,6,7,8].map(i => (
-                    <div key={i} style={{ border: `1px solid ${GRAY2}`, aspectRatio: "1/1", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'PP Neue Machina', sans-serif", fontSize: "clamp(8px, 1vh, 12px)", color: GRAY1 }}>
+                    <div key={i} style={{ border: `1px solid ${GRAY2}`, aspectRatio: "1/1", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bitcount Single', sans-serif", fontSize: "clamp(8px, 1vh, 12px)", color: GRAY1 }}>
                       {i < 10 ? `0${i}` : i}
                     </div>
                   ))}
                 </div>
                 <div style={{ marginTop: "auto", paddingTop: 12 }}>
-                  <p style={{ fontFamily: "'PP Neue Machina', sans-serif", fontSize: "clamp(14px, 2vh, 18px)", fontWeight: 900, color: BLUE }}>TYPE SYSTEM GRID V.02</p>
+                  <p style={{ fontFamily: "'Bitcount Single', sans-serif", fontSize: "clamp(14px, 2vh, 18px)", fontWeight: 900, color: BLUE }}>TYPE SYSTEM GRID V.02</p>
                   <p style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", color: GRAY1 }}>STRUCTURAL ALIGNMENT</p>
                 </div>
               </div>
@@ -935,7 +935,7 @@ const OpenNetizenCaseStudy = () => {
 
               <div style={{ borderTop: `1px solid ${GRAY2}`, paddingTop: 16 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                  <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontWeight: 900, fontSize: "clamp(32px, 4vw, 56px)", letterSpacing: -1, color: UI_LIGHT, lineHeight: 0.9 }}>
+                  <span style={{ fontFamily: "'Bitcount Single', 'Arial Black', sans-serif", fontWeight: 900, fontSize: "clamp(32px, 4vw, 56px)", letterSpacing: -1, color: UI_LIGHT, lineHeight: 0.9 }}>
                     OPEN NETIZEN
                   </span>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1 }}>

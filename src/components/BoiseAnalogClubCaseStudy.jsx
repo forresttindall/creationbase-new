@@ -312,7 +312,7 @@ const BoiseAnalogClubCaseStudy = () => {
                 KEEP FILM ALIVE
               </p>
               <h1 style={{
-                fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif",
+                fontFamily: "'Bitcount Single', 'Arial Black', sans-serif",
                 fontWeight: 900,
                 fontSize: "clamp(48px, 6vw, 96px)",
                 color: UI_LIGHT,
@@ -464,7 +464,7 @@ const BoiseAnalogClubCaseStudy = () => {
                 ].map((p) => (
                   <div key={p.n} style={{ background: PAGE_BG, padding: isMobile ? "18px 14px" : "24px 20px" }}>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 12 }}>
-                      <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontSize: 28, fontWeight: 900, color: RED }}>{p.n}</span>
+                      <span style={{ fontFamily: "'Bitcount Single', 'Arial Black', sans-serif", fontSize: 28, fontWeight: 900, color: RED }}>{p.n}</span>
                       <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: UI_LIGHT, letterSpacing: 1 }}>{p.label}</span>
                     </div>
                     {p.subs.map((s, i) => (
@@ -560,7 +560,7 @@ const BoiseAnalogClubCaseStudy = () => {
                     }}>{i + 1}</span>
                     <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
                       <span style={{
-                        fontFamily: v.isImpact ? "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif" : "'Bucklane Script', 'PP Neue Machina', 'Arial Black', sans-serif",
+                        fontFamily: v.isImpact ? "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif" : "'Bucklane Script', 'Bitcount Single', 'Arial Black', sans-serif",
                         fontWeight: v.isImpact ? 400 : 900,
                         fontSize: "clamp(18px, 3.2vw, 40px)",
                         color: v.color,
@@ -830,7 +830,7 @@ const BoiseAnalogClubCaseStudy = () => {
 
               <div style={{ borderTop: `1px solid ${GRAY2}`, paddingTop: 16 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                  <span style={{ fontFamily: "'PP Neue Machina', 'Arial Black', sans-serif", fontWeight: 900, fontSize: "clamp(32px, 4vw, 56px)", letterSpacing: -1, color: UI_LIGHT, lineHeight: 0.9 }}>
+                  <span style={{ fontFamily: "'Bitcount Single', 'Arial Black', sans-serif", fontWeight: 900, fontSize: "clamp(32px, 4vw, 56px)", letterSpacing: -1, color: UI_LIGHT, lineHeight: 0.9 }}>
                     BOISE ANALOG CLUB
                   </span>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1 }}>

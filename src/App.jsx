@@ -107,7 +107,7 @@ const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange
       <div ref={footerVantaElRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
       <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
         <div className="footer-cta">
-          <h2 className="section-title">Let&apos;s Work<br />Together</h2>
+          <h2 className="section-title" style={{ fontWeight: 400 }}>Let&apos;s Work<br />Together</h2>
         </div>
 
         <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-xl)' }}>
@@ -926,7 +926,7 @@ function App() {
               <div ref={heroVantaElRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
               <div style={{ minHeight: 'var(--vh-stable)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-xl)', position: 'relative', zIndex: 1 }}>
                 <h1 style={{ 
-                  fontFamily: 'var(--font-display)', 
+                  fontFamily: 'var(--font-display)', fontWeight: 400, 
                   fontSize: 'var(--fs-display)', 
                   lineHeight: 1,
                   textTransform: 'uppercase',
@@ -1045,7 +1045,7 @@ function App() {
                   <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
                     <div>
                       <h3 style={{ 
-                        fontFamily: 'var(--font-display)', 
+                        fontFamily: 'var(--font-display)', fontWeight: 400, 
                         fontSize: 'var(--fs-xl)', 
                         lineHeight: 1,
                         color: UI_LIGHT,
@@ -1121,7 +1121,7 @@ function App() {
                   <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
                     <div>
                       <h3 style={{ 
-                        fontFamily: 'var(--font-display)', 
+                        fontFamily: 'var(--font-display)', fontWeight: 400, 
                         fontSize: 'var(--fs-xl)', 
                         lineHeight: 1,
                         color: UI_LIGHT,
@@ -1197,7 +1197,7 @@ function App() {
                   <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
                     <div>
                       <h3 style={{ 
-                        fontFamily: 'var(--font-display)', 
+                        fontFamily: 'var(--font-display)', fontWeight: 400, 
                         fontSize: 'var(--fs-xl)', 
                         lineHeight: 1,
                         color: UI_LIGHT,
@@ -1273,7 +1273,7 @@ function App() {
                   <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
                     <div>
                       <h3 style={{ 
-                        fontFamily: 'var(--font-display)', 
+                        fontFamily: 'var(--font-display)', fontWeight: 400, 
                         fontSize: 'var(--fs-xl)', 
                         lineHeight: 1,
                         color: UI_LIGHT,
@@ -1341,7 +1341,8 @@ function App() {
                         fontSize: 'var(--fs-lg)', 
                         margin: 0,
                         textTransform: 'uppercase',
-                        fontFamily: 'var(--font-display)'
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 400
                       }}>
                         Micron Technology
                       </h4>
@@ -1372,7 +1373,8 @@ function App() {
                         fontSize: 'var(--fs-lg)', 
                         margin: 0,
                         textTransform: 'uppercase',
-                        fontFamily: 'var(--font-display)'
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 400
                       }}>
                         Ramboll
                       </h4>
@@ -1404,7 +1406,8 @@ function App() {
                         fontSize: 'var(--fs-lg)', 
                         margin: 0,
                         textTransform: 'uppercase',
-                        fontFamily: 'var(--font-display)'
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 400
                       }}>
                         Superbase
                       </h4>
@@ -1436,7 +1439,8 @@ function App() {
                         fontSize: 'var(--fs-lg)', 
                         margin: 0,
                         textTransform: 'uppercase',
-                        fontFamily: 'var(--font-display)'
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 400
                       }}>
                         CMYK Graffix
                       </h4>
@@ -1523,6 +1527,7 @@ function App() {
                       <div>
                         <h4 style={{ 
                             fontFamily: 'var(--font-display)', 
+                            fontWeight: 400,
                             fontSize: 'var(--fs-lg)', 
                             textTransform: 'uppercase',
                             marginBottom: 'var(--spacing-sm)',

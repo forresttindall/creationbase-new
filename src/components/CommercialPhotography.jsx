@@ -1,29 +1,30 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const portraitImages = [
-  '/images/_DSC2145.webp',
-  '/images/_DSC2146.webp',
-  '/images/_DSC2148.webp',
-  '/images/_DSC2151.webp',
-  '/images/_DSC2201.webp',
-  '/images/P2200860.webp',
-  '/images/P2200865.webp',
-  '/images/P2200886.webp',
-  '/images/P2200894.webp',
-  '/images/P2200926.webp',
-  '/images/P2200941.webp',
-  '/images/P2200967.webp',
-  '/images/P2200984.webp',
-  '/images/P2201073.webp',
-  '/images/P2201089.webp',
-  '/images/P2201097.webp',
-  '/images/P2201196.webp',
-  '/images/P2201197.webp',
-  '/images/P2201212.webp',
+const commercialPhotographyImages = [
+  '/images/campfire.JPG',
+  '/images/_DSC4685-2.jpg',
+  '/images/_DSC4390.jpg',
+  '/images/_DSC2842.jpg',
+  '/images/_DSC1636.jpg',
+  '/images/_DSC6969.jpg',
+  '/images/_DSC8589.jpg',
+  '/images/fish.jpg',
+  '/images/_DSC3525.jpg',
+  '/images/_DSC9182.jpg',
+  '/images/_DSC1954-2.jpg',
+  '/images/_DSC7392.jpg',
+  '/images/_DSC7142.jpg',
+  '/images/_DSC6942.jpg',
+  '/images/_DSC6840.jpg',
+  '/images/_DSC4988.jpg',
+  '/images/_DSC4899.jpg',
+  '/images/_DSC3991.jpg',
+  '/images/_DSC3168-2.jpg',
+  '/images/_DSC2016.jpg',
 ];
 
-const Portraits = () => {
+const CommercialPhotography = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -43,7 +44,7 @@ const Portraits = () => {
     >
       <div className="full-bleed">
         <div className="mosaic-masonry">
-          {portraitImages.map((src) => (
+          {commercialPhotographyImages.map((src) => (
             <div className="mosaic-tile" key={src}>
               <img src={src} alt="" loading="lazy" />
             </div>
@@ -54,4 +55,4 @@ const Portraits = () => {
   );
 };
 
-export default Portraits;
+export default CommercialPhotography;

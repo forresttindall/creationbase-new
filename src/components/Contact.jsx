@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { blastConfetti } from '../utils/confetti';
 
-const BLACK = '#0F0F0F';
-const GRAY1 = 'rgba(226, 226, 224, 0.66)';
-const WHITE = '#E2E2E0';
+const BLACK = '#FFFFFF';
+const GRAY1 = 'rgba(17, 17, 17, 0.56)';
+const WHITE = '#111111';
 
 const Contact = () => {
   const [name, setName] = useState('');
@@ -59,7 +59,7 @@ const Contact = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      data-header-theme="dark"
+      data-header-theme="light"
       style={{ background: BLACK, color: WHITE, minHeight: '100vh' }}
     >
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: '1px solid var(--color-border)' }}>

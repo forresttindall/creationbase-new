@@ -14,12 +14,15 @@ const sections = [
 ];
 
 const RED = "#ED1C23";
-const WHITE = "#FFFFFF";
-const BLACK = "#0F0F0F";
-const UI_LIGHT = "#E2E2E0";
+const WHITE = "#111111";
+const BLACK = "#FFFFFF";
+const UI_LIGHT = "#111111";
 const PAGE_BG = BLACK;
-const GRAY1 = "rgba(226, 226, 224, 0.66)";
-const GRAY2 = "#353535";
+const GRAY1 = "rgba(17, 17, 17, 0.56)";
+const GRAY2 = "#C9C9C9";
+const BRAND_WHITE = "#FFFFFF";
+const BRAND_BLACK = "#111111";
+const BRAND_GRAY_DARK = "#353535";
 
 function SectionNav({ active, isMobile }) {
   if (isMobile) return null;
@@ -308,23 +311,23 @@ const BoiseAnalogClubCaseStudy = () => {
             }}
           >
             <div style={{ marginTop: 'auto', marginBottom: '48px' }}>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: UI_LIGHT, letterSpacing: 2, margin: "0 0 14px", textTransform: "uppercase" }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: BRAND_WHITE, letterSpacing: 2, margin: "0 0 14px", textTransform: "uppercase" }}>
                 KEEP FILM ALIVE
               </p>
               <h1 style={{
-                fontFamily: "'Bitcount Single', 'Arial Black', sans-serif",
-                fontWeight: 900,
+                fontFamily: "'Bucklane Script', 'Bitcount Single', 'Arial Black', sans-serif",
+                fontWeight: 400,
                 fontSize: "clamp(48px, 6vw, 96px)",
-                color: UI_LIGHT,
-                letterSpacing: -2,
+                color: BRAND_WHITE,
+                letterSpacing: "-0.04em",
                 lineHeight: 0.85,
                 margin: 0,
-                textTransform: 'uppercase',
+                textTransform: 'none',
                 whiteSpace: isMobile ? 'normal' : 'nowrap'
               }}>
                 Boise Analog Club
               </h1>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: UI_LIGHT, lineHeight: 1.8, marginTop: 14, maxWidth: 720 }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 12, color: BRAND_WHITE, lineHeight: 1.8, marginTop: 14, maxWidth: 720 }}>
                 Visual identity and flyer system for a community film photography club—built for repeatable event promotion and print consistency.
               </p>
             </div>
@@ -500,7 +503,7 @@ const BoiseAnalogClubCaseStudy = () => {
                   { kind: "impact", label: "ANALOG" },
                 ].map((item, idx) => (
                   <div key={item.kind === "img" ? item.src : `impact-${idx}`} style={{
-                    background: item.kind === "impact" ? RED : WHITE,
+                    background: item.kind === "impact" ? RED : BRAND_WHITE,
                     border: `1px solid ${GRAY2}`,
                     overflow: "hidden",
                     aspectRatio: "var(--bac-logomark-ar)",
@@ -520,7 +523,7 @@ const BoiseAnalogClubCaseStudy = () => {
                         fontSize: "clamp(28px, 4vw, 56px)",
                         lineHeight: 1,
                         letterSpacing: 1,
-                        color: WHITE,
+                        color: BRAND_WHITE,
                         textTransform: "uppercase"
                       }}>
                         {item.label}
@@ -535,9 +538,9 @@ const BoiseAnalogClubCaseStudy = () => {
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: "clamp(6px, 1vh, 12px)" }}>2.2 TYPEMARK</p>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {[
-                  { bg: RED, color: WHITE, label: "Analog" },
-                  { bg: WHITE, color: RED, label: "Analog" },
-                  { bg: RED, color: WHITE, label: "ANALOG", isImpact: true },
+                  { bg: RED, color: BRAND_WHITE, label: "Analog" },
+                  { bg: BRAND_WHITE, color: RED, label: "Analog" },
+                  { bg: RED, color: BRAND_WHITE, label: "ANALOG", isImpact: true },
                 ].map((v, i) => (
                   <div key={i} style={{
                     background: v.bg,
@@ -612,28 +615,28 @@ const BoiseAnalogClubCaseStudy = () => {
                 hex="ED1C23"
                 cmyk="CMYK C0 M100 Y92 K0"
                 rgb="RGB R237 G28 B35"
-                bg={RED} textColor={WHITE}
+                bg={RED} textColor={BRAND_WHITE}
               />
               <ColorSwatch
                 letter="B" num="02"
                 hex="FFFFFF"
                 cmyk="CMYK C0 M0 Y0 K0"
                 rgb="RGB R255 G255 B255"
-                bg={WHITE} textColor={BLACK}
+                bg={BRAND_WHITE} textColor={BRAND_BLACK}
               />
               <ColorSwatch
                 letter="C" num="03"
                 hex="000000"
                 cmyk="CMYK C72 M68 Y67 K88"
                 rgb="RGB R0 G0 B0"
-                bg={BLACK} textColor={WHITE}
+                bg={BRAND_BLACK} textColor={BRAND_WHITE}
               />
               <ColorSwatch
                 letter="D" num="04"
                 hex="353535"
                 cmyk="CMYK C67 M63 Y62 K57"
                 rgb="RGB R53 G53 B53"
-                bg={GRAY2} textColor={WHITE}
+                bg={BRAND_GRAY_DARK} textColor={BRAND_WHITE}
               />
             </div>
           </ScrollSection>
@@ -830,8 +833,8 @@ const BoiseAnalogClubCaseStudy = () => {
 
               <div style={{ borderTop: `1px solid ${GRAY2}`, paddingTop: 16 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                  <span style={{ fontFamily: "'Bitcount Single', 'Arial Black', sans-serif", fontWeight: 900, fontSize: "clamp(32px, 4vw, 56px)", letterSpacing: -1, color: UI_LIGHT, lineHeight: 0.9 }}>
-                    BOISE ANALOG CLUB
+                  <span style={{ fontFamily: "'Bucklane Script', 'Bitcount Single', 'Arial Black', sans-serif", fontWeight: 400, fontSize: "clamp(32px, 4vw, 56px)", letterSpacing: "-0.04em", color: UI_LIGHT, lineHeight: 0.9 }}>
+                    Boise Analog Club
                   </span>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1 }}>
                     GRID / MODULAR

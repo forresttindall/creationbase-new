@@ -15,12 +15,16 @@ const sections = [
 ];
 
 const BLUE = "#172EFF";
-const WHITE = "#FFFFFF";
-const BLACK = "#0F0F0F";
-const UI_LIGHT = "#E2E2E0";
+const WHITE = "#111111";
+const BLACK = "#FFFFFF";
+const UI_LIGHT = "#111111";
 const PAGE_BG = BLACK;
-const GRAY1 = "rgba(226, 226, 224, 0.66)";
-const GRAY2 = "#353535";
+const GRAY1 = "rgba(17, 17, 17, 0.56)";
+const GRAY2 = "#C9C9C9";
+const BRAND_WHITE = "#FFFFFF";
+const BRAND_BLACK = "#111111";
+const BRAND_GRAY_MID = "#676767";
+const BRAND_GRAY_DARK = "#353535";
 
 function SectionNav({ active, isMobile }) {
   if (isMobile) return null;
@@ -100,10 +104,10 @@ function PageHeader({ number, title, isMobile }) {
 function LogoMark({ size = 80, color = WHITE, bg = BLUE }) {
   // Use exact PNG file names as requested by the user
   const logoSrc = 
-    color === BLACK || color === 'black' || color === '#000000' ? '/images/open netizen logo black.png' :
+    color === BRAND_BLACK || color === 'black' || color === '#000000' || color === '#111111' ? '/images/open netizen logo black.png' :
     color === BLUE || color === 'blue' || color === '#172EFF' ? '/images/open netizen logo blue.png' :
-    color === GRAY1 || color === 'gray medium' || color === '#676767' ? '/images/open netizen logo gray medium.png' :
-    color === GRAY2 || color === 'gray dark' || color === '#353535' ? '/images/open netizen logo gray dark.png' :
+    color === BRAND_GRAY_MID || color === 'gray medium' || color === '#676767' ? '/images/open netizen logo gray medium.png' :
+    color === BRAND_GRAY_DARK || color === 'gray dark' || color === '#353535' ? '/images/open netizen logo gray dark.png' :
     '/images/open netizen logo white.png';
 
   return (
@@ -330,15 +334,15 @@ const OpenNetizenCaseStudy = () => {
             }}
           >
             <div style={{ marginTop: 'auto', marginBottom: '48px' }}>
-              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: WHITE, letterSpacing: 2, margin: "0 0 14px", textTransform: "uppercase" }}>
+              <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: BRAND_WHITE, letterSpacing: 2, margin: "0 0 14px", textTransform: "uppercase" }}>
                 FREE THE WEB
               </p>
               <h1 style={{
-                fontFamily: "'Bitcount Single', 'Arial Black', sans-serif",
-                fontWeight: 900,
+                fontFamily: "'PP Neue Machina', 'Neue Machina', sans-serif",
+                fontWeight: 400,
                 fontSize: "clamp(48px, 6vw, 96px)",
-                color: WHITE,
-                letterSpacing: -2,
+                color: BRAND_WHITE,
+                letterSpacing: "-0.04em",
                 lineHeight: 0.85,
                 margin: 0,
                 textTransform: 'uppercase',
@@ -447,7 +451,7 @@ const OpenNetizenCaseStudy = () => {
                   aspectRatio: '1/1',
                   width: '100%',
                 }}>
-                  <LogoMark size="var(--on-brand-logo-size)" color={WHITE} bg="transparent" />
+                  <LogoMark size="var(--on-brand-logo-size)" color={BRAND_WHITE} bg="transparent" />
                 </div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
@@ -516,9 +520,9 @@ const OpenNetizenCaseStudy = () => {
                 width: "100%" 
               }}>
                 {[
-                  { bg: BLUE, color: WHITE },
-                  { bg: WHITE, color: BLUE },
-                  { bg: GRAY1, color: WHITE },
+                  { bg: BLUE, color: BRAND_WHITE },
+                  { bg: BRAND_WHITE, color: BLUE },
+                  { bg: BRAND_GRAY_MID, color: BRAND_WHITE },
                 ].map((v, i) => (
                   <div key={i} style={{
                     background: v.bg,
@@ -539,9 +543,9 @@ const OpenNetizenCaseStudy = () => {
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: GRAY1, letterSpacing: 2, marginBottom: "clamp(6px, 1vh, 12px)" }}>2.2 TYPEMARK</p>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {[
-                  { bg: BLUE, color: WHITE },
-                  { bg: WHITE, color: BLUE },
-                  { bg: GRAY1, color: WHITE },
+                  { bg: BLUE, color: BRAND_WHITE },
+                  { bg: BRAND_WHITE, color: BLUE },
+                  { bg: BRAND_GRAY_MID, color: BRAND_WHITE },
                 ].map((v, i) => (
                   <div key={i} style={{
                     background: v.bg,
@@ -617,35 +621,35 @@ const OpenNetizenCaseStudy = () => {
                 hex="172EFF"
                 cmyk="CMYK C85 M74 Y0 K0"
                 rgb="RGB R23 G46 B255"
-                bg={BLUE} textColor={WHITE}
+                bg={BLUE} textColor={BRAND_WHITE}
               />
               <ColorSwatch
                 letter="B" num="02" label="Secondary"
                 hex="FFFFFF"
                 cmyk="CMYK C0 M0 Y0 K0"
                 rgb="RGB R255 G255 B255"
-                bg={WHITE} textColor={BLACK}
+                bg={BRAND_WHITE} textColor={BRAND_BLACK}
               />
               <ColorSwatch
                 letter="C" num="03" label="Gray Mid"
                 hex="676767"
                 cmyk="CMYK C58 M58 Y51 K20"
                 rgb="RGB R103 G103 B103"
-                bg={GRAY1} textColor={WHITE}
+                bg={BRAND_GRAY_MID} textColor={BRAND_WHITE}
               />
               <ColorSwatch
                 letter="D" num="04" label="Gray Dark"
                 hex="353535"
                 cmyk="CMYK C67 M63 Y62 K57"
                 rgb="RGB R53 G53 B53"
-                bg={GRAY2} textColor={WHITE}
+                bg={BRAND_GRAY_DARK} textColor={BRAND_WHITE}
               />
               <ColorSwatch
                 letter="E" num="05" label="Black"
                 hex="000000"
                 cmyk="CMYK C72 M68 Y67 K88"
                 rgb="RGB R0 G0 B0"
-                bg="#111" textColor={WHITE}
+                bg={BRAND_BLACK} textColor={BRAND_WHITE}
               />
             </div>
           </ScrollSection>
@@ -802,7 +806,7 @@ const OpenNetizenCaseStudy = () => {
                   </div>
                   <div style={{ flex: 1, background: BLUE, position: "relative", marginBottom: "clamp(24px, 4vh, 40px)" }}>
                     <div style={{ position: "absolute", bottom: 8, right: 8 }}>
-                      <LogoMark size={isMobile ? 40 : "clamp(24px, 3vh, 32px)"} color={WHITE} bg="transparent" />
+                      <LogoMark size={isMobile ? 40 : "clamp(24px, 3vh, 32px)"} color={BRAND_WHITE} bg="transparent" />
                     </div>
                   </div>
                 </div>
@@ -820,7 +824,7 @@ const OpenNetizenCaseStudy = () => {
                 background: BLUE, 
                 padding: isMobile ? "24px 20px" : "clamp(24px, 4vh, 48px) clamp(16px, 3vw, 32px)", 
                 border: `1px solid ${GRAY2}`, 
-                color: WHITE, 
+                color: BRAND_WHITE, 
                 display: "flex", 
                 flexDirection: "column", 
                 justifyContent: "space-between",
@@ -830,10 +834,10 @@ const OpenNetizenCaseStudy = () => {
                 overflow: "hidden"
               }}>
                 <div>
-                  <LogoMark size="clamp(32px, 5vh, 48px)" color={WHITE} bg="transparent" />
+                  <LogoMark size="clamp(32px, 5vh, 48px)" color={BRAND_WHITE} bg="transparent" />
                   <h4 style={{ fontFamily: "'Bitcount Single', sans-serif", fontSize: isMobile ? "clamp(24px, 9vw, 36px)" : "clamp(24px, 4vh, 40px)", fontWeight: 900, lineHeight: 0.85, marginTop: isMobile ? 12 : "clamp(12px, 2vh, 24px)" }}>CONNECT<br/>TO THE<br/>NETIZEN.</h4>
                 </div>
-                <div style={{ border: `1px solid ${WHITE}`, padding: "clamp(8px, 1.5vh, 12px) clamp(16px, 2vw, 24px)", alignSelf: "flex-start", marginTop: 12 }}>
+                <div style={{ border: `1px solid ${BRAND_WHITE}`, padding: "clamp(8px, 1.5vh, 12px) clamp(16px, 2vw, 24px)", alignSelf: "flex-start", marginTop: 12 }}>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: "clamp(8px, 1vh, 10px)", letterSpacing: 2 }}>[ INITIALIZE ]</span>
                 </div>
               </div>
@@ -935,7 +939,7 @@ const OpenNetizenCaseStudy = () => {
 
               <div style={{ borderTop: `1px solid ${GRAY2}`, paddingTop: 16 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                  <span style={{ fontFamily: "'Bitcount Single', 'Arial Black', sans-serif", fontWeight: 900, fontSize: "clamp(32px, 4vw, 56px)", letterSpacing: -1, color: UI_LIGHT, lineHeight: 0.9 }}>
+                  <span style={{ fontFamily: "'PP Neue Machina', 'Neue Machina', sans-serif", fontWeight: 400, fontSize: "clamp(32px, 4vw, 56px)", letterSpacing: "-0.04em", color: UI_LIGHT, lineHeight: 0.9 }}>
                     OPEN NETIZEN
                   </span>
                   <span style={{ fontFamily: "'SF Mono', monospace", fontSize: 10, letterSpacing: 2, color: GRAY1 }}>

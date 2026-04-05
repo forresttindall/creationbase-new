@@ -4,10 +4,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowUpRight } from '@phosphor-icons/react';
 import { blogPosts } from '../blog/posts';
 
-const BLACK = '#0F0F0F';
-const GRAY1 = 'rgba(226, 226, 224, 0.66)';
-const GRAY2 = '#353535';
-const WHITE = '#E2E2E0';
+const BLACK = '#FFFFFF';
+const GRAY1 = 'rgba(17, 17, 17, 0.56)';
+const GRAY2 = '#C9C9C9';
+const WHITE = '#111111';
 
 const Blog = () => {
   const location = useLocation();
@@ -34,7 +34,7 @@ const Blog = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      data-header-theme="dark"
+      data-header-theme="light"
       style={{ background: BLACK, color: WHITE, minHeight: '100vh' }}
     >
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: '1px solid var(--color-border)' }}>
@@ -58,8 +58,8 @@ const Blog = () => {
                 <motion.button
                   key={p.slug}
                   onClick={() => navigate(`/blog/${p.slug}`)}
-                  whileHover={{ backgroundColor: 'rgba(226,226,224,0.06)' }}
-                  whileTap={{ backgroundColor: 'rgba(226,226,224,0.08)' }}
+                  whileHover={{ backgroundColor: 'rgba(17,17,17,0.04)' }}
+                  whileTap={{ backgroundColor: 'rgba(17,17,17,0.06)' }}
                   style={{
                     background: 'transparent',
                     border: 'none',

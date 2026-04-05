@@ -228,7 +228,7 @@ const graphicDesign = [
     title: "Micron Technology",
     category: "Environmental Signage",
     image: "/images/MICRON.JPG",
-    description: "Desiging over 1000 ada signs for the 2026 expansion.",
+    description: "Environmental signage",
     year: "2026"
   },
  
@@ -1333,20 +1333,22 @@ function App() {
                     viewport={{ once: true }}
                     style={{ borderTop: '1px solid rgba(226, 226, 224, 0.12)', paddingTop: 'var(--spacing-md)' }}
                   >
-                    <div className="small-text" style={{ marginBottom: 'var(--spacing-md)', opacity: 0.55 }}>
-                      A01
-                    </div>
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/micron.png" alt="Micron" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
                     </div>
-                    <h4 style={{ 
-                      fontSize: 'var(--fs-lg)', 
-                      margin: '0 0 var(--spacing-sm) 0',
-                      textTransform: 'uppercase',
-                      fontFamily: 'var(--font-display)'
-                    }}>
-                      Micron Technology
-                    </h4>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--spacing-sm)' }}>
+                      <h4 style={{ 
+                        fontSize: 'var(--fs-lg)', 
+                        margin: 0,
+                        textTransform: 'uppercase',
+                        fontFamily: 'var(--font-display)'
+                      }}>
+                        Micron Technology
+                      </h4>
+                      <div className="small-text" style={{ opacity: 0.55 }}>
+                        A01
+                      </div>
+                    </div>
                     <p className="small-text" style={{ maxWidth: '90%' }}>
                       Designed over 1000 ADA-compliant signs for the massive 2026 Boise expansion. Creating a cohesive wayfinding system that merges strict regulatory standards with architectural harmony.
                     </p>
@@ -1362,20 +1364,22 @@ function App() {
                     transition={{ delay: 0.2 }}
                     style={{ borderTop: '1px solid rgba(226, 226, 224, 0.12)', paddingTop: 'var(--spacing-md)' }}
                   >
-                    <div className="small-text" style={{ marginBottom: 'var(--spacing-md)', opacity: 0.55 }}>
-                      A02
-                    </div>
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/ramboll.png" alt="Ramboll" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
                     </div>
-                    <h4 style={{ 
-                      fontSize: 'var(--fs-lg)', 
-                      margin: '0 0 var(--spacing-sm) 0',
-                      textTransform: 'uppercase',
-                      fontFamily: 'var(--font-display)'
-                    }}>
-                      Ramboll
-                    </h4>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--spacing-sm)' }}>
+                      <h4 style={{ 
+                        fontSize: 'var(--fs-lg)', 
+                        margin: 0,
+                        textTransform: 'uppercase',
+                        fontFamily: 'var(--font-display)'
+                      }}>
+                        Ramboll
+                      </h4>
+                      <div className="small-text" style={{ opacity: 0.55 }}>
+                        A02
+                      </div>
+                    </div>
                     <p className="small-text" style={{ maxWidth: '90%' }}>
                       Built a custom data migration system for Ramboll North America&apos;s Air Quality division and provide ongoing system administration for data migration servers. Delivering a robust full-stack solution to ensure data integrity and streamline complex environmental reporting workflows.
                     </p>
@@ -1392,20 +1396,22 @@ function App() {
                     transition={{ delay: 0.4 }}
                     style={{ borderTop: '1px solid rgba(226, 226, 224, 0.12)', paddingTop: 'var(--spacing-md)' }}
                   >
-                    <div className="small-text" style={{ marginBottom: 'var(--spacing-md)', opacity: 0.55 }}>
-                      A03
-                    </div>
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/superbase.jpg" alt="Superbase" style={{ height: '100%', filter: 'grayscale(100%)' }} />
                     </div>
-                    <h4 style={{ 
-                      fontSize: 'var(--fs-lg)', 
-                      margin: '0 0 var(--spacing-sm) 0',
-                      textTransform: 'uppercase',
-                      fontFamily: 'var(--font-display)'
-                    }}>
-                      Superbase
-                    </h4>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--spacing-sm)' }}>
+                      <h4 style={{ 
+                        fontSize: 'var(--fs-lg)', 
+                        margin: 0,
+                        textTransform: 'uppercase',
+                        fontFamily: 'var(--font-display)'
+                      }}>
+                        Superbase
+                      </h4>
+                      <div className="small-text" style={{ opacity: 0.55 }}>
+                        A03
+                      </div>
+                    </div>
                     <p className="small-text" style={{ maxWidth: '90%' }}>
                       Collaborated on high-level UI/UX and design.  Building a scalable digital website and design systems with a leading design agency.
                     </p>
@@ -1422,20 +1428,22 @@ function App() {
                     transition={{ delay: 0.6 }}
                     style={{ borderTop: '1px solid rgba(226, 226, 224, 0.12)', paddingTop: 'var(--spacing-md)' }}
                   >
-                    <div className="small-text" style={{ marginBottom: 'var(--spacing-md)', opacity: 0.55 }}>
-                      A04
-                    </div>
                     <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
                       <img src="/images/cmyk.jpg" alt="CMYK Graffix" style={{ height: '100%', filter: 'grayscale(100%) invert(1)' }} />
                     </div>
-                    <h4 style={{ 
-                      fontSize: 'var(--fs-lg)', 
-                      margin: '0 0 var(--spacing-sm) 0',
-                      textTransform: 'uppercase',
-                      fontFamily: 'var(--font-display)'
-                    }}>
-                      CMYK Graffix
-                    </h4>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--spacing-sm)' }}>
+                      <h4 style={{ 
+                        fontSize: 'var(--fs-lg)', 
+                        margin: 0,
+                        textTransform: 'uppercase',
+                        fontFamily: 'var(--font-display)'
+                      }}>
+                        CMYK Graffix
+                      </h4>
+                      <div className="small-text" style={{ opacity: 0.55 }}>
+                        A04
+                      </div>
+                    </div>
                     <p className="small-text" style={{ maxWidth: '90%' }}>
                       Partner for large-format print and branding projects. Delivering print-ready assets and visual identities for a premier design and print agency.
                     </p>
@@ -1475,10 +1483,7 @@ function App() {
                         paddingTop: 'var(--spacing-md)'
                       }}
                     >
-                      <div className="small-text" style={{ marginBottom: 'var(--spacing-md)', opacity: 0.55 }}>
-                        {`A${String(i + 5).padStart(2, '0')}`}
-                      </div>
-                      {/* Header: User Info + Stars */}
+                      {/* Header: User Info + Index Number */}
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--spacing-md)' }}>
                         {/* Left: Image + Name */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
@@ -1508,14 +1513,9 @@ function App() {
                             </div>
                         </div>
 
-                        {/* Right: Stars */}
-                        <div style={{ 
-                            fontSize: 'var(--fs-lg)', 
-                            color: UI_LIGHT, 
-                            letterSpacing: '-2px',
-                            lineHeight: 1
-                          }}>
-                            {testimonial.stars}
+                        {/* Right: Index Number */}
+                        <div className="small-text" style={{ opacity: 0.55 }}>
+                          {`A${String(i + 5).padStart(2, '0')}`}
                         </div>
                       </div>
 

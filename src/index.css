@@ -89,6 +89,11 @@
   padding: 0;
 }
 
+html {
+  scrollbar-color: #797978 #0f0f0f;
+  scrollbar-width: thin;
+}
+
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
@@ -97,6 +102,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   line-height: 1.4;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f0f0f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(226, 226, 224, 0.45);
+  border-radius: 999px;
+  border: 2px solid #0f0f0f;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(226, 226, 224, 0.65);
 }
 
 img {

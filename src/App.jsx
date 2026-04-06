@@ -1348,15 +1348,21 @@ function App() {
                   <img 
                     src="/images/me1.jpg" 
                     alt="Portrait" 
+                    className="studio-portrait-single"
                     style={{ 
                       width: '100%', 
                       height: '100%', 
                       objectFit: 'cover',
                       filter: 'grayscale(100%) contrast(1.1)',
-                      display: 'block',
                       borderRadius: '12px'
                     }} 
                   />
+                  <div className="studio-portrait-mosaic">
+                    <img src="/images/me1.jpg" alt="Portrait mosaic one" className="studio-portrait-mosaic__tile studio-portrait-mosaic__tile--wide studio-portrait-mosaic__tile--first" />
+                    <img src="/images/mirror.jpg" alt="Portrait mosaic two" className="studio-portrait-mosaic__tile studio-portrait-mosaic__tile--wide studio-portrait-mosaic__tile--second" />
+                    <img src="/images/me2.jpg" alt="Portrait mosaic two" className="studio-portrait-mosaic__tile" />
+                    <img src="/images/mirror3.jpg" alt="Portrait mosaic four" className="studio-portrait-mosaic__tile studio-portrait-mosaic__tile--fourth" />
+                  </div>
                   <div style={{
                     position: 'absolute',
                     bottom: 'calc(var(--spacing-md) + 10px)',

@@ -77,7 +77,7 @@ const SiteFooter = ({ onContactClick, reserveRightRail = false }) => {
       <div className={`footer-shell${reserveRightRail ? ' footer-shell--tracker' : ''}`} style={{ padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-xxl)', minHeight: '80vh', position: 'relative', zIndex: 1 }}>
         <div className="footer-top">
           <div className="footer-cta">
-            <h2 className="section-title" style={{ fontWeight: 400, marginBottom: 0 }}>Let&apos;s Work<br />Together</h2>
+            <h2 className="section-title" style={{ fontWeight: 400, marginBottom: 0, fontSize: 'clamp(22px, 9vw, 72px)' }}>Let&apos;s Work<br />Together</h2>
           </div>
           <div className="footer-links-column">
             <p className="small-text" style={{ marginBottom: 'var(--spacing-md)', fontWeight: 'var(--font-mono-weight-bold)' }}>LINKS</p>
@@ -761,15 +761,10 @@ function App() {
             {/* Hero */}
             <section data-header-theme="light" style={{ position: 'relative', overflow: 'hidden', background: UI_DARK, color: UI_LIGHT, borderBottom: HOME_SECTION_DIVIDER }}>
               <div style={{ minHeight: 'var(--home-hero-min-h)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
-                <h1 style={{ 
-                  fontFamily: 'var(--font-display)', fontWeight: 500, 
-                  fontSize: 'var(--home-hero-display)', 
-                  lineHeight: 1,
-                  textTransform: 'uppercase',
-                  letterSpacing: '-0.04em',
-                  marginBottom: 'auto',
-                  maxWidth: 'var(--home-hero-max-w)',
-                  whiteSpace: 'nowrap'
+                <h1 className="home-hero__title" style={{ 
+                  fontFamily: 'var(--font-display)', fontWeight: 'var(--font-display-weight)', 
+                  fontSynthesis: 'weight',
+                  marginBottom: 'auto'
                 }}>
                   <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
                     <DecryptText as="span" text="Visual System" trigger="mount" delay={200} duration={900} />

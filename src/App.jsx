@@ -1363,7 +1363,7 @@ function App() {
                     <img src="/images/me2.jpg" alt="Portrait mosaic two" className="studio-portrait-mosaic__tile" />
                     <img src="/images/mirror3.jpg" alt="Portrait mosaic four" className="studio-portrait-mosaic__tile studio-portrait-mosaic__tile--fourth" />
                   </div>
-                  <div style={{
+                  <div className="studio-portrait-label" style={{
                     position: 'absolute',
                     bottom: 'calc(var(--spacing-md) + 10px)',
                     left: 'calc(var(--spacing-md) + 10px)',
@@ -1375,7 +1375,8 @@ function App() {
                     fontSize: 'var(--fs-sm)',
                     textTransform: 'uppercase'
                   }}>
-                    Figure 01. Portrait
+                    <span className="studio-portrait-label__single">Figure 01. Portrait</span>
+                    <span className="studio-portrait-label__multi">Figure 01. Portraits</span>
                   </div>
                 </div>
 

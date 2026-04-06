@@ -923,6 +923,10 @@ ul {
   object-position: center 35%;
 }
 
+.studio-portrait-label__multi {
+  display: none;
+}
+
 .studio-client-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -992,6 +996,14 @@ ul {
     max-width: none;
     height: auto;
     aspect-ratio: auto;
+  }
+
+  .studio-portrait-label__single {
+    display: none;
+  }
+
+  .studio-portrait-label__multi {
+    display: inline;
   }
 
   .studio-client-grid {

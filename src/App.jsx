@@ -28,7 +28,7 @@ const INDEX01_PROJECTS = [
     scope: 'Scope(Brand, Website)',
     primaryImage: '/images/ricochet mockup.png',
     primaryAlt: 'Ricochet project mockup',
-    secondaryImage: '/images/Exportable tables.PNG',
+    secondaryImage: '/images/Exportable tables.png',
     secondaryAlt: 'Ricochet exportable tables interface',
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },

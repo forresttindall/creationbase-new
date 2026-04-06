@@ -48,7 +48,7 @@
 }
 
 :root {
-  --font-display: 'Datatype', monospace;
+  --font-display: 'impact', monospace;
   --font-mono: 'SF Mono', monospace;
   --font-mono-weight: 500;
   --font-mono-weight-bold: 800;

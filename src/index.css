@@ -46,8 +46,16 @@
 }
 
 
+
+@font-face {
+  font-family: 'Tiposka';
+  src: url('/Fonts/Tiposka.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
 :root {
-  --font-display: 'Neue Machina', monospace;
+  --font-display: 'Tiposka', monospace;
   --font-display-weight: 900;
   --font-display-weight-bold: 800;
   --font-mono: 'SF Mono', monospace;

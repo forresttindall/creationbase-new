@@ -6,7 +6,7 @@ const BLACK = '#FFFFFF';
 const GRAY1 = 'rgba(17, 17, 17, 0.56)';
 const WHITE = '#111111';
 
-const Contact = () => {
+const Contact = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange, onSubmitNewsletter }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -87,11 +87,49 @@ const Contact = () => {
                 CONTACT
               </div>
               <div style={{ marginTop: 'var(--spacing-md)' }}>
-                <div className="small-text" style={{ textTransform: 'none' }}>
-                  Email
+                <div className="small-text" style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>
+                  FORREST TINDALL STUDIO •
                 </div>
                 <div className="small-text" style={{ marginTop: 6 }}>
-                  <a href="mailto:forrest.tindall@gmail.com">forrest.tindall@gmail.com</a>
+                  BOISE IDAHO + REMOTE
+                </div>
+              </div>
+
+              <div className="newsletter-block" style={{ marginTop: 'var(--spacing-xl)' }}>
+                <div className="newsletter-inner">
+                  <p className="small-text" style={{ marginBottom: 'var(--spacing-md)', color: GRAY1 }}>NEWSLETTER</p>
+                  <form onSubmit={onSubmitNewsletter} className="newsletter-form">
+                    <input
+                      type="email"
+                      value={newsletterEmail}
+                      onChange={onNewsletterEmailChange}
+                      placeholder="Email"
+                      required
+                      className="newsletter-input"
+                    />
+                    <button
+                      type="submit"
+                      disabled={newsletterStatus === 'loading'}
+                      className="newsletter-button"
+                      style={{
+                        cursor: newsletterStatus === 'loading' ? 'default' : 'pointer',
+                        opacity: newsletterStatus === 'loading' ? 0.6 : 1,
+                      }}
+                    >
+                      {newsletterStatus === 'loading' ? '...' : 'Sign Up'}
+                    </button>
+                  </form>
+
+                  {newsletterStatus === 'success' && (
+                    <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85, textTransform: 'none' }}>
+                      Submitted.
+                    </div>
+                  )}
+                  {newsletterStatus === 'error' && (
+                    <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85, textTransform: 'none' }}>
+                      Error. Try again.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

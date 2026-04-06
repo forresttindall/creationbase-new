@@ -21,161 +21,95 @@ const HERO_AVAILABILITY = {
   label: 'Available',
   color: '#5FE37C',
 };
+const INDEX01_PROJECTS = [
+  {
+    id: 'ricochet',
+    titleLines: ['Ricochet'],
+    scope: 'Scope(Brand, Website)',
+    primaryImage: '/images/ricochet mockup.png',
+    primaryAlt: 'Ricochet project mockup',
+    secondaryImage: '/images/Exportable tables.PNG',
+    secondaryAlt: 'Ricochet exportable tables interface',
+    sideOffset: 'clamp(2rem, 7vw, 5rem)',
+  },
+  {
+    id: 'on',
+    titleLines: ['Open Netizen'],
+    scope: 'Scope(Identity, Visual System)',
+    primaryImage: '/images/OPEN NETIZEN CARD.jpg',
+    primaryAlt: 'Open Netizen brand card',
+    secondaryImage: '/images/OPEN NETIZEN WEBSITE MOCKUP.jpg',
+    secondaryAlt: 'Open Netizen website mockup',
+    sideOffset: 'clamp(3rem, 8vw, 6rem)',
+  },
+  {
+    id: 'micron',
+    titleLines: ['Work Sharp +', 'Drill Doctor'],
+    scope: 'Scope(Photography, Campaign Assets)',
+    primaryImage: '/images/_DSC6969.jpg',
+    primaryAlt: 'Work Sharp and Drill Doctor hero photograph',
+    secondaryImage: '/images/_DSC7142.jpg',
+    secondaryAlt: 'Work Sharp and Drill Doctor supporting photograph',
+    sideOffset: 'clamp(2.5rem, 6vw, 4.5rem)',
+  },
+  {
+    id: 'bac',
+    titleLines: ['Boise Analog', 'Club'],
+    scope: 'Scope(Identity, Print System)',
+    primaryImage: '/images/analogmockup 2.png',
+    primaryAlt: 'Boise Analog Club identity mockup',
+    secondaryImage: '/images/analog2.png',
+    secondaryAlt: 'Boise Analog Club supporting cover image',
+    sideOffset: 'clamp(3rem, 9vw, 6.5rem)',
+  },
+];
 
-const SiteFooter = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange, onSubmitNewsletter, onContactClick }) => {
-  const footerVantaElRef = useRef(null);
-  const footerVantaEffectRef = useRef(null);
-
-  useEffect(() => {
-    const el = footerVantaElRef.current;
-    if (!el) return;
-
-    let initTimer = 0;
-    let resizeHandler = null;
-    let lastWidth = window.innerWidth;
-
-    const destroy = () => {
-      if (resizeHandler) {
-        window.removeEventListener('resize', resizeHandler);
-        resizeHandler = null;
-      }
-      if (!footerVantaEffectRef.current) return;
-      try {
-        footerVantaEffectRef.current.destroy();
-      } catch {
-        void 0;
-      }
-      footerVantaEffectRef.current = null;
-    };
-
-    const init = () => {
-      if (!window.VANTA || typeof window.VANTA.TOPOLOGY !== 'function') return false;
-      destroy();
-      footerVantaEffectRef.current = window.VANTA.TOPOLOGY({
-        el,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.0,
-        minWidth: 200.0,
-        scale: 1.0,
-        scaleMobile: 1.0,
-        color: 0x000000,
-        backgroundColor: 0xffffff,
-      });
-
-      const effect = footerVantaEffectRef.current;
-      if (effect && typeof effect.resize === 'function') {
-        try {
-          window.removeEventListener('resize', effect.resize);
-        } catch {
-          void 0;
-        }
-        lastWidth = window.innerWidth;
-        resizeHandler = () => {
-          const w = window.innerWidth;
-          if (w !== lastWidth) {
-            lastWidth = w;
-            try {
-              effect.resize();
-            } catch {
-              void 0;
-            }
-          }
-        };
-        window.addEventListener('resize', resizeHandler);
-      }
-
-      return true;
-    };
-
-    if (!init()) {
-      initTimer = window.setInterval(() => {
-        if (init()) window.clearInterval(initTimer);
-      }, 100);
-    }
-
-    return () => {
-      if (initTimer) window.clearInterval(initTimer);
-      destroy();
-    };
-  }, []);
-
+const SiteFooter = ({ onContactClick, reserveRightRail = false }) => {
   return (
     <motion.section
       data-header-theme="light"
-      className="footer-vanta"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
       style={{ position: 'relative', overflow: 'hidden', background: UI_DARK }}
     >
-      <div ref={footerVantaElRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
-      <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
-        <div className="footer-cta">
-          <h2 className="section-title" style={{ fontWeight: 400 }}>Let&apos;s Work<br />Together</h2>
-        </div>
-
-        <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-xl)' }}>
-          <div>
-            <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>LINKS</p>
-            <ul className="small-text">
-              <li><a href="/contact" onClick={(ev) => { ev.preventDefault(); onContactClick(); }} style={{ wordBreak: 'break-all' }}>FORREST.TINDALL@GMAIL.COM</a></li>
+      <div className={`footer-shell${reserveRightRail ? ' footer-shell--tracker' : ''}`} style={{ padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-xxl)', minHeight: '80vh', position: 'relative', zIndex: 1 }}>
+        <div className="footer-top">
+          <div className="footer-cta">
+            <h2 className="section-title" style={{ fontWeight: 400, marginBottom: 0 }}>Let&apos;s Work<br />Together</h2>
+          </div>
+          <div className="footer-links-column">
+            <p className="small-text" style={{ marginBottom: 'var(--spacing-md)', fontWeight: 'var(--font-mono-weight-bold)' }}>LINKS</p>
+            <ul className="small-text footer-links-list">
+              <li><a href="/contact" onClick={(ev) => { ev.preventDefault(); onContactClick(); }}>CONTACT</a></li>
               <li><a href="https://instagram.com/forrest.tindall/" target="_blank" rel="noreferrer">INSTAGRAM</a></li>
               <li><a href="https://www.linkedin.com/in/forrest-tindall/" target="_blank" rel="noreferrer">LINKEDIN</a></li>
             </ul>
           </div>
-          <div>
-            <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>SERVICES</p>
-            <ul className="small-text">
-              <li>DESIGN</li>
-              <li>DEVELOPMENT</li>
-              <li>PHOTOGRAPHY</li>
-              <li>VISUAL SYSTEMS</li>
-            </ul>
+        </div>
+
+        <div className="footer-marquee footer-marquee--text full-bleed">
+          <div className="footer-marquee__track footer-marquee__track--reverse">
+            {[...Array(20)].map((_, index) => (
+              <span key={index} className="footer-marquee__text-item small-text">
+                FORREST TINDALL STUDIO •
+              </span>
+            ))}
           </div>
         </div>
 
-        <div className="newsletter-block">
-          <div className="newsletter-inner">
-            <p className="small-text" style={{ marginBottom: 'var(--spacing-md)' }}>NEWSLETTER</p>
-            <form onSubmit={onSubmitNewsletter} className="newsletter-form">
-              <input
-                type="email"
-                value={newsletterEmail}
-                onChange={onNewsletterEmailChange}
-                placeholder="Email"
-                required
-                className="newsletter-input"
-              />
-              <button
-                type="submit"
-                disabled={newsletterStatus === 'loading'}
-                className="newsletter-button"
-                style={{
-                  cursor: newsletterStatus === 'loading' ? 'default' : 'pointer',
-                  opacity: newsletterStatus === 'loading' ? 0.6 : 1,
-                }}
-              >
-                {newsletterStatus === 'loading' ? '...' : 'Sign Up'}
-              </button>
-            </form>
-
-            {newsletterStatus === 'success' && (
-              <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                Submitted.
+        <div className="footer-marquee footer-marquee--images full-bleed">
+          <div className="footer-marquee__track">
+            {[...FOOTER_CAROUSEL_IMAGES, ...FOOTER_CAROUSEL_IMAGES].map((item, index) => (
+              <div key={`${item.src}-${index}`} className="footer-carousel-card">
+                <img src={item.src} alt={item.alt} className="footer-carousel-card__image" loading="lazy" />
               </div>
-            )}
-            {newsletterStatus === 'error' && (
-              <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                Error. Try again.
-              </div>
-            )}
+            ))}
           </div>
         </div>
 
-        <div style={{ marginTop: 'var(--spacing-xxl)', borderTop: '1px solid rgba(17, 17, 17, 0.18)', paddingTop: 'var(--spacing-sm)' }} className="flex">
+        <div style={{ marginTop: '0', borderTop: HOME_SECTION_DIVIDER, paddingTop: '10px' }} className="flex">
           <p className="small-text" style={{ flex: 1 }}>© 2026 FORREST TINDALL</p>
           <p className="small-text">DESIGNED & CODED IN BOISE, ID</p>
         </div>
@@ -312,6 +246,19 @@ const testimonials = [
   }
 ];
 
+const FOOTER_CAROUSEL_IMAGES = [
+  { src: '/images/ricochet mockup.png', alt: 'Ricochet footer carousel image' },
+  { src: '/images/amore mockup.png', alt: 'Amore footer carousel image' },
+  { src: '/images/clearfeed.png', alt: 'Clearfeed footer carousel image' },
+  { src: '/images/gif.gif', alt: 'Graphic design footer carousel image' },
+  { src: '/images/MICRON.JPG', alt: 'Micron footer carousel image' },
+  { src: '/images/bac gen x soft club.png', alt: 'Boise Analog footer carousel image' },
+  { src: '/images/device-1.PNG', alt: 'Playground footer carousel image' },
+  { src: '/images/network.jpg', alt: 'Development footer carousel image' },
+  { src: '/images/pilot micro new.png', alt: 'Art print footer carousel image' },
+  { src: '/images/bar.jpg', alt: 'Photography footer carousel image' },
+];
+
 const ProjectModal = ({ project, onClose }) => {
   if (!project) return null;
 
@@ -364,6 +311,7 @@ const ProjectModal = ({ project, onClose }) => {
             fontSize: 'var(--fs-lg)',
             cursor: 'pointer',
             fontFamily: 'var(--font-mono)',
+            fontWeight: 'var(--font-mono-weight)',
             textTransform: 'uppercase'
           }}
         >
@@ -413,6 +361,7 @@ function App() {
     return 'light';
   });
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [navLogoSpinTick, setNavLogoSpinTick] = useState(0);
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -634,10 +583,11 @@ function App() {
   }, [location.pathname]);
 
   const headerColor = UI_LIGHT;
-  const headerLogoSrc = '/images/logoblack.png';
+  const headerLogoSrc = '/images/new logo.png';
   const mobileNavBg = 'rgba(150,150,150,0.32)';
 
   const goHome = () => {
+    setNavLogoSpinTick((value) => value + 1);
     setMobileNavOpen(false);
     pendingHomeScrollRestoreRef.current = false;
     homeScrollYRef.current = 0;
@@ -665,6 +615,11 @@ function App() {
     }
   };
 
+  const toggleMobileNav = () => {
+    setNavLogoSpinTick((value) => value + 1);
+    setMobileNavOpen((value) => !value);
+  };
+
   return (
     <div className="app">
       <motion.header 
@@ -686,8 +641,20 @@ function App() {
               onClick={goHome}
             >
               <span className="site-nav__menu-logos" aria-hidden="true">
-                <img src={headerLogoSrc} alt="" className="site-nav__menu-logo" />
-                <img src={headerLogoSrc} alt="" className="site-nav__menu-logo" />
+                <motion.img
+                  src={headerLogoSrc}
+                  alt=""
+                  className="site-nav__menu-logo"
+                  animate={{ rotate: navLogoSpinTick * 360 }}
+                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                />
+                <motion.img
+                  src={headerLogoSrc}
+                  alt=""
+                  className="site-nav__menu-logo"
+                  animate={{ rotate: navLogoSpinTick * -360 }}
+                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                />
               </span>
             </button>
             <button
@@ -696,7 +663,7 @@ function App() {
               aria-label={mobileNavOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileNavOpen}
               aria-controls="mobile-nav-panel"
-              onClick={() => setMobileNavOpen((v) => !v)}
+              onClick={toggleMobileNav}
             >
               <span className="site-nav__menu-label">{mobileNavOpen ? 'Close' : 'Menu'}</span>
             </button>
@@ -761,7 +728,13 @@ function App() {
         {activeCaseStudy === 'blog' ? (
           <Blog key="blog" />
         ) : activeCaseStudy === 'contact' ? (
-          <Contact key="contact" />
+          <Contact
+            key="contact"
+            newsletterEmail={newsletterEmail}
+            newsletterStatus={newsletterStatus}
+            onNewsletterEmailChange={(ev) => setNewsletterEmail(ev.target.value)}
+            onSubmitNewsletter={submitNewsletter}
+          />
         ) : activeCaseStudy === 'bac' ? (
           <BoiseAnalogClubCaseStudy key="bac" />
         ) : activeCaseStudy === 'on' ? (
@@ -786,65 +759,67 @@ function App() {
             exit={{ opacity: 0 }}
           >
             {/* Hero */}
-            <section data-header-theme="light" style={{ position: 'relative', overflow: 'hidden', background: UI_DARK, color: UI_LIGHT }}>
-              <div style={{ minHeight: '58vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 'var(--spacing-md) var(--spacing-md) calc(var(--spacing-xl) * 1.5)', position: 'relative', zIndex: 1 }}>
+            <section data-header-theme="light" style={{ position: 'relative', overflow: 'hidden', background: UI_DARK, color: UI_LIGHT, borderBottom: HOME_SECTION_DIVIDER }}>
+              <div style={{ minHeight: 'var(--home-hero-min-h)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
                 <h1 style={{ 
-                  fontFamily: 'var(--font-display)', fontWeight: 400, 
-                  fontSize: 'var(--fs-display)', 
+                  fontFamily: 'var(--font-display)', fontWeight: 500, 
+                  fontSize: 'var(--home-hero-display)', 
                   lineHeight: 1,
                   textTransform: 'uppercase',
                   letterSpacing: '-0.04em',
-                  marginBottom: 'var(--home-hero-h1-mb)',
-                  maxWidth: '8ch'
+                  marginBottom: 'auto',
+                  maxWidth: 'var(--home-hero-max-w)',
+                  whiteSpace: 'nowrap'
                 }}>
                   <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-                    <DecryptText as="span" text="Visual" trigger="mount" delay={200} duration={900} />
+                    <DecryptText as="span" text="Visual System" trigger="mount" delay={200} duration={900} />
                   </div>
                   <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
-                    <DecryptText as="span" text="System" trigger="mount" delay={320} duration={900} />
-                  </div>
-                  <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
-                    <DecryptText as="span" text="Design" trigger="mount" delay={440} duration={900} />
+                    <DecryptText as="span" text="Design + Dev" trigger="mount" delay={440} duration={900} />
                   </div>
                 </h1>
                 <motion.div 
+                  className="home-hero__meta"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.8 }}
                   style={{
                     display: 'grid',
                     gridTemplateColumns: 'minmax(220px, 1.15fr) minmax(240px, 1.7fr) minmax(160px, 0.9fr)',
-                    alignItems: 'end',
+                    alignItems: 'start',
                     gap: 'var(--spacing-lg)'
                   }}
                 >
-                  <div className="small-text" style={{ lineHeight: 1.2, display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                    <span>Forrest Tindall Studio</span>
-                    <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: '#111111', display: 'inline-block', flex: '0 0 auto' }} />
-                    <span>(Design Studio and Digital Partner)</span>
+                  <div className="small-text home-hero__identity" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
+                    <div className="home-hero__identity-desktop" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                      <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Forrest Tindall Studio</span>
+                      <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: '#111111', display: 'inline-block', flex: '0 0 auto' }} />
+                      <span>(Design Studio and Digital Partner)</span>
+                    </div>
+                    <div className="home-hero__identity-mobile">
+                      <div style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Forrest Tindall Studio •</div>
+                      <div>(Design + Dev Studio and Digital Partner)</div>
+                    </div>
                   </div>
-                  <div className="small-text" style={{ lineHeight: 1.2 }}>
-                    <div>WE HELP YOU:</div>
-                    <div>— Define your visual system</div>
-                    <div>— Design your digital presence</div>
-                    <div>— Deploy your brand online</div>
+                  <div className="small-text home-hero__services" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2, display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: '12px', alignItems: 'start' }}>
+                    <div>I HELP YOU:</div>
+                    <div>
+                      <div>— Define your visual system</div>
+                      <div>— Design your digital presence</div>
+                      <div>— Deploy your brand online</div>
+                    </div>
                   </div>
-                  <div className="small-text" style={{ lineHeight: 1.2, justifySelf: 'end', textAlign: 'right' }}>
-                    <div>currently:</div>
+                  <div className="small-text home-hero__availability" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2, justifySelf: 'end', textAlign: 'right' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '6px' }}>
+                      <span>currently:</span>
                       <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: HERO_AVAILABILITY.color, display: 'inline-block' }} />
                       <span>{HERO_AVAILABILITY.label}</span>
                     </div>
+                    <div>Boise + Remote</div>
                   </div>
                 </motion.div>
               </div>
 
-              <div className="flex" style={{ justifyContent: 'space-between', padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-sm)', alignItems: 'baseline', background: 'transparent', position: 'relative', zIndex: 1, borderBottom: HOME_SECTION_DIVIDER }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
-                  PROJECTS
-                </h2>
-                <span className="small-text" style={{ color: UI_LIGHT }}>Index (01)</span>
-              </div>
             </section>
 
 
@@ -860,292 +835,69 @@ function App() {
                 flexDirection: 'column',
               }}
             >
-              <div className="home-case-study-grid">
-              <motion.div
-                onClick={() => openCaseStudy('ricochet')}
-                whileHover="hover"
-                className="home-case-study-item"
-                style={{ 
-                  position: 'relative', 
-                  width: '100%',
-                  aspectRatio: '16 / 10',
-                  overflow: 'hidden',
-                  cursor: 'pointer'
-                }}
-              >
-                <div style={{ width: '100%', height: '100%' }}>
-                  <img 
-                    src="/images/ricochet mockup.png" 
-                    alt="Ricochet Project" 
-                    style={{ 
-                      width: '100%', 
-                      height: '100%',
-                      objectFit: 'cover',
-                      display: 'block',
-                      borderRadius: '12px'
-                    }} 
-                  />
-                </div>
-                
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'flex-end',
-                  padding: '0 var(--spacing-md) var(--spacing-md)',
-                  pointerEvents: 'none'
-                }}>
-                  <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                    <div>
-                      <h3 style={{ 
-                        fontFamily: 'var(--font-display)', fontWeight: 400, 
-                        fontSize: 'var(--fs-xl)', 
-                        lineHeight: 1,
-                        color: UI_DARK,
-                        margin: '0 0 var(--spacing-sm) 0',
-                        textTransform: 'uppercase'
-                      }}>
-                        Ricochet
-                      </h3>
-                      <p className="small-text" style={{ color: UI_DARK, maxWidth: '400px', margin: 0 }}>
-                        Website redesign + rebrand post-acquisition—moving away from the startup SaaS look into a more contemporary aesthetic.
-                      </p>
-                    </div>
-
-                    <motion.div 
-                      variants={{
-                        hover: { opacity: 0.7, scale: 1.08 }
-                      }}
-                      style={{
-                        color: UI_DARK,
-                        whiteSpace: 'nowrap',
-                        transition: 'opacity 0.3s ease'
-                      }}
+              <div className="home-project-stack">
+                {INDEX01_PROJECTS.map((project, index) => (
+                  <article
+                    key={project.id}
+                    className="home-project-layer"
+                    style={{ zIndex: index + 1 }}
+                  >
+                    <motion.div
+                      onClick={() => openCaseStudy(project.id)}
+                      className="home-project-layer__sticky"
                     >
-                      <ArrowUpRight size={34} weight="thin" aria-hidden="true" focusable="false" />
+                      <div className="home-project-layer__panel">
+                        <motion.div className="home-project-layer__media" whileHover="hover">
+                          <div className="home-project-layer__media-main">
+                            <img
+                              src={project.primaryImage}
+                              alt={project.primaryAlt}
+                              className="home-project-layer__image"
+                            />
+                          </div>
+                          <div className="home-project-layer__media-side">
+                            <img
+                              src={project.secondaryImage}
+                              alt={project.secondaryAlt}
+                              className="home-project-layer__image"
+                            />
+                          </div>
+                          <motion.div
+                            className="home-project-layer__media-overlay"
+                            variants={{
+                              hover: { opacity: 1 },
+                            }}
+                          >
+                            <div className="home-project-layer__view-chip">View</div>
+                          </motion.div>
+                        </motion.div>
+                        <div className="home-project-layer__meta">
+                          <div className="home-project-layer__copy">
+                            <h3
+                              className="home-project-layer__inline-title"
+                              style={{
+                                fontFamily: 'var(--font-mono)',
+                                fontWeight: 'var(--font-mono-weight-bold)',
+                                fontSize: 'var(--fs-sm)',
+                                lineHeight: 1.2,
+                                color: UI_LIGHT,
+                                margin: 0,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.02em',
+                              }}
+                            >
+                              {`${project.titleLines.join(' ')} •`}
+                            </h3>
+                            <div className="home-project-layer__details small-text">
+                              <span>{project.scope}</span>
+                              <span>{`Project (${String(index + 1).padStart(2, '0')})`}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </motion.div>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                onClick={() => openCaseStudy('on')}
-                whileHover="hover"
-                className="home-case-study-item"
-                style={{ 
-                  position: 'relative', 
-                  width: '100%',
-                  aspectRatio: '16 / 10',
-                  overflow: 'hidden',
-                  cursor: 'pointer'
-                }}
-              >
-                <div style={{ width: '100%', height: '100%' }}>
-                  <img 
-                    src="/images/OPEN NETIZEN CARD.jpg" 
-                    alt="Open Netizen Case Study" 
-                    style={{ 
-                      width: '100%', 
-                      height: '100%',
-                      objectFit: 'cover',
-                      display: 'block',
-                      borderRadius: '12px'
-                    }} 
-                  />
-                </div>
-                
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'flex-end',
-                  padding: '0 var(--spacing-md) var(--spacing-md)',
-                  pointerEvents: 'none'
-                }}>
-                  <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                    <div>
-                      <h3 style={{ 
-                        fontFamily: 'var(--font-display)', fontWeight: 400, 
-                        fontSize: 'var(--fs-xl)', 
-                        lineHeight: 1,
-                        color: UI_DARK,
-                        margin: '0 0 var(--spacing-sm) 0',
-                        textTransform: 'uppercase'
-                      }}>
-                        Open Netizen
-                      </h3>
-                      <p className="small-text" style={{ color: UI_DARK, maxWidth: '420px', margin: 0 }}>
-                        Brand identity and visual system design for a decentralized digital network.
-                      </p>
-                    </div>
-
-                    <motion.div 
-                      variants={{
-                        hover: { opacity: 0.7, scale: 1.08 }
-                      }}
-                      style={{
-                        color: UI_DARK,
-                        whiteSpace: 'nowrap',
-                        transition: 'opacity 0.3s ease'
-                      }}
-                    >
-                      <ArrowUpRight size={34} weight="thin" aria-hidden="true" focusable="false" />
-                    </motion.div>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                onClick={() => openCaseStudy('micron')}
-                whileHover="hover"
-                className="home-case-study-item"
-                style={{ 
-                  position: 'relative', 
-                  width: '100%',
-                  aspectRatio: '16 / 10',
-                  overflow: 'hidden',
-                  cursor: 'pointer'
-                }}
-              >
-                <div style={{ width: '100%', height: '100%' }}>
-                  <img 
-                    src="/images/_DSC6969.jpg" 
-                    alt="Work Sharp and Drill Doctor Popular Mechanics photoshoot" 
-                    style={{ 
-                      width: '100%', 
-                      height: '100%',
-                      objectFit: 'cover',
-                      display: 'block',
-                      borderRadius: '12px'
-                    }} 
-                  />
-                </div>
-                
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'flex-end',
-                  padding: '0 var(--spacing-md) var(--spacing-md)',
-                  pointerEvents: 'none'
-                }}>
-                  <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                    <div>
-                      <h3 style={{ 
-                        fontFamily: 'var(--font-display)', fontWeight: 400, 
-                        fontSize: 'var(--fs-xl)', 
-                        lineHeight: 1,
-                        color: UI_DARK,
-                        margin: '0 0 var(--spacing-sm) 0',
-                        textTransform: 'uppercase'
-                      }}>
-                        Work Sharp + Drill Doctor
-                      </h3>
-                      <p className="small-text" style={{ color: UI_DARK, maxWidth: '420px', margin: 0 }}>
-                        Combined product photoshoot for Popular Mechanics featuring Work Sharp and Drill Doctor.
-                      </p>
-                    </div>
-
-                    <motion.div 
-                      variants={{
-                        hover: { opacity: 0.7, scale: 1.08 }
-                      }}
-                      style={{
-                        color: UI_DARK,
-                        whiteSpace: 'nowrap',
-                        transition: 'opacity 0.3s ease'
-                      }}
-                    >
-                      <ArrowUpRight size={34} weight="thin" aria-hidden="true" focusable="false" />
-                    </motion.div>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                onClick={() => openCaseStudy('bac')}
-                whileHover="hover"
-                className="home-case-study-item"
-                style={{ 
-                  position: 'relative', 
-                  width: '100%',
-                  aspectRatio: '16 / 10',
-                  overflow: 'hidden',
-                  cursor: 'pointer'
-                }}
-              >
-                <div style={{ width: '100%', height: '100%' }}>
-                  <img 
-                    src="/images/analogmockup 2.png" 
-                    alt="Boise Analog Club Case Study" 
-                    style={{ 
-                      width: '100%', 
-                      height: '100%',
-                      objectFit: 'cover',
-                      display: 'block',
-                      borderRadius: '12px'
-                    }} 
-                  />
-                </div>
-                
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'flex-end',
-                  padding: '0 var(--spacing-md) var(--spacing-md)',
-                  pointerEvents: 'none'
-                }}>
-                  <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                    <div>
-                      <h3 style={{ 
-                        fontFamily: 'var(--font-display)', fontWeight: 400, 
-                        fontSize: 'var(--fs-xl)', 
-                        lineHeight: 1,
-                        color: UI_DARK,
-                        margin: '0 0 var(--spacing-sm) 0',
-                        textTransform: 'uppercase',
-                        maxWidth: '11ch'
-                      }}>
-                        <span style={{ display: 'block' }}>Boise Analog</span>
-                        <span style={{ display: 'block' }}>Club</span>
-                      </h3>
-                      <p className="small-text" style={{ color: UI_DARK, maxWidth: '420px', margin: 0 }}>
-                        Flyer design and brand identity system for a community film photography club.
-                      </p>
-                    </div>
-
-                    <motion.div 
-                      variants={{
-                        hover: { opacity: 0.7, scale: 1.08 }
-                      }}
-                      style={{
-                        color: UI_DARK,
-                        whiteSpace: 'nowrap',
-                        transition: 'opacity 0.3s ease'
-                      }}
-                    >
-                      <ArrowUpRight size={34} weight="thin" aria-hidden="true" focusable="false" />
-                    </motion.div>
-                  </div>
-                </div>
-              </motion.div>
+                  </article>
+                ))}
               </div>
             </motion.section>
 
@@ -1177,18 +929,16 @@ function App() {
                     viewport={{ once: true }}
                     style={{ borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-md)' }}
                   >
-                    <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
-                      <img src="/images/micron.png" alt="Micron" style={{ height: '100%' }} />
-                    </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--spacing-sm)' }}>
                       <h4 style={{ 
-                        fontSize: 'var(--fs-lg)', 
+                        fontSize: 'var(--fs-sm)', 
                         margin: 0,
                         textTransform: 'uppercase',
-                        fontFamily: 'var(--font-display)',
-                        fontWeight: 400
+                        fontFamily: 'var(--font-mono)',
+                        fontWeight: 'var(--font-mono-weight-bold)',
+                        letterSpacing: '0.02em'
                       }}>
-                        Micron Technology
+                        Micron Technology •
                       </h4>
                       <div className="small-text" style={{ color: UI_LIGHT }}>
                         A01
@@ -1197,7 +947,7 @@ function App() {
                     <p className="small-text" style={{ maxWidth: '90%' }}>
                       Designed over 1000 ADA-compliant signs for the massive 2026 Boise expansion. Creating a cohesive wayfinding system that merges strict regulatory standards with architectural harmony.
                     </p>
-                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
+                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontWeight: 'var(--font-mono-weight)', fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
                       [WAYFINDING] [ENVIRONMENTAL] [ADA]
                     </div>
                   </motion.div>
@@ -1209,18 +959,16 @@ function App() {
                     transition={{ delay: 0.2 }}
                     style={{ borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-md)' }}
                   >
-                    <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
-                      <img src="/images/ramboll.png" alt="Ramboll" style={{ height: '100%' }} />
-                    </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--spacing-sm)' }}>
                       <h4 style={{ 
-                        fontSize: 'var(--fs-lg)', 
+                        fontSize: 'var(--fs-sm)', 
                         margin: 0,
                         textTransform: 'uppercase',
-                        fontFamily: 'var(--font-display)',
-                        fontWeight: 400
+                        fontFamily: 'var(--font-mono)',
+                        fontWeight: 'var(--font-mono-weight-bold)',
+                        letterSpacing: '0.02em'
                       }}>
-                        Ramboll
+                        Ramboll •
                       </h4>
                       <div className="small-text" style={{ color: UI_LIGHT }}>
                         A02
@@ -1229,7 +977,7 @@ function App() {
                     <p className="small-text" style={{ maxWidth: '90%' }}>
                       Built a custom data migration system for Ramboll North America&apos;s Air Quality division and provide ongoing system administration for data migration servers. Delivering a robust full-stack solution to ensure data integrity and streamline complex environmental reporting workflows.
                     </p>
-                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
+                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontWeight: 'var(--font-mono-weight)', fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
                       [FULL STACK] [SYSTEM ADMIN] [DATA MIGRATION]
                     </div>
                   </motion.div>
@@ -1242,18 +990,16 @@ function App() {
                     transition={{ delay: 0.4 }}
                     style={{ borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-md)' }}
                   >
-                    <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
-                      <img src="/images/superbase.jpg" alt="Superbase" style={{ height: '100%', filter: 'invert(1)' }} />
-                    </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--spacing-sm)' }}>
                       <h4 style={{ 
-                        fontSize: 'var(--fs-lg)', 
+                        fontSize: 'var(--fs-sm)', 
                         margin: 0,
                         textTransform: 'uppercase',
-                        fontFamily: 'var(--font-display)',
-                        fontWeight: 400
+                        fontFamily: 'var(--font-mono)',
+                        fontWeight: 'var(--font-mono-weight-bold)',
+                        letterSpacing: '0.02em'
                       }}>
-                        Superbase
+                        Superbase •
                       </h4>
                       <div className="small-text" style={{ color: UI_LIGHT }}>
                         A03
@@ -1262,7 +1008,7 @@ function App() {
                     <p className="small-text" style={{ maxWidth: '90%' }}>
                       Collaborated on high-level UI/UX and design.  Building a scalable digital website and design systems with a leading design agency.
                     </p>
-                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
+                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontWeight: 'var(--font-mono-weight)', fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
                       [UI/UX DESIGN] [DEVELOPMENT] [AGENCY PARTNER]
                     </div>
                   </motion.div>
@@ -1275,18 +1021,16 @@ function App() {
                     transition={{ delay: 0.6 }}
                     style={{ borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-md)' }}
                   >
-                    <div style={{ marginBottom: 'var(--spacing-md)', height: '40px' }}>
-                      <img src="/images/cmyk.jpg" alt="CMYK Graffix" style={{ height: '100%' }} />
-                    </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--spacing-sm)' }}>
                       <h4 style={{ 
-                        fontSize: 'var(--fs-lg)', 
+                        fontSize: 'var(--fs-sm)', 
                         margin: 0,
                         textTransform: 'uppercase',
-                        fontFamily: 'var(--font-display)',
-                        fontWeight: 400
+                        fontFamily: 'var(--font-mono)',
+                        fontWeight: 'var(--font-mono-weight-bold)',
+                        letterSpacing: '0.02em'
                       }}>
-                        CMYK Graffix
+                        CMYK Graffix •
                       </h4>
                       <div className="small-text" style={{ color: UI_LIGHT }}>
                         A04
@@ -1295,7 +1039,7 @@ function App() {
                     <p className="small-text" style={{ maxWidth: '90%' }}>
                       Partner for large-format print and branding projects. Delivering print-ready assets and visual identities for a premier design and print agency.
                     </p>
-                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontSize: 'var(--fs-xs)' }}>
+                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontWeight: 'var(--font-mono-weight)', fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
                       [GRAPHIC DESIGN] [PRINT] [AGENCY PARTNER]
                     </div>
                   </motion.div>
@@ -1354,7 +1098,8 @@ function App() {
                             </div>
                             <div style={{
                               fontFamily: 'var(--font-mono)',
-                              fontSize: 'var(--fs-xs)',
+                              fontWeight: 'var(--font-mono-weight)',
+                              fontSize: 'var(--fs-sm)',
                               textTransform: 'uppercase'
                             }}>
                               [{testimonial.name}]
@@ -1370,12 +1115,13 @@ function App() {
                       {/* Body Content */}
                       <div>
                         <h4 style={{ 
-                            fontFamily: 'var(--font-display)', 
-                            fontWeight: 400,
-                            fontSize: 'var(--fs-lg)', 
+                            fontFamily: 'var(--font-mono)', 
+                            fontWeight: 'var(--font-mono-weight-bold)',
+                            fontSize: 'var(--fs-sm)', 
                             textTransform: 'uppercase',
                             marginBottom: 'var(--spacing-sm)',
-                            lineHeight: 1
+                            lineHeight: 1,
+                            letterSpacing: '0.02em'
                         }}>
                             {testimonial.headline}
                         </h4>
@@ -1506,7 +1252,7 @@ function App() {
                       <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid var(--color-border)', padding: '10px 12px', alignItems: 'baseline' }}>
                         <div>
                           <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
-                          <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
+                          <p className="small-text" style={{ opacity: 0.7, minHeight: '2.4em', lineHeight: 1.2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{project.description}</p>
                         </div>
                         <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
                           <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
@@ -1570,7 +1316,7 @@ function App() {
                       <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid var(--color-border)', padding: '10px 12px', alignItems: 'baseline' }}>
                         <div>
                           <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
-                          <p className="small-text" style={{ opacity: 0.7 }}>{project.description}</p>
+                          <p className="small-text" style={{ opacity: 0.7, minHeight: '2.4em', lineHeight: 1.2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{project.description}</p>
                         </div>
                         <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
                           <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
@@ -1624,7 +1370,8 @@ function App() {
                     color: UI_LIGHT,
                     padding: 'var(--spacing-xs) var(--spacing-sm)',
                     fontFamily: 'var(--font-mono)',
-                    fontSize: 'var(--fs-xs)',
+                    fontWeight: 'var(--font-mono-weight)',
+                    fontSize: 'var(--fs-sm)',
                     textTransform: 'uppercase'
                   }}>
                     Figure 01. Portrait
@@ -1661,7 +1408,8 @@ function App() {
                                 alignItems: 'center',
                                 gap: 'var(--spacing-sm)',
                                 fontFamily: 'var(--font-mono)',
-                                fontSize: 'var(--fs-xs)',
+                                fontWeight: 'var(--font-mono-weight)',
+                                fontSize: 'var(--fs-sm)',
                                 textTransform: 'uppercase',
                                 color: UI_LIGHT,
                               }}
@@ -1690,7 +1438,8 @@ function App() {
                                 alignItems: 'center',
                                 gap: 'var(--spacing-sm)',
                                 fontFamily: 'var(--font-mono)',
-                                fontSize: 'var(--fs-xs)',
+                                fontWeight: 'var(--font-mono-weight)',
+                                fontSize: 'var(--fs-sm)',
                                 textTransform: 'uppercase',
                                 color: UI_LIGHT,
                               }}
@@ -1719,7 +1468,8 @@ function App() {
                                 alignItems: 'center',
                                 gap: 'var(--spacing-sm)',
                                 fontFamily: 'var(--font-mono)',
-                                fontSize: 'var(--fs-xs)',
+                                fontWeight: 'var(--font-mono-weight)',
+                                fontSize: 'var(--fs-sm)',
                                 textTransform: 'uppercase',
                                 color: UI_LIGHT,
                               }}
@@ -1748,7 +1498,8 @@ function App() {
                                 alignItems: 'center',
                                 gap: 'var(--spacing-sm)',
                                 fontFamily: 'var(--font-mono)',
-                                fontSize: 'var(--fs-xs)',
+                                fontWeight: 'var(--font-mono-weight)',
+                                fontSize: 'var(--fs-sm)',
                                 textTransform: 'uppercase',
                                 color: UI_LIGHT,
                               }}
@@ -1771,13 +1522,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
-      <SiteFooter
-        newsletterEmail={newsletterEmail}
-        newsletterStatus={newsletterStatus}
-        onNewsletterEmailChange={(ev) => setNewsletterEmail(ev.target.value)}
-        onSubmitNewsletter={submitNewsletter}
-        onContactClick={openContact}
-      />
+      <SiteFooter onContactClick={openContact} reserveRightRail={activeCaseStudy === 'bac' || activeCaseStudy === 'on'} />
     </div>
   );
 }

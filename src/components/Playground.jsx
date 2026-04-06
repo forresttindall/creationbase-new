@@ -170,7 +170,8 @@ const Playground = () => {
         .playground-tag {
           margin-top: 14px;
           font-family: var(--font-mono);
-          font-size: var(--fs-xs);
+          font-size: var(--fs-sm);
+          font-weight: var(--font-mono-weight);
           letter-spacing: 2px;
           text-transform: uppercase;
           color: ${GRAY1};

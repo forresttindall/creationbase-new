@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import DecryptText from './DecryptText';
 
@@ -20,6 +20,32 @@ const FastburgerProject = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const [readMoreOpen, setReadMoreOpen] = useState(false);
+
+  useEffect(() => {
+    if (readMoreOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('fastburger-info-open');
+    } else {
+      document.body.style.overflow = '';
+      document.body.classList.remove('fastburger-info-open');
+    }
+    const handleNavClick = (ev) => {
+      const el = ev.target.closest('.site-nav__menu-toggle');
+      if (readMoreOpen && el) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        setReadMoreOpen(false);
+      }
+    };
+    document.addEventListener('click', handleNavClick, true);
+    return () => {
+      document.body.style.overflow = '';
+      document.body.classList.remove('fastburger-info-open');
+      document.removeEventListener('click', handleNavClick, true);
+    };
+  }, [readMoreOpen]);
 
   useEffect(() => {
     const adjustRowHeights = () => {
@@ -79,6 +105,74 @@ const FastburgerProject = () => {
         </div>
       </section>
 
+      <button
+        type="button"
+        className="fastburger-readmore"
+        aria-label="Read more"
+        onClick={() => setReadMoreOpen(true)}
+      >
+        <div className="fastburger-readmore__track">
+          {Array.from({ length: 24 }).map((_, i) => (
+            <span key={i} className="fastburger-readmore__item small-text">
+              READ MORE •
+            </span>
+          ))}
+        </div>
+      </button>
+
+      {readMoreOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fastburger-overlay"
+          onClick={() => setReadMoreOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(150,150,150,0.32)',
+            backdropFilter: 'blur(26px)',
+            WebkitBackdropFilter: 'blur(26px)',
+            zIndex: 390,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden'
+          }}
+        >
+          <motion.div
+            initial={{ y: 12, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 12, opacity: 0 }}
+            className="fastburger-overlay__inner"
+            onClick={(ev) => ev.stopPropagation()}
+            style={{
+              position: 'relative',
+              width: 'min(820px, calc(100% - 40px))',
+              borderRadius: 16,
+              background: 'rgba(255,255,255,0.85)',
+              backdropFilter: 'blur(22px)',
+              WebkitBackdropFilter: 'blur(22px)',
+              border: 'none',
+              padding: 'var(--spacing-xl) var(--spacing-lg)',
+              color: '#111111'
+            }}
+          >
+            <div className="small-text" style={{ marginBottom: 'var(--spacing-md)', fontWeight: 'var(--font-mono-weight-bold)' }}>
+              FASTBURGER • <span style={{ marginLeft: 14 }}>SCOPE( FULL BRAND IDENTITY SYSTEM, WEBSITE)</span>
+            </div>
+            <div className="small-text" style={{ letterSpacing: 2, color: 'rgba(17,17,17,0.56)' }}>ROLE</div>
+            <div className="small-text" style={{ marginTop: 8, textTransform: 'none' }}>Brand + Web Designer</div>
+            <div className="small-text" style={{ letterSpacing: 2, color: 'rgba(17,17,17,0.56)', marginTop: 'var(--spacing-lg)' }}>SCOPE</div>
+            <div className="small-text" style={{ marginTop: 8, textTransform: 'none' }}>Identity system, packaging, signage, merch, website UI</div>
+            <div className="small-text" style={{ letterSpacing: 2, color: 'rgba(17,17,17,0.56)', marginTop: 'var(--spacing-lg)' }}>PROJECT</div>
+            <div className="small-text" style={{ marginTop: 8, textTransform: 'none' }}>
+              Comprehensive brand identity system with packaging assets and website UI—logo suite, packaging and signage applications, merchandise, and responsive web interface.
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
       <section style={{ padding: 'var(--spacing-md) 10px var(--spacing-xxl)' }}>
         <div style={{ height: 1, background: '#000000', marginLeft: -10, marginRight: -10 }} />
         <div>
@@ -129,6 +223,48 @@ const FastburgerProject = () => {
           padding-bottom: var(--spacing-xxl);
         }
 
+        .fastburger-readmore {
+          position: fixed;
+          left: 50%;
+          bottom: 78px;
+          transform: translateX(-50%);
+          display: block;
+          width: clamp(280px, 64vw, 740px);
+          height: 34px;
+          border-radius: 999px;
+          border: none;
+          background: rgba(191, 191, 191, 0.45);
+          backdrop-filter: blur(30px);
+          -webkit-backdrop-filter: blur(30px);
+          color: inherit;
+          overflow: hidden;
+          z-index: 402;
+          pointer-events: auto;
+        }
+        .fastburger-readmore__track {
+          display: inline-flex;
+          align-items: center;
+          gap: 24px;
+          white-space: nowrap;
+          will-change: transform;
+          animation: fastburgerMarquee 12s linear infinite;
+          padding: 0 12px;
+        }
+        .fastburger-readmore__item {
+          letter-spacing: 0.05em;
+        }
+        @keyframes fastburgerMarquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+
+        body.fastburger-info-open .fastburger-readmore { display: none; }
+        body.fastburger-info-open .site-nav__menu-label { position: relative; color: transparent; }
+        body.fastburger-info-open .site-nav__menu-label::after {
+          content: 'Close';
+          color: #111111;
+        }
+
         .fastburger-row {
           display: flex;
           gap: 10px;
@@ -171,6 +307,10 @@ const FastburgerProject = () => {
             max-width: 100%;
             white-space: normal;
             overflow-wrap: anywhere;
+          }
+          .fastburger-readmore {
+            bottom: 72px;
+            width: calc(100% - 20px);
           }
           .fastburger-row {
             flex-direction: column;

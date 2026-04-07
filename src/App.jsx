@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from '@phosphor-icons/react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -67,6 +67,14 @@ const INDEX01_PROJECTS = [
 ];
 
 const SiteFooter = ({ onContactClick, reserveRightRail = false }) => {
+  const shuffledFooterImages = useMemo(() => {
+    const arr = [...FOOTER_CAROUSEL_IMAGES];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+  }, []);
   return (
     <motion.section
       data-header-theme="light"
@@ -103,7 +111,7 @@ const SiteFooter = ({ onContactClick, reserveRightRail = false }) => {
 
         <div className="footer-marquee footer-marquee--images full-bleed">
           <div className="footer-marquee__track">
-            {[...FOOTER_CAROUSEL_IMAGES, ...FOOTER_CAROUSEL_IMAGES].map((item, index) => (
+            {[...shuffledFooterImages, ...shuffledFooterImages].map((item, index) => (
               <div key={`${item.src}-${index}`} className="footer-carousel-card">
                 <img src={item.src} alt={item.alt} className="footer-carousel-card__image" loading="lazy" />
               </div>
@@ -259,6 +267,12 @@ const FOOTER_CAROUSEL_IMAGES = [
   { src: '/images/network.jpg', alt: 'Development footer carousel image' },
   { src: '/images/pilot micro new.png', alt: 'Art print footer carousel image' },
   { src: '/images/bar.jpg', alt: 'Photography footer carousel image' },
+  { src: '/images/FASTBURGER MENU MOCKUP.png', alt: 'Fastburger menu mockup footer carousel image' },
+  { src: '/images/FASTBURGER MENU.png', alt: 'Fastburger printed menu footer carousel image' },
+  { src: '/images/fastburger box.jpg', alt: 'Fastburger box footer carousel image' },
+  { src: '/images/fastburger a board.jpg', alt: 'Fastburger signage footer carousel image' },
+  { src: '/images/fastburger typemark.jpg', alt: 'Fastburger typemark footer carousel image' },
+  { src: '/images/fastburger.png', alt: 'Fastburger website mockup footer carousel image' },
 ];
 
 const ProjectModal = ({ project, onClose }) => {

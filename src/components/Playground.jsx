@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 
 const BLACK = '#FFFFFF';
 const WHITE = '#111111';
-const GRAY1 = 'rgba(17, 17, 17, 0.56)';
 const BORDER = 'var(--color-border)';
 
 const ITEMS = [
@@ -36,15 +35,15 @@ const Playground = () => {
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: `1px solid ${BORDER}` }}>
         <div className="full-bleed playground-bleed">
           <div className="playground-header flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
-            <h1 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-              <span className="playground-title-rainbow">PLAYGROUND</span>
+            <h1 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: WHITE }}>
+              PLAYGROUND
             </h1>
-            <div className="playground-kicker small-text" style={{ color: GRAY1 }}>
+            <div className="playground-kicker small-text" style={{ color: WHITE }}>
               DESIGN / ART / DEV
             </div>
           </div>
           <div style={{ height: 1, background: BORDER, marginTop: 'var(--spacing-sm)' }} />
-          <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 860, opacity: 0.9, textTransform: 'none' }}>
+          <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 860, opacity: 0.9, color: WHITE }}>
             A place for experiments—product renders, visual studies, and technical prototypes.
           </div>
         </div>
@@ -64,7 +63,7 @@ const Playground = () => {
                     <div className="playground-frame">
                       <img src={item.src} alt={item.tag} loading="lazy" decoding="async" />
                     </div>
-                    <div className="playground-tag">{item.tag}</div>
+                    <div className="playground-tag small-text" style={{ color: WHITE }}>{item.tag}</div>
                   </div>
                 </div>
               );
@@ -74,58 +73,6 @@ const Playground = () => {
       </section>
 
       <style>{`
-        .playground-title-rainbow {
-          background-image: linear-gradient(
-            90deg,
-            #ff4d4d,
-            #ffb84d,
-            #fff04d,
-            #4dff88,
-            #4dd9ff,
-            #8a4dff,
-            #ff4dd2,
-            #ff4d4d
-          );
-          background-size: 300% 100%;
-          background-position: 0% 50%;
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-          text-shadow:
-            0 0 14px rgba(255, 77, 77, 0.25),
-            0 0 26px rgba(77, 217, 255, 0.2),
-            0 0 38px rgba(138, 77, 255, 0.18);
-          animation: playgroundRainbowShift 6s linear infinite, playgroundGlowPulse 2.6s ease-in-out infinite;
-          filter: saturate(1.25);
-        }
-
-        @keyframes playgroundRainbowShift {
-          0% { background-position: 0% 50%; }
-          100% { background-position: 100% 50%; }
-        }
-
-        @keyframes playgroundGlowPulse {
-          0%, 100% {
-            text-shadow:
-              0 0 10px rgba(255, 77, 77, 0.18),
-              0 0 18px rgba(77, 217, 255, 0.16),
-              0 0 26px rgba(138, 77, 255, 0.14);
-          }
-          50% {
-            text-shadow:
-              0 0 18px rgba(255, 77, 77, 0.34),
-              0 0 34px rgba(77, 217, 255, 0.26),
-              0 0 52px rgba(138, 77, 255, 0.24);
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .playground-title-rainbow {
-            animation: none;
-            background-position: 50% 50%;
-          }
-        }
-
         .playground-page .playground-bleed {
           padding-left: clamp(24px, 6vw, 120px);
           padding-right: clamp(24px, 6vw, 120px);
@@ -169,12 +116,6 @@ const Playground = () => {
 
         .playground-tag {
           margin-top: 14px;
-          font-family: var(--font-mono);
-          font-size: var(--fs-sm);
-          font-weight: var(--font-mono-weight);
-          letter-spacing: 2px;
-          text-transform: uppercase;
-          color: ${GRAY1};
           width: 100%;
           text-align: left;
         }

@@ -6,14 +6,14 @@ const BLACK = '#FFFFFF';
 const WHITE = '#111111';
 
 const FASTBURGER_IMAGES = [
-  { src: '/images/FASTBURGER MENU MOCKUP.png', alt: 'Fastburger menu mockup', className: 'fastburger-gallery__item fastburger-gallery__item--hero' },
-  { src: '/images/fastburger logo.jpg', alt: 'Fastburger logo identity', className: 'fastburger-gallery__item fastburger-gallery__item--square' },
-  { src: '/images/fastburger website mockup 2.jpg', alt: 'Fastburger printed menu', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
-  { src: '/images/fastburger box vertical.png', alt: 'Fastburger vertical packaging detail', className: 'fastburger-gallery__item fastburger-gallery__item--portrait' },
-  { src: '/images/fastburger a board.jpg', alt: 'Fastburger a-board signage', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
-  { src: '/images/fastburger tote vertical.png', alt: 'Fastburger vertical tote detail', className: 'fastburger-gallery__item fastburger-gallery__item--portrait' },
-  { src: '/images/fastburger typemark.jpg', alt: 'Fastburger typemark', className: 'fastburger-gallery__item fastburger-gallery__item--square' },
-  { src: '/images/fastburger website mockup 1.jpg', alt: 'Fastburger website mockup', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
+  { src: '/images/FASTBURGER MENU MOCKUP.webp', alt: 'Fastburger menu mockup', className: 'fastburger-gallery__item fastburger-gallery__item--hero' },
+  { src: '/images/fastburger logo.webp', alt: 'Fastburger logo identity', className: 'fastburger-gallery__item fastburger-gallery__item--square' },
+  { src: '/images/fastburger website mockup 2.webp', alt: 'Fastburger printed menu', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
+  { src: '/images/fastburger box vertical.webp', alt: 'Fastburger vertical packaging detail', className: 'fastburger-gallery__item fastburger-gallery__item--portrait' },
+  { src: '/images/fastburger a board.webp', alt: 'Fastburger a-board signage', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
+  { src: '/images/fastburger tote vertical.webp', alt: 'Fastburger vertical tote detail', className: 'fastburger-gallery__item fastburger-gallery__item--portrait' },
+  { src: '/images/fastburger typemark.webp', alt: 'Fastburger typemark', className: 'fastburger-gallery__item fastburger-gallery__item--square' },
+  { src: '/images/fastburger website mockup 1.webp', alt: 'Fastburger website mockup', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
 ];
 
 const FastburgerProject = () => {
@@ -22,6 +22,7 @@ const FastburgerProject = () => {
   }, []);
 
   const [readMoreOpen, setReadMoreOpen] = useState(false);
+  const [loadedBySrc, setLoadedBySrc] = useState({});
 
   useEffect(() => {
     if (readMoreOpen) {
@@ -192,22 +193,40 @@ const FastburgerProject = () => {
               const rowClass = single ? 'fastburger-row fastburger-row--single' : (rIdx % 2 === 0 ? 'fastburger-row fastburger-row--left' : 'fastburger-row fastburger-row--right');
               return (
                 <div key={`row-${rIdx}`} className={rowClass}>
-                  {row.map((image) => (
-                    <div key={image.src} className="fastburger-card">
-                      <div className="fastburger-frame">
-                        <img
-                          src={image.src}
-                          alt={image.alt}
-                          loading="lazy"
-                          decoding="async"
-                          onError={(ev) => {
-                            const card = ev.currentTarget.closest('.fastburger-card');
-                            if (card) card.style.display = 'none';
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                  {row.map((image) => {
+                    const isLoaded = !!loadedBySrc[image.src];
+                    return (
+                      <motion.div
+                        key={image.src}
+                        className="fastburger-card"
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                      >
+                        <div className={`fastburger-frame${isLoaded ? ' fastburger-frame--loaded' : ' fastburger-frame--loading'}`}>
+                          <div className="fastburger-skeleton" aria-hidden="true" />
+                          <img
+                            className="fastburger-img"
+                            src={image.src}
+                            alt={image.alt}
+                            loading="lazy"
+                            decoding="async"
+                            onLoad={() => {
+                              setLoadedBySrc((prev) => {
+                                if (prev[image.src]) return prev;
+                                return { ...prev, [image.src]: true };
+                              });
+                            }}
+                            onError={(ev) => {
+                              const card = ev.currentTarget.closest('.fastburger-card');
+                              if (card) card.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </div>
               );
             })}
@@ -288,13 +307,57 @@ const FastburgerProject = () => {
 
         .fastburger-frame {
           height: auto;
+          position: relative;
         }
 
-        .fastburger-frame img {
+        .fastburger-skeleton {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            90deg,
+            rgba(17, 17, 17, 0.06) 0%,
+            rgba(17, 17, 17, 0.12) 50%,
+            rgba(17, 17, 17, 0.06) 100%
+          );
+          background-size: 200% 100%;
+          animation: fastburgerSkeleton 1.2s ease-in-out infinite;
+          opacity: 1;
+          transition: opacity 260ms ease;
+        }
+
+        @keyframes fastburgerSkeleton {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+
+        .fastburger-img {
           width: 100%;
           height: 100%;
           display: block;
           object-fit: cover;
+          opacity: 0;
+          filter: blur(12px);
+          transform: scale(1.01);
+          transition: opacity 380ms ease, filter 520ms ease, transform 520ms ease;
+        }
+
+        .fastburger-frame--loaded .fastburger-skeleton {
+          opacity: 0;
+        }
+
+        .fastburger-frame--loaded .fastburger-img {
+          opacity: 1;
+          filter: blur(0);
+          transform: scale(1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .fastburger-skeleton {
+            animation: none;
+          }
+          .fastburger-img {
+            transition: none;
+          }
         }
 
         .fastburger-row--left .fastburger-card:first-child { flex: 0 0 60%; }

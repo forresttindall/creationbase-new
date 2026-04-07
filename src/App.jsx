@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useAnimationFrame, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, useVelocity } from 'framer-motion';
 import { ArrowUpRight } from '@phosphor-icons/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BoiseAnalogClubCaseStudy from './components/BoiseAnalogClubCaseStudy';
@@ -27,11 +27,11 @@ const INDEX01_PROJECTS = [
     id: 'fastburger',
     titleLines: ['Fastburger'],
     scope: 'Scope(Full Brand Identity System, Website)',
-    primaryImage: '/images/fastburger box.jpg',
+    primaryImage: '/images/fastburger box.webp',
     primaryAlt: 'Fastburger packaging mockup',
-    secondaryImage: '/images/fastburger website mockup 1.jpg',
+    secondaryImage: '/images/fastburger website mockup 1.webp',
     secondaryAlt: 'Fastburger website mockup',
-    secondaryFallbackImage: '/images/fastburger.png',
+    secondaryFallbackImage: '/images/fastburger.webp',
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },
   {
@@ -153,7 +153,7 @@ const projects = [
   {
     title: "Fastburger",
     category: "Brand & UI/UX Design",
-    image: "/images/fastburger.png",
+    image: "/images/fastburger.webp",
     description: "Restaurant website design in figma and dev in REACT",
     year: "2025"
   },
@@ -267,14 +267,14 @@ const FOOTER_CAROUSEL_IMAGES = [
   { src: '/images/network.jpg', alt: 'Development footer carousel image' },
   { src: '/images/pilot micro new.png', alt: 'Art print footer carousel image' },
   { src: '/images/bar.jpg', alt: 'Photography footer carousel image' },
-  { src: '/images/FASTBURGER MENU MOCKUP.png', alt: 'Fastburger menu mockup footer carousel image' },
-  { src: '/images/FASTBURGER MENU.png', alt: 'Fastburger printed menu footer carousel image' },
-  { src: '/images/fastburger box.jpg', alt: 'Fastburger box footer carousel image' },
-  { src: '/images/fastburger a board.jpg', alt: 'Fastburger signage footer carousel image' },
-  { src: '/images/fastburger typemark.jpg', alt: 'Fastburger typemark footer carousel image' },
-  { src: '/images/fastburger.png', alt: 'Fastburger website mockup footer carousel image' },
-  { src: '/images/fastburger website mockup 1.jpg', alt: 'Fastburger website mockup footer carousel image' },
-  { src: '/images/fastburger website mockup 2.jpg', alt: 'Fastburger website mockup footer carousel image' },
+  { src: '/images/FASTBURGER MENU MOCKUP.webp', alt: 'Fastburger menu mockup footer carousel image' },
+  { src: '/images/FASTBURGER MENU.webp', alt: 'Fastburger printed menu footer carousel image' },
+  { src: '/images/fastburger box.webp', alt: 'Fastburger box footer carousel image' },
+  { src: '/images/fastburger a board.webp', alt: 'Fastburger signage footer carousel image' },
+  { src: '/images/fastburger typemark.webp', alt: 'Fastburger typemark footer carousel image' },
+  { src: '/images/fastburger.webp', alt: 'Fastburger website mockup footer carousel image' },
+  { src: '/images/fastburger website mockup 1.webp', alt: 'Fastburger website mockup footer carousel image' },
+  { src: '/images/fastburger website mockup 2.webp', alt: 'Fastburger website mockup footer carousel image' },
 ];
 
 const ProjectModal = ({ project, onClose }) => {
@@ -605,6 +605,21 @@ function App() {
   const headerColor = UI_LIGHT;
   const headerLogoSrc = '/images/new logo.png';
   const mobileNavBg = 'rgba(150,150,150,0.32)';
+  const reduceMotion = useReducedMotion();
+  const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
+  const smoothScrollVelocity = useSpring(scrollVelocity, { damping: 50, stiffness: 400 });
+  const navScrollSpin = useMotionValue(0);
+  const navScrollSpinReverse = useTransform(navScrollSpin, (v) => -v);
+  const navScrollRotate = navScrollSpin;
+  const navScrollRotateReverse = navScrollSpinReverse;
+
+  useAnimationFrame((_, delta) => {
+    if (reduceMotion) return;
+    const v = smoothScrollVelocity.get();
+    const clamped = Math.max(-4000, Math.min(4000, v));
+    navScrollSpin.set(navScrollSpin.get() + clamped * 0.05 * (delta / 1000));
+  });
 
   const goHome = () => {
     setNavLogoSpinTick((value) => value + 1);
@@ -661,20 +676,24 @@ function App() {
               onClick={goHome}
             >
               <span className="site-nav__menu-logos" aria-hidden="true">
-                <motion.img
-                  src={headerLogoSrc}
-                  alt=""
-                  className="site-nav__menu-logo"
-                  animate={{ rotate: navLogoSpinTick * 360 }}
-                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                />
-                <motion.img
-                  src={headerLogoSrc}
-                  alt=""
-                  className="site-nav__menu-logo"
-                  animate={{ rotate: navLogoSpinTick * -360 }}
-                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                />
+                <motion.span style={{ display: 'inline-flex', rotate: navScrollRotate }}>
+                  <motion.img
+                    src={headerLogoSrc}
+                    alt=""
+                    className="site-nav__menu-logo"
+                    animate={{ rotate: navLogoSpinTick * 360 }}
+                    transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                  />
+                </motion.span>
+                <motion.span style={{ display: 'inline-flex', rotate: navScrollRotateReverse }}>
+                  <motion.img
+                    src={headerLogoSrc}
+                    alt=""
+                    className="site-nav__menu-logo"
+                    animate={{ rotate: navLogoSpinTick * -360 }}
+                    transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                  />
+                </motion.span>
               </span>
             </button>
             <button

@@ -261,11 +261,6 @@ const FastburgerProject = () => {
         body.fastburger-info-open .fastburger-readmore { display: none; }
         body.fastburger-info-open .site-nav__menu-label {
           position: relative;
-          display: inline-block;
-          min-width: 5ch;
-          text-align: center;
-          white-space: nowrap;
-          line-height: 1;
           color: transparent;
         }
         body.fastburger-info-open .site-nav__menu-label::after {
@@ -276,6 +271,7 @@ const FastburgerProject = () => {
           align-items: center;
           justify-content: center;
           color: #111111;
+          pointer-events: none;
         }
 
         .fastburger-row {

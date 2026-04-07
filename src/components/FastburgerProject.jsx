@@ -259,9 +259,22 @@ const FastburgerProject = () => {
         }
 
         body.fastburger-info-open .fastburger-readmore { display: none; }
-        body.fastburger-info-open .site-nav__menu-label { position: relative; color: transparent; }
+        body.fastburger-info-open .site-nav__menu-label {
+          position: relative;
+          display: inline-block;
+          min-width: 5ch;
+          text-align: center;
+          white-space: nowrap;
+          line-height: 1;
+          color: transparent;
+        }
         body.fastburger-info-open .site-nav__menu-label::after {
           content: 'Close';
+          position: absolute;
+          inset: 0;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           color: #111111;
         }
 

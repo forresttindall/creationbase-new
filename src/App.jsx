@@ -29,8 +29,8 @@ const INDEX01_PROJECTS = [
     scope: 'Scope(Full Brand Identity System, Website)',
     primaryImage: '/images/fastburger box.jpg',
     primaryAlt: 'Fastburger packaging mockup',
-    secondaryImage: '/images/FASTBURGER MENU MOCKUP.png',
-    secondaryAlt: 'Fastburger menu mockup',
+    secondaryImage: '/images/fastburger website mockup 1.jpg',
+    secondaryAlt: 'Fastburger website mockup',
     secondaryFallbackImage: '/images/fastburger.png',
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },
@@ -273,6 +273,8 @@ const FOOTER_CAROUSEL_IMAGES = [
   { src: '/images/fastburger a board.jpg', alt: 'Fastburger signage footer carousel image' },
   { src: '/images/fastburger typemark.jpg', alt: 'Fastburger typemark footer carousel image' },
   { src: '/images/fastburger.png', alt: 'Fastburger website mockup footer carousel image' },
+  { src: '/images/fastburger website mockup 1.jpg', alt: 'Fastburger website mockup footer carousel image' },
+  { src: '/images/fastburger website mockup 2.jpg', alt: 'Fastburger website mockup footer carousel image' },
 ];
 
 const ProjectModal = ({ project, onClose }) => {

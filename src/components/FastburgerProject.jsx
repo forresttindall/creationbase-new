@@ -8,12 +8,12 @@ const WHITE = '#111111';
 const FASTBURGER_IMAGES = [
   { src: '/images/FASTBURGER MENU MOCKUP.png', alt: 'Fastburger menu mockup', className: 'fastburger-gallery__item fastburger-gallery__item--hero' },
   { src: '/images/fastburger logo.jpg', alt: 'Fastburger logo identity', className: 'fastburger-gallery__item fastburger-gallery__item--square' },
-  { src: '/images/FASTBURGER MENU.png', alt: 'Fastburger printed menu', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
+  { src: '/images/fastburger website mockup 2.jpg', alt: 'Fastburger printed menu', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
   { src: '/images/fastburger box vertical.png', alt: 'Fastburger vertical packaging detail', className: 'fastburger-gallery__item fastburger-gallery__item--portrait' },
   { src: '/images/fastburger a board.jpg', alt: 'Fastburger a-board signage', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
   { src: '/images/fastburger tote vertical.png', alt: 'Fastburger vertical tote detail', className: 'fastburger-gallery__item fastburger-gallery__item--portrait' },
   { src: '/images/fastburger typemark.jpg', alt: 'Fastburger typemark', className: 'fastburger-gallery__item fastburger-gallery__item--square' },
-  { src: '/images/fastburger.png', alt: 'Fastburger website mockup', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
+  { src: '/images/fastburger website mockup 1.jpg', alt: 'Fastburger website mockup', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
 ];
 
 const FastburgerProject = () => {
@@ -158,16 +158,16 @@ const FastburgerProject = () => {
               color: '#111111'
             }}
           >
-            <div className="small-text" style={{ marginBottom: 'var(--spacing-md)', fontWeight: 'var(--font-mono-weight-bold)' }}>
-              FASTBURGER • <span style={{ marginLeft: 14 }}>SCOPE( FULL BRAND IDENTITY SYSTEM, WEBSITE)</span>
+            <div className="small-text" style={{ marginBottom: 'var(--spacing-lg)', fontWeight: 'var(--font-mono-weight-bold)' }}>
+              FASTBURGER •
             </div>
-            <div className="small-text" style={{ letterSpacing: 2, color: 'rgba(17,17,17,0.56)' }}>ROLE</div>
-            <div className="small-text" style={{ marginTop: 8, textTransform: 'none' }}>Brand + Web Designer</div>
-            <div className="small-text" style={{ letterSpacing: 2, color: 'rgba(17,17,17,0.56)', marginTop: 'var(--spacing-lg)' }}>SCOPE</div>
-            <div className="small-text" style={{ marginTop: 8, textTransform: 'none' }}>Identity system, packaging, signage, merch, website UI</div>
-            <div className="small-text" style={{ letterSpacing: 2, color: 'rgba(17,17,17,0.56)', marginTop: 'var(--spacing-lg)' }}>PROJECT</div>
-            <div className="small-text" style={{ marginTop: 8, textTransform: 'none' }}>
-              Comprehensive brand identity system with packaging assets and website UI—logo suite, packaging and signage applications, merchandise, and responsive web interface.
+            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)' }}>ROLE</div>
+            <div className="small-text" style={{ marginTop: 8 }}>Brand + Web Designer + Developer</div>
+            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>SCOPE</div>
+            <div className="small-text" style={{ marginTop: 8 }}>Identity system, packaging, signage, merch, website design and development</div>
+            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>PROJECT</div>
+            <div className="small-text" style={{ marginTop: 8 }}>
+              Comprehensive brand identity system with packaging assets and website design and development—logo suite, packaging and signage applications, merchandise, and responsive web interface.
             </div>
           </motion.div>
         </motion.div>

@@ -281,15 +281,15 @@ ul {
 
 .footer-carousel-card {
   flex: 0 0 auto;
-  width: clamp(360px, 27vw, 520px);
-  aspect-ratio: 1 / 1;
+  height: clamp(360px, 27vw, 520px);
+  width: auto;
   border: 0;
   overflow: hidden;
   background: var(--color-bg);
 }
 
 .footer-carousel-card__image {
-  width: 100%;
+  width: auto;
   height: 100%;
   object-fit: cover;
   display: block;

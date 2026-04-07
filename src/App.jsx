@@ -12,6 +12,7 @@ import Contact from './components/Contact';
 import RicochetProject from './components/RicochetProject';
 import MicronProject from './components/MicronProject';
 import Playground from './components/Playground';
+import FastburgerProject from './components/FastburgerProject';
 import DecryptText from './components/DecryptText';
 
 const UI_LIGHT = '#111111';
@@ -23,12 +24,23 @@ const HERO_AVAILABILITY = {
 };
 const INDEX01_PROJECTS = [
   {
+    id: 'fastburger',
+    titleLines: ['Fastburger'],
+    scope: 'Scope(Full Brand Identity System, Website)',
+    primaryImage: '/images/fastburger box.jpg',
+    primaryAlt: 'Fastburger packaging mockup',
+    secondaryImage: '/images/FASTBURGER MENU MOCKUP.png',
+    secondaryAlt: 'Fastburger menu mockup',
+    secondaryFallbackImage: '/images/fastburger.png',
+    sideOffset: 'clamp(2rem, 7vw, 5rem)',
+  },
+  {
     id: 'ricochet',
     titleLines: ['Ricochet'],
     scope: 'Scope(Brand, Website)',
     primaryImage: '/images/ricochet mockup.png',
     primaryAlt: 'Ricochet project mockup',
-    secondaryImage: '/images/Exportable tables.png',
+    secondaryImage: '/images/Exportable tables.PNG',
     secondaryAlt: 'Ricochet exportable tables interface',
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },
@@ -51,16 +63,6 @@ const INDEX01_PROJECTS = [
     secondaryImage: '/images/_DSC7142.jpg',
     secondaryAlt: 'Work Sharp and Drill Doctor supporting photograph',
     sideOffset: 'clamp(2.5rem, 6vw, 4.5rem)',
-  },
-  {
-    id: 'bac',
-    titleLines: ['Boise Analog', 'Club'],
-    scope: 'Scope(Identity, Print System)',
-    primaryImage: '/images/analogmockup 2.png',
-    primaryAlt: 'Boise Analog Club identity mockup',
-    secondaryImage: '/images/analog2.png',
-    secondaryAlt: 'Boise Analog Club supporting cover image',
-    sideOffset: 'clamp(3rem, 9vw, 6.5rem)',
   },
 ];
 
@@ -507,7 +509,8 @@ function App() {
     homeScrollYRef.current = y;
     sessionStorage.setItem('homeScrollY', String(y));
     pendingHomeScrollRestoreRef.current = true;
-    if (id === 'on') navigate('/open-netizen');
+    if (id === 'fastburger') navigate('/fastburger');
+    else if (id === 'on') navigate('/open-netizen');
     else if (id === 'bac') navigate('/boise-analog-club');
     else if (id === 'ricochet') navigate('/ricochet');
     else if (id === 'micron') navigate('/work-sharp-drill-doctor');
@@ -569,7 +572,8 @@ function App() {
 
   useEffect(() => {
     const pathname = location.pathname;
-    if (pathname === '/open-netizen') setActiveCaseStudy('on');
+    if (pathname === '/fastburger') setActiveCaseStudy('fastburger');
+    else if (pathname === '/open-netizen') setActiveCaseStudy('on');
     else if (pathname === '/boise-analog-club') setActiveCaseStudy('bac');
     else if (pathname === '/ricochet') setActiveCaseStudy('ricochet');
     else if (pathname === '/work-sharp-drill-doctor') setActiveCaseStudy('micron');
@@ -735,6 +739,8 @@ function App() {
             onNewsletterEmailChange={(ev) => setNewsletterEmail(ev.target.value)}
             onSubmitNewsletter={submitNewsletter}
           />
+        ) : activeCaseStudy === 'fastburger' ? (
+          <FastburgerProject key="fastburger" />
         ) : activeCaseStudy === 'bac' ? (
           <BoiseAnalogClubCaseStudy key="bac" />
         ) : activeCaseStudy === 'on' ? (
@@ -855,6 +861,10 @@ function App() {
                               src={project.secondaryImage}
                               alt={project.secondaryAlt}
                               className="home-project-layer__image"
+                              onError={(ev) => {
+                                ev.currentTarget.onerror = null;
+                                ev.currentTarget.src = project.secondaryFallbackImage || project.primaryImage;
+                              }}
                             />
                           </div>
                           <motion.div

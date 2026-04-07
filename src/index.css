@@ -650,6 +650,7 @@ ul {
 }
 
 .home-hero__title {
+  font-family: var(--font-display);
   font-weight: var(--font-display-weight) !important;
   font-synthesis: weight;
   font-size: clamp(56px, 12vw, 220px);

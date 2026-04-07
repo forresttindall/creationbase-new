@@ -1,0 +1,187 @@
+import { useEffect } from 'react';
+import { motion } from 'framer-motion';
+import DecryptText from './DecryptText';
+
+const BLACK = '#FFFFFF';
+const WHITE = '#111111';
+
+const FASTBURGER_IMAGES = [
+  { src: '/images/FASTBURGER MENU MOCKUP.png', alt: 'Fastburger menu mockup', className: 'fastburger-gallery__item fastburger-gallery__item--hero' },
+  { src: '/images/fastburger logo.jpg', alt: 'Fastburger logo identity', className: 'fastburger-gallery__item fastburger-gallery__item--square' },
+  { src: '/images/FASTBURGER MENU.png', alt: 'Fastburger printed menu', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
+  { src: '/images/fastburger box vertical.png', alt: 'Fastburger vertical packaging detail', className: 'fastburger-gallery__item fastburger-gallery__item--portrait' },
+  { src: '/images/fastburger a board.jpg', alt: 'Fastburger a-board signage', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
+  { src: '/images/fastburger tote vertical.png', alt: 'Fastburger vertical tote detail', className: 'fastburger-gallery__item fastburger-gallery__item--portrait' },
+  { src: '/images/fastburger typemark.jpg', alt: 'Fastburger typemark', className: 'fastburger-gallery__item fastburger-gallery__item--square' },
+  { src: '/images/fastburger.png', alt: 'Fastburger website mockup', className: 'fastburger-gallery__item fastburger-gallery__item--landscape' },
+];
+
+const FastburgerProject = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const adjustRowHeights = () => {
+      const rows = Array.from(document.querySelectorAll('.fastburger-row'));
+      rows.forEach((row) => {
+        const frames = Array.from(row.querySelectorAll('.fastburger-frame'));
+        const imgs = Array.from(row.querySelectorAll('.fastburger-frame img'));
+        if (frames.length !== imgs.length || frames.length === 0) return;
+        const heights = imgs.map((img, idx) => {
+          const frame = frames[idx];
+          const w = frame.getBoundingClientRect().width;
+          const naturalW = img.naturalWidth || w;
+          const naturalH = img.naturalHeight || w;
+          const ratio = naturalH / naturalW;
+          return Math.max(0, Math.round(w * ratio));
+        });
+        const minH = Math.min(...heights);
+        frames.forEach((frame) => {
+          frame.style.height = `${minH}px`;
+        });
+      });
+    };
+    const onLoad = (ev) => {
+      if (ev && ev.target && ev.target.tagName === 'IMG') adjustRowHeights();
+    };
+    const container = document;
+    container.addEventListener('load', onLoad, true);
+    window.addEventListener('resize', adjustRowHeights);
+    // initial adjust once images have layout
+    const initialAdjust = () => adjustRowHeights();
+    const raf = requestAnimationFrame(initialAdjust);
+    return () => {
+      container.removeEventListener('load', onLoad, true);
+      window.removeEventListener('resize', adjustRowHeights);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+  return (
+    <motion.div
+      className="fastburger-page"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      data-header-theme="light"
+      style={{ background: BLACK, color: WHITE, minHeight: '100vh' }}
+    >
+      <section data-header-theme="light" style={{ position: 'relative', overflow: 'hidden', background: BLACK, color: WHITE }}>
+        <div style={{ minHeight: '42vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
+          <h1 className="home-hero__title" style={{ marginBottom: 'auto' }}>
+            <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
+              <DecryptText as="span" text="QUALITY BURGERS," trigger="mount" delay={200} duration={900} />
+            </div>
+            <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
+              <DecryptText as="span" text="FAST" trigger="mount" delay={440} duration={900} />
+            </div>
+          </h1>
+        </div>
+      </section>
+
+      <section style={{ padding: 'var(--spacing-md) 10px var(--spacing-xxl)' }}>
+        <div style={{ height: 1, background: '#000000', marginLeft: -10, marginRight: -10 }} />
+        <div>
+          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', marginBottom: 20 }}>
+            <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>FASTBURGER</span>
+            <span style={{ margin: '0 14px' }}>•</span>
+            <span style={{ marginLeft: 14 }}>SCOPE( FULL BRAND IDENTITY SYSTEM, WEBSITE)</span>
+          </div>
+          <div className="fastburger-rows">
+            {FASTBURGER_IMAGES.reduce((rows, img, idx) => {
+              const rowIndex = Math.floor(idx / 2);
+              if (!rows[rowIndex]) rows[rowIndex] = [];
+              rows[rowIndex].push(img);
+              return rows;
+            }, []).map((row, rIdx) => {
+              const single = row.length === 1;
+              const rowClass = single ? 'fastburger-row fastburger-row--single' : (rIdx % 2 === 0 ? 'fastburger-row fastburger-row--left' : 'fastburger-row fastburger-row--right');
+              return (
+                <div key={`row-${rIdx}`} className={rowClass}>
+                  {row.map((image) => (
+                    <div key={image.src} className="fastburger-card">
+                      <div className="fastburger-frame">
+                        <img
+                          src={image.src}
+                          alt={image.alt}
+                          loading="lazy"
+                          decoding="async"
+                          onError={(ev) => {
+                            const card = ev.currentTarget.closest('.fastburger-card');
+                            if (card) card.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <style>{`
+        .fastburger-rows {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          padding-bottom: var(--spacing-xxl);
+        }
+
+        .fastburger-row {
+          display: flex;
+          gap: 10px;
+          width: 100%;
+        }
+
+        .fastburger-card {
+          border-radius: 12px;
+          overflow: hidden;
+          background: ${BLACK};
+        }
+
+        .fastburger-frame {
+          height: auto;
+        }
+
+        .fastburger-frame img {
+          width: 100%;
+          height: 100%;
+          display: block;
+          object-fit: cover;
+        }
+
+        .fastburger-row--left .fastburger-card:first-child { flex: 0 0 60%; }
+        .fastburger-row--left .fastburger-card:last-child { flex: 0 0 40%; }
+        .fastburger-row--right .fastburger-card:first-child { flex: 0 0 40%; }
+        .fastburger-row--right .fastburger-card:last-child { flex: 0 0 60%; }
+        .fastburger-row--single .fastburger-card { flex: 1 1 auto; }
+
+        @media (max-width: 1100px) {
+          .fastburger-frame { height: auto; }
+        }
+
+        @media (max-width: 700px) {
+          .fastburger-header {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          .fastburger-page .home-hero__title {
+            max-width: 100%;
+            white-space: normal;
+            overflow-wrap: anywhere;
+          }
+          .fastburger-row {
+            flex-direction: column;
+          }
+          .fastburger-card {
+            width: 100%;
+          }
+        }
+      `}</style>
+    </motion.div>
+  );
+};
+
+export default FastburgerProject;

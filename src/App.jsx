@@ -144,13 +144,6 @@ const projects = [
     year: "2025"
   },
   {
-    title: "Clearfeed",
-    category: "UI/UX Design & Dev",
-    image: "/images/clearfeed.png",
-    description: "Desktop application design in figma and dev in ELECTRON",
-    year: "2025"
-  },
-  {
     title: "Fastburger",
     category: "Brand & UI/UX Design",
     image: "/images/fastburger website mockup 1.webp",
@@ -158,9 +151,16 @@ const projects = [
     year: "2025"
   },
   {
+    title: "Clearfeed",
+    category: "UI/UX Design & Dev",
+    image: "/images/clearfeed.png",
+    description: "Desktop application design in figma and dev in ELECTRON",
+    year: "2025"
+  },
+  {
     title: "Arrowleaf",
     category: "UI/UX Design & Dev",
-    image: "/images/arrowleaf.png",
+    image: "/images/arrowleaf2.png",
     description: "Website design in figma and dev in REACT",
     year: "2024"
   },
@@ -168,6 +168,15 @@ const projects = [
 ];
 
 const graphicDesign = [
+
+    {
+    title: "Paradox Labs",
+    category: "Brand Identity",
+    image: "/images/paradoxlabscard.jpg",
+    description: "Logo and Visual Identity System",
+    year: "2025"
+  },
+
  {
     title: "Alias Zine",
     category: "Brand Identity",
@@ -203,17 +212,11 @@ const graphicDesign = [
 
   
 
-  {
-    title: "Paradox Labs",
-    category: "Brand Identity",
-    image: "/images/paradoxlabscard.jpg",
-    description: "Logo and Visual Identity System",
-    year: "2025"
-  },
+
   {
     title: "Moab Brewery",
     category: "Illustration",
-    image: "/images/beer-3.jpg",
+    image: "/images/beer-3.png",
     description: "Label illustration and design",
     year: "2025"
   },
@@ -227,7 +230,7 @@ const graphicDesign = [
   {
     title: "Boise Analog Club",
     category: "Brand Identity",
-    image: "/images/bac community mockup.jpg",
+    image: "/images/bac community mockup.png",
     description: "Promotional Poster Design",
     year: "2025"
   }
@@ -447,6 +450,53 @@ function App() {
     if (!redirect) return;
     navigate(redirect, { replace: true });
   }, [location.pathname, location.search, navigate]);
+
+  useEffect(() => {
+    if (location.pathname !== '/') return;
+    const adjustRowHeights = () => {
+      const isMobile = window.matchMedia('(max-width: 700px)').matches;
+      const rows = Array.from(document.querySelectorAll('.uiux-row'));
+      const maxRowH = Math.round(Math.max(260, Math.min(520, window.innerHeight * 0.6)));
+      const maxSingleRowH = Math.round(Math.max(340, Math.min(680, window.innerHeight * 0.72)));
+      rows.forEach((row) => {
+        const frames = Array.from(row.querySelectorAll('.uiux-frame'));
+        if (frames.length === 0) return;
+        if (isMobile) {
+          frames.forEach((frame) => {
+            frame.style.height = '';
+          });
+          return;
+        }
+        const imgs = Array.from(row.querySelectorAll('.uiux-frame img'));
+        if (frames.length !== imgs.length) return;
+        const isSingle = row.classList.contains('uiux-row--single');
+        const heights = imgs.map((img, idx) => {
+          const frame = frames[idx];
+          const w = frame.getBoundingClientRect().width;
+          const naturalW = img.naturalWidth || w;
+          const naturalH = img.naturalHeight || w;
+          const ratio = naturalH / naturalW;
+          return Math.max(0, Math.round(w * ratio));
+        });
+        const minH = Math.min(...heights);
+        const targetH = Math.min(minH, isSingle ? maxSingleRowH : maxRowH);
+        frames.forEach((frame) => {
+          frame.style.height = `${targetH}px`;
+        });
+      });
+    };
+    const onLoad = (ev) => {
+      if (ev && ev.target && ev.target.tagName === 'IMG') adjustRowHeights();
+    };
+    document.addEventListener('load', onLoad, true);
+    window.addEventListener('resize', adjustRowHeights);
+    const raf = requestAnimationFrame(adjustRowHeights);
+    return () => {
+      document.removeEventListener('load', onLoad, true);
+      window.removeEventListener('resize', adjustRowHeights);
+      cancelAnimationFrame(raf);
+    };
+  }, [location.pathname]);
 
   useEffect(() => {
     if (location.pathname !== '/') {
@@ -1335,58 +1385,44 @@ function App() {
                 <span className="small-text">Index (05)</span>
               </div>
               
-              <div className="project-grid project-grid--tight">
-                {projects.map((project, index) => (
-                  <motion.article 
-                    key={index} 
-                    className="project-card"
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-10%" }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
-                    onClick={() => setSelectedProject(project)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <div style={{ border: '1px solid var(--color-border)', overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: UI_DARK }}>
-                      <div style={{ 
-                        overflow: 'hidden',
-                        aspectRatio: '1/1',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: UI_DARK
-                      }}>
-                        <img 
-                          src={project.image} 
-                          alt={project.title}
-                          style={{ 
-                            width: 'auto',
-                            height: '100%',
-                            maxWidth: 'none',
-                            display: 'block',
-                            transition: 'all 0.5s ease'
-                          }}
-                          onMouseOver={(e) => {
-                            e.currentTarget.style.transform = 'scale(1.05)';
-                          }}
-                          onMouseOut={(e) => {
-                            e.currentTarget.style.transform = 'scale(1)';
-                          }}
-                        />
-                      </div>
-                      <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid var(--color-border)', padding: '10px 12px', alignItems: 'baseline' }}>
-                        <div>
-                          <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
-                          <p className="small-text" style={{ opacity: 0.7, minHeight: '2.4em', lineHeight: 1.2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{project.description}</p>
-                        </div>
-                        <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
-                          <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
-                          <div>{project.year}</div>
-                        </div>
-                      </div>
+              <div className="uiux-rows">
+                {projects.reduce((rows, project, idx) => {
+                  const rowIndex = Math.floor(idx / 2);
+                  if (!rows[rowIndex]) rows[rowIndex] = [];
+                  rows[rowIndex].push(project);
+                  return rows;
+                }, []).map((row, rIdx) => {
+                  const single = row.length === 1;
+                  const rowClass = single ? 'uiux-row uiux-row--single' : (rIdx % 2 === 0 ? 'uiux-row uiux-row--left' : 'uiux-row uiux-row--right');
+                  return (
+                    <div key={`uiux-row-${rIdx}`} className={rowClass}>
+                      {row.map((project) => (
+                        <motion.div
+                          key={project.title}
+                          className="uiux-card"
+                          initial={{ opacity: 0, y: 50 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: "-10%" }}
+                          transition={{ duration: 0.6, ease: "easeOut" }}
+                          onClick={() => setSelectedProject(project)}
+                        >
+                          <div className="uiux-frame">
+                            <img
+                              src={project.image}
+                              alt={project.title}
+                              loading="lazy"
+                              decoding="async"
+                              onError={(ev) => {
+                                const card = ev.currentTarget.closest('.uiux-card');
+                                if (card) card.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        </motion.div>
+                      ))}
                     </div>
-                  </motion.article>
-                ))}
+                  );
+                })}
               </div>
             </section>
 
@@ -1398,60 +1434,44 @@ function App() {
                 <span className="small-text">Index (06)</span>
               </div>
 
-              <div className="project-grid project-grid--tight" style={{ alignItems: 'start' }}>
-                {graphicDesign.map((project, i) => (
-                  <motion.article 
-                    key={i} 
-                    className="project-card"
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-10%" }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
-                    onClick={() => setSelectedProject(project)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <div style={{ border: '1px solid var(--color-border)', overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: UI_DARK }}>
-                      <div style={{ 
-                        overflow: 'hidden',
-                        aspectRatio: '1/1',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: UI_DARK
-                      }}>
-                        <img 
-                            src={project.image} 
-                            alt={project.title} 
-                            style={{ 
-                              width: '100%',
-                              height: '100%',
-                              maxWidth: '100%',
-                              objectFit: 'cover',
-                              display: 'block',
-                              transition: 'all 0.5s ease'
-                            }} 
-                            onMouseOver={(e) => {
-                              e.currentTarget.style.transform = 'scale(1.05)';
-                            }}
-                            onMouseOut={(e) => {
-                              e.currentTarget.style.transform = 'scale(1)';
-                            }}
-                            loading="lazy" 
-                          />
-                      </div>
-                      <div className="flex" style={{ justifyContent: 'space-between', borderTop: '1px solid var(--color-border)', padding: '10px 12px', alignItems: 'baseline' }}>
-                        <div>
-                          <h3 className="small-text" style={{ fontWeight: 'bold' }}>{project.title}</h3>
-                          <p className="small-text" style={{ opacity: 0.7, minHeight: '2.4em', lineHeight: 1.2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{project.description}</p>
-                        </div>
-                        <div className="small-text" style={{ textAlign: 'right', flexShrink: 0 }}>
-                          <div style={{ whiteSpace: 'nowrap' }}>{project.category}</div>
-                          <div>{project.year}</div>
-                        </div>
-                      </div>
+              <div className="uiux-rows">
+                {graphicDesign.reduce((rows, project, idx) => {
+                  const rowIndex = Math.floor(idx / 2);
+                  if (!rows[rowIndex]) rows[rowIndex] = [];
+                  rows[rowIndex].push(project);
+                  return rows;
+                }, []).map((row, rIdx) => {
+                  const single = row.length === 1;
+                  const rowClass = single ? 'uiux-row uiux-row--single' : (rIdx % 2 === 0 ? 'uiux-row uiux-row--left' : 'uiux-row uiux-row--right');
+                  return (
+                    <div key={`design-row-${rIdx}`} className={rowClass}>
+                      {row.map((project) => (
+                        <motion.div
+                          key={project.title}
+                          className="uiux-card"
+                          initial={{ opacity: 0, y: 50 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: "-10%" }}
+                          transition={{ duration: 0.6, ease: "easeOut" }}
+                          onClick={() => setSelectedProject(project)}
+                        >
+                          <div className="uiux-frame">
+                            <img
+                              src={project.image}
+                              alt={project.title}
+                              loading="lazy"
+                              decoding="async"
+                              onError={(ev) => {
+                                const card = ev.currentTarget.closest('.uiux-card');
+                                if (card) card.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        </motion.div>
+                      ))}
                     </div>
-                  </motion.article>
-                ))}
+                  );
+                })}
               </div>
             </section>
 

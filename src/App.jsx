@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useAnimationFrame, useMotionValue, useReducedM
 import { ArrowUpRight } from '@phosphor-icons/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BoiseAnalogClubCaseStudy from './components/BoiseAnalogClubCaseStudy';
-import OpenNetizenCaseStudy from './components/OpenNetizenCaseStudy';
+import OpenNetizenProject from './components/OpenNetizenProject';
 import Portraits from './components/Portraits';
 import StreetPhotography from './components/StreetPhotography';
 import CommercialPhotography from './components/CommercialPhotography';
@@ -914,7 +914,7 @@ function App() {
         ) : activeCaseStudy === 'bac' ? (
           <BoiseAnalogClubCaseStudy key="bac" />
         ) : activeCaseStudy === 'on' ? (
-          <OpenNetizenCaseStudy key="on" />
+          <OpenNetizenProject key="on" />
         ) : activeCaseStudy === 'ricochet' ? (
           <RicochetProject key="ricochet" />
         ) : activeCaseStudy === 'micron' ? (

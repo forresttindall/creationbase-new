@@ -4,16 +4,16 @@ import DecryptText from './DecryptText';
 
 const BLACK = '#FFFFFF';
 const WHITE = '#111111';
-const WORKSHARP_IMAGES = [
-  { src: '/images/_DSC6969.jpg', alt: 'Work Sharp and Drill Doctor hero photograph' },
-  { src: '/images/_DSC7142.jpg', alt: 'Work Sharp and Drill Doctor supporting photograph' },
-  { src: '/images/_DSC4026.jpg', alt: 'Work Sharp and Drill Doctor editorial select' },
-  { src: '/images/_DSC3935-2.jpg', alt: 'Work Sharp and Drill Doctor editorial select' },
-  { src: '/images/_DSC6840.jpg', alt: 'Work Sharp and Drill Doctor editorial select' },
-  { src: '/images/IMG_3004.jpg', alt: 'Work Sharp and Drill Doctor editorial select' },
+
+const OPEN_NETIZEN_IMAGES = [
+  { src: '/images/OPEN NETIZEN CARD.jpg', alt: 'Open Netizen card mockup' },
+  { src: '/images/OPEN NETIZEN WEBSITE MOCKUP.jpg', alt: 'Open Netizen website mockup' },
+  { src: '/images/OPEN NETIZEN.jpg', alt: 'Open Netizen identity mockup' },
+  { src: '/images/sign mockup open netizen.png', alt: 'Open Netizen signage mockup' },
+
 ];
 
-const MicronProject = () => {
+const OpenNetizenProject = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -24,10 +24,10 @@ const MicronProject = () => {
   useEffect(() => {
     if (readMoreOpen) {
       document.body.style.overflow = 'hidden';
-      document.body.classList.add('worksharp-info-open');
+      document.body.classList.add('open-netizen-info-open');
     } else {
       document.body.style.overflow = '';
-      document.body.classList.remove('worksharp-info-open');
+      document.body.classList.remove('open-netizen-info-open');
     }
     const handleNavClick = (ev) => {
       const el = ev.target.closest('.site-nav__menu-toggle');
@@ -40,17 +40,17 @@ const MicronProject = () => {
     document.addEventListener('click', handleNavClick, true);
     return () => {
       document.body.style.overflow = '';
-      document.body.classList.remove('worksharp-info-open');
+      document.body.classList.remove('open-netizen-info-open');
       document.removeEventListener('click', handleNavClick, true);
     };
   }, [readMoreOpen]);
 
   useEffect(() => {
     const adjustRowHeights = () => {
-      const rows = Array.from(document.querySelectorAll('.worksharp-row'));
+      const rows = Array.from(document.querySelectorAll('.open-netizen-row'));
       rows.forEach((row) => {
-        const frames = Array.from(row.querySelectorAll('.worksharp-frame'));
-        const imgs = Array.from(row.querySelectorAll('.worksharp-frame img'));
+        const frames = Array.from(row.querySelectorAll('.open-netizen-frame'));
+        const imgs = Array.from(row.querySelectorAll('.open-netizen-frame img'));
         if (frames.length !== imgs.length || frames.length === 0) return;
         const heights = imgs.map((img, idx) => {
           const frame = frames[idx];
@@ -69,12 +69,11 @@ const MicronProject = () => {
     const onLoad = (ev) => {
       if (ev && ev.target && ev.target.tagName === 'IMG') adjustRowHeights();
     };
-    const container = document;
-    container.addEventListener('load', onLoad, true);
+    document.addEventListener('load', onLoad, true);
     window.addEventListener('resize', adjustRowHeights);
     const raf = requestAnimationFrame(adjustRowHeights);
     return () => {
-      container.removeEventListener('load', onLoad, true);
+      document.removeEventListener('load', onLoad, true);
       window.removeEventListener('resize', adjustRowHeights);
       cancelAnimationFrame(raf);
     };
@@ -82,21 +81,18 @@ const MicronProject = () => {
 
   return (
     <motion.div
+      className="open-netizen-page"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       data-header-theme="light"
-      className="worksharp-page"
       style={{ background: BLACK, color: WHITE, minHeight: '100vh' }}
     >
       <section data-header-theme="light" style={{ position: 'relative', overflow: 'hidden', background: BLACK, color: WHITE }}>
         <div style={{ minHeight: '42vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
           <h1 className="home-hero__title" style={{ marginBottom: 'auto' }}>
             <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-              <DecryptText as="span" text="PRINT READY" trigger="mount" delay={200} duration={900} />
-            </div>
-            <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
-              <DecryptText as="span" text="PHOTOGRAPHY" trigger="mount" delay={440} duration={900} />
+              <DecryptText as="span" text="FREE THE WEB" trigger="mount" delay={200} duration={900} />
             </div>
           </h1>
         </div>
@@ -104,13 +100,13 @@ const MicronProject = () => {
 
       <button
         type="button"
-        className="worksharp-readmore"
+        className="open-netizen-readmore"
         aria-label="Read more"
         onClick={() => setReadMoreOpen(true)}
       >
-        <div className="worksharp-readmore__track">
+        <div className="open-netizen-readmore__track">
           {Array.from({ length: 24 }).map((_, i) => (
-            <span key={i} className="worksharp-readmore__item small-text">
+            <span key={i} className="open-netizen-readmore__item small-text">
               READ MORE •
             </span>
           ))}
@@ -122,7 +118,7 @@ const MicronProject = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="worksharp-overlay"
+          className="open-netizen-overlay"
           onClick={() => setReadMoreOpen(false)}
           style={{
             position: 'fixed',
@@ -141,7 +137,7 @@ const MicronProject = () => {
             initial={{ y: 12, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 12, opacity: 0 }}
-            className="worksharp-overlay__inner"
+            className="open-netizen-overlay__inner"
             onClick={(ev) => ev.stopPropagation()}
             style={{
               position: 'relative',
@@ -156,15 +152,15 @@ const MicronProject = () => {
             }}
           >
             <div className="small-text" style={{ marginBottom: 'var(--spacing-lg)', fontWeight: 'var(--font-mono-weight-bold)' }}>
-              WORK SHARP + DRILL DOCTOR •
+              OPEN NETIZEN •
             </div>
             <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)' }}>ROLE</div>
-            <div className="small-text" style={{ marginTop: 8 }}>Photographer</div>
+            <div className="small-text" style={{ marginTop: 8 }}>Brand + Web Designer + Developer</div>
             <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>SCOPE</div>
-            <div className="small-text" style={{ marginTop: 8 }}>Editorial product photography, lighting direction, post-production, magazine-ready selects</div>
+            <div className="small-text" style={{ marginTop: 8 }}>Identity system, website design and development, applications</div>
             <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>PROJECT</div>
             <div className="small-text" style={{ marginTop: 8 }}>
-              Editorial product photoshoot for Popular Mechanics featuring Work Sharp and Drill Doctor—built around clean lighting, rugged material detail, and a sharp magazine-ready product story.
+              Civic non-profit identity system and website—built to feel independent, principled, and accessible while staying grounded in the visual language of the open web.
             </div>
           </motion.div>
         </motion.div>
@@ -174,19 +170,19 @@ const MicronProject = () => {
         <div style={{ height: 1, background: '#000000', marginLeft: -10, marginRight: -10 }} />
         <div>
           <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', marginBottom: 20 }}>
-            <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>WORK SHARP + DRILL DOCTOR</span>
+            <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>OPEN NETIZEN</span>
             <span style={{ margin: '0 14px' }}>•</span>
-            <span style={{ marginLeft: 14 }}>SCOPE( POPULAR MECHANICS / PHOTOGRAPHY)</span>
+            <span style={{ marginLeft: 14 }}>SCOPE( BRAND IDENTITY SYSTEM, WEBSITE)</span>
           </div>
-          <div className="worksharp-rows">
-            {WORKSHARP_IMAGES.reduce((rows, img, idx) => {
+          <div className="open-netizen-rows">
+            {OPEN_NETIZEN_IMAGES.reduce((rows, img, idx) => {
               const rowIndex = Math.floor(idx / 2);
               if (!rows[rowIndex]) rows[rowIndex] = [];
               rows[rowIndex].push(img);
               return rows;
             }, []).map((row, rIdx) => {
               const single = row.length === 1;
-              const rowClass = single ? 'worksharp-row worksharp-row--single' : (rIdx % 2 === 0 ? 'worksharp-row worksharp-row--left' : 'worksharp-row worksharp-row--right');
+              const rowClass = single ? 'open-netizen-row open-netizen-row--single' : (rIdx % 2 === 0 ? 'open-netizen-row open-netizen-row--left' : 'open-netizen-row open-netizen-row--right');
               return (
                 <div key={`row-${rIdx}`} className={rowClass}>
                   {row.map((image) => {
@@ -194,16 +190,16 @@ const MicronProject = () => {
                     return (
                       <motion.div
                         key={image.src}
-                        className="worksharp-card"
+                        className="open-netizen-card"
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-10%" }}
                         transition={{ duration: 0.6, ease: "easeOut" }}
                       >
-                        <div className={`worksharp-frame${isLoaded ? ' worksharp-frame--loaded' : ' worksharp-frame--loading'}`}>
-                          <div className="worksharp-skeleton" aria-hidden="true" />
+                        <div className={`open-netizen-frame${isLoaded ? ' open-netizen-frame--loaded' : ' open-netizen-frame--loading'}`}>
+                          <div className="open-netizen-skeleton" aria-hidden="true" />
                           <img
-                            className="worksharp-img"
+                            className="open-netizen-img"
                             src={image.src}
                             alt={image.alt}
                             loading="lazy"
@@ -215,7 +211,7 @@ const MicronProject = () => {
                               });
                             }}
                             onError={(ev) => {
-                              const card = ev.currentTarget.closest('.worksharp-card');
+                              const card = ev.currentTarget.closest('.open-netizen-card');
                               if (card) card.style.display = 'none';
                             }}
                           />
@@ -231,14 +227,14 @@ const MicronProject = () => {
       </section>
 
       <style>{`
-        .worksharp-rows {
+        .open-netizen-rows {
           display: flex;
           flex-direction: column;
           gap: 10px;
           padding-bottom: var(--spacing-xxl);
         }
 
-        .worksharp-readmore {
+        .open-netizen-readmore {
           position: fixed;
           left: 50%;
           bottom: 78px;
@@ -256,29 +252,29 @@ const MicronProject = () => {
           z-index: 402;
           pointer-events: auto;
         }
-        .worksharp-readmore__track {
+        .open-netizen-readmore__track {
           display: inline-flex;
           align-items: center;
           gap: 24px;
           white-space: nowrap;
           will-change: transform;
-          animation: worksharpMarquee 12s linear infinite;
+          animation: openNetizenMarquee 12s linear infinite;
           padding: 0 12px;
         }
-        .worksharp-readmore__item {
+        .open-netizen-readmore__item {
           letter-spacing: 0.05em;
         }
-        @keyframes worksharpMarquee {
+        @keyframes openNetizenMarquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
 
-        body.worksharp-info-open .worksharp-readmore { display: none; }
-        body.worksharp-info-open .site-nav__menu-label {
+        body.open-netizen-info-open .open-netizen-readmore { display: none; }
+        body.open-netizen-info-open .site-nav__menu-label {
           position: relative;
           color: transparent;
         }
-        body.worksharp-info-open .site-nav__menu-label::after {
+        body.open-netizen-info-open .site-nav__menu-label::after {
           content: 'Close';
           position: absolute;
           inset: 0;
@@ -289,24 +285,26 @@ const MicronProject = () => {
           pointer-events: none;
         }
 
-        .worksharp-row {
+        .open-netizen-row {
           display: flex;
           gap: 10px;
           width: 100%;
+          box-sizing: border-box;
         }
 
-        .worksharp-card {
+        .open-netizen-card {
           border-radius: 12px;
           overflow: hidden;
           background: ${BLACK};
+          min-width: 0;
         }
 
-        .worksharp-frame {
+        .open-netizen-frame {
           height: auto;
           position: relative;
         }
 
-        .worksharp-skeleton {
+        .open-netizen-skeleton {
           position: absolute;
           inset: 0;
           background: linear-gradient(
@@ -316,17 +314,17 @@ const MicronProject = () => {
             rgba(17, 17, 17, 0.06) 100%
           );
           background-size: 200% 100%;
-          animation: worksharpSkeleton 1.2s ease-in-out infinite;
+          animation: openNetizenSkeleton 1.2s ease-in-out infinite;
           opacity: 1;
           transition: opacity 260ms ease;
         }
 
-        @keyframes worksharpSkeleton {
+        @keyframes openNetizenSkeleton {
           0% { background-position: 200% 0; }
           100% { background-position: -200% 0; }
         }
 
-        .worksharp-img {
+        .open-netizen-img {
           width: 100%;
           height: 100%;
           display: block;
@@ -337,41 +335,56 @@ const MicronProject = () => {
           transition: opacity 380ms ease, filter 520ms ease, transform 520ms ease;
         }
 
-        .worksharp-frame--loaded .worksharp-skeleton {
+        .open-netizen-frame--loaded .open-netizen-skeleton {
           opacity: 0;
         }
 
-        .worksharp-frame--loaded .worksharp-img {
+        .open-netizen-frame--loaded .open-netizen-img {
           opacity: 1;
           filter: blur(0);
           transform: scale(1);
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .worksharp-skeleton {
+          .open-netizen-skeleton {
             animation: none;
           }
-          .worksharp-img {
+          .open-netizen-img {
             transition: none;
           }
         }
 
-        .worksharp-row--left .worksharp-card:first-child { flex: 0 0 60%; }
-        .worksharp-row--left .worksharp-card:last-child { flex: 0 0 40%; }
-        .worksharp-row--right .worksharp-card:first-child { flex: 0 0 40%; }
-        .worksharp-row--right .worksharp-card:last-child { flex: 0 0 60%; }
-        .worksharp-row--single .worksharp-card { flex: 1 1 auto; }
+        .open-netizen-row--left .open-netizen-card:first-child { flex: 3 1 0; }
+        .open-netizen-row--left .open-netizen-card:last-child { flex: 2 1 0; }
+        .open-netizen-row--right .open-netizen-card:first-child { flex: 2 1 0; }
+        .open-netizen-row--right .open-netizen-card:last-child { flex: 3 1 0; }
+        .open-netizen-row--single .open-netizen-card { flex: 1 1 auto; }
 
         @media (max-width: 700px) {
-          .worksharp-readmore {
+          .open-netizen-page .home-hero__title {
+            max-width: 100%;
+            white-space: normal;
+            overflow-wrap: anywhere;
+          }
+          .open-netizen-readmore {
             bottom: 72px;
             width: calc(100% - 20px);
           }
-          .worksharp-row {
+          .open-netizen-row {
             flex-direction: column;
           }
-          .worksharp-card {
+          .open-netizen-row--left .open-netizen-card:first-child,
+          .open-netizen-row--left .open-netizen-card:last-child,
+          .open-netizen-row--right .open-netizen-card:first-child,
+          .open-netizen-row--right .open-netizen-card:last-child,
+          .open-netizen-row--single .open-netizen-card {
+            flex: 0 0 auto;
+          }
+          .open-netizen-card {
             width: 100%;
+          }
+          .open-netizen-img {
+            height: auto;
           }
         }
       `}</style>
@@ -379,4 +392,4 @@ const MicronProject = () => {
   );
 };
 
-export default MicronProject;
+export default OpenNetizenProject;

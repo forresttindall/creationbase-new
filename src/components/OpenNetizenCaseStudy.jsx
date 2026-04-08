@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Broadcast, Code, GlobeHemisphereWest, ShieldCheck, UsersThree, WifiHigh } from '@phosphor-icons/react';
+import DecryptText from './DecryptText';
 
 const sections = [
   "0.0 VISUAL SYSTEM NOTES",
@@ -337,18 +338,13 @@ const OpenNetizenCaseStudy = () => {
               <p style={{ fontFamily: "'SF Mono', monospace", fontSize: 11, color: BRAND_WHITE, letterSpacing: 2, margin: "0 0 14px", textTransform: "uppercase" }}>
                 FREE THE WEB
               </p>
-              <h1 style={{
-                fontFamily: "'PP Neue Machina', 'Neue Machina', sans-serif",
-                fontWeight: 400,
-                fontSize: "clamp(48px, 6vw, 96px)",
-                color: BRAND_WHITE,
-                letterSpacing: "-0.04em",
-                lineHeight: 0.85,
-                margin: 0,
-                textTransform: 'uppercase',
-                whiteSpace: isMobile ? 'normal' : 'nowrap'
-              }}>
-                Open Netizen
+              <h1 className="home-hero__title" style={{ margin: 0, color: BRAND_WHITE }}>
+                <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
+                  <DecryptText as="span" text="OPEN" trigger="mount" delay={200} duration={900} />
+                </div>
+                <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
+                  <DecryptText as="span" text="NETIZEN" trigger="mount" delay={440} duration={900} />
+                </div>
               </h1>
             </div>
           </div>

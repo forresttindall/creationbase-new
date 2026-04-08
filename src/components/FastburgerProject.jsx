@@ -170,6 +170,21 @@ const FastburgerProject = () => {
             <div className="small-text" style={{ marginTop: 8 }}>
               Comprehensive brand identity system with packaging assets and website design and development—logo suite, packaging and signage applications, merchandise, and responsive web interface.
             </div>
+            <a
+              href="https://fastburger.vercel.app/"
+              target="_blank"
+              rel="noreferrer"
+              className="small-text"
+              style={{
+                marginTop: 'var(--spacing-lg)',
+                display: 'inline-flex',
+                color: '#111111',
+                textDecoration: 'none',
+                fontWeight: 'var(--font-mono-weight-bold)',
+              }}
+            >
+              SEE LIVE SITE
+            </a>
           </motion.div>
         </motion.div>
       )}

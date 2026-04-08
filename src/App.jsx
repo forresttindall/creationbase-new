@@ -291,7 +291,9 @@ const ProjectModal = ({ project, onClose }) => {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        backgroundColor: 'rgba(191, 191, 191, 0.45)',
+        backdropFilter: 'blur(30px)',
+        WebkitBackdropFilter: 'blur(30px)',
         zIndex: 1000,
         display: 'flex',
         alignItems: 'center',
@@ -316,50 +318,73 @@ const ProjectModal = ({ project, onClose }) => {
           position: 'relative'
         }}
       >
-        <button 
-          onClick={onClose}
+        <div
           style={{
             position: 'absolute',
-            top: '-40px',
+            top: '-46px',
             right: 0,
-            background: 'none',
-            border: 'none',
-            color: UI_LIGHT,
-            fontSize: 'var(--fs-lg)',
-            cursor: 'pointer',
-            fontFamily: 'var(--font-mono)',
-            fontWeight: 'var(--font-mono-weight)',
-            textTransform: 'uppercase'
+            padding: 4,
+            background: 'rgba(191, 191, 191, 0.45)',
+            borderRadius: 12,
+            backdropFilter: 'blur(30px)',
+            WebkitBackdropFilter: 'blur(30px)',
           }}
         >
-          [CLOSE]
-        </button>
-        <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <img 
-            src={project.image} 
-            alt={project.title}
-            style={{ 
-              maxWidth: '100%', 
-              maxHeight: '80vh', 
-              objectFit: 'contain',
-              display: 'block'
-            }} 
-          />
+          <button 
+            onClick={onClose}
+            style={{
+              background: 'rgba(255, 255, 255, 0.85)',
+              border: 'none',
+              borderRadius: 10,
+              padding: '10px 16px',
+              color: UI_LIGHT,
+              fontSize: 'calc(var(--fs-xs) + 3px)',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-mono)',
+              fontWeight: 'var(--font-mono-weight)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              backdropFilter: 'blur(30px)',
+              WebkitBackdropFilter: 'blur(30px)',
+            }}
+          >
+            Close
+          </button>
         </div>
-        <div style={{ 
-          marginTop: 'var(--spacing-md)', 
-          color: UI_LIGHT, 
-          display: 'flex', 
-          justifyContent: 'space-between',
-          alignItems: 'flex-start'
-        }}>
-          <div>
-            <h2 className="section-title" style={{ fontSize: 'var(--fs-lg)', marginBottom: 'var(--spacing-xs)', color: UI_LIGHT }}>{project.title}</h2>
-            <p className="small-text" style={{ opacity: 0.8 }}>{project.description}</p>
-          </div>
-          <div className="small-text" style={{ textAlign: 'right' }}>
-            <div>{project.category}</div>
-            <div>{project.year}</div>
+        <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center' }}>
+          <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', maxWidth: '100%' }}>
+            <img 
+              src={project.image} 
+              alt={project.title}
+              style={{ 
+                maxWidth: '100%', 
+                maxHeight: '80vh', 
+                objectFit: 'contain',
+                display: 'block'
+              }} 
+            />
+            <div className="home-project-layer__meta" style={{ marginTop: 'var(--spacing-md)', color: UI_LIGHT, padding: 0 }}>
+              <div className="home-project-layer__copy">
+                <h3
+                  className="home-project-layer__inline-title"
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontWeight: 'var(--font-mono-weight-bold)',
+                    fontSize: 'var(--fs-sm)',
+                    lineHeight: 1.2,
+                    color: UI_LIGHT,
+                    margin: 0,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.02em',
+                  }}
+                >
+                  {`${project.title} •`}
+                </h3>
+                <div className="home-project-layer__details">
+                  <span>{`SCOPE( ${project.category} )`}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </motion.div>

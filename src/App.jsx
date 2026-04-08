@@ -169,7 +169,7 @@ const projects = [
 
 const graphicDesign = [
  {
-    title: "Analogix Zine",
+    title: "Alias Zine",
     category: "Brand Identity",
     image: "/images/gif.gif",
     description: "Logo Design, Animation Design",
@@ -186,7 +186,7 @@ const graphicDesign = [
   {
     title: "Boise Analog Club",
     category: "Brand Identity",
-    image: "/images/bac gen x soft club.png",
+    image: "/images/bac soft club mockup.jpg",
     description: "Social Media Promotional Asset Design",
     year: "2026"
   },
@@ -225,7 +225,7 @@ const graphicDesign = [
   {
     title: "Boise Analog Club",
     category: "Brand Identity",
-    image: "/images/bac.png",
+    image: "/images/bac community mockup.jpg",
     description: "Promotional Poster Design",
     year: "2025"
   }
@@ -1421,9 +1421,10 @@ function App() {
                             src={project.image} 
                             alt={project.title} 
                             style={{ 
-                              width: 'auto',
+                              width: '100%',
                               height: '100%',
-                              maxWidth: 'none',
+                              maxWidth: '100%',
+                              objectFit: 'cover',
                               display: 'block',
                               transition: 'all 0.5s ease'
                             }} 

@@ -153,7 +153,7 @@ const projects = [
   {
     title: "Fastburger",
     category: "Brand & UI/UX Design",
-    image: "/images/fastburger box.webp",
+    image: "/images/fastburger website mockup 1.webp",
     description: "Restaurant website design in figma and dev in REACT",
     year: "2025"
   },

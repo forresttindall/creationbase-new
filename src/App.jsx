@@ -191,6 +191,7 @@ const graphicDesign = [
     year: "2026"
   },
  
+  /*
   {
     title: "Creationbase",
     category: "Asset Design",
@@ -198,6 +199,7 @@ const graphicDesign = [
     description: "Digital assets for launch campaign.",
     year: "2025"
   },
+  */
 
   
 

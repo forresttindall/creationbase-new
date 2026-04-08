@@ -612,6 +612,58 @@ function App() {
   const navScrollSpinReverse = useTransform(navScrollSpin, (v) => -v);
   const navScrollRotate = navScrollSpin;
   const navScrollRotateReverse = navScrollSpinReverse;
+  const [cursorEnabled, setCursorEnabled] = useState(false);
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  const cursorXSpring = useSpring(cursorX, { damping: 30, stiffness: 500, mass: 0.2 });
+  const cursorYSpring = useSpring(cursorY, { damping: 30, stiffness: 500, mass: 0.2 });
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setCursorEnabled(false);
+      return;
+    }
+    const pointerQuery = window.matchMedia('(pointer: fine)');
+    const hoverQuery = window.matchMedia('(hover: hover)');
+    const update = () => setCursorEnabled(pointerQuery.matches && hoverQuery.matches);
+    update();
+    if (pointerQuery.addEventListener) {
+      pointerQuery.addEventListener('change', update);
+      hoverQuery.addEventListener('change', update);
+      return () => {
+        pointerQuery.removeEventListener('change', update);
+        hoverQuery.removeEventListener('change', update);
+      };
+    }
+    pointerQuery.addListener(update);
+    hoverQuery.addListener(update);
+    return () => {
+      pointerQuery.removeListener(update);
+      hoverQuery.removeListener(update);
+    };
+  }, [reduceMotion]);
+
+  useEffect(() => {
+    if (!cursorEnabled) return;
+    const onMove = (ev) => {
+      cursorX.set(ev.clientX);
+      cursorY.set(ev.clientY);
+    };
+    const onLeave = () => {
+      cursorX.set(-100);
+      cursorY.set(-100);
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+    window.addEventListener('pointerdown', onMove, { passive: true });
+    window.addEventListener('blur', onLeave);
+    document.addEventListener('mouseleave', onLeave);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerdown', onMove);
+      window.removeEventListener('blur', onLeave);
+      document.removeEventListener('mouseleave', onLeave);
+    };
+  }, [cursorEnabled, cursorX, cursorY]);
 
   useAnimationFrame((_, delta) => {
     if (reduceMotion) return;
@@ -656,6 +708,13 @@ function App() {
 
   return (
     <div className="app">
+      {cursorEnabled && (
+        <motion.div
+          aria-hidden="true"
+          className="cursor-follower"
+          style={{ x: cursorXSpring, y: cursorYSpring }}
+        />
+      )}
       <motion.header 
         className="site-header"
         data-mobile-nav-open={mobileNavOpen ? 'true' : 'false'}

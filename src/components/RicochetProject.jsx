@@ -41,7 +41,7 @@ const RicochetProject = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)', gap: 'var(--spacing-xl)', alignItems: 'start' }}>
             <div style={{ border: `1px solid ${GRAY2}`, overflow: 'hidden' }}>
               <img
-                src="/images/ricochet mockup.png"
+                src="/images/ricochet mockup.webp"
                 alt="Ricochet UI mockup"
                 style={{ width: '100%', height: 'auto', display: 'block' }}
               />

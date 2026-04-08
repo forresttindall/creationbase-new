@@ -38,7 +38,7 @@ const INDEX01_PROJECTS = [
     id: 'ricochet',
     titleLines: ['Ricochet'],
     scope: 'Scope(Brand, Website)',
-    primaryImage: '/images/ricochet mockup.png',
+    primaryImage: '/images/ricochet mockup.webp',
     primaryAlt: 'Ricochet project mockup',
     secondaryImage: '/images/Exportable tables.png',
     secondaryAlt: 'Ricochet exportable tables interface',
@@ -132,7 +132,7 @@ const projects = [
   {
     title: "Ricochet",
     category: "UI/UX Design",
-    image: "/images/ricochet mockup.png",
+    image: "/images/ricochet mockup.webp",
     description: "SaaS website design and prototyping at Superbase",
     year: "2026"
   },
@@ -160,7 +160,7 @@ const projects = [
   {
     title: "Arrowleaf",
     category: "UI/UX Design & Dev",
-    image: "/images/arrowleaf2.png",
+    image: "/images/arrowleaf2.webp",
     description: "Website design in figma and dev in REACT",
     year: "2024"
   },
@@ -195,7 +195,7 @@ const graphicDesign = [
   {
     title: "Boise Analog Club",
     category: "Brand Identity",
-    image: "/images/bac soft club mockup.jpg",
+    image: "/images/bac soft club mockup.webp",
     description: "Social Media Promotional Asset Design",
     year: "2026"
   },
@@ -216,7 +216,7 @@ const graphicDesign = [
   {
     title: "Moab Brewery",
     category: "Illustration",
-    image: "/images/beer-3.png",
+    image: "/images/beer-3.webp",
     description: "Label illustration and design",
     year: "2025"
   },
@@ -230,7 +230,7 @@ const graphicDesign = [
   {
     title: "Boise Analog Club",
     category: "Brand Identity",
-    image: "/images/bac community mockup.png",
+    image: "/images/bac community mockup.webp",
     description: "Promotional Poster Design",
     year: "2025"
   }
@@ -262,7 +262,7 @@ const testimonials = [
 ];
 
 const FOOTER_CAROUSEL_IMAGES = [
-  { src: '/images/ricochet mockup.png', alt: 'Ricochet footer carousel image' },
+  { src: '/images/ricochet mockup.webp', alt: 'Ricochet footer carousel image' },
   { src: '/images/amore mockup.png', alt: 'Amore footer carousel image' },
   { src: '/images/clearfeed.png', alt: 'Clearfeed footer carousel image' },
   { src: '/images/gif.gif', alt: 'Graphic design footer carousel image' },

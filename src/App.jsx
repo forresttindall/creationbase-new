@@ -40,7 +40,7 @@ const INDEX01_PROJECTS = [
     scope: 'Scope(Brand, Website)',
     primaryImage: '/images/ricochet mockup.webp',
     primaryAlt: 'Ricochet project mockup',
-    secondaryImage: '/images/Exportable tables.png',
+    secondaryImage: '/images/Exportable tables.PNG',
     secondaryAlt: 'Ricochet exportable tables interface',
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },
@@ -75,6 +75,10 @@ const SiteFooter = ({ onContactClick, reserveRightRail = false }) => {
     }
     return arr;
   }, []);
+  const footerImageMarqueeDuration = useMemo(() => {
+    const seconds = Math.max(34, shuffledFooterImages.length * 2);
+    return `${seconds}s`;
+  }, [shuffledFooterImages.length]);
   return (
     <motion.section
       data-header-theme="light"
@@ -110,7 +114,7 @@ const SiteFooter = ({ onContactClick, reserveRightRail = false }) => {
         </div>
 
         <div className="footer-marquee footer-marquee--images full-bleed">
-          <div className="footer-marquee__track">
+          <div className="footer-marquee__track" style={{ '--footer-marquee-duration': footerImageMarqueeDuration }}>
             {[...shuffledFooterImages, ...shuffledFooterImages].map((item, index) => (
               <div key={`${item.src}-${index}`} className="footer-carousel-card">
                 <img src={item.src} alt={item.alt} className="footer-carousel-card__image" loading="lazy" />
@@ -236,6 +240,31 @@ const graphicDesign = [
   }
 ];
 
+const COMMERCIAL_PHOTOGRAPHY_IMAGES = [
+  '/images/_DSC4685-2.webp',
+  '/images/_DSC4390.webp',
+  '/images/_DSC2842.webp',
+  
+  '/images/_DSC3168.webp',
+  
+  '/images/_DSC1954-2.webp',
+  '/images/_DSC6942.webp',
+  
+
+  '/images/_DSC4899.webp',
+ 
+  '/images/_DSC2016.webp',
+  '/images/_DSC9182.webp',
+];
+
+const photography = COMMERCIAL_PHOTOGRAPHY_IMAGES.map((image, idx) => ({
+  title: `Commercial ${String(idx + 1).padStart(2, '0')}`,
+  category: 'Commercial Photography',
+  image,
+  description: 'Commercial photography—product, environment, and brand storytelling.',
+  year: '2026',
+}));
+
 
 const testimonials = [
   {
@@ -279,6 +308,7 @@ const FOOTER_CAROUSEL_IMAGES = [
   { src: '/images/fastburger typemark.webp', alt: 'Fastburger typemark footer carousel image' },
   { src: '/images/fastburger website mockup 1.webp', alt: 'Fastburger website mockup footer carousel image' },
   { src: '/images/fastburger website mockup 2.webp', alt: 'Fastburger website mockup footer carousel image' },
+  ...COMMERCIAL_PHOTOGRAPHY_IMAGES.map((src) => ({ src, alt: 'Commercial photography footer carousel image' })),
 ];
 
 const ProjectModal = ({ project, onClose }) => {
@@ -629,10 +659,6 @@ function App() {
   const goToSection = (id) => {
     setMobileNavOpen(false);
     pendingHomeScrollRestoreRef.current = false;
-    if (id === 'photo') {
-      openCaseStudy('commercial');
-      return;
-    }
     if (location.pathname !== '/') {
       navigate(`/#${id}`);
       return;
@@ -1475,6 +1501,55 @@ function App() {
               </div>
             </section>
 
+            <section id="photo" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
+              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
+                  <DecryptText as="span" text="PHOTOGRAPHY" trigger="inView" duration={800} />
+                </h2>
+                <span className="small-text">Index (07)</span>
+              </div>
+
+              <div className="uiux-rows">
+                {photography.reduce((rows, project, idx) => {
+                  const rowIndex = Math.floor(idx / 2);
+                  if (!rows[rowIndex]) rows[rowIndex] = [];
+                  rows[rowIndex].push(project);
+                  return rows;
+                }, []).map((row, rIdx) => {
+                  const single = row.length === 1;
+                  const rowClass = single ? 'uiux-row uiux-row--single' : (rIdx % 2 === 0 ? 'uiux-row uiux-row--left' : 'uiux-row uiux-row--right');
+                  return (
+                    <div key={`photo-row-${rIdx}`} className={rowClass}>
+                      {row.map((project) => (
+                        <motion.div
+                          key={project.image}
+                          className="uiux-card"
+                          initial={{ opacity: 0, y: 50 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: "-10%" }}
+                          transition={{ duration: 0.6, ease: "easeOut" }}
+                          onClick={() => setSelectedProject(project)}
+                        >
+                          <div className="uiux-frame">
+                            <img
+                              src={project.image}
+                              alt={project.title}
+                              loading="lazy"
+                              decoding="async"
+                              onError={(ev) => {
+                                const card = ev.currentTarget.closest('.uiux-card');
+                                if (card) card.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+
             <section style={{ 
               padding: '0',
               background: UI_DARK,
@@ -1495,7 +1570,14 @@ function App() {
                   </div>
                 </div>
 
-                <div className="studio-portrait-wrapper studio-practice-image" style={{ padding: '10px', boxSizing: 'border-box' }}>
+                <motion.div
+                  className="studio-portrait-wrapper studio-practice-image"
+                  style={{ padding: '10px', boxSizing: 'border-box' }}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-10%" }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                >
                   <img 
                     src="/images/me1.jpg" 
                     alt="Portrait" 
@@ -1529,7 +1611,7 @@ function App() {
                     <span className="studio-portrait-label__single">Figure 01. Portrait</span>
                     <span className="studio-portrait-label__multi">Figure 01. Portraits</span>
                   </div>
-                </div>
+                </motion.div>
 
                 <div className="studio-typography-column studio-practice-body">
                   <div>
@@ -1640,7 +1722,9 @@ function App() {
                           <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
                             <div className="small-text">COMMERCIAL PHOTOGRAPHY</div>
                             <motion.button
-                              onClick={() => openCaseStudy('commercial')}
+                              onClick={() => {
+                                goToSection('photo');
+                              }}
                               whileHover={{ opacity: 0.7 }}
                               style={{
                                 background: 'none',

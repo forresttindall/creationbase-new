@@ -255,7 +255,7 @@ ul {
   display: flex;
   align-items: center;
   gap: 0;
-  animation: footer-marquee 34s linear infinite;
+  animation: footer-marquee var(--footer-marquee-duration, 34s) linear infinite;
   will-change: transform;
 }
 

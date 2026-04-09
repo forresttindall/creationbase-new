@@ -10,6 +10,9 @@ const WORKSHARP_IMAGES = [
   { src: '/images/_DSC4026.jpg', alt: 'Work Sharp and Drill Doctor editorial select' },
   { src: '/images/_DSC3935-2.jpg', alt: 'Work Sharp and Drill Doctor editorial select' },
   { src: '/images/_DSC6840.jpg', alt: 'Work Sharp and Drill Doctor editorial select' },
+  { src: '/images/_DSC6814.webp', alt: 'Work Sharp and Drill Doctor editorial select' },
+  { src: '/images/_DSC6836.webp', alt: 'Work Sharp and Drill Doctor editorial select' },
+  { src: '/images/_DSC6908.webp', alt: 'Work Sharp and Drill Doctor editorial select' },
   { src: '/images/IMG_3004.jpg', alt: 'Work Sharp and Drill Doctor editorial select' },
 ];
 

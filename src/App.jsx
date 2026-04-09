@@ -1718,37 +1718,6 @@ function App() {
                           </div>
                         </div>
 
-                        <div className="passion-projects-item passion-projects-item--full">
-                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
-                            <div className="small-text">COMMERCIAL PHOTOGRAPHY</div>
-                            <motion.button
-                              onClick={() => {
-                                goToSection('photo');
-                              }}
-                              whileHover={{ opacity: 0.7 }}
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                padding: 0,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 'var(--spacing-sm)',
-                                fontFamily: 'var(--font-mono)',
-                                fontWeight: 'var(--font-mono-weight)',
-                                fontSize: 'var(--fs-sm)',
-                                textTransform: 'uppercase',
-                                color: UI_LIGHT,
-                              }}
-                            >
-                              [VIEW]
-                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
-                            </motion.button>
-                          </div>
-                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                            Commercial image work focused on products, environment, and brand storytelling.
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>

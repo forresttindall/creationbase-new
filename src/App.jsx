@@ -968,11 +968,11 @@ function App() {
                   fontSynthesis: 'weight',
                   marginBottom: 'auto'
                 }}>
-                  <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-                    <DecryptText as="span" text="Visual System" trigger="mount" delay={200} duration={900} />
+                  <div className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
+                    <DecryptText as="span" text="Fullstack creative" trigger="mount" delay={200} duration={900} />
                   </div>
-                  <div style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
-                    <DecryptText as="span" text="Design + Dev" trigger="mount" delay={440} duration={900} />
+                  <div className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
+                    <DecryptText as="span" text="for brands and teams" trigger="mount" delay={440} duration={900} />
                   </div>
                 </h1>
                 <motion.div 
@@ -991,11 +991,11 @@ function App() {
                     <div className="home-hero__identity-desktop" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Forrest Tindall Studio</span>
                       <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: '#111111', display: 'inline-block', flex: '0 0 auto' }} />
-                      <span>(Design Studio and Digital Partner)</span>
+                      <span>(CREATIVE STUDIO AND DIGITAL PARTNER)</span>
                     </div>
                     <div className="home-hero__identity-mobile">
                       <div style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Forrest Tindall Studio •</div>
-                      <div>(Design + Dev Studio and Digital Partner)</div>
+                      <div>(CREATIVE STUDIO AND DIGITAL PARTNER)</div>
                     </div>
                   </div>
                   <div className="small-text home-hero__services" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2, display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: '12px', alignItems: 'start' }}>

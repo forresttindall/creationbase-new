@@ -1001,9 +1001,9 @@ function App() {
                   <div className="small-text home-hero__services" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2, display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: '12px', alignItems: 'start' }}>
                     <div>I HELP YOU:</div>
                     <div>
-                      <div>— Define your visual system</div>
-                      <div>— Design your digital presence</div>
-                      <div>— Deploy your brand online</div>
+                      <div>— Visual System Design</div>
+                      <div>— Web Development</div>
+                      <div>— Photography</div>
                     </div>
                   </div>
                   <div className="small-text home-hero__availability" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2, justifySelf: 'end', textAlign: 'right' }}>

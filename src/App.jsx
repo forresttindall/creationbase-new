@@ -972,7 +972,7 @@ function App() {
                     <DecryptText as="span" text="Fullstack creative" trigger="mount" delay={200} duration={900} />
                   </div>
                   <div className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
-                    <DecryptText as="span" text="for brands and teams" trigger="mount" delay={440} duration={900} />
+                    <DecryptText as="span" text="for brands + teams" trigger="mount" delay={440} duration={900} />
                   </div>
                 </h1>
                 <motion.div 
@@ -1374,7 +1374,7 @@ function App() {
                       maxWidth: '90%',
                     }}
                   >
-                    Full-stack creative for brands and teams. I design visual systems, build fast websites, and create photography that supports the story.
+                    Full-stack creative for brands + teams. I design visual systems, build fast websites, and create photography that supports the story.
                   </p>
                   <div className="small-text" style={{ marginTop: 'var(--spacing-md)', color: UI_LIGHT }}>
                     Available contract, project-based, or retainer.

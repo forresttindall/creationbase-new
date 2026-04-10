@@ -1144,7 +1144,7 @@ ul {
 
 @media (max-width: 900px) {
   .home-hero__title {
-    font-size: clamp(28px, 7.6vw, 50px);
+    font-size: clamp(32px, 9vw, 58px);
     white-space: normal;
     overflow-wrap: break-word;
   }

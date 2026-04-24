@@ -5,13 +5,16 @@ import DecryptText from './DecryptText';
 const BLACK = '#FFFFFF';
 const WHITE = '#111111';
 
-const WIM_IMAGES = [
+const WIM_IMAGES = 
+[{ src: '/images/wim software.png', alt: 'WIM software mockup' },
+   { src: '/images/wim typemark.jpg', alt: 'WIM typemark' },
+    { src: '/images/wim logomark.jpg', alt: 'WIM logomark' },
   { src: '/images/wim safety shirt.jpg', alt: 'WIM safety shirt mockup' },
-  { src: '/images/wim typemark.jpg', alt: 'WIM typemark' },
-  { src: '/images/wim logomark.jpg', alt: 'WIM logomark' },
+ 
+ { src: '/images/wim truck mockup.jpg', alt: 'WIM truck mockup' },
   { src: '/images/wim HAT MOCKUP.png', alt: 'WIM hat mockup' },
   
-  { src: '/images/wim truck mockup.jpg', alt: 'WIM truck mockup' },
+  
 ];
 
 const WimProject = () => {
@@ -158,7 +161,7 @@ const WimProject = () => {
             <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)' }}>ROLE</div>
             <div className="small-text" style={{ marginTop: 8 }}>BRAND + IDENTITY DESIGN</div>
             <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>SCOPE</div>
-            <div className="small-text" style={{ marginTop: 8 }}>IDENTITY SYSTEM, UNIFORM, VEHICLE GRAPHICS</div>
+            <div className="small-text" style={{ marginTop: 8 }}>IDENTITY SYSTEM, SOFTWARE APP UI/UX DESIGN</div>
             <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>PROJECT</div>
             <div className="small-text" style={{ marginTop: 8 }}>
               WAREHOUSE INTELLIGENCE BRAND SYSTEM AND UNIFORM SUITE—BUILT FOR CLARITY, RECOGNITION, AND APPLICATION ACROSS APPAREL AND FIELD USE.

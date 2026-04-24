@@ -13,6 +13,7 @@ import RicochetProject from './components/RicochetProject';
 import MicronProject from './components/MicronProject';
 import Playground from './components/Playground';
 import FastburgerProject from './components/FastburgerProject';
+import WimProject from './components/WimProject';
 import DecryptText from './components/DecryptText';
 
 const UI_LIGHT = '#111111';
@@ -23,6 +24,17 @@ const HERO_AVAILABILITY = {
   color: '#5FE37C',
 };
 const INDEX01_PROJECTS = [
+  {
+    id: 'wim',
+    titleLines: ['WIM'],
+    scope: 'Scope(Identity, Uniform)',
+    primaryImage: '/images/wim truck mockup.jpg',
+    primaryAlt: 'WIM truck mockup',
+    secondaryImage: '/images/wim safety shirt.jpg',
+    secondaryAlt: 'WIM safety shirt mockup',
+    secondaryFallbackImage: '/images/wim HAT MOCKUP.png',
+    sideOffset: 'clamp(2rem, 7vw, 5rem)',
+  },
   {
     id: 'fastburger',
     titleLines: ['Fastburger'],
@@ -632,6 +644,7 @@ function App() {
     sessionStorage.setItem('homeScrollY', String(y));
     pendingHomeScrollRestoreRef.current = true;
     if (id === 'fastburger') navigate('/fastburger');
+    else if (id === 'wim') navigate('/wim');
     else if (id === 'on') navigate('/open-netizen');
     else if (id === 'bac') navigate('/boise-analog-club');
     else if (id === 'ricochet') navigate('/ricochet');
@@ -691,6 +704,7 @@ function App() {
   useEffect(() => {
     const pathname = location.pathname;
     if (pathname === '/fastburger') setActiveCaseStudy('fastburger');
+    else if (pathname === '/wim') setActiveCaseStudy('wim');
     else if (pathname === '/open-netizen') setActiveCaseStudy('on');
     else if (pathname === '/boise-analog-club') setActiveCaseStudy('bac');
     else if (pathname === '/ricochet') setActiveCaseStudy('ricochet');
@@ -937,6 +951,8 @@ function App() {
           />
         ) : activeCaseStudy === 'fastburger' ? (
           <FastburgerProject key="fastburger" />
+        ) : activeCaseStudy === 'wim' ? (
+          <WimProject key="wim" />
         ) : activeCaseStudy === 'bac' ? (
           <BoiseAnalogClubCaseStudy key="bac" />
         ) : activeCaseStudy === 'on' ? (

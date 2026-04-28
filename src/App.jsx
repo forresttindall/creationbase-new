@@ -12,7 +12,7 @@ import Playground from './components/Playground';
 import FastburgerProject from './components/FastburgerProject';
 import WimProject from './components/WimProject';
 import DecryptText from './components/DecryptText';
-import { Analytics } from "@vercel/analytics/next";
+import { Analytics } from '@vercel/analytics/react';
 
 const UI_LIGHT = '#111111';
 const UI_DARK = '#FFFFFF';
@@ -1538,6 +1538,7 @@ function App() {
         )}
       </AnimatePresence>
       <SiteFooter onContactClick={openContact} reserveRightRail={activeCaseStudy === 'bac' || activeCaseStudy === 'on'} />
+      <Analytics />
     </div>
   );
 }

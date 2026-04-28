@@ -945,6 +945,100 @@ ul {
   border-bottom: 1px solid #000000;
 }
 
+.studio-practice {
+  border-bottom: 1px solid #000000;
+}
+
+.studio-practice__header {
+  padding: var(--spacing-lg) var(--spacing-md) 0 var(--spacing-md);
+}
+
+.studio-practice__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+}
+
+.studio-practice__content {
+  padding: 0 var(--spacing-md) var(--spacing-xl) var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  border-bottom: 0;
+}
+
+.studio-practice__top {
+  padding: 10px 0;
+  border-bottom: 1px solid #000000;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  align-items: start;
+}
+
+.studio-practice__copy {
+  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.studio-practice__team-grid {
+  margin-top: 0;
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 10px;
+  align-content: start;
+}
+
+.studio-practice__team-name {
+  font-family: var(--font-mono);
+  font-weight: var(--font-mono-weight);
+  font-size: var(--fs-sm);
+  line-height: 1.2;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.studio-practice__team-role {
+  font-family: var(--font-mono);
+  font-weight: var(--font-mono-weight);
+  font-size: var(--fs-sm);
+  line-height: 1.2;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: #111111bf;
+}
+
+.studio-practice__team-card {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.studio-practice__team-image {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.studio-practice__team-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+.studio-practice__team-meta {
+  padding: 0;
+  min-width: 0;
+  align-self: center;
+}
+
 .studio-practice-header {
   grid-area: studioHeader;
   padding: var(--spacing-xxl) var(--spacing-md) 0 var(--spacing-md);
@@ -1043,6 +1137,28 @@ ul {
     grid-template-areas:
       "studioHeader studioImage"
       "studioBody studioImage";
+  }
+
+  .studio-practice__content {
+    border-bottom: 0;
+    padding: 0 var(--spacing-md) var(--spacing-xxl) var(--spacing-md);
+  }
+
+  .studio-practice__top {
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    align-items: stretch;
+  }
+
+  .studio-practice__copy {
+    padding-right: 10px;
+  }
+
+  .studio-practice__team {
+    padding-left: 10px;
+    border-left: 1px solid #000000;
+    display: flex;
+    align-items: stretch;
   }
 
   .studio-typography-column {

@@ -109,8 +109,8 @@ const SiteFooter = ({ onContactClick, reserveRightRail = false }) => {
             <p className="small-text" style={{ marginBottom: 'var(--spacing-md)', fontWeight: 'var(--font-mono-weight-bold)' }}>LINKS</p>
             <ul className="small-text footer-links-list">
               <li><a href="/contact" onClick={(ev) => { ev.preventDefault(); onContactClick(); }}>CONTACT</a></li>
-              <li><a href="https://instagram.com/forrest.tindall/" target="_blank" rel="noreferrer">INSTAGRAM</a></li>
-              <li><a href="https://www.linkedin.com/in/forrest-tindall/" target="_blank" rel="noreferrer">LINKEDIN</a></li>
+              <li><a href="https://instagram.com/creationbase.io" target="_blank" rel="noreferrer">INSTAGRAM</a></li>
+              <li><a href="https://www.linkedin.com/company/creationbaseio/" target="_blank" rel="noreferrer">LINKEDIN</a></li>
             </ul>
           </div>
         </div>
@@ -119,7 +119,7 @@ const SiteFooter = ({ onContactClick, reserveRightRail = false }) => {
           <div className="footer-marquee__track footer-marquee__track--reverse">
             {[...Array(20)].map((_, index) => (
               <span key={index} className="footer-marquee__text-item small-text">
-                FORREST TINDALL STUDIO •
+                CREATIONBASE •
               </span>
             ))}
           </div>
@@ -136,7 +136,7 @@ const SiteFooter = ({ onContactClick, reserveRightRail = false }) => {
         </div>
 
         <div style={{ marginTop: '0', borderTop: HOME_SECTION_DIVIDER, paddingTop: '10px' }} className="flex">
-          <p className="small-text" style={{ flex: 1 }}>© 2026 FORREST TINDALL</p>
+          <p className="small-text" style={{ flex: 1 }}>© 2026 CREATIONBASE</p>
           <p className="small-text">DESIGNED & CODED IN BOISE, ID</p>
         </div>
       </div>
@@ -985,10 +985,10 @@ function App() {
                   marginBottom: 'auto'
                 }}>
                   <div className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-                    <DecryptText as="span" text="Fullstack creative" trigger="mount" delay={200} duration={900} />
+                    <DecryptText as="span" text="visual system design" trigger="mount" delay={200} duration={900} />
                   </div>
                   <div className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em', marginTop: '-0.2em' }}>
-                    <DecryptText as="span" text="for brands + teams" trigger="mount" delay={440} duration={900} />
+                    <DecryptText as="span" text="and development" trigger="mount" delay={440} duration={900} />
                   </div>
                 </h1>
                 <motion.div 
@@ -1005,21 +1005,20 @@ function App() {
                 >
                   <div className="small-text home-hero__identity" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
                     <div className="home-hero__identity-desktop" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                      <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Forrest Tindall Studio</span>
+                      <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Creationbase</span>
                       <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: '#111111', display: 'inline-block', flex: '0 0 auto' }} />
                       <span>(CREATIVE STUDIO AND DIGITAL PARTNER)</span>
                     </div>
                     <div className="home-hero__identity-mobile">
-                      <div style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Forrest Tindall Studio •</div>
+                      <div style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Creationbase •</div>
                       <div>(CREATIVE STUDIO AND DIGITAL PARTNER)</div>
                     </div>
                   </div>
                   <div className="small-text home-hero__services" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2, display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: '12px', alignItems: 'start' }}>
-                    <div>I HELP YOU:</div>
+                    <div>WE HELP YOU:</div>
                     <div>
                       <div>— Visual System Design</div>
                       <div>— Web Development</div>
-                      <div>— Photography</div>
                     </div>
                   </div>
                   <div className="small-text home-hero__availability" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2, justifySelf: 'end', textAlign: 'right' }}>
@@ -1566,180 +1565,99 @@ function App() {
               </div>
             </section>
 
-            <section style={{ 
-              padding: '0',
-              background: UI_DARK,
-              color: UI_LIGHT,
-              minHeight: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-              position: 'relative',
-              overflow: 'hidden'
-            }}>
-              <div className="studio-split-layout">
-                <div className="studio-practice-header">
-                  <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: HOME_SECTION_DIVIDER, paddingBottom: 'var(--spacing-sm)' }}>
+            <section style={{ padding: '0', background: UI_DARK, color: UI_LIGHT, minHeight: 'auto', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
+              <div className="studio-practice">
+                <div className="studio-practice__header">
+                  <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', borderBottom: HOME_SECTION_DIVIDER, paddingBottom: 'var(--spacing-sm)' }}>
                     <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                       <DecryptText as="span" text="STUDIO PRACTICE" trigger="inView" duration={800} />
                     </h2>
-                    <span className="small-text">Index (08)</span>
+                    <span className="small-text">Index (07)</span>
                   </div>
                 </div>
 
-                <motion.div
-                  className="studio-portrait-wrapper studio-practice-image"
-                  style={{ padding: '10px', boxSizing: 'border-box' }}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-10%" }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                >
-                  <img 
-                    src="/images/me1.jpg" 
-                    alt="Portrait" 
-                    className="studio-portrait-single"
-                    style={{ 
-                      width: '100%', 
-                      height: '100%', 
-                      objectFit: 'cover',
-                      filter: 'grayscale(100%) contrast(1.1)',
-                      borderRadius: '12px'
-                    }} 
-                  />
-                  <div className="studio-portrait-mosaic">
-                    <img src="/images/me1.jpg" alt="Portrait mosaic one" className="studio-portrait-mosaic__tile studio-portrait-mosaic__tile--wide studio-portrait-mosaic__tile--first" />
-                    <img src="/images/mirror.jpg" alt="Portrait mosaic two" className="studio-portrait-mosaic__tile studio-portrait-mosaic__tile--wide studio-portrait-mosaic__tile--second" />
-                    <img src="/images/me2.jpg" alt="Portrait mosaic two" className="studio-portrait-mosaic__tile" />
-                    <img src="/images/mirror3.jpg" alt="Portrait mosaic four" className="studio-portrait-mosaic__tile studio-portrait-mosaic__tile--fourth" />
-                  </div>
-                  <div className="studio-portrait-label" style={{
-                    position: 'absolute',
-                    bottom: 'calc(var(--spacing-md) + 10px)',
-                    left: 'calc(var(--spacing-md) + 10px)',
-                    background: UI_DARK,
-                    color: UI_LIGHT,
-                    padding: 'var(--spacing-xs) var(--spacing-sm)',
-                    fontFamily: 'var(--font-mono)',
-                    fontWeight: 'var(--font-mono-weight)',
-                    fontSize: 'var(--fs-sm)',
-                    textTransform: 'uppercase'
-                  }}>
-                    <span className="studio-portrait-label__single">Figure 01. Portrait</span>
-                    <span className="studio-portrait-label__multi">Figure 01. Portraits</span>
-                  </div>
-                </motion.div>
+                <div className="studio-practice__grid">
+                  <div className="studio-practice__content">
+                    <div className="studio-practice__top">
+                      <div className="studio-practice__copy">
+                        <div className="small-text" style={{ maxWidth: '520px' }}>
+                          Creationbase is an independent design and development studio based in Boise, Idaho. Founded in 2023, we partner with brands and teams to shape clear visual systems, design UI/UX, and build fast, durable websites. We’re currently leading the environmental signage design for the Micron expansion building in Boise—creating a cohesive wayfinding system designed for clarity, scale, and daily use.
+                        </div>
+                        <div className="small-text" style={{ maxWidth: '520px', marginTop: 'var(--spacing-md)' }}>
+                          We’re building an inclusive team and a studio culture grounded in craft, clarity, and respect. Our values show up in the details: collaborative process, accessible design decisions, maintainable code, and transparent partnerships built for the long term.
+                        </div>
+                      </div>
 
-                <div className="studio-typography-column studio-practice-body">
-                  <div>
-                    <div className="small-text" style={{ maxWidth: '300px', marginTop: 'var(--spacing-lg)' }}>
-                      Forrest Tindall is a Fullstack Creative from Boise, Idaho. His work spans photography, design, art, web development, sculpture, knife making, and illustration, blending technical precision with visual storytelling. He began making art early, first through drawing and writing, then discovering film photography at thirteen. In 2012, he began designing logos, websites, and he launched <em>Tindall Knives</em>, beginning an over decade-long career as a bladesmith. Around the same time, he started a parallel path in photography, focusing on outdoor and product photography for the knife and tool industry. His photography has been featured in multiple publications, including <em>Popular Mechanics Magazine</em>. Years spent shaping steel by hand in the mountains became a study in patience, discipline, and craftsmanship, qualities that continue to define his creative work today. Through photography, design, writing, illustration, and mixed media, Tindall explores identity, society, and the subtle contradictions of modern life, examining the space between what we call things and what they truly are. His work has appeared in exhibitions, global publications, and bespoke retailers, reflecting an ongoing effort to bridge the personal and the universal.
+                      <div className="studio-practice__team">
+                        <div className="studio-practice__team-grid">
+                          <div className="studio-practice__team-card">
+                            <div className="studio-practice__team-image">
+                              <img src="/images/me2.jpg" alt="Forrest Tindall" loading="lazy" decoding="async" />
+                            </div>
+                            <div className="studio-practice__team-meta">
+                              <div className="studio-practice__team-name">Forrest Tindall</div>
+                              <div className="studio-practice__team-role">Founder / Creative Director</div>
+                            </div>
+                          </div>
+
+                          <div className="studio-practice__team-card">
+                            <div className="studio-practice__team-image">
+                              <img src="/images/sarah.jpg" alt="Sarah Houser" loading="lazy" decoding="async" />
+                            </div>
+                            <div className="studio-practice__team-meta">
+                              <div className="studio-practice__team-name">Sarah Houser</div>
+                              <div className="studio-practice__team-role">CMO</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="flex" style={{ justifyContent: 'space-between', marginTop: 'var(--spacing-xl)', alignItems: 'baseline', borderBottom: HOME_SECTION_DIVIDER, paddingBottom: 'var(--spacing-sm)' }}>
-                      <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-                        <DecryptText as="span" text="PASSION PROJECTS" trigger="inView" duration={800} />
-                      </h2>
-                      <span className="small-text">Index (07.1)</span>
-                    </div>
+                    <div className="studio-practice__passion">
+                      <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', borderBottom: HOME_SECTION_DIVIDER, paddingBottom: 'var(--spacing-sm)' }}>
+                        <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+                          <DecryptText as="span" text="PASSION PROJECTS" trigger="inView" duration={800} />
+                        </h2>
+                        <span className="small-text">Index (07.1)</span>
+                      </div>
 
-                    <div className="passion-projects-block">
-                      <div className="passion-projects-grid">
-                        <div className="passion-projects-item passion-projects-item--left">
-                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
-                            <div className="small-text">PORTRAITS</div>
-                            <motion.button
-                              onClick={() => openCaseStudy('portraits')}
-                              whileHover={{ opacity: 0.7 }}
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                padding: 0,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 'var(--spacing-sm)',
-                                fontFamily: 'var(--font-mono)',
-                                fontWeight: 'var(--font-mono-weight)',
-                                fontSize: 'var(--fs-sm)',
-                                textTransform: 'uppercase',
-                                color: UI_LIGHT,
-                              }}
-                            >
-                              [VIEW]
-                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
-                            </motion.button>
-                          </div>
-                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                            Portrait photography studies in light—texture, gesture, and presence.
+                      <div className="passion-projects-block">
+                        <div className="passion-projects-grid">
+                          <div className="passion-projects-item passion-projects-item--full">
+                            <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
+                              <div className="small-text">PLAYGROUND</div>
+                              <motion.button
+                                onClick={() => openCaseStudy('playground')}
+                                whileHover={{ opacity: 0.7 }}
+                                style={{
+                                  background: 'none',
+                                  border: 'none',
+                                  padding: 0,
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: 'var(--spacing-sm)',
+                                  fontFamily: 'var(--font-mono)',
+                                  fontWeight: 'var(--font-mono-weight)',
+                                  fontSize: 'var(--fs-sm)',
+                                  textTransform: 'uppercase',
+                                  color: UI_LIGHT,
+                                }}
+                              >
+                                [VIEW]
+                                <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
+                              </motion.button>
+                            </div>
+                            <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
+                              Experiments in design, art, development, and image-making.
+                            </div>
                           </div>
                         </div>
-
-                        <div className="passion-projects-item passion-projects-item--right">
-                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
-                            <div className="small-text">STREET PHOTOGRAPHY</div>
-                            <motion.button
-                              onClick={() => openCaseStudy('street')}
-                              whileHover={{ opacity: 0.7 }}
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                padding: 0,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 'var(--spacing-sm)',
-                                fontFamily: 'var(--font-mono)',
-                                fontWeight: 'var(--font-mono-weight)',
-                                fontSize: 'var(--fs-sm)',
-                                textTransform: 'uppercase',
-                                color: UI_LIGHT,
-                              }}
-                            >
-                              [VIEW]
-                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
-                            </motion.button>
-                          </div>
-                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                            Mostly shot on film in black and white—protest, movement, and chance.
-                          </div>
-                        </div>
-
-                        <div className="passion-projects-item passion-projects-item--full">
-                          <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
-                            <div className="small-text">PLAYGROUND</div>
-                            <motion.button
-                              onClick={() => openCaseStudy('playground')}
-                              whileHover={{ opacity: 0.7 }}
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                padding: 0,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 'var(--spacing-sm)',
-                                fontFamily: 'var(--font-mono)',
-                                fontWeight: 'var(--font-mono-weight)',
-                                fontSize: 'var(--fs-sm)',
-                                textTransform: 'uppercase',
-                                color: UI_LIGHT,
-                              }}
-                            >
-                              [VIEW]
-                              <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
-                            </motion.button>
-                          </div>
-                          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                            Experiments in design, art, development, and image-making.
-                          </div>
-                        </div>
-
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-
             </section>
           </motion.div>
         )}

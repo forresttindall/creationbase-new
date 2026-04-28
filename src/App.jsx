@@ -52,7 +52,7 @@ const INDEX01_PROJECTS = [
     scope: 'Scope(Brand, Website)',
     primaryImage: '/images/ricochet mockup.webp',
     primaryAlt: 'Ricochet project mockup',
-    secondaryImage: '/images/Exportable tables.png',
+    secondaryImage: '/images/Exportable tables.PNG',
     secondaryAlt: 'Ricochet exportable tables interface',
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },

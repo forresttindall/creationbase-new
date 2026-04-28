@@ -21,9 +21,9 @@ const Contact = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange, o
     if (status === 'loading') return;
     setStatus('loading');
 
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_qlqfr28';
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_cc2wh4f';
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'pZtlnSO7NHel0tpbW';
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_txe96pq';
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_l2zhyqf';
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'ZpTIIyS2dofg5_9Ux';
 
     try {
       const resp = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
@@ -37,7 +37,7 @@ const Contact = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange, o
             from_name: name,
             reply_to: email,
             user_email: email,
-            subject: 'Contact Inquiry',
+            subject: 'Creationbase Inquiry',
             message,
           },
         }),
@@ -88,7 +88,7 @@ const Contact = ({ newsletterEmail, newsletterStatus, onNewsletterEmailChange, o
               </div>
               <div style={{ marginTop: 'var(--spacing-md)' }}>
                 <div className="small-text" style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>
-                  FORREST TINDALL STUDIO •
+                  CREATIONBASE •
                 </div>
                 <div className="small-text" style={{ marginTop: 6 }}>
                   BOISE IDAHO + REMOTE

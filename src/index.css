@@ -1,3 +1,5 @@
+@import url(https://db.onlinewebfonts.com/c/2d5ddebe9739a037dea229634e3dab4f?family=Mark+W1G);
+
 @font-face {
   font-family: 'Neue Machina';
   src: url('/Fonts/PPNeueMachina-InktrapRegular.otf') format('opentype');
@@ -32,8 +34,6 @@
   font-weight: 400;
   font-style: normal;
 }
-
-@import url(https://db.onlinewebfonts.com/c/2d5ddebe9739a037dea229634e3dab4f?family=Mark+W1G); 
 
 @font-face {
     font-family: "Mark W1G";

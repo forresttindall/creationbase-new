@@ -4,9 +4,6 @@ import { ArrowUpRight } from '@phosphor-icons/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BoiseAnalogClubCaseStudy from './components/BoiseAnalogClubCaseStudy';
 import OpenNetizenProject from './components/OpenNetizenProject';
-import Portraits from './components/Portraits';
-import StreetPhotography from './components/StreetPhotography';
-import CommercialPhotography from './components/CommercialPhotography';
 import Blog from './components/Blog';
 import Contact from './components/Contact';
 import RicochetProject from './components/RicochetProject';
@@ -47,16 +44,6 @@ const INDEX01_PROJECTS = [
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },
   {
-    id: 'ricochet',
-    titleLines: ['Ricochet'],
-    scope: 'Scope(Brand, Website)',
-    primaryImage: '/images/ricochet mockup.webp',
-    primaryAlt: 'Ricochet project mockup',
-    secondaryImage: '/images/Exportable tables.PNG',
-    secondaryAlt: 'Ricochet exportable tables interface',
-    sideOffset: 'clamp(2rem, 7vw, 5rem)',
-  },
-  {
     id: 'on',
     titleLines: ['Open Netizen'],
     scope: 'Scope(Identity, Visual System)',
@@ -65,16 +52,6 @@ const INDEX01_PROJECTS = [
     secondaryImage: '/images/OPEN NETIZEN WEBSITE MOCKUP.jpg',
     secondaryAlt: 'Open Netizen website mockup',
     sideOffset: 'clamp(3rem, 8vw, 6rem)',
-  },
-  {
-    id: 'micron',
-    titleLines: ['Work Sharp +', 'Drill Doctor'],
-    scope: 'Scope(Photography, Campaign Assets)',
-    primaryImage: '/images/_DSC6969.jpg',
-    primaryAlt: 'Work Sharp and Drill Doctor hero photograph',
-    secondaryImage: '/images/_DSC7142.jpg',
-    secondaryAlt: 'Work Sharp and Drill Doctor supporting photograph',
-    sideOffset: 'clamp(2.5rem, 6vw, 4.5rem)',
   },
 ];
 
@@ -146,10 +123,10 @@ const SiteFooter = ({ onContactClick, reserveRightRail = false }) => {
 
 const projects = [
   {
-    title: "Ricochet",
+    title: "Wim Software",
     category: "UI/UX Design",
-    image: "/images/ricochet mockup.webp",
-    description: "SaaS website design and prototyping at Superbase",
+    image: "/images/wim software.png",
+    description: "website design and prototyping",
     year: "2026"
   },
   {
@@ -180,17 +157,24 @@ const projects = [
     description: "Website design in figma and dev in REACT",
     year: "2024"
   },
+    {
+    title: "Fastburger",
+    category: "Brand & UI/UX Design",
+    image: "/images/fastburger website mockup 2.webp",
+    description: "Restaurant website design in figma and dev in REACT",
+    year: "2025"
+  },
 
 ];
 
 const graphicDesign = [
 
     {
-    title: "Paradox Labs",
+    title: "WIM",
     category: "Brand Identity",
-    image: "/images/paradoxlabscard.jpg",
+    image: "/images/wim safety shirt.jpg",
     description: "Logo and Visual Identity System",
-    year: "2025"
+    year: "2026"
   },
 
  {
@@ -200,18 +184,11 @@ const graphicDesign = [
     description: "Logo Design, Animation Design",
     year: "2025"
   },
-     {
-    title: "Micron Technology",
-    category: "Environmental Signage",
-    image: "/images/MICRON.JPG",
-    description: "Environmental signage",
-    year: "2026"
-  },
  
   {
-    title: "Boise Analog Club",
+    title: "Fastburger",
     category: "Brand Identity",
-    image: "/images/bac soft club mockup.webp",
+    image: "/images/fastburger box.webp",
     description: "Social Media Promotional Asset Design",
     year: "2026"
   },
@@ -230,9 +207,9 @@ const graphicDesign = [
 
 
   {
-    title: "Moab Brewery",
-    category: "Illustration",
-    image: "/images/beer-3.webp",
+    title: "WIM",
+    category: "Design",
+    image: "/images/wim truck mockup.jpg",
     description: "Label illustration and design",
     year: "2025"
   },
@@ -244,39 +221,13 @@ const graphicDesign = [
     year: "2025"
   },
   {
-    title: "Boise Analog Club",
+    title: "Paradox labs",
     category: "Brand Identity",
-    image: "/images/bac community mockup.webp",
+    image: "/images/paradoxlabscard.jpg",
     description: "Promotional Poster Design",
     year: "2025"
   }
 ];
-
-const COMMERCIAL_PHOTOGRAPHY_IMAGES = [
-  '/images/_DSC4685-2.webp',
-  '/images/_DSC4390.webp',
-  '/images/_DSC2842.webp',
-  
-  '/images/_DSC3168.webp',
-  
-  '/images/_DSC1954-2.webp',
-  '/images/_DSC6942.webp',
-  
-
-  '/images/_DSC4899.webp',
- 
-  '/images/_DSC2016.webp',
-  '/images/_DSC9182.webp',
-];
-
-const photography = COMMERCIAL_PHOTOGRAPHY_IMAGES.map((image, idx) => ({
-  title: `Commercial ${String(idx + 1).padStart(2, '0')}`,
-  category: 'Commercial Photography',
-  image,
-  description: 'Commercial photography—product, environment, and brand storytelling.',
-  year: '2026',
-}));
-
 
 const testimonials = [
   {
@@ -320,7 +271,12 @@ const FOOTER_CAROUSEL_IMAGES = [
   { src: '/images/fastburger typemark.webp', alt: 'Fastburger typemark footer carousel image' },
   { src: '/images/fastburger website mockup 1.webp', alt: 'Fastburger website mockup footer carousel image' },
   { src: '/images/fastburger website mockup 2.webp', alt: 'Fastburger website mockup footer carousel image' },
-  ...COMMERCIAL_PHOTOGRAPHY_IMAGES.map((src) => ({ src, alt: 'Commercial photography footer carousel image' })),
+  { src: '/images/wim software.png', alt: 'WIM software mockup footer carousel image' },
+  { src: '/images/wim typemark.jpg', alt: 'WIM typemark footer carousel image' },
+  { src: '/images/wim logomark.jpg', alt: 'WIM logomark footer carousel image' },
+  { src: '/images/wim safety shirt.jpg', alt: 'WIM safety shirt mockup footer carousel image' },
+  { src: '/images/wim truck mockup.jpg', alt: 'WIM truck mockup footer carousel image' },
+  { src: '/images/wim HAT MOCKUP.png', alt: 'WIM hat mockup footer carousel image' },
 ];
 
 const ProjectModal = ({ project, onClose }) => {
@@ -446,7 +402,7 @@ function App() {
   const [, setHeaderTheme] = useState(() => {
     if (typeof window === 'undefined' || !window.location) return 'light';
     const p = window.location.pathname;
-    if (p === '/' || p === '/portraits' || p === '/street-photography') return 'dark';
+    if (p === '/') return 'dark';
     return 'light';
   });
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -542,11 +498,7 @@ function App() {
 
   useEffect(() => {
     if (location.pathname !== '/') {
-      if (location.pathname === '/portraits' || location.pathname === '/street-photography') {
-        setHeaderTheme('dark');
-      } else {
-        setHeaderTheme('light');
-      }
+      setHeaderTheme('light');
       return;
     }
 
@@ -650,9 +602,6 @@ function App() {
     else if (id === 'ricochet') navigate('/ricochet');
     else if (id === 'micron') navigate('/work-sharp-drill-doctor');
     else if (id === 'playground') navigate('/playground');
-    else if (id === 'portraits') navigate('/portraits');
-    else if (id === 'street') navigate('/street-photography');
-    else if (id === 'commercial') navigate('/commercial-photography');
     else if (id === 'blog') navigate('/blog');
   };
 
@@ -710,9 +659,6 @@ function App() {
     else if (pathname === '/ricochet') setActiveCaseStudy('ricochet');
     else if (pathname === '/work-sharp-drill-doctor') setActiveCaseStudy('micron');
     else if (pathname === '/playground') setActiveCaseStudy('playground');
-    else if (pathname === '/portraits') setActiveCaseStudy('portraits');
-    else if (pathname === '/street-photography') setActiveCaseStudy('street');
-    else if (pathname === '/commercial-photography') setActiveCaseStudy('commercial');
     else if (pathname === '/blog' || pathname.startsWith('/blog/')) setActiveCaseStudy('blog');
     else if (pathname === '/contact') setActiveCaseStudy('contact');
     else setActiveCaseStudy(null);
@@ -912,9 +858,6 @@ function App() {
                 <button type="button" className="mobile-nav-link" onClick={() => goToSection('dev')}>
                   Dev
                 </button>
-                <button type="button" className="mobile-nav-link" onClick={() => goToSection('photo')}>
-                  Photo
-                </button>
                 <button type="button" className="mobile-nav-link" onClick={openContact}>
                   Contact
                 </button>
@@ -963,12 +906,6 @@ function App() {
           <MicronProject key="micron" />
         ) : activeCaseStudy === 'playground' ? (
           <Playground key="playground" />
-        ) : activeCaseStudy === 'portraits' ? (
-          <Portraits key="portraits" />
-        ) : activeCaseStudy === 'street' ? (
-          <StreetPhotography key="street" />
-        ) : activeCaseStudy === 'commercial' ? (
-          <CommercialPhotography key="commercial" />
         ) : (
           <motion.div
             key="homepage"
@@ -1122,7 +1059,7 @@ function App() {
               padding: '0',
               background: UI_DARK,
               color: UI_LIGHT,
-              minHeight: '100vh',
+              minHeight: 'auto',
               display: 'flex',
               flexDirection: 'column',
               position: 'relative',
@@ -1260,22 +1197,12 @@ function App() {
                     </div>
                   </motion.div>
                 </div>
-              </div>
-
-              {/* Testimonials */}
-              <div style={{ padding: 'var(--spacing-xxl) var(--spacing-md)' }}>
-                <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
-                  <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
-                    <DecryptText as="span" text="CLIENT FEEDBACK" trigger="inView" duration={800} />
-                  </h2>
-                  <span className="small-text">Index (03)</span>
-                </div>
-
-                <div style={{ 
+                <div style={{
                   display: 'grid', 
                   gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
                   gap: 'var(--spacing-lg)',
-                  alignItems: 'start'
+                  alignItems: 'start',
+                  marginTop: 'var(--spacing-xl)',
                 }}>
                   {testimonials.map((testimonial, i) => (
                     <motion.div
@@ -1389,7 +1316,7 @@ function App() {
                       maxWidth: '90%',
                     }}
                   >
-                    Full-stack creative for brands + teams. I design visual systems, build fast websites, and create photography that supports the story.
+                    Design and development studio for brands + teams. We design visual systems and build fast websites that support the story.
                   </p>
                   <div className="small-text" style={{ marginTop: 'var(--spacing-md)', color: UI_LIGHT }}>
                     Available contract, project-based, or retainer.
@@ -1406,12 +1333,8 @@ function App() {
                       <span style={{ color: UI_LIGHT }}>02</span>
                     </li>
                     <li className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', padding: '10px 0', borderTop: '1px solid #000000' }}>
-                      <span>PHOTOGRAPHY</span>
-                      <span style={{ color: UI_LIGHT }}>03</span>
-                    </li>
-                    <li className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', padding: '10px 0', borderTop: '1px solid #000000' }}>
                       <span>VISUAL SYSTEMS</span>
-                      <span style={{ color: UI_LIGHT }}>04</span>
+                      <span style={{ color: UI_LIGHT }}>03</span>
                     </li>
                   </ul>
                 </div>
@@ -1489,55 +1412,6 @@ function App() {
                       {row.map((project) => (
                         <motion.div
                           key={project.title}
-                          className="uiux-card"
-                          initial={{ opacity: 0, y: 50 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true, margin: "-10%" }}
-                          transition={{ duration: 0.6, ease: "easeOut" }}
-                          onClick={() => setSelectedProject(project)}
-                        >
-                          <div className="uiux-frame">
-                            <img
-                              src={project.image}
-                              alt={project.title}
-                              loading="lazy"
-                              decoding="async"
-                              onError={(ev) => {
-                                const card = ev.currentTarget.closest('.uiux-card');
-                                if (card) card.style.display = 'none';
-                              }}
-                            />
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-
-            <section id="photo" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
-              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
-                  <DecryptText as="span" text="PHOTOGRAPHY" trigger="inView" duration={800} />
-                </h2>
-                <span className="small-text">Index (07)</span>
-              </div>
-
-              <div className="uiux-rows">
-                {photography.reduce((rows, project, idx) => {
-                  const rowIndex = Math.floor(idx / 2);
-                  if (!rows[rowIndex]) rows[rowIndex] = [];
-                  rows[rowIndex].push(project);
-                  return rows;
-                }, []).map((row, rIdx) => {
-                  const single = row.length === 1;
-                  const rowClass = single ? 'uiux-row uiux-row--single' : (rIdx % 2 === 0 ? 'uiux-row uiux-row--left' : 'uiux-row uiux-row--right');
-                  return (
-                    <div key={`photo-row-${rIdx}`} className={rowClass}>
-                      {row.map((project) => (
-                        <motion.div
-                          key={project.image}
                           className="uiux-card"
                           initial={{ opacity: 0, y: 50 }}
                           whileInView={{ opacity: 1, y: 0 }}

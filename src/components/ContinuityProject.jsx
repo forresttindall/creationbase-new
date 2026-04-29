@@ -6,10 +6,11 @@ const BLACK = '#FFFFFF';
 const WHITE = '#111111';
 
 const CONTINUITY_IMAGES = [
-  { src: '/images/continuity/screens.jpg', alt: 'Continuity screens' },
-  { src: '/images/continuity/app.png', alt: 'Continuity app' },
-  { src: '/images/continuity/continuity%20logo.jpg', alt: 'Continuity logo' },
-  { src: '/images/continuity/TSHIRT%20MOCKUP.jpg', alt: 'Continuity t-shirt mockup' },
+  { src: '/images/continuity/screens.webp', alt: 'Continuity screens' },
+  { src: '/images/continuity/app.webp', alt: 'Continuity app' },
+  { src: '/images/continuity/continuity%20logo.webp', alt: 'Continuity logo' },
+  { src: '/images/continuity/TSHIRT%20MOCKUP.webp', alt: 'Continuity t-shirt mockup' },
+  { src: '/images/continuity/Cotton%20Totebag%20Mockup.webp', alt: 'Continuity totebag mockup' },
 ];
 
 const ContinuityProject = () => {

@@ -6,13 +6,13 @@ const BLACK = '#FFFFFF';
 const WHITE = '#111111';
 
 const WIM_IMAGES = 
-[{ src: '/images/wim software.png', alt: 'WIM software mockup' },
-   { src: '/images/wim typemark.jpg', alt: 'WIM typemark' },
-    { src: '/images/wim logomark.jpg', alt: 'WIM logomark' },
-  { src: '/images/wim safety shirt.jpg', alt: 'WIM safety shirt mockup' },
+[{ src: '/images/wim software.webp', alt: 'WIM software mockup' },
+   { src: '/images/wim typemark.webp', alt: 'WIM typemark' },
+    { src: '/images/wim logomark.webp', alt: 'WIM logomark' },
+  { src: '/images/wim safety shirt.webp', alt: 'WIM safety shirt mockup' },
  
- { src: '/images/wim truck mockup.jpg', alt: 'WIM truck mockup' },
-  { src: '/images/wim HAT MOCKUP.png', alt: 'WIM hat mockup' },
+ { src: '/images/wim truck mockup.webp', alt: 'WIM truck mockup' },
+  { src: '/images/wim HAT MOCKUP.webp', alt: 'WIM hat mockup' },
   
   
 ];

@@ -27,22 +27,22 @@ const INDEX01_PROJECTS = [
     id: 'wim',
     titleLines: ['WIM'],
     scope: 'Scope(Identity, App UI/UX Design)',
-    primaryImage: '/images/wim truck mockup.jpg',
+    primaryImage: '/images/wim truck mockup.webp',
     primaryAlt: 'WIM truck mockup',
-    secondaryImage: '/images/wim software.png',
+    secondaryImage: '/images/wim software.webp',
     secondaryAlt: 'WIM software mockup',
-    secondaryFallbackImage: '/images/wim HAT MOCKUP.png',
+    secondaryFallbackImage: '/images/wim HAT MOCKUP.webp',
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },
   {
     id: 'continuity',
     titleLines: ['Continuity'],
     scope: 'Scope(Identity, App UI/UX Design)',
-    primaryImage: '/images/continuity/screens.jpg',
+    primaryImage: '/images/continuity/screens.webp',
     primaryAlt: 'Continuity screens',
-    secondaryImage: '/images/continuity/app.png',
+    secondaryImage: '/images/continuity/app.webp',
     secondaryAlt: 'Continuity app',
-    secondaryFallbackImage: '/images/continuity/TSHIRT%20MOCKUP.jpg',
+    secondaryFallbackImage: '/images/continuity/TSHIRT%20MOCKUP.webp',
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },
   {
@@ -138,7 +138,7 @@ const projects = [
   {
     title: "Wim Software",
     category: "UI/UX Design",
-    image: "/images/wim software.png",
+    image: "/images/wim software.webp",
     description: "website design and prototyping",
     year: "2026"
   },
@@ -185,7 +185,7 @@ const graphicDesign = [
     {
     title: "WIM",
     category: "Brand Identity",
-    image: "/images/wim safety shirt.jpg",
+    image: "/images/wim safety shirt.webp",
     description: "Logo and Visual Identity System",
     year: "2026"
   },
@@ -199,9 +199,9 @@ const graphicDesign = [
   },
  
   {
-    title: "Fastburger",
+    title: "Continuity",
     category: "Brand Identity",
-    image: "/images/fastburger box.webp",
+    image: "/images/continuity/screens.webp",
     description: "Social Media Promotional Asset Design",
     year: "2026"
   },
@@ -222,21 +222,21 @@ const graphicDesign = [
   {
     title: "WIM",
     category: "Design",
-    image: "/images/wim truck mockup.jpg",
+    image: "/images/wim truck mockup.webp",
     description: "Label illustration and design",
     year: "2025"
   },
   {
     title: "Conway The Machine",
     category: "Album Art Design",
-    image: "/images/conway the machine 1 mockup.png",
+    image: "/images/fastburger box.webp",
     description: "Concept album artwork design.",
     year: "2025"
   },
   {
-    title: "Paradox labs",
+    title: "Continuity",
     category: "Brand Identity",
-    image: "/images/paradoxlabscard.jpg",
+    image: "/images/continuity/TSHIRT MOCKUP.webp",
     description: "Promotional Poster Design",
     year: "2025"
   }
@@ -284,12 +284,17 @@ const FOOTER_CAROUSEL_IMAGES = [
   { src: '/images/fastburger typemark.webp', alt: 'Fastburger typemark footer carousel image' },
   { src: '/images/fastburger website mockup 1.webp', alt: 'Fastburger website mockup footer carousel image' },
   { src: '/images/fastburger website mockup 2.webp', alt: 'Fastburger website mockup footer carousel image' },
-  { src: '/images/wim software.png', alt: 'WIM software mockup footer carousel image' },
-  { src: '/images/wim typemark.jpg', alt: 'WIM typemark footer carousel image' },
-  { src: '/images/wim logomark.jpg', alt: 'WIM logomark footer carousel image' },
-  { src: '/images/wim safety shirt.jpg', alt: 'WIM safety shirt mockup footer carousel image' },
-  { src: '/images/wim truck mockup.jpg', alt: 'WIM truck mockup footer carousel image' },
-  { src: '/images/wim HAT MOCKUP.png', alt: 'WIM hat mockup footer carousel image' },
+  { src: '/images/continuity/screens.webp', alt: 'Continuity screens footer carousel image' },
+  { src: '/images/continuity/app.webp', alt: 'Continuity app footer carousel image' },
+  { src: '/images/continuity/continuity%20logo.webp', alt: 'Continuity logo footer carousel image' },
+  { src: '/images/continuity/TSHIRT%20MOCKUP.webp', alt: 'Continuity t-shirt mockup footer carousel image' },
+  { src: '/images/continuity/Cotton%20Totebag%20Mockup.webp', alt: 'Continuity totebag mockup footer carousel image' },
+  { src: '/images/wim software.webp', alt: 'WIM software mockup footer carousel image' },
+  { src: '/images/wim typemark.webp', alt: 'WIM typemark footer carousel image' },
+  { src: '/images/wim logomark.webp', alt: 'WIM logomark footer carousel image' },
+  { src: '/images/wim safety shirt.webp', alt: 'WIM safety shirt mockup footer carousel image' },
+  { src: '/images/wim truck mockup.webp', alt: 'WIM truck mockup footer carousel image' },
+  { src: '/images/wim HAT MOCKUP.webp', alt: 'WIM hat mockup footer carousel image' },
 ];
 
 const ProjectModal = ({ project, onClose }) => {
@@ -1493,7 +1498,7 @@ function App() {
 
                           <div className="studio-practice__team-card">
                             <div className="studio-practice__team-image">
-                              <img src="/images/sarah.jpg" alt="Sarah Houser" loading="lazy" decoding="async" />
+                              <img src="/images/sarah.webp" alt="Sarah Houser" loading="lazy" decoding="async" />
                             </div>
                             <div className="studio-practice__team-meta">
                               <div className="studio-practice__team-name">Sarah Houser</div>

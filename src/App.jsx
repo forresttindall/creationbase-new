@@ -11,6 +11,7 @@ import MicronProject from './components/MicronProject';
 import Playground from './components/Playground';
 import FastburgerProject from './components/FastburgerProject';
 import WimProject from './components/WimProject';
+import ContinuityProject from './components/ContinuityProject';
 import DecryptText from './components/DecryptText';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -31,6 +32,17 @@ const INDEX01_PROJECTS = [
     secondaryImage: '/images/wim software.png',
     secondaryAlt: 'WIM software mockup',
     secondaryFallbackImage: '/images/wim HAT MOCKUP.png',
+    sideOffset: 'clamp(2rem, 7vw, 5rem)',
+  },
+  {
+    id: 'continuity',
+    titleLines: ['Continuity'],
+    scope: 'Scope(Identity, App UI/UX Design)',
+    primaryImage: '/images/continuity/screens.jpg',
+    primaryAlt: 'Continuity screens',
+    secondaryImage: '/images/continuity/app.png',
+    secondaryAlt: 'Continuity app',
+    secondaryFallbackImage: '/images/continuity/TSHIRT%20MOCKUP.jpg',
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },
   {
@@ -598,6 +610,7 @@ function App() {
     pendingHomeScrollRestoreRef.current = true;
     if (id === 'fastburger') navigate('/fastburger');
     else if (id === 'wim') navigate('/wim');
+    else if (id === 'continuity') navigate('/continuity');
     else if (id === 'on') navigate('/open-netizen');
     else if (id === 'bac') navigate('/boise-analog-club');
     else if (id === 'ricochet') navigate('/ricochet');
@@ -655,6 +668,7 @@ function App() {
     const pathname = location.pathname;
     if (pathname === '/fastburger') setActiveCaseStudy('fastburger');
     else if (pathname === '/wim') setActiveCaseStudy('wim');
+    else if (pathname === '/continuity') setActiveCaseStudy('continuity');
     else if (pathname === '/open-netizen') setActiveCaseStudy('on');
     else if (pathname === '/boise-analog-club') setActiveCaseStudy('bac');
     else if (pathname === '/ricochet') setActiveCaseStudy('ricochet');
@@ -897,6 +911,8 @@ function App() {
           <FastburgerProject key="fastburger" />
         ) : activeCaseStudy === 'wim' ? (
           <WimProject key="wim" />
+        ) : activeCaseStudy === 'continuity' ? (
+          <ContinuityProject key="continuity" />
         ) : activeCaseStudy === 'bac' ? (
           <BoiseAnalogClubCaseStudy key="bac" />
         ) : activeCaseStudy === 'on' ? (

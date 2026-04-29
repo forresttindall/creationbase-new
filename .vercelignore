@@ -1,1 +1,6 @@
 .git
+.git/**
+**/*.psd
+.vercel
+node_modules
+dist

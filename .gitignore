@@ -5,6 +5,8 @@
 
 .DS_Store
 
+*.psd
+
 node_modules/
 dist/
 dist-ssr/

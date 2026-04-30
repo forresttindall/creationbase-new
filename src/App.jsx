@@ -13,6 +13,7 @@ import FastburgerProject from './components/FastburgerProject';
 import WimProject from './components/WimProject';
 import ContinuityProject from './components/ContinuityProject';
 import DecryptText from './components/DecryptText';
+import Tools from './components/Tools';
 import { Analytics } from '@vercel/analytics/react';
 
 const UI_LIGHT = '#111111';
@@ -637,6 +638,19 @@ function App() {
     navigate('/contact');
   };
 
+  const openMaterialLab = () => {
+    setMobileNavOpen(false);
+    if (location.pathname === '/') {
+      const y = window.scrollY || 0;
+      homeScrollYRef.current = y;
+      sessionStorage.setItem('homeScrollY', String(y));
+      pendingHomeScrollRestoreRef.current = true;
+    } else {
+      pendingHomeScrollRestoreRef.current = false;
+    }
+    navigate('/material-lab');
+  };
+
   const goToSection = (id) => {
     setMobileNavOpen(false);
     pendingHomeScrollRestoreRef.current = false;
@@ -681,8 +695,13 @@ function App() {
     else if (pathname === '/playground') setActiveCaseStudy('playground');
     else if (pathname === '/blog' || pathname.startsWith('/blog/')) setActiveCaseStudy('blog');
     else if (pathname === '/contact') setActiveCaseStudy('contact');
+    else if (pathname === '/material-lab' || pathname.startsWith('/material-lab/')) setActiveCaseStudy('material-lab');
+    else if (pathname === '/tools' || pathname.startsWith('/tools/')) {
+      setActiveCaseStudy('material-lab');
+      navigate('/material-lab', { replace: true });
+    }
     else setActiveCaseStudy(null);
-  }, [location.pathname]);
+  }, [location.pathname, navigate]);
 
   const headerColor = UI_LIGHT;
   const headerLogoSrc = '/images/new logo.png';
@@ -878,6 +897,9 @@ function App() {
                 <button type="button" className="mobile-nav-link" onClick={() => goToSection('dev')}>
                   Dev
                 </button>
+                <button type="button" className="mobile-nav-link" onClick={openMaterialLab}>
+                  Material Lab
+                </button>
                 <button type="button" className="mobile-nav-link" onClick={openContact}>
                   Contact
                 </button>
@@ -928,6 +950,8 @@ function App() {
           <MicronProject key="micron" />
         ) : activeCaseStudy === 'playground' ? (
           <Playground key="playground" />
+        ) : activeCaseStudy === 'material-lab' ? (
+          <Tools key="material-lab" />
         ) : (
           <motion.div
             key="homepage"

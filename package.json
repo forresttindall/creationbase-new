@@ -11,6 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
+    "@paper-design/shaders-react": "^0.0.76",
     "@phosphor-icons/react": "^2.1.10",
     "@vercel/analytics": "^2.0.1",
     "canvas-confetti": "^1.9.4",

@@ -69,7 +69,16 @@ const INDEX01_PROJECTS = [
   },
 ];
 
-const SiteFooter = ({ onContactClick, reserveRightRail = false }) => {
+const SiteFooter = ({
+  onContactClick,
+  reserveRightRail = false,
+  newsletterName,
+  newsletterEmail,
+  newsletterStatus,
+  onNewsletterNameChange,
+  onNewsletterEmailChange,
+  onSubmitNewsletter,
+}) => {
   const shuffledFooterImages = useMemo(() => {
     const arr = [...FOOTER_CAROUSEL_IMAGES];
     for (let i = arr.length - 1; i > 0; i--) {
@@ -124,6 +133,64 @@ const SiteFooter = ({ onContactClick, reserveRightRail = false }) => {
               </div>
             ))}
           </div>
+        </div>
+
+        <div style={{ borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-xl)', paddingBottom: 'var(--spacing-xl)' }}>
+          <h1 className="section-title" style={{ marginBottom: 14, fontWeight: 400, fontSize: 'clamp(22px, 4vw, 40px)' }}>
+            get our free brand and website guide
+          </h1>
+          <form
+            onSubmit={onSubmitNewsletter}
+            className="newsletter-form"
+            style={{
+              maxWidth: 720,
+              display: 'grid',
+              gridTemplateColumns: 'minmax(140px, 200px) minmax(0, 1fr) auto',
+              gap: 12,
+              alignItems: 'center',
+            }}
+          >
+            <input
+              type="text"
+              value={newsletterName}
+              onChange={onNewsletterNameChange}
+              placeholder="Name"
+              required
+              className="newsletter-input"
+              aria-label="Name"
+            />
+            <input
+              type="email"
+              value={newsletterEmail}
+              onChange={onNewsletterEmailChange}
+              placeholder="Email"
+              required
+              className="newsletter-input"
+              aria-label="Email"
+            />
+            <button
+              type="submit"
+              disabled={newsletterStatus === 'loading'}
+              className="newsletter-button"
+              style={{
+                cursor: newsletterStatus === 'loading' ? 'default' : 'pointer',
+                opacity: newsletterStatus === 'loading' ? 0.6 : 1,
+                minWidth: 140,
+              }}
+            >
+              {newsletterStatus === 'loading' ? '...' : 'Sign Up'}
+            </button>
+          </form>
+          {newsletterStatus === 'success' && (
+            <div className="small-text" style={{ marginTop: 10, opacity: 0.85, textTransform: 'none' }}>
+              Submitted.
+            </div>
+          )}
+          {newsletterStatus === 'error' && (
+            <div className="small-text" style={{ marginTop: 10, opacity: 0.85, textTransform: 'none' }}>
+              Error. Try again.
+            </div>
+          )}
         </div>
 
         <div style={{ marginTop: '0', borderTop: HOME_SECTION_DIVIDER, paddingTop: '10px' }} className="flex">
@@ -416,6 +483,7 @@ const ProjectModal = ({ project, onClose }) => {
 
 function App() {
   const [selectedProject, setSelectedProject] = useState(null);
+  const [newsletterName, setNewsletterName] = useState('');
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState('idle');
   const [, setHeaderTheme] = useState(() => {
@@ -793,11 +861,12 @@ function App() {
       const resp = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: newsletterEmail }),
+        body: JSON.stringify({ email: newsletterEmail, name: newsletterName }),
       });
       if (!resp.ok) throw new Error('Subscribe failed');
       setNewsletterStatus('success');
       setNewsletterEmail('');
+      setNewsletterName('');
     } catch {
       setNewsletterStatus('error');
     }
@@ -1582,7 +1651,16 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
-      <SiteFooter onContactClick={openContact} reserveRightRail={activeCaseStudy === 'bac' || activeCaseStudy === 'on'} />
+      <SiteFooter
+        onContactClick={openContact}
+        reserveRightRail={activeCaseStudy === 'bac' || activeCaseStudy === 'on'}
+        newsletterName={newsletterName}
+        newsletterEmail={newsletterEmail}
+        newsletterStatus={newsletterStatus}
+        onNewsletterNameChange={(ev) => setNewsletterName(ev.target.value)}
+        onNewsletterEmailChange={(ev) => setNewsletterEmail(ev.target.value)}
+        onSubmitNewsletter={submitNewsletter}
+      />
       <Analytics />
     </div>
   );

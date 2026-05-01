@@ -24,6 +24,16 @@ export default async function handler(req, res) {
     return;
   }
 
+  const name = String(body?.name ?? '').trim();
+  let firstname = '';
+  let lastname = '';
+  if (name) {
+    const safe = name.replace(/\s+/g, ' ').slice(0, 80);
+    const parts = safe.split(' ').filter(Boolean);
+    firstname = parts[0] || '';
+    lastname = parts.slice(1).join(' ');
+  }
+
   try {
     const resp = await fetch('https://api.sender.net/v2/subscribers', {
       method: 'POST',
@@ -32,7 +42,11 @@ export default async function handler(req, res) {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({
+        email,
+        ...(firstname ? { firstname } : {}),
+        ...(lastname ? { lastname } : {}),
+      }),
     });
 
     const text = await resp.text();

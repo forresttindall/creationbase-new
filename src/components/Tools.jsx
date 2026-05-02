@@ -1101,9 +1101,12 @@ function Tools() {
 
     if (isPaperShader) {
       setStatusMessage('Preparing recording…');
-      setPaperExportActive(true);
+      const usePreviewCanvas = isIOSDevice;
+      if (!usePreviewCanvas) {
+        setPaperExportActive(true);
+      }
       await new Promise((r) => requestAnimationFrame(() => r()));
-      const shaderCanvas = await waitForCanvasIn(() => paperExportMountRef.current);
+      const shaderCanvas = await waitForCanvasIn(() => (usePreviewCanvas ? paperPreviewMountRef.current : paperExportMountRef.current));
       if (!shaderCanvas) {
         setStatusMessage('Recording failed (canvas not ready).');
         setPaperExportActive(false);
@@ -1185,16 +1188,16 @@ function Tools() {
                     imageData.data.set(pixels.subarray(srcStart, srcStart + rowBytes), dstStart);
                   }
                   if (tmpCtx) tmpCtx.putImageData(imageData, 0, 0);
-                  ctx.drawImage(tmp, 0, 0, frameW, frameH);
+                  ctx.drawImage(tmp, 0, 0);
                 } else {
-                  try { ctx.drawImage(shaderCanvas, 0, 0, frameW, frameH); } catch (err) { void err; }
+                  try { ctx.drawImage(shaderCanvas, 0, 0); } catch (err) { void err; }
                 }
               } catch (e) {
                 void e;
-                try { ctx.drawImage(shaderCanvas, 0, 0, frameW, frameH); } catch (err) { void err; }
+                try { ctx.drawImage(shaderCanvas, 0, 0); } catch (err) { void err; }
               }
             } else {
-              try { ctx.drawImage(shaderCanvas, 0, 0, frameW, frameH); } catch (e) { void e; }
+              try { ctx.drawImage(shaderCanvas, 0, 0); } catch (e) { void e; }
             }
 
             const pngBlob = await canvasToPng();

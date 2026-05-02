@@ -855,20 +855,22 @@ function Tools() {
   const shareMp4 = useCallback(async () => {
     if (!mp4Download?.blob) return;
     if (!navigator.share) {
-      openUrl(mp4Download.url);
+      downloadFromUrl(mp4Download.url, mp4Download.filename);
       return;
     }
-    const file = new File([mp4Download.blob], mp4Download.filename, { type: 'video/mp4' });
+    const fileType = mp4Download.blob.type || 'video/mp4';
+    const file = new File([mp4Download.blob], mp4Download.filename, { type: fileType });
     if (navigator.canShare && !navigator.canShare({ files: [file] })) {
-      openUrl(mp4Download.url);
+      downloadFromUrl(mp4Download.url, mp4Download.filename);
       return;
     }
     try {
       await navigator.share({ files: [file], title: 'MATERIAL LAB' });
     } catch (e) {
       void e;
+      downloadFromUrl(mp4Download.url, mp4Download.filename);
     }
-  }, [mp4Download, openUrl]);
+  }, [downloadFromUrl, mp4Download]);
 
   const saveMp4 = useCallback(async () => {
     if (!mp4Download?.url) return;
@@ -1098,17 +1100,19 @@ function Tools() {
     }
 
     if (isIOSDevice) {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-
-      prevAnimateRef.current = animate;
-      if (!animate) setAnimate(true);
-      forcePixelRatioRef.current = 1;
       const gl = initGlIfNeeded();
       if (!gl) {
         setStatusMessage('WebGL init failed.');
         return;
       }
+
+      prevAnimateRef.current = animate;
+      if (!animate) setAnimate(true);
+      forcePixelRatioRef.current = 1;
+
+      const maxFrames = 300;
+      const fps = Math.max(10, Math.min(videoFps, Math.floor(maxFrames / Math.max(1, videoDuration))));
+      const totalFrames = Math.max(1, Math.round(videoDuration * fps));
 
       if (!recordFboRef.current || recordFboSizeRef.current.w !== frameW || recordFboSizeRef.current.h !== frameH) {
         if (recordFboRef.current) {
@@ -1139,8 +1143,8 @@ function Tools() {
         gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
         const ok = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
         gl.bindTexture(gl.TEXTURE_2D, null);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         if (!ok) {
-          gl.bindFramebuffer(gl.FRAMEBUFFER, null);
           try { gl.deleteTexture(tex); } catch (e) { void e; }
           try { gl.deleteFramebuffer(fbo); } catch (e) { void e; }
           setStatusMessage('Recording failed (framebuffer incomplete).');
@@ -1151,10 +1155,6 @@ function Tools() {
         recordFboTexRef.current = tex;
         recordFboSizeRef.current = { w: frameW, h: frameH };
       }
-
-      render({ width: frameW, height: frameH, pixelRatio: 1, framebuffer: recordFboRef.current });
-      await new Promise((r) => requestAnimationFrame(() => r()));
-      await new Promise((r) => requestAnimationFrame(() => r()));
 
       const out = document.createElement('canvas');
       out.width = frameW;
@@ -1177,22 +1177,35 @@ function Tools() {
         return;
       }
 
-      const fps = Math.max(10, Math.min(60, videoFps));
-      const baseFill = bgHex || '#FFFFFF';
-      const draw = () => {
-        render({ width: frameW, height: frameH, pixelRatio: 1, framebuffer: recordFboRef.current });
-        ctx.fillStyle = baseFill;
-        ctx.fillRect(0, 0, frameW, frameH);
-        try { gl.finish(); } catch (e) { void e; }
-        const expectedLen = frameW * frameH * 4;
-        if (!iosReadPixelsRef.current || iosReadPixelsRef.current.length !== expectedLen) {
-          iosReadPixelsRef.current = new Uint8Array(expectedLen);
-        }
-        if (!iosImageDataRef.current || iosImageDataRef.current.width !== frameW || iosImageDataRef.current.height !== frameH) {
-          iosImageDataRef.current = ctx.createImageData(frameW, frameH);
-        }
-        try {
+      const expectedLen = frameW * frameH * 4;
+      if (!iosReadPixelsRef.current || iosReadPixelsRef.current.length !== expectedLen) {
+        iosReadPixelsRef.current = new Uint8Array(expectedLen);
+      }
+      if (!iosImageDataRef.current || iosImageDataRef.current.width !== frameW || iosImageDataRef.current.height !== frameH) {
+        iosImageDataRef.current = ctx.createImageData(frameW, frameH);
+      }
+
+      setIsRecording(true);
+      setIsFinalizing(true);
+
+      const pad = (n) => String(n).padStart(5, '0');
+      const canvasToPng = () => new Promise((resolve) => {
+        out.toBlob((b) => resolve(b), 'image/png');
+      });
+
+      const prevTime = timeAccRef.current;
+      try {
+        setStatusMessage(`Preparing frames… (${fps}fps)`);
+        const { ffmpeg, fetchFile } = await withTimeout(getFfmpeg(), 60000, 'FFmpeg load');
+        for (let i = 0; i < totalFrames; i += 1) {
+          if (i % 20 === 0) setStatusMessage(`Preparing frames… ${i}/${totalFrames}`);
+          timeAccRef.current = prevTime + i / fps;
+          render({ width: frameW, height: frameH, pixelRatio: 1, framebuffer: recordFboRef.current });
+          try { gl.finish(); } catch (e) { void e; }
+          gl.bindFramebuffer(gl.FRAMEBUFFER, recordFboRef.current);
           gl.readPixels(0, 0, frameW, frameH, gl.RGBA, gl.UNSIGNED_BYTE, iosReadPixelsRef.current);
+          gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
           const src = iosReadPixelsRef.current;
           const dst = iosImageDataRef.current.data;
           const rowBytes = frameW * 4;
@@ -1202,89 +1215,55 @@ function Tools() {
             dst.set(src.subarray(srcStart, srcStart + rowBytes), dstStart);
           }
           ctx.putImageData(iosImageDataRef.current, 0, 0);
-        } catch (e) {
-          void e;
-        }
-      };
-      draw();
-      recordIntervalRef.current = window.setInterval(draw, Math.round(1000 / fps));
 
-      await new Promise((r) => requestAnimationFrame(() => r()));
-      await new Promise((r) => requestAnimationFrame(() => r()));
-      await new Promise((r) => globalThis.setTimeout(r, Math.round(1000 / fps)));
-      draw();
-
-      const stream = out.captureStream(fps);
-      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
-      recordChunksRef.current = [];
-      recorder.ondataavailable = (ev) => {
-        if (ev.data && ev.data.size > 0) recordChunksRef.current.push(ev.data);
-      };
-      recorder.onstop = async () => {
-        if (recordIntervalRef.current) {
-          window.clearInterval(recordIntervalRef.current);
-          recordIntervalRef.current = 0;
+          const pngBlob = await canvasToPng();
+          if (!pngBlob) throw new Error('Frame encode failed');
+          const data = await fetchFile(pngBlob);
+          await ffmpeg.writeFile(`frame-${pad(i)}.png`, data);
         }
+
+        setStatusMessage('Encoding MP4…');
+        const outputName = `out-ios-${Date.now()}.mp4`;
+        await withTimeout(
+          ffmpeg.exec([
+            '-framerate', String(fps),
+            '-start_number', '0',
+            '-i', 'frame-%05d.png',
+            '-an',
+            '-c:v', 'libx264',
+            '-preset', 'veryfast',
+            '-crf', '23',
+            '-profile:v', 'baseline',
+            '-level', '3.0',
+            '-pix_fmt', 'yuv420p',
+            '-movflags', '+faststart',
+            outputName,
+          ]),
+          180000,
+          'MP4 encode',
+        );
+        const bytes = await withTimeout(ffmpeg.readFile(outputName), 20000, 'MP4 read');
+        const mp4 = new Blob([bytes], { type: 'video/mp4' });
+        for (let i = 0; i < totalFrames; i += 1) {
+          try { await ffmpeg.deleteFile(`frame-${pad(i)}.png`); } catch (e) { void e; }
+        }
+        try { await ffmpeg.deleteFile(outputName); } catch (e) { void e; }
+        setMp4DownloadFromBlob(mp4, outFilename);
+        setStatusMessage('MP4 ready.');
+      } catch {
+        setStatusMessage('MP4 encoding failed.');
+      } finally {
+        timeAccRef.current = prevTime;
         if (recordCanvasElRef.current) {
           try { recordCanvasElRef.current.remove(); } catch (e) { void e; }
           recordCanvasElRef.current = null;
         }
-        const blobType = recorder.mimeType || mimeType || '';
-        const inputExt = String(blobType).includes('mp4') ? 'mp4' : 'webm';
-        const blob = new Blob(recordChunksRef.current, { type: blobType || 'video/webm' });
-        try {
-          if (needsTranscode || !String(blobType).startsWith('video/mp4')) {
-            setStatusMessage('Encoding MP4…');
-            const mp4 = await encodeMp4(blob, inputExt);
-            const handle = saveFileHandleRef.current;
-            saveFileHandleRef.current = null;
-            if (handle && await writeFileHandle(handle, mp4)) {
-              setStatusMessage('Saved.');
-              clearMp4Download();
-            } else {
-              setMp4DownloadFromBlob(mp4, outFilename);
-              setStatusMessage('MP4 ready.');
-            }
-          } else {
-            const handle = saveFileHandleRef.current;
-            saveFileHandleRef.current = null;
-            if (handle && await writeFileHandle(handle, blob)) {
-              setStatusMessage('Saved.');
-              clearMp4Download();
-            } else {
-              setMp4DownloadFromBlob(blob, outFilename);
-              setStatusMessage('MP4 ready.');
-            }
-          }
-        } catch {
-          const handle = saveFileHandleRef.current;
-          saveFileHandleRef.current = null;
-          if (handle && await writeFileHandle(handle, blob)) {
-            setStatusMessage('Saved.');
-            clearMp4Download();
-          } else {
-            setMp4DownloadFromBlob(blob, outFilename);
-            setStatusMessage('MP4 ready.');
-          }
-        } finally {
-          recordChunksRef.current = [];
-          mediaRecorderRef.current = null;
-          forcePixelRatioRef.current = null;
-          setIsRecording(false);
-          setIsFinalizing(false);
-          if (!prevAnimateRef.current) setAnimate(false);
-          scheduleRender();
-        }
-      };
-
-      mediaRecorderRef.current = recorder;
-      setIsRecording(true);
-      setIsFinalizing(false);
-      setStatusMessage(`Recording ${videoDuration}s video…`);
-      recorder.start(250);
-      recordTimeoutRef.current = window.setTimeout(() => {
-        stopRecording();
-      }, Math.max(1, videoDuration) * 1000 + extraStopMs);
+        forcePixelRatioRef.current = null;
+        setIsRecording(false);
+        setIsFinalizing(false);
+        if (!prevAnimateRef.current) setAnimate(false);
+        scheduleRender();
+      }
       return;
     }
 

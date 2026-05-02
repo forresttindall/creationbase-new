@@ -1143,7 +1143,12 @@ function Tools() {
           out.toBlob((b) => resolve(b), 'image/png');
         });
         const paperSpeedForExport = animate ? paperSpeed : 0;
-        setPaperManualFrameActive(true);
+        const mount = paperExportMountRef.current?.paperShaderMount;
+        if (mount) {
+          try { mount.setSpeed(0); } catch (e) { void e; }
+        } else {
+          setPaperManualFrameActive(true);
+        }
 
         const glPaper = shaderCanvas.getContext('webgl2') || shaderCanvas.getContext('webgl');
         const captureW2 = Math.max(1, glPaper?.drawingBufferWidth || shaderCanvas.width || frameW);
@@ -1168,7 +1173,12 @@ function Tools() {
 
           for (let i = 0; i < totalFrames; i += 1) {
             if (i % 12 === 0) setStatusMessage(`Preparing frames… ${i}/${totalFrames}`);
-            setPaperManualFrameMs((i / fps) * paperSpeedForExport * 1000);
+            const frameMs = (i / fps) * paperSpeedForExport * 1000;
+            if (mount) {
+              try { mount.setFrame(frameMs); } catch (e) { void e; }
+            } else {
+              setPaperManualFrameMs(frameMs);
+            }
             await new Promise((r) => requestAnimationFrame(() => r()));
             await new Promise((r) => requestAnimationFrame(() => r()));
 
@@ -1191,6 +1201,7 @@ function Tools() {
                     const dstStart = y * rowBytes;
                     imageData.data.set(pixels.subarray(srcStart, srcStart + rowBytes), dstStart);
                   }
+                  for (let p = 3; p < imageData.data.length; p += 4) imageData.data[p] = 255;
                   if (tmpCtx && tmp) {
                     tmpCtx.putImageData(imageData, 0, 0);
                     ctx.drawImage(tmp, 0, 0, frameW, frameH);
@@ -1463,6 +1474,7 @@ function Tools() {
               const dstStart = y * rowBytes;
               dst.set(src.subarray(srcStart, srcStart + rowBytes), dstStart);
             }
+            for (let p = 3; p < dst.length; p += 4) dst[p] = 255;
             ctx.putImageData(iosImageDataRef.current, 0, 0);
           } else {
             ctx.fillStyle = bgHex || '#FFFFFF';

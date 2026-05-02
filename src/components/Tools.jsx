@@ -1047,13 +1047,21 @@ function Tools() {
               try { glPaper.finish(); } catch (e) { void e; }
               try {
                 glPaper.readPixels(0, 0, captureW, captureH, glPaper.RGBA, glPaper.UNSIGNED_BYTE, pixels);
-                const rowBytes = captureW * 4;
-                for (let y = 0; y < captureH; y += 1) {
-                  const srcStart = (captureH - 1 - y) * rowBytes;
-                  const dstStart = y * rowBytes;
-                  imageData.data.set(pixels.subarray(srcStart, srcStart + rowBytes), dstStart);
+                let hasNonZero = false;
+                for (let k = 0; k < pixels.length; k += 16384) {
+                  if (pixels[k] || pixels[k + 1] || pixels[k + 2] || pixels[k + 3]) { hasNonZero = true; break; }
                 }
-                ctx.putImageData(imageData, 0, 0);
+                if (hasNonZero) {
+                  const rowBytes = captureW * 4;
+                  for (let y = 0; y < captureH; y += 1) {
+                    const srcStart = (captureH - 1 - y) * rowBytes;
+                    const dstStart = y * rowBytes;
+                    imageData.data.set(pixels.subarray(srcStart, srcStart + rowBytes), dstStart);
+                  }
+                  ctx.putImageData(imageData, 0, 0);
+                } else {
+                  try { ctx.drawImage(shaderCanvas, 0, 0, captureW, captureH); } catch (err) { void err; }
+                }
               } catch (e) {
                 void e;
                 try { ctx.drawImage(shaderCanvas, 0, 0, captureW, captureH); } catch (err) { void err; }
@@ -1305,14 +1313,23 @@ function Tools() {
           gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
           const src = iosReadPixelsRef.current;
-          const dst = iosImageDataRef.current.data;
-          const rowBytes = frameW * 4;
-          for (let y = 0; y < frameH; y += 1) {
-            const srcStart = (frameH - 1 - y) * rowBytes;
-            const dstStart = y * rowBytes;
-            dst.set(src.subarray(srcStart, srcStart + rowBytes), dstStart);
+          let hasNonZero = false;
+          for (let k = 0; k < src.length; k += 16384) {
+            if (src[k] || src[k + 1] || src[k + 2] || src[k + 3]) { hasNonZero = true; break; }
           }
-          ctx.putImageData(iosImageDataRef.current, 0, 0);
+          if (hasNonZero) {
+            const dst = iosImageDataRef.current.data;
+            const rowBytes = frameW * 4;
+            for (let y = 0; y < frameH; y += 1) {
+              const srcStart = (frameH - 1 - y) * rowBytes;
+              const dstStart = y * rowBytes;
+              dst.set(src.subarray(srcStart, srcStart + rowBytes), dstStart);
+            }
+            ctx.putImageData(iosImageDataRef.current, 0, 0);
+          } else {
+            ctx.fillStyle = bgHex || '#FFFFFF';
+            ctx.fillRect(0, 0, frameW, frameH);
+          }
 
           const pngBlob = await canvasToPng();
           if (!pngBlob) throw new Error('Frame encode failed');
@@ -1477,6 +1494,7 @@ function Tools() {
       offsetY: paperOffsetY,
       speed: computedPaperSpeed,
     };
+    const webGlContextAttributes = isIOSDevice ? { preserveDrawingBuffer: true, alpha: true, premultipliedAlpha: false } : undefined;
     const sizing = mode === 'export'
       ? { width: frameW, height: frameH, minPixelRatio: 1, maxPixelCount: Math.max(1, frameW * frameH * 4) }
       : { style: { width: '100%', height: '100%' } };
@@ -1486,6 +1504,7 @@ function Tools() {
         <Heatmap
           {...sizing}
           {...common}
+          webGlContextAttributes={webGlContextAttributes}
           image={paperImage}
           colors={heatmapColors}
           colorBack={bgHex}
@@ -1502,6 +1521,7 @@ function Tools() {
       <LiquidMetal
         {...sizing}
         {...common}
+        webGlContextAttributes={webGlContextAttributes}
         image={paperImage}
         shape="none"
         colorBack={bgHex}

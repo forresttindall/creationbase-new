@@ -368,6 +368,7 @@ function Tools() {
   const recordChunksRef = useRef([]);
   const iosReadPixelsRef = useRef(null);
   const iosImageDataRef = useRef(null);
+  const recordCanvasElRef = useRef(null);
   const ffmpegRef = useRef(null);
   const ffmpegLoadingRef = useRef(null);
   const saveFileHandleRef = useRef(null);
@@ -651,6 +652,10 @@ function Tools() {
       if (lastUrlRef.current) URL.revokeObjectURL(lastUrlRef.current);
       lastUrlRef.current = '';
       if (recordTimeoutRef.current) window.clearTimeout(recordTimeoutRef.current);
+      if (recordCanvasElRef.current) {
+        try { recordCanvasElRef.current.remove(); } catch (e) { void e; }
+        recordCanvasElRef.current = null;
+      }
     };
   }, []);
 
@@ -964,9 +969,21 @@ function Tools() {
       const out = document.createElement('canvas');
       out.width = frameW;
       out.height = frameH;
+      out.style.position = 'fixed';
+      out.style.left = '-10000px';
+      out.style.top = '0';
+      out.style.width = `${frameW}px`;
+      out.style.height = `${frameH}px`;
+      out.style.opacity = '0';
+      out.style.pointerEvents = 'none';
+      out.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(out);
+      recordCanvasElRef.current = out;
       const ctx = out.getContext('2d');
       if (!ctx) {
         setStatusMessage('Recording failed (2D context unavailable).');
+        try { out.remove(); } catch (e) { void e; }
+        if (recordCanvasElRef.current === out) recordCanvasElRef.current = null;
         setPaperExportActive(false);
         return;
       }
@@ -997,6 +1014,10 @@ function Tools() {
         if (recordIntervalRef.current) {
           window.clearInterval(recordIntervalRef.current);
           recordIntervalRef.current = 0;
+        }
+        if (recordCanvasElRef.current) {
+          try { recordCanvasElRef.current.remove(); } catch (e) { void e; }
+          recordCanvasElRef.current = null;
         }
         const blobType = recorder.mimeType || mimeType || '';
         const inputExt = String(blobType).includes('mp4') ? 'mp4' : 'webm';
@@ -1069,9 +1090,21 @@ function Tools() {
       const out = document.createElement('canvas');
       out.width = frameW;
       out.height = frameH;
+      out.style.position = 'fixed';
+      out.style.left = '-10000px';
+      out.style.top = '0';
+      out.style.width = `${frameW}px`;
+      out.style.height = `${frameH}px`;
+      out.style.opacity = '0';
+      out.style.pointerEvents = 'none';
+      out.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(out);
+      recordCanvasElRef.current = out;
       const ctx = out.getContext('2d');
       if (!ctx) {
         setStatusMessage('Recording failed (2D context unavailable).');
+        try { out.remove(); } catch (e) { void e; }
+        if (recordCanvasElRef.current === out) recordCanvasElRef.current = null;
         return;
       }
 
@@ -1127,6 +1160,10 @@ function Tools() {
         if (recordIntervalRef.current) {
           window.clearInterval(recordIntervalRef.current);
           recordIntervalRef.current = 0;
+        }
+        if (recordCanvasElRef.current) {
+          try { recordCanvasElRef.current.remove(); } catch (e) { void e; }
+          recordCanvasElRef.current = null;
         }
         const blobType = recorder.mimeType || mimeType || '';
         const inputExt = String(blobType).includes('mp4') ? 'mp4' : 'webm';

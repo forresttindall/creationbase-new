@@ -855,22 +855,22 @@ function Tools() {
   const shareMp4 = useCallback(async () => {
     if (!mp4Download?.blob) return;
     if (!navigator.share) {
-      downloadFromUrl(mp4Download.url, mp4Download.filename);
+      openUrl(mp4Download.url);
       return;
     }
     const fileType = mp4Download.blob.type || 'video/mp4';
     const file = new File([mp4Download.blob], mp4Download.filename, { type: fileType });
     if (navigator.canShare && !navigator.canShare({ files: [file] })) {
-      downloadFromUrl(mp4Download.url, mp4Download.filename);
+      openUrl(mp4Download.url);
       return;
     }
     try {
       await navigator.share({ files: [file], title: 'MATERIAL LAB' });
     } catch (e) {
       void e;
-      downloadFromUrl(mp4Download.url, mp4Download.filename);
+      openUrl(mp4Download.url);
     }
-  }, [downloadFromUrl, mp4Download]);
+  }, [mp4Download, openUrl]);
 
   const saveMp4 = useCallback(async () => {
     if (!mp4Download?.url) return;
@@ -956,7 +956,7 @@ function Tools() {
 
   const startRecording = useCallback(async () => {
     if (isRecording || isFinalizing) return;
-    if (typeof MediaRecorder === 'undefined') {
+    if (typeof MediaRecorder === 'undefined' && !isIOSDevice) {
       setStatusMessage('Video export is not supported in this browser (MediaRecorder unavailable).');
       return;
     }
@@ -989,14 +989,17 @@ function Tools() {
         return;
       }
 
+      const captureW = Math.max(1, shaderCanvas.width || frameW);
+      const captureH = Math.max(1, shaderCanvas.height || frameH);
+
       const out = document.createElement('canvas');
-      out.width = frameW;
-      out.height = frameH;
+      out.width = captureW;
+      out.height = captureH;
       out.style.position = 'fixed';
       out.style.left = '-10000px';
       out.style.top = '0';
-      out.style.width = `${frameW}px`;
-      out.style.height = `${frameH}px`;
+      out.style.width = `${captureW}px`;
+      out.style.height = `${captureH}px`;
       out.style.opacity = '0';
       out.style.pointerEvents = 'none';
       out.setAttribute('aria-hidden', 'true');
@@ -1008,6 +1011,101 @@ function Tools() {
         try { out.remove(); } catch (e) { void e; }
         if (recordCanvasElRef.current === out) recordCanvasElRef.current = null;
         setPaperExportActive(false);
+        return;
+      }
+
+      if (isIOSDevice) {
+        const maxFrames = 180;
+        const fps = Math.max(6, Math.min(videoFps, Math.floor(maxFrames / Math.max(1, videoDuration))));
+        const totalFrames = Math.max(1, Math.round(videoDuration * fps));
+        const pad = (n) => String(n).padStart(5, '0');
+        const canvasToPng = () => new Promise((resolve) => {
+          out.toBlob((b) => resolve(b), 'image/png');
+        });
+        const glPaper = shaderCanvas.getContext('webgl2') || shaderCanvas.getContext('webgl');
+        const expectedLen = captureW * captureH * 4;
+        const pixels = new Uint8Array(expectedLen);
+        const imageData = ctx.createImageData(captureW, captureH);
+
+        setIsRecording(true);
+        setIsFinalizing(true);
+        try {
+          setStatusMessage(`Preparing frames… (${fps}fps)`);
+          const { ffmpeg, fetchFile } = await withTimeout(getFfmpeg(), 60000, 'FFmpeg load');
+
+          for (let i = 0; i < totalFrames; i += 1) {
+            if (i % 12 === 0) setStatusMessage(`Preparing frames… ${i}/${totalFrames}`);
+            await new Promise((r) => requestAnimationFrame(() => r()));
+            await new Promise((r) => requestAnimationFrame(() => r()));
+            await new Promise((r) => globalThis.setTimeout(r, 0));
+
+            ctx.clearRect(0, 0, captureW, captureH);
+            ctx.fillStyle = bgHex || (isPaperHeatmap ? '#000000' : '#FFFFFF');
+            ctx.fillRect(0, 0, captureW, captureH);
+
+            if (glPaper) {
+              try { glPaper.finish(); } catch (e) { void e; }
+              try {
+                glPaper.readPixels(0, 0, captureW, captureH, glPaper.RGBA, glPaper.UNSIGNED_BYTE, pixels);
+                const rowBytes = captureW * 4;
+                for (let y = 0; y < captureH; y += 1) {
+                  const srcStart = (captureH - 1 - y) * rowBytes;
+                  const dstStart = y * rowBytes;
+                  imageData.data.set(pixels.subarray(srcStart, srcStart + rowBytes), dstStart);
+                }
+                ctx.putImageData(imageData, 0, 0);
+              } catch (e) {
+                void e;
+                try { ctx.drawImage(shaderCanvas, 0, 0, captureW, captureH); } catch (err) { void err; }
+              }
+            } else {
+              try { ctx.drawImage(shaderCanvas, 0, 0, captureW, captureH); } catch (e) { void e; }
+            }
+
+            const pngBlob = await canvasToPng();
+            if (!pngBlob) throw new Error('Frame encode failed');
+            await ffmpeg.writeFile(`frame-${pad(i)}.png`, await fetchFile(pngBlob));
+          }
+
+          setStatusMessage('Encoding MP4…');
+          const outputName = `out-ios-paper-${Date.now()}.mp4`;
+          await withTimeout(
+            ffmpeg.exec([
+              '-framerate', String(fps),
+              '-start_number', '0',
+              '-i', 'frame-%05d.png',
+              '-an',
+              '-c:v', 'libx264',
+              '-preset', 'veryfast',
+              '-crf', '23',
+              '-profile:v', 'baseline',
+              '-level', '3.0',
+              '-pix_fmt', 'yuv420p',
+              '-movflags', '+faststart',
+              outputName,
+            ]),
+            180000,
+            'MP4 encode',
+          );
+          const bytes = await withTimeout(ffmpeg.readFile(outputName), 20000, 'MP4 read');
+          const mp4 = new Blob([bytes], { type: 'video/mp4' });
+          for (let i = 0; i < totalFrames; i += 1) {
+            try { await ffmpeg.deleteFile(`frame-${pad(i)}.png`); } catch (e) { void e; }
+          }
+          try { await ffmpeg.deleteFile(outputName); } catch (e) { void e; }
+          setMp4DownloadFromBlob(mp4, outFilename);
+          setStatusMessage('MP4 ready.');
+        } catch {
+          setStatusMessage('MP4 encoding failed.');
+        } finally {
+          if (recordCanvasElRef.current) {
+            try { recordCanvasElRef.current.remove(); } catch (e) { void e; }
+            recordCanvasElRef.current = null;
+          }
+          setIsRecording(false);
+          setIsFinalizing(false);
+          setPaperExportActive(false);
+        }
         return;
       }
 

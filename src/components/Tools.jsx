@@ -369,6 +369,9 @@ function Tools() {
   const iosReadPixelsRef = useRef(null);
   const iosImageDataRef = useRef(null);
   const recordCanvasElRef = useRef(null);
+  const recordFboRef = useRef(null);
+  const recordFboTexRef = useRef(null);
+  const recordFboSizeRef = useRef({ w: 0, h: 0 });
   const ffmpegRef = useRef(null);
   const ffmpegLoadingRef = useRef(null);
   const saveFileHandleRef = useRef(null);
@@ -580,7 +583,14 @@ function Tools() {
     const pixelRatio = options?.pixelRatio ?? (forcedPixelRatio ?? Math.min(window.devicePixelRatio || 1, 2));
     const canvasW = options?.width ?? frameW;
     const canvasH = options?.height ?? frameH;
-    setCanvasDrawingBuffer(gl, canvasW, canvasH, pixelRatio);
+    const targetFramebuffer = options?.framebuffer ?? null;
+    if (targetFramebuffer) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, targetFramebuffer);
+      gl.viewport(0, 0, Math.max(1, Math.round(canvasW)), Math.max(1, Math.round(canvasH)));
+    } else {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      setCanvasDrawingBuffer(gl, canvasW, canvasH, pixelRatio);
+    }
 
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -655,6 +665,17 @@ function Tools() {
       if (recordCanvasElRef.current) {
         try { recordCanvasElRef.current.remove(); } catch (e) { void e; }
         recordCanvasElRef.current = null;
+      }
+      const gl = glRef.current;
+      if (gl) {
+        if (recordFboRef.current) {
+          try { gl.deleteFramebuffer(recordFboRef.current); } catch (e) { void e; }
+          recordFboRef.current = null;
+        }
+        if (recordFboTexRef.current) {
+          try { gl.deleteTexture(recordFboTexRef.current); } catch (e) { void e; }
+          recordFboTexRef.current = null;
+        }
       }
     };
   }, []);
@@ -1083,7 +1104,55 @@ function Tools() {
       prevAnimateRef.current = animate;
       if (!animate) setAnimate(true);
       forcePixelRatioRef.current = 1;
-      render({ width: frameW, height: frameH, pixelRatio: 1 });
+      const gl = initGlIfNeeded();
+      if (!gl) {
+        setStatusMessage('WebGL init failed.');
+        return;
+      }
+
+      if (!recordFboRef.current || recordFboSizeRef.current.w !== frameW || recordFboSizeRef.current.h !== frameH) {
+        if (recordFboRef.current) {
+          try { gl.deleteFramebuffer(recordFboRef.current); } catch (e) { void e; }
+          recordFboRef.current = null;
+        }
+        if (recordFboTexRef.current) {
+          try { gl.deleteTexture(recordFboTexRef.current); } catch (e) { void e; }
+          recordFboTexRef.current = null;
+        }
+
+        const tex = gl.createTexture();
+        const fbo = gl.createFramebuffer();
+        if (!tex || !fbo) {
+          if (tex) try { gl.deleteTexture(tex); } catch (e) { void e; }
+          if (fbo) try { gl.deleteFramebuffer(fbo); } catch (e) { void e; }
+          setStatusMessage('Recording failed (framebuffer unavailable).');
+          return;
+        }
+
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, frameW, frameH, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+        const ok = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        if (!ok) {
+          gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+          try { gl.deleteTexture(tex); } catch (e) { void e; }
+          try { gl.deleteFramebuffer(fbo); } catch (e) { void e; }
+          setStatusMessage('Recording failed (framebuffer incomplete).');
+          return;
+        }
+
+        recordFboRef.current = fbo;
+        recordFboTexRef.current = tex;
+        recordFboSizeRef.current = { w: frameW, h: frameH };
+      }
+
+      render({ width: frameW, height: frameH, pixelRatio: 1, framebuffer: recordFboRef.current });
       await new Promise((r) => requestAnimationFrame(() => r()));
       await new Promise((r) => requestAnimationFrame(() => r()));
 
@@ -1111,36 +1180,31 @@ function Tools() {
       const fps = Math.max(10, Math.min(60, videoFps));
       const baseFill = bgHex || '#FFFFFF';
       const draw = () => {
-        render({ width: frameW, height: frameH, pixelRatio: 1 });
+        render({ width: frameW, height: frameH, pixelRatio: 1, framebuffer: recordFboRef.current });
         ctx.fillStyle = baseFill;
         ctx.fillRect(0, 0, frameW, frameH);
-        const gl = glRef.current;
-        if (gl) {
-          try { gl.finish(); } catch (e) { void e; }
-          const expectedLen = frameW * frameH * 4;
-          if (!iosReadPixelsRef.current || iosReadPixelsRef.current.length !== expectedLen) {
-            iosReadPixelsRef.current = new Uint8Array(expectedLen);
-          }
-          if (!iosImageDataRef.current || iosImageDataRef.current.width !== frameW || iosImageDataRef.current.height !== frameH) {
-            iosImageDataRef.current = ctx.createImageData(frameW, frameH);
-          }
-          try {
-            gl.readPixels(0, 0, frameW, frameH, gl.RGBA, gl.UNSIGNED_BYTE, iosReadPixelsRef.current);
-            const src = iosReadPixelsRef.current;
-            const dst = iosImageDataRef.current.data;
-            const rowBytes = frameW * 4;
-            for (let y = 0; y < frameH; y += 1) {
-              const srcStart = (frameH - 1 - y) * rowBytes;
-              const dstStart = y * rowBytes;
-              dst.set(src.subarray(srcStart, srcStart + rowBytes), dstStart);
-            }
-            ctx.putImageData(iosImageDataRef.current, 0, 0);
-            return;
-          } catch (e) {
-            void e;
-          }
+        try { gl.finish(); } catch (e) { void e; }
+        const expectedLen = frameW * frameH * 4;
+        if (!iosReadPixelsRef.current || iosReadPixelsRef.current.length !== expectedLen) {
+          iosReadPixelsRef.current = new Uint8Array(expectedLen);
         }
-        try { ctx.drawImage(canvas, 0, 0, frameW, frameH); } catch (e) { void e; }
+        if (!iosImageDataRef.current || iosImageDataRef.current.width !== frameW || iosImageDataRef.current.height !== frameH) {
+          iosImageDataRef.current = ctx.createImageData(frameW, frameH);
+        }
+        try {
+          gl.readPixels(0, 0, frameW, frameH, gl.RGBA, gl.UNSIGNED_BYTE, iosReadPixelsRef.current);
+          const src = iosReadPixelsRef.current;
+          const dst = iosImageDataRef.current.data;
+          const rowBytes = frameW * 4;
+          for (let y = 0; y < frameH; y += 1) {
+            const srcStart = (frameH - 1 - y) * rowBytes;
+            const dstStart = y * rowBytes;
+            dst.set(src.subarray(srcStart, srcStart + rowBytes), dstStart);
+          }
+          ctx.putImageData(iosImageDataRef.current, 0, 0);
+        } catch (e) {
+          void e;
+        }
       };
       draw();
       recordIntervalRef.current = window.setInterval(draw, Math.round(1000 / fps));
@@ -1784,6 +1848,15 @@ function Tools() {
                   >
                     {isMobileDevice ? 'Save to Photos' : 'Save MP4'}
                   </button>
+                  <div style={{ border: '1px solid rgba(17,17,17,0.18)', borderRadius: 12, overflow: 'hidden', background: '#FFFFFF' }}>
+                    <video
+                      src={mp4Download.url}
+                      controls
+                      playsInline
+                      muted
+                      style={{ width: '100%', height: 'auto', display: 'block' }}
+                    />
+                  </div>
                   <button
                     type="button"
                     className="mobile-nav-link"

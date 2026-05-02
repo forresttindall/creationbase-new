@@ -399,12 +399,12 @@ function Tools() {
   const [hue, setHue] = useState(0);
   const [tintHex, setTintHex] = useState('#d7d7d7');
   const [bgHex, setBgHex] = useState('#ffffff');
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(0.75);
   const [panX, setPanX] = useState(0);
   const [panY, setPanY] = useState(0);
   const [animate, setAnimate] = useState(true);
   const [paperSpeed, setPaperSpeed] = useState(1);
-  const [paperScale, setPaperScale] = useState(0.75);
+  const [paperScale, setPaperScale] = useState(0.65);
   const [paperRotation, setPaperRotation] = useState(0);
   const [paperOffsetX, setPaperOffsetX] = useState(0);
   const [paperOffsetY, setPaperOffsetY] = useState(0);
@@ -438,7 +438,6 @@ function Tools() {
   const [isFinalizing, setIsFinalizing] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
   const [mp4Download, setMp4Download] = useState(null);
-  const [debugCapture, setDebugCapture] = useState(null);
   const [stackLayout, setStackLayout] = useState(() => {
     if (typeof window === 'undefined') return false;
     return window.matchMedia('(max-width: 980px)').matches;
@@ -839,10 +838,6 @@ function Tools() {
     if (mp4Download?.url) URL.revokeObjectURL(mp4Download.url);
   }, [mp4Download]);
 
-  useEffect(() => () => {
-    if (debugCapture?.url) URL.revokeObjectURL(debugCapture.url);
-  }, [debugCapture]);
-
   const downloadFromUrl = useCallback((url, filename) => {
     const a = document.createElement('a');
     a.href = url;
@@ -851,122 +846,6 @@ function Tools() {
     a.click();
     a.remove();
   }, []);
-
-  const captureDebugFrame = useCallback(async () => {
-    const makeResult = async ({ canvasW, canvasH, renderToCanvas }) => {
-      const out = document.createElement('canvas');
-      out.width = canvasW;
-      out.height = canvasH;
-      const ctx = out.getContext('2d');
-      if (!ctx) return null;
-      ctx.fillStyle = bgHex || '#FFFFFF';
-      ctx.fillRect(0, 0, canvasW, canvasH);
-      const stats = await renderToCanvas(ctx);
-      const blob = await new Promise((resolve) => out.toBlob((b) => resolve(b), 'image/png'));
-      if (!blob) return null;
-      return { url: URL.createObjectURL(blob), canvasW, canvasH, stats };
-    };
-
-    if (isPaperShader) {
-      const mount = paperPreviewMountRef.current;
-      const shaderCanvas = mount ? mount.querySelector('canvas') : null;
-      if (!shaderCanvas) {
-        setDebugCapture((prev) => {
-          if (prev?.url) URL.revokeObjectURL(prev.url);
-          return { url: '', canvasW: 0, canvasH: 0, stats: { error: 'No shader canvas found in preview.' } };
-        });
-        return;
-      }
-      const canvasW = Math.max(1, shaderCanvas.width || frameW);
-      const canvasH = Math.max(1, shaderCanvas.height || frameH);
-      const gl = shaderCanvas.getContext('webgl2') || shaderCanvas.getContext('webgl');
-
-      const result = await makeResult({
-        canvasW,
-        canvasH,
-        renderToCanvas: async (ctx) => {
-          if (!gl) {
-            try { ctx.drawImage(shaderCanvas, 0, 0, canvasW, canvasH); } catch (e) { return { error: String(e?.message || e) }; }
-            return { mode: 'drawImage', hasNonZero: true };
-          }
-          const expectedLen = canvasW * canvasH * 4;
-          const pixels = new Uint8Array(expectedLen);
-          const imageData = ctx.createImageData(canvasW, canvasH);
-          try {
-            try { gl.finish(); } catch (e) { void e; }
-            gl.readPixels(0, 0, canvasW, canvasH, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-            let hasNonZero = false;
-            for (let k = 0; k < pixels.length; k += 16384) {
-              if (pixels[k] || pixels[k + 1] || pixels[k + 2] || pixels[k + 3]) { hasNonZero = true; break; }
-            }
-            if (hasNonZero) {
-              const rowBytes = canvasW * 4;
-              for (let y = 0; y < canvasH; y += 1) {
-                const srcStart = (canvasH - 1 - y) * rowBytes;
-                const dstStart = y * rowBytes;
-                imageData.data.set(pixels.subarray(srcStart, srcStart + rowBytes), dstStart);
-              }
-              ctx.putImageData(imageData, 0, 0);
-            }
-            return { mode: 'readPixels', hasNonZero, firstPixel: Array.from(pixels.subarray(0, 4)) };
-          } catch (e) {
-            return { mode: 'readPixels', error: String(e?.message || e) };
-          }
-        }
-      });
-      if (!result) return;
-      setDebugCapture((prev) => {
-        if (prev?.url) URL.revokeObjectURL(prev.url);
-        return result;
-      });
-      return;
-    }
-
-    const gl = initGlIfNeeded();
-    if (!gl) {
-      setDebugCapture((prev) => {
-        if (prev?.url) URL.revokeObjectURL(prev.url);
-        return { url: '', canvasW: 0, canvasH: 0, stats: { error: 'WebGL init failed.' } };
-      });
-      return;
-    }
-
-    const result = await makeResult({
-      canvasW: frameW,
-      canvasH: frameH,
-      renderToCanvas: async (ctx) => {
-        render({ width: frameW, height: frameH, pixelRatio: 1 });
-        const expectedLen = frameW * frameH * 4;
-        const pixels = new Uint8Array(expectedLen);
-        const imageData = ctx.createImageData(frameW, frameH);
-        try {
-          try { gl.finish(); } catch (e) { void e; }
-          gl.readPixels(0, 0, frameW, frameH, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-          let hasNonZero = false;
-          for (let k = 0; k < pixels.length; k += 16384) {
-            if (pixels[k] || pixels[k + 1] || pixels[k + 2] || pixels[k + 3]) { hasNonZero = true; break; }
-          }
-          if (hasNonZero) {
-            const rowBytes = frameW * 4;
-            for (let y = 0; y < frameH; y += 1) {
-              const srcStart = (frameH - 1 - y) * rowBytes;
-              const dstStart = y * rowBytes;
-              imageData.data.set(pixels.subarray(srcStart, srcStart + rowBytes), dstStart);
-            }
-            ctx.putImageData(imageData, 0, 0);
-          }
-          return { mode: 'readPixels', hasNonZero, firstPixel: Array.from(pixels.subarray(0, 4)) };
-        } catch (e) {
-          return { mode: 'readPixels', error: String(e?.message || e) };
-        }
-      }
-    });
-    if (!result) return;
-    setDebugCapture((prev) => {
-      if (prev?.url) URL.revokeObjectURL(prev.url);
-      return result;
-    });
-  }, [bgHex, frameH, frameW, initGlIfNeeded, isPaperShader, paperPreviewMountRef, render]);
 
   const openUrl = useCallback((url) => {
     const w = window.open(url, '_blank', 'noopener,noreferrer');
@@ -1760,12 +1639,13 @@ function Tools() {
                     <input
                       style={rangeStyle}
                       type="range"
-                      min={0.05}
-                      max={3}
-                      step={0.01}
-                      value={isPaperShader ? paperScale : zoom}
+                      min={20}
+                      max={200}
+                      step={1}
+                      value={Math.round((isPaperShader ? paperScale : zoom) * 100)}
                       onChange={(ev) => {
-                        const v = clamp(Number(ev.target.value), 0.05, 3);
+                        const pct = clamp(Number(ev.target.value), 20, 200);
+                        const v = pct / 100;
                         if (isPaperShader) setPaperScale(v);
                         else setZoom(v);
                       }}
@@ -1773,14 +1653,15 @@ function Tools() {
                     <input
                       style={fieldBaseStyle}
                       type="number"
-                      min={0.05}
-                      max={3}
-                      step={0.01}
-                      value={Number((isPaperShader ? paperScale : zoom).toFixed(2))}
+                      min={20}
+                      max={200}
+                      step={1}
+                      value={Math.round((isPaperShader ? paperScale : zoom) * 100)}
                       onChange={(ev) => {
                         const raw = Number(ev.target.value);
                         if (!Number.isFinite(raw)) return;
-                        const v = clamp(raw, 0.05, 3);
+                        const pct = clamp(raw, 20, 200);
+                        const v = pct / 100;
                         if (isPaperShader) setPaperScale(v);
                         else setZoom(v);
                       }}
@@ -2073,16 +1954,6 @@ function Tools() {
                   >
                     {isMobileDevice ? 'Save to Photos' : 'Save MP4'}
                   </button>
-                  {isIOSDevice && (
-                    <button
-                      type="button"
-                      className="mobile-nav-link"
-                      style={{ minHeight: 44, background: 'transparent' }}
-                      onClick={captureDebugFrame}
-                    >
-                      Debug Capture Frame
-                    </button>
-                  )}
                   <div style={{ border: '1px solid rgba(17,17,17,0.18)', borderRadius: 12, overflow: 'hidden', background: '#FFFFFF' }}>
                     <video
                       src={mp4Download.url}
@@ -2092,16 +1963,6 @@ function Tools() {
                       style={{ width: '100%', height: 'auto', display: 'block' }}
                     />
                   </div>
-                  {isIOSDevice && debugCapture?.url && (
-                    <div style={{ display: 'grid', gap: 8 }}>
-                      <div className="small-text" style={{ opacity: 0.75, lineHeight: 1.2 }}>
-                        {`Debug frame: ${debugCapture.canvasW}×${debugCapture.canvasH} • ${JSON.stringify(debugCapture.stats || {})}`}
-                      </div>
-                      <div style={{ border: '1px solid rgba(17,17,17,0.18)', borderRadius: 12, overflow: 'hidden', background: '#FFFFFF' }}>
-                        <img src={debugCapture.url} alt="Debug capture frame" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                      </div>
-                    </div>
-                  )}
                   <button
                     type="button"
                     className="mobile-nav-link"

@@ -345,6 +345,12 @@ function Tools() {
     return coarse || /iPhone|iPad|iPod|Android/i.test(ua);
   }, []);
 
+  const isIOSDevice = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    const ua = navigator.userAgent || '';
+    return /iPhone|iPad|iPod/i.test(ua);
+  }, []);
+
   const canvasRef = useRef(null);
   const glRef = useRef(null);
   const programRef = useRef(null);
@@ -674,10 +680,10 @@ function Tools() {
     ];
 
     const mp4 = mp4Candidates.find(isSupported);
-    if (mp4) return { mimeType: mp4, needsTranscode: false };
+    if (mp4) return { mimeType: mp4, needsTranscode: isIOSDevice };
     const webm = webmCandidates.find(isSupported) || '';
     return { mimeType: webm, needsTranscode: true };
-  }, []);
+  }, [isIOSDevice]);
 
   const getFfmpeg = useCallback(async () => {
     if (ffmpegRef.current) return ffmpegRef.current;
@@ -767,7 +773,7 @@ function Tools() {
     try {
       try {
         await withTimeout(
-          ffmpeg.exec(['-i', inputName, '-an', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', outputName]),
+          ffmpeg.exec(['-i', inputName, '-an', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23', '-profile:v', 'baseline', '-level', '3.0', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', outputName]),
           120000,
           'MP4 encode',
         );
@@ -989,10 +995,10 @@ function Tools() {
           window.clearInterval(recordIntervalRef.current);
           recordIntervalRef.current = 0;
         }
+        const blobType = recorder.mimeType || mimeType || '';
+        const inputExt = String(blobType).includes('mp4') ? 'mp4' : 'webm';
+        const blob = new Blob(recordChunksRef.current, { type: blobType || 'video/webm' });
         try {
-          const blobType = recorder.mimeType || mimeType || '';
-          const inputExt = String(blobType).includes('mp4') ? 'mp4' : 'webm';
-          const blob = new Blob(recordChunksRef.current, { type: blobType || 'video/webm' });
           if (needsTranscode || !String(blobType).startsWith('video/mp4')) {
             setStatusMessage('Encoding MP4…');
             const mp4 = await encodeMp4(blob, inputExt);
@@ -1017,7 +1023,15 @@ function Tools() {
             }
           }
         } catch {
-          setStatusMessage('MP4 encoding failed.');
+          const handle = saveFileHandleRef.current;
+          saveFileHandleRef.current = null;
+          if (handle && await writeFileHandle(handle, blob)) {
+            setStatusMessage('Saved.');
+            clearMp4Download();
+          } else {
+            setMp4DownloadFromBlob(blob, outFilename);
+            setStatusMessage('MP4 ready.');
+          }
         } finally {
           recordChunksRef.current = [];
           mediaRecorderRef.current = null;
@@ -1056,10 +1070,10 @@ function Tools() {
       if (ev.data && ev.data.size > 0) recordChunksRef.current.push(ev.data);
     };
     recorder.onstop = async () => {
+      const blobType = recorder.mimeType || mimeType || '';
+      const inputExt = String(blobType).includes('mp4') ? 'mp4' : 'webm';
+      const blob = new Blob(recordChunksRef.current, { type: blobType || 'video/webm' });
       try {
-        const blobType = recorder.mimeType || mimeType || '';
-        const inputExt = String(blobType).includes('mp4') ? 'mp4' : 'webm';
-        const blob = new Blob(recordChunksRef.current, { type: blobType || 'video/webm' });
         if (needsTranscode || !String(blobType).startsWith('video/mp4')) {
           setStatusMessage('Encoding MP4…');
           const mp4 = await encodeMp4(blob, inputExt);
@@ -1084,7 +1098,15 @@ function Tools() {
           }
         }
       } catch {
-        setStatusMessage('MP4 encoding failed.');
+        const handle = saveFileHandleRef.current;
+        saveFileHandleRef.current = null;
+        if (handle && await writeFileHandle(handle, blob)) {
+          setStatusMessage('Saved.');
+          clearMp4Download();
+        } else {
+          setMp4DownloadFromBlob(blob, outFilename);
+          setStatusMessage('MP4 ready.');
+        }
       } finally {
         recordChunksRef.current = [];
         mediaRecorderRef.current = null;

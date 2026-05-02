@@ -802,7 +802,7 @@ function Tools() {
     try {
       try {
         await withTimeout(
-          ffmpeg.exec(['-i', inputName, '-an', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23', '-profile:v', 'baseline', '-level', '3.0', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', outputName]),
+          ffmpeg.exec(['-i', inputName, '-an', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23', '-profile:v', 'baseline', '-level', '4.0', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', outputName]),
           120000,
           'MP4 encode',
         );
@@ -1208,7 +1208,7 @@ function Tools() {
               '-preset', 'veryfast',
               '-crf', '23',
               '-profile:v', 'baseline',
-              '-level', '3.0',
+              '-level', '4.0',
               '-pix_fmt', 'yuv420p',
               '-movflags', '+faststart',
               outputName,
@@ -1470,7 +1470,7 @@ function Tools() {
             '-preset', 'veryfast',
             '-crf', '23',
             '-profile:v', 'baseline',
-            '-level', '3.0',
+            '-level', '4.0',
             '-pix_fmt', 'yuv420p',
             '-movflags', '+faststart',
             outputName,

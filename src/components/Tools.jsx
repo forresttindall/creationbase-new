@@ -380,6 +380,8 @@ function Tools() {
   const paperPreviewMountRef = useRef(null);
   const paperExportMountRef = useRef(null);
   const [paperExportActive, setPaperExportActive] = useState(false);
+  const [paperManualFrameActive, setPaperManualFrameActive] = useState(false);
+  const [paperManualFrameMs, setPaperManualFrameMs] = useState(0);
   const [paperImageUrl, setPaperImageUrl] = useState('/images/creationbase logo new png.png');
 
   const [framePresetId, setFramePresetId] = useState(FRAME_PRESETS[0].id);
@@ -1110,17 +1112,14 @@ function Tools() {
         return;
       }
 
-      const captureW = Math.max(1, shaderCanvas.width || frameW);
-      const captureH = Math.max(1, shaderCanvas.height || frameH);
-
       const out = document.createElement('canvas');
-      out.width = captureW;
-      out.height = captureH;
+      out.width = frameW;
+      out.height = frameH;
       out.style.position = 'fixed';
       out.style.left = '-10000px';
       out.style.top = '0';
-      out.style.width = `${captureW}px`;
-      out.style.height = `${captureH}px`;
+      out.style.width = `${frameW}px`;
+      out.style.height = `${frameH}px`;
       out.style.opacity = '0';
       out.style.pointerEvents = 'none';
       out.setAttribute('aria-hidden', 'true');
@@ -1143,10 +1142,23 @@ function Tools() {
         const canvasToPng = () => new Promise((resolve) => {
           out.toBlob((b) => resolve(b), 'image/png');
         });
+        const paperSpeedForExport = animate ? paperSpeed : 0;
+        setPaperManualFrameActive(true);
+
         const glPaper = shaderCanvas.getContext('webgl2') || shaderCanvas.getContext('webgl');
-        const expectedLen = captureW * captureH * 4;
+        const captureW2 = Math.max(1, glPaper?.drawingBufferWidth || shaderCanvas.width || frameW);
+        const captureH2 = Math.max(1, glPaper?.drawingBufferHeight || shaderCanvas.height || frameH);
+        const expectedLen = captureW2 * captureH2 * 4;
         const pixels = new Uint8Array(expectedLen);
-        const imageData = ctx.createImageData(captureW, captureH);
+
+        const needsScale = captureW2 !== frameW || captureH2 !== frameH;
+        const tmp = needsScale ? document.createElement('canvas') : null;
+        if (tmp) {
+          tmp.width = captureW2;
+          tmp.height = captureH2;
+        }
+        const tmpCtx = tmp ? tmp.getContext('2d') : null;
+        const imageData = (tmpCtx || ctx).createImageData(captureW2, captureH2);
 
         setIsRecording(true);
         setIsFinalizing(true);
@@ -1156,39 +1168,44 @@ function Tools() {
 
           for (let i = 0; i < totalFrames; i += 1) {
             if (i % 12 === 0) setStatusMessage(`Preparing frames… ${i}/${totalFrames}`);
+            setPaperManualFrameMs((i / fps) * paperSpeedForExport * 1000);
             await new Promise((r) => requestAnimationFrame(() => r()));
             await new Promise((r) => requestAnimationFrame(() => r()));
-            await new Promise((r) => globalThis.setTimeout(r, 0));
 
-            ctx.clearRect(0, 0, captureW, captureH);
+            ctx.clearRect(0, 0, frameW, frameH);
             ctx.fillStyle = bgHex || (isPaperHeatmap ? '#000000' : '#FFFFFF');
-            ctx.fillRect(0, 0, captureW, captureH);
+            ctx.fillRect(0, 0, frameW, frameH);
 
             if (glPaper) {
               try { glPaper.finish(); } catch (e) { void e; }
               try {
-                glPaper.readPixels(0, 0, captureW, captureH, glPaper.RGBA, glPaper.UNSIGNED_BYTE, pixels);
+                glPaper.readPixels(0, 0, captureW2, captureH2, glPaper.RGBA, glPaper.UNSIGNED_BYTE, pixels);
                 let hasNonZero = false;
                 for (let k = 0; k < pixels.length; k += 16384) {
                   if (pixels[k] || pixels[k + 1] || pixels[k + 2] || pixels[k + 3]) { hasNonZero = true; break; }
                 }
                 if (hasNonZero) {
-                  const rowBytes = captureW * 4;
-                  for (let y = 0; y < captureH; y += 1) {
-                    const srcStart = (captureH - 1 - y) * rowBytes;
+                  const rowBytes = captureW2 * 4;
+                  for (let y = 0; y < captureH2; y += 1) {
+                    const srcStart = (captureH2 - 1 - y) * rowBytes;
                     const dstStart = y * rowBytes;
                     imageData.data.set(pixels.subarray(srcStart, srcStart + rowBytes), dstStart);
                   }
-                  ctx.putImageData(imageData, 0, 0);
+                  if (tmpCtx && tmp) {
+                    tmpCtx.putImageData(imageData, 0, 0);
+                    ctx.drawImage(tmp, 0, 0, frameW, frameH);
+                  } else {
+                    ctx.putImageData(imageData, 0, 0);
+                  }
                 } else {
-                  try { ctx.drawImage(shaderCanvas, 0, 0, captureW, captureH); } catch (err) { void err; }
+                  try { ctx.drawImage(shaderCanvas, 0, 0, frameW, frameH); } catch (err) { void err; }
                 }
               } catch (e) {
                 void e;
-                try { ctx.drawImage(shaderCanvas, 0, 0, captureW, captureH); } catch (err) { void err; }
+                try { ctx.drawImage(shaderCanvas, 0, 0, frameW, frameH); } catch (err) { void err; }
               }
             } else {
-              try { ctx.drawImage(shaderCanvas, 0, 0, captureW, captureH); } catch (e) { void e; }
+              try { ctx.drawImage(shaderCanvas, 0, 0, frameW, frameH); } catch (e) { void e; }
             }
 
             const pngBlob = await canvasToPng();
@@ -1231,6 +1248,8 @@ function Tools() {
             try { recordCanvasElRef.current.remove(); } catch (e) { void e; }
             recordCanvasElRef.current = null;
           }
+          setPaperManualFrameActive(false);
+          setPaperManualFrameMs(0);
           setIsRecording(false);
           setIsFinalizing(false);
           setPaperExportActive(false);
@@ -1333,8 +1352,6 @@ function Tools() {
         return;
       }
 
-      prevAnimateRef.current = animate;
-      if (!animate) setAnimate(true);
       forcePixelRatioRef.current = 1;
 
       const maxFrames = 300;
@@ -1497,7 +1514,6 @@ function Tools() {
         forcePixelRatioRef.current = null;
         setIsRecording(false);
         setIsFinalizing(false);
-        if (!prevAnimateRef.current) setAnimate(false);
         scheduleRender();
       }
       return;
@@ -1613,11 +1629,12 @@ function Tools() {
       rotation: paperRotation,
       offsetX: paperOffsetX,
       offsetY: paperOffsetY,
-      speed: computedPaperSpeed,
+      speed: paperManualFrameActive ? 0 : computedPaperSpeed,
+      frame: paperManualFrameActive ? paperManualFrameMs : 0,
     };
     const webGlContextAttributes = isIOSDevice ? { preserveDrawingBuffer: true, alpha: true, premultipliedAlpha: false } : undefined;
     const sizing = mode === 'export'
-      ? { width: frameW, height: frameH, minPixelRatio: 1, maxPixelCount: Math.max(1, frameW * frameH * 4) }
+      ? { width: frameW, height: frameH, minPixelRatio: 1, maxPixelCount: Math.max(1, frameW * frameH) }
       : { style: { width: '100%', height: '100%' } };
 
     if (isPaperHeatmap) {

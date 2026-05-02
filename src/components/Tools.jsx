@@ -366,6 +366,8 @@ function Tools() {
   const recordTimeoutRef = useRef(0);
   const recordIntervalRef = useRef(0);
   const recordChunksRef = useRef([]);
+  const iosReadPixelsRef = useRef(null);
+  const iosImageDataRef = useRef(null);
   const ffmpegRef = useRef(null);
   const ffmpegLoadingRef = useRef(null);
   const saveFileHandleRef = useRef(null);
@@ -1079,7 +1081,33 @@ function Tools() {
         render({ width: frameW, height: frameH, pixelRatio: 1 });
         ctx.fillStyle = baseFill;
         ctx.fillRect(0, 0, frameW, frameH);
-        ctx.drawImage(canvas, 0, 0, frameW, frameH);
+        const gl = glRef.current;
+        if (gl) {
+          try { gl.finish(); } catch (e) { void e; }
+          const expectedLen = frameW * frameH * 4;
+          if (!iosReadPixelsRef.current || iosReadPixelsRef.current.length !== expectedLen) {
+            iosReadPixelsRef.current = new Uint8Array(expectedLen);
+          }
+          if (!iosImageDataRef.current || iosImageDataRef.current.width !== frameW || iosImageDataRef.current.height !== frameH) {
+            iosImageDataRef.current = ctx.createImageData(frameW, frameH);
+          }
+          try {
+            gl.readPixels(0, 0, frameW, frameH, gl.RGBA, gl.UNSIGNED_BYTE, iosReadPixelsRef.current);
+            const src = iosReadPixelsRef.current;
+            const dst = iosImageDataRef.current.data;
+            const rowBytes = frameW * 4;
+            for (let y = 0; y < frameH; y += 1) {
+              const srcStart = (frameH - 1 - y) * rowBytes;
+              const dstStart = y * rowBytes;
+              dst.set(src.subarray(srcStart, srcStart + rowBytes), dstStart);
+            }
+            ctx.putImageData(iosImageDataRef.current, 0, 0);
+            return;
+          } catch (e) {
+            void e;
+          }
+        }
+        try { ctx.drawImage(canvas, 0, 0, frameW, frameH); } catch (e) { void e; }
       };
       draw();
       recordIntervalRef.current = window.setInterval(draw, Math.round(1000 / fps));

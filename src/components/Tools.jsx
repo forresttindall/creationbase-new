@@ -1143,6 +1143,19 @@ function Tools() {
           out.toBlob((b) => resolve(b), 'image/png');
         });
         const paperSpeedForExport = animate ? paperSpeed : 0;
+        const bg = parseHex(bgHex || (isPaperHeatmap ? '#000000' : '#FFFFFF')) || { r: 255, g: 255, b: 255 };
+        const hasNonBackgroundSample = (buf) => {
+          if (!buf || buf.length < 4) return false;
+          const stride = Math.max(4, Math.floor(buf.length / 4096 / 4) * 4);
+          const tol = 2;
+          for (let i = 0; i < buf.length; i += stride) {
+            const r = buf[i];
+            const g = buf[i + 1];
+            const b = buf[i + 2];
+            if (Math.abs(r - bg.r) > tol || Math.abs(g - bg.g) > tol || Math.abs(b - bg.b) > tol) return true;
+          }
+          return false;
+        };
         const mount = paperExportMountRef.current?.paperShaderMount;
         if (mount) {
           try { mount.setSpeed(0); } catch (e) { void e; }
@@ -1170,6 +1183,26 @@ function Tools() {
         try {
           setStatusMessage(`Preparing frames… (${fps}fps)`);
           const { ffmpeg, fetchFile } = await withTimeout(getFfmpeg(), 60000, 'FFmpeg load');
+
+          const prepStart = performance.now();
+          for (;;) {
+            const frameMs = 0;
+            if (mount) {
+              try { mount.setFrame(frameMs); } catch (e) { void e; }
+            } else {
+              setPaperManualFrameMs(frameMs);
+            }
+            await new Promise((r) => requestAnimationFrame(() => r()));
+            await new Promise((r) => requestAnimationFrame(() => r()));
+            if (glPaper) {
+              try { glPaper.finish(); } catch (e) { void e; }
+              try { glPaper.readPixels(0, 0, captureW2, captureH2, glPaper.RGBA, glPaper.UNSIGNED_BYTE, pixels); } catch (e) { void e; }
+              if (hasNonBackgroundSample(pixels)) break;
+            }
+            if (performance.now() - prepStart > 4000) break;
+            setStatusMessage('Preparing frames… (waiting for image)');
+            await new Promise((r) => globalThis.setTimeout(r, 60));
+          }
 
           for (let i = 0; i < totalFrames; i += 1) {
             if (i % 12 === 0) setStatusMessage(`Preparing frames… ${i}/${totalFrames}`);
@@ -2182,12 +2215,13 @@ function Tools() {
             aria-hidden="true"
             style={{
               position: 'fixed',
-              left: -10000,
+              left: 0,
               top: 0,
               width: frameW,
               height: frameH,
               opacity: 0,
               pointerEvents: 'none',
+              zIndex: -1,
             }}
           >
             {renderPaperShader('export')}

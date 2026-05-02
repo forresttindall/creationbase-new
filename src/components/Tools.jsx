@@ -380,8 +380,6 @@ function Tools() {
   const paperPreviewMountRef = useRef(null);
   const paperExportMountRef = useRef(null);
   const [paperExportActive, setPaperExportActive] = useState(false);
-  const [paperManualFrameActive, setPaperManualFrameActive] = useState(false);
-  const [paperManualFrameMs, setPaperManualFrameMs] = useState(0);
   const [paperImageUrl, setPaperImageUrl] = useState('/images/creationbase logo new png.png');
 
   const [framePresetId, setFramePresetId] = useState(FRAME_PRESETS[0].id);
@@ -1142,26 +1140,7 @@ function Tools() {
         const canvasToPng = () => new Promise((resolve) => {
           out.toBlob((b) => resolve(b), 'image/png');
         });
-        const paperSpeedForExport = animate ? paperSpeed : 0;
-        const bg = parseHex(bgHex || (isPaperHeatmap ? '#000000' : '#FFFFFF')) || { r: 255, g: 255, b: 255 };
-        const hasNonBackgroundSample = (buf) => {
-          if (!buf || buf.length < 4) return false;
-          const stride = Math.max(4, Math.floor(buf.length / 4096 / 4) * 4);
-          const tol = 2;
-          for (let i = 0; i < buf.length; i += stride) {
-            const r = buf[i];
-            const g = buf[i + 1];
-            const b = buf[i + 2];
-            if (Math.abs(r - bg.r) > tol || Math.abs(g - bg.g) > tol || Math.abs(b - bg.b) > tol) return true;
-          }
-          return false;
-        };
         const mount = paperExportMountRef.current?.paperShaderMount;
-        if (mount) {
-          try { mount.setSpeed(0); } catch (e) { void e; }
-        } else {
-          setPaperManualFrameActive(true);
-        }
 
         const glPaper = shaderCanvas.getContext('webgl2') || shaderCanvas.getContext('webgl');
         const captureW2 = Math.max(1, glPaper?.drawingBufferWidth || shaderCanvas.width || frameW);
@@ -1169,14 +1148,11 @@ function Tools() {
         const expectedLen = captureW2 * captureH2 * 4;
         const pixels = new Uint8Array(expectedLen);
 
-        const needsScale = captureW2 !== frameW || captureH2 !== frameH;
-        const tmp = needsScale ? document.createElement('canvas') : null;
-        if (tmp) {
-          tmp.width = captureW2;
-          tmp.height = captureH2;
-        }
-        const tmpCtx = tmp ? tmp.getContext('2d') : null;
-        const imageData = (tmpCtx || ctx).createImageData(captureW2, captureH2);
+        const tmp = document.createElement('canvas');
+        tmp.width = captureW2;
+        tmp.height = captureH2;
+        const tmpCtx = tmp.getContext('2d');
+        const imageData = tmpCtx ? tmpCtx.createImageData(captureW2, captureH2) : ctx.createImageData(captureW2, captureH2);
 
         setIsRecording(true);
         setIsFinalizing(true);
@@ -1184,34 +1160,8 @@ function Tools() {
           setStatusMessage(`Preparing frames… (${fps}fps)`);
           const { ffmpeg, fetchFile } = await withTimeout(getFfmpeg(), 60000, 'FFmpeg load');
 
-          const prepStart = performance.now();
-          for (;;) {
-            const frameMs = 0;
-            if (mount) {
-              try { mount.setFrame(frameMs); } catch (e) { void e; }
-            } else {
-              setPaperManualFrameMs(frameMs);
-            }
-            await new Promise((r) => requestAnimationFrame(() => r()));
-            await new Promise((r) => requestAnimationFrame(() => r()));
-            if (glPaper) {
-              try { glPaper.finish(); } catch (e) { void e; }
-              try { glPaper.readPixels(0, 0, captureW2, captureH2, glPaper.RGBA, glPaper.UNSIGNED_BYTE, pixels); } catch (e) { void e; }
-              if (hasNonBackgroundSample(pixels)) break;
-            }
-            if (performance.now() - prepStart > 4000) break;
-            setStatusMessage('Preparing frames… (waiting for image)');
-            await new Promise((r) => globalThis.setTimeout(r, 60));
-          }
-
           for (let i = 0; i < totalFrames; i += 1) {
             if (i % 12 === 0) setStatusMessage(`Preparing frames… ${i}/${totalFrames}`);
-            const frameMs = (i / fps) * paperSpeedForExport * 1000;
-            if (mount) {
-              try { mount.setFrame(frameMs); } catch (e) { void e; }
-            } else {
-              setPaperManualFrameMs(frameMs);
-            }
             await new Promise((r) => requestAnimationFrame(() => r()));
             await new Promise((r) => requestAnimationFrame(() => r()));
 
@@ -1234,13 +1184,8 @@ function Tools() {
                     const dstStart = y * rowBytes;
                     imageData.data.set(pixels.subarray(srcStart, srcStart + rowBytes), dstStart);
                   }
-                  for (let p = 3; p < imageData.data.length; p += 4) imageData.data[p] = 255;
-                  if (tmpCtx && tmp) {
-                    tmpCtx.putImageData(imageData, 0, 0);
-                    ctx.drawImage(tmp, 0, 0, frameW, frameH);
-                  } else {
-                    ctx.putImageData(imageData, 0, 0);
-                  }
+                  if (tmpCtx) tmpCtx.putImageData(imageData, 0, 0);
+                  ctx.drawImage(tmp, 0, 0, frameW, frameH);
                 } else {
                   try { ctx.drawImage(shaderCanvas, 0, 0, frameW, frameH); } catch (err) { void err; }
                 }
@@ -1292,8 +1237,6 @@ function Tools() {
             try { recordCanvasElRef.current.remove(); } catch (e) { void e; }
             recordCanvasElRef.current = null;
           }
-          setPaperManualFrameActive(false);
-          setPaperManualFrameMs(0);
           setIsRecording(false);
           setIsFinalizing(false);
           setPaperExportActive(false);
@@ -1674,12 +1617,11 @@ function Tools() {
       rotation: paperRotation,
       offsetX: paperOffsetX,
       offsetY: paperOffsetY,
-      speed: paperManualFrameActive ? 0 : computedPaperSpeed,
-      frame: paperManualFrameActive ? paperManualFrameMs : 0,
+      speed: computedPaperSpeed,
     };
     const webGlContextAttributes = isIOSDevice ? { preserveDrawingBuffer: true, alpha: true, premultipliedAlpha: false } : undefined;
     const sizing = mode === 'export'
-      ? { width: frameW, height: frameH, minPixelRatio: 1, maxPixelCount: Math.max(1, frameW * frameH) }
+      ? { width: frameW, height: frameH, minPixelRatio: 1, maxPixelCount: Math.max(1, frameW * frameH * 4) }
       : { style: { width: '100%', height: '100%' } };
 
     if (isPaperHeatmap) {
@@ -2215,13 +2157,12 @@ function Tools() {
             aria-hidden="true"
             style={{
               position: 'fixed',
-              left: 0,
+              left: -10000,
               top: 0,
               width: frameW,
               height: frameH,
               opacity: 0,
               pointerEvents: 'none',
-              zIndex: -1,
             }}
           >
             {renderPaperShader('export')}

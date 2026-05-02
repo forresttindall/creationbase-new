@@ -941,6 +941,7 @@ function Tools() {
     }
     const ext = 'mp4';
     const outFilename = `creationbase-tools-${frameW}x${frameH}-${videoDuration}s.${ext}`;
+    const extraStopMs = isIOSDevice ? 1100 : 0;
 
     if (!isMobileDevice) {
       const handle = await requestSaveFileHandle(outFilename);
@@ -1048,7 +1049,113 @@ function Tools() {
       recorder.start(250);
       recordTimeoutRef.current = window.setTimeout(() => {
         stopRecording();
-      }, Math.max(1, videoDuration) * 1000);
+      }, Math.max(1, videoDuration) * 1000 + extraStopMs);
+      return;
+    }
+
+    if (isIOSDevice) {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      prevAnimateRef.current = animate;
+      if (!animate) setAnimate(true);
+      forcePixelRatioRef.current = 1;
+      render({ width: frameW, height: frameH, pixelRatio: 1 });
+      await new Promise((r) => requestAnimationFrame(() => r()));
+      await new Promise((r) => requestAnimationFrame(() => r()));
+
+      const out = document.createElement('canvas');
+      out.width = frameW;
+      out.height = frameH;
+      const ctx = out.getContext('2d');
+      if (!ctx) {
+        setStatusMessage('Recording failed (2D context unavailable).');
+        return;
+      }
+
+      const fps = Math.max(10, Math.min(60, videoFps));
+      const baseFill = bgHex || '#FFFFFF';
+      const draw = () => {
+        render({ width: frameW, height: frameH, pixelRatio: 1 });
+        ctx.fillStyle = baseFill;
+        ctx.fillRect(0, 0, frameW, frameH);
+        ctx.drawImage(canvas, 0, 0, frameW, frameH);
+      };
+      draw();
+      recordIntervalRef.current = window.setInterval(draw, Math.round(1000 / fps));
+
+      await new Promise((r) => requestAnimationFrame(() => r()));
+      await new Promise((r) => requestAnimationFrame(() => r()));
+      await new Promise((r) => globalThis.setTimeout(r, Math.round(1000 / fps)));
+      draw();
+
+      const stream = out.captureStream(fps);
+      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
+      recordChunksRef.current = [];
+      recorder.ondataavailable = (ev) => {
+        if (ev.data && ev.data.size > 0) recordChunksRef.current.push(ev.data);
+      };
+      recorder.onstop = async () => {
+        if (recordIntervalRef.current) {
+          window.clearInterval(recordIntervalRef.current);
+          recordIntervalRef.current = 0;
+        }
+        const blobType = recorder.mimeType || mimeType || '';
+        const inputExt = String(blobType).includes('mp4') ? 'mp4' : 'webm';
+        const blob = new Blob(recordChunksRef.current, { type: blobType || 'video/webm' });
+        try {
+          if (needsTranscode || !String(blobType).startsWith('video/mp4')) {
+            setStatusMessage('Encoding MP4…');
+            const mp4 = await encodeMp4(blob, inputExt);
+            const handle = saveFileHandleRef.current;
+            saveFileHandleRef.current = null;
+            if (handle && await writeFileHandle(handle, mp4)) {
+              setStatusMessage('Saved.');
+              clearMp4Download();
+            } else {
+              setMp4DownloadFromBlob(mp4, outFilename);
+              setStatusMessage('MP4 ready.');
+            }
+          } else {
+            const handle = saveFileHandleRef.current;
+            saveFileHandleRef.current = null;
+            if (handle && await writeFileHandle(handle, blob)) {
+              setStatusMessage('Saved.');
+              clearMp4Download();
+            } else {
+              setMp4DownloadFromBlob(blob, outFilename);
+              setStatusMessage('MP4 ready.');
+            }
+          }
+        } catch {
+          const handle = saveFileHandleRef.current;
+          saveFileHandleRef.current = null;
+          if (handle && await writeFileHandle(handle, blob)) {
+            setStatusMessage('Saved.');
+            clearMp4Download();
+          } else {
+            setMp4DownloadFromBlob(blob, outFilename);
+            setStatusMessage('MP4 ready.');
+          }
+        } finally {
+          recordChunksRef.current = [];
+          mediaRecorderRef.current = null;
+          forcePixelRatioRef.current = null;
+          setIsRecording(false);
+          setIsFinalizing(false);
+          if (!prevAnimateRef.current) setAnimate(false);
+          scheduleRender();
+        }
+      };
+
+      mediaRecorderRef.current = recorder;
+      setIsRecording(true);
+      setIsFinalizing(false);
+      setStatusMessage(`Recording ${videoDuration}s video…`);
+      recorder.start(250);
+      recordTimeoutRef.current = window.setTimeout(() => {
+        stopRecording();
+      }, Math.max(1, videoDuration) * 1000 + extraStopMs);
       return;
     }
 
@@ -1126,8 +1233,8 @@ function Tools() {
 
     recordTimeoutRef.current = window.setTimeout(() => {
       stopRecording();
-    }, Math.max(1, videoDuration) * 1000);
-  }, [animate, bgHex, clearMp4Download, encodeMp4, frameH, frameW, isFinalizing, isMobileDevice, isPaperHeatmap, isPaperShader, isRecording, pickVideoMime, render, requestSaveFileHandle, scheduleRender, setMp4DownloadFromBlob, stopRecording, videoDuration, videoFps, waitForCanvasIn, writeFileHandle]);
+    }, Math.max(1, videoDuration) * 1000 + extraStopMs);
+  }, [animate, bgHex, clearMp4Download, encodeMp4, frameH, frameW, isFinalizing, isIOSDevice, isMobileDevice, isPaperHeatmap, isPaperShader, isRecording, pickVideoMime, render, requestSaveFileHandle, scheduleRender, setMp4DownloadFromBlob, stopRecording, videoDuration, videoFps, waitForCanvasIn, writeFileHandle]);
 
   const pageBg = UI_DARK;
   const pageFg = UI_LIGHT;

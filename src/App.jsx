@@ -135,62 +135,67 @@ const SiteFooter = ({
           </div>
         </div>
 
-        <div style={{ borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-xl)', paddingBottom: 'var(--spacing-xl)' }}>
-          <h1 className="section-title" style={{ marginBottom: 14, fontWeight: 400, fontSize: 'clamp(22px, 4vw, 40px)' }}>
-            get our free brand and website guide
-          </h1>
-          <form
-            onSubmit={onSubmitNewsletter}
-            className="newsletter-form"
-            style={{
-              maxWidth: 720,
-              display: 'grid',
-              gridTemplateColumns: 'minmax(140px, 200px) minmax(0, 1fr) auto',
-              gap: 12,
-              alignItems: 'center',
-            }}
-          >
-            <input
-              type="text"
-              value={newsletterName}
-              onChange={onNewsletterNameChange}
-              placeholder="Name"
-              required
-              className="newsletter-input"
-              aria-label="Name"
-            />
-            <input
-              type="email"
-              value={newsletterEmail}
-              onChange={onNewsletterEmailChange}
-              placeholder="Email"
-              required
-              className="newsletter-input"
-              aria-label="Email"
-            />
-            <button
-              type="submit"
-              disabled={newsletterStatus === 'loading'}
-              className="newsletter-button"
-              style={{
-                cursor: newsletterStatus === 'loading' ? 'default' : 'pointer',
-                opacity: newsletterStatus === 'loading' ? 0.6 : 1,
-                minWidth: 140,
-              }}
-            >
-              {newsletterStatus === 'loading' ? '...' : 'Sign Up'}
-            </button>
-          </form>
-          {newsletterStatus === 'success' && (
-            <div className="small-text" style={{ marginTop: 10, opacity: 0.85, textTransform: 'none' }}>
-              Submitted.
+        <div className="newsletter-block footer-newsletter">
+          <div className="footer-newsletter__grid">
+            <div className="footer-newsletter__content">
+              <h1 className="section-title" style={{ marginBottom: 14, fontWeight: 400, fontSize: 'clamp(22px, 4vw, 40px)' }}>
+                get our free brand and website guide
+              </h1>
+              <form
+                onSubmit={onSubmitNewsletter}
+                className="newsletter-form"
+              >
+                <input
+                  type="text"
+                  value={newsletterName}
+                  onChange={onNewsletterNameChange}
+                  placeholder="Name"
+                  required
+                  className="newsletter-input"
+                  aria-label="Name"
+                />
+                <input
+                  type="email"
+                  value={newsletterEmail}
+                  onChange={onNewsletterEmailChange}
+                  placeholder="Email"
+                  required
+                  className="newsletter-input"
+                  aria-label="Email"
+                />
+                <button
+                  type="submit"
+                  disabled={newsletterStatus === 'loading'}
+                  className="newsletter-button"
+                  style={{
+                    cursor: newsletterStatus === 'loading' ? 'default' : 'pointer',
+                    opacity: newsletterStatus === 'loading' ? 0.6 : 1,
+                    minWidth: 140,
+                  }}
+                >
+                  {newsletterStatus === 'loading' ? '...' : 'Sign Up'}
+                </button>
+              </form>
+              {newsletterStatus === 'success' && (
+                <div className="small-text" style={{ marginTop: 10, opacity: 0.85, textTransform: 'none' }}>
+                  Submitted.
+                </div>
+              )}
+              {newsletterStatus === 'error' && (
+                <div className="small-text" style={{ marginTop: 10, opacity: 0.85, textTransform: 'none' }}>
+                  Error. Try again.
+                </div>
+              )}
             </div>
-          )}
-          {newsletterStatus === 'error' && (
-            <div className="small-text" style={{ marginTop: 10, opacity: 0.85, textTransform: 'none' }}>
-              Error. Try again.
+            <div className="footer-newsletter__media" aria-hidden="true">
+              <img
+                src="/images/the%20guide%20mockup.webp"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
             </div>
-          )}
+          </div>
         </div>
 
         <div style={{ marginTop: '0', borderTop: HOME_SECTION_DIVIDER, paddingTop: '10px' }} className="flex">

@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUpRight } from '@phosphor-icons/react';
 
-const BLACK = '#FFFFFF';
-const GRAY1 = 'rgba(17, 17, 17, 0.56)';
-const GRAY2 = '#C9C9C9';
-const WHITE = '#111111';
+const BLACK = 'var(--color-bg)';
+const GRAY1 = 'var(--color-text-dim)';
+const GRAY2 = 'var(--color-border)';
+const WHITE = 'var(--color-text)';
 const STRATEGY_CALL_URL = 'https://calendly.com/forrest-creationbase/30min';
 
 const Services = () => {
@@ -16,8 +16,8 @@ const Services = () => {
     () => [
       { id: 'overview', label: 'Overview' },
       { id: 'four-cs', label: '4 Cs' },
-      { id: 'uiux', label: 'UI/UX' },
-      { id: 'dev', label: 'Development' },
+      { id: 'uiux', label: 'UI/UX + Product Design' },
+      { id: 'brand', label: 'Brand Design' },
       { id: 'logos', label: 'Logo Psychology' },
       { id: 'color', label: 'Color Memory' },
     ],
@@ -48,7 +48,7 @@ const Services = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      data-header-theme="light"
+      data-header-theme="dark"
       style={{ background: BLACK, color: WHITE, minHeight: '100vh' }}
       role="main"
     >
@@ -60,7 +60,7 @@ const Services = () => {
           </header>
           <div style={{ height: 1, background: 'var(--color-border)', marginTop: 'var(--spacing-sm)' }} aria-hidden="true" />
           <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 760, opacity: 0.85 }}>
-            Strategy-first UI/UX design, high-performance web development, and brand systems—built to be understood fast and remembered longer.
+            Strategy-first UI/UX and product design, brand systems, and visual identity work built to be understood fast and remembered longer.
           </div>
         </div>
       </section>
@@ -121,17 +121,17 @@ const Services = () => {
             <div style={{ borderTop: `1px solid ${GRAY2}`, paddingTop: 'var(--spacing-xl)' }}>
               <section id="overview" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
                 <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: '0 0 var(--spacing-md)' }}>
-                  What We Do
+                  Overview
                 </h2>
                 <p className="small-text" style={{ lineHeight: 1.6, margin: '0 0 var(--spacing-lg)', color: WHITE, maxWidth: 860 }}>
-                  Creationbase is a design and development studio focused on visual systems—how your brand looks, behaves, and earns trust across the web. We build experiences that are minimal but not generic: clear messaging, deliberate typography, strong imagery, precise interaction, and code that stays fast as you scale.
+                  Creationbase pairs UI/UX and product design with brand design so your site, product, and visual identity feel like one cohesive system. We help brands communicate faster, look sharper, and build trust through clear structure, memorable visuals, and polished interaction.
                 </p>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
                   {[
-                    { k: 'UI/UX Design', v: 'Flows, IA, product thinking, and interfaces that reduce friction.' },
-                    { k: 'Web Development', v: 'React/Vite builds with performance, accessibility, and polish.' },
-                    { k: 'Brand Systems', v: 'Logo, type, color, and motion rules that stay consistent.' },
-                    { k: 'Launch Support', v: 'QA, handoff, and iteration after launch based on real behavior.' },
+                    { k: 'UI/UX + Product Design', v: 'User flows, wireframes, interface systems, and polished screens built to reduce friction.' },
+                    { k: 'Brand Design', v: 'Identity direction, logos, typography, color, and supporting visuals that make the brand recognizable.' },
+                    { k: 'Visual Systems', v: 'Shared rules for layout, motion, imagery, and hierarchy so every touchpoint feels consistent.' },
+                    { k: 'Launch Support', v: 'Design handoff, refinement, and rollout support to get the system live cleanly.' },
                   ].map((item) => (
                     <div key={item.k} style={{ border: `1px solid ${GRAY2}`, borderRadius: 10, padding: 14 }}>
                       <div className="small-text" style={{ letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>
@@ -178,7 +178,7 @@ const Services = () => {
 
               <section id="uiux" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
                 <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: '0 0 var(--spacing-md)' }}>
-                  UI/UX Design
+                  UI/UX + Product Design
                 </h2>
                 <p className="small-text" style={{ lineHeight: 1.6, margin: '0 0 var(--spacing-lg)', color: WHITE, maxWidth: 860 }}>
                   Good UI is quiet. It makes the next step feel inevitable. We design interfaces by reducing cognitive load: fewer choices at once, clearer hierarchy, stronger naming, and consistent interaction rules.
@@ -194,19 +194,19 @@ const Services = () => {
                 </div>
               </section>
 
-              <section id="dev" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
+              <section id="brand" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
                 <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: '0 0 var(--spacing-md)' }}>
-                  Web Development
+                  Brand Design
                 </h2>
                 <p className="small-text" style={{ lineHeight: 1.6, margin: '0 0 var(--spacing-lg)', color: WHITE, maxWidth: 860 }}>
-                  Design is only real when it runs. We build fast sites that feel stable and intentional: clean structure, responsive behavior, accessible markup, and performance that holds up when content grows.
+                  Brand design gives people something they can recognize and remember. We build identity systems that feel distinct, translate cleanly across formats, and support the product experience instead of competing with it.
                 </p>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
                   {[
-                    { k: 'Performance', v: 'Ship less, render fast, keep interactions smooth.' },
-                    { k: 'Accessibility', v: 'Keyboard-friendly, readable contrast, sensible semantics.' },
-                    { k: 'Maintainability', v: 'Components as systems, not one-off pages.' },
-                    { k: 'Iteration', v: 'Small changes stay safe because the system is consistent.' },
+                    { k: 'Identity Direction', v: 'Distinct visual territory, references, and creative direction.' },
+                    { k: 'Logo Systems', v: 'Primary marks, alternates, lockups, and usage rules.' },
+                    { k: 'Typography + Color', v: 'Ownable type and palette choices that strengthen recall.' },
+                    { k: 'Brand Assets', v: 'Graphics, layout rules, and supporting assets for consistent rollout.' },
                   ].map((item) => (
                     <div key={item.k} style={{ border: `1px solid ${GRAY2}`, borderRadius: 10, padding: 14 }}>
                       <div className="small-text" style={{ letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>

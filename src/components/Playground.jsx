@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const BLACK = '#FFFFFF';
-const WHITE = '#111111';
+const BLACK = 'var(--color-bg)';
+const WHITE = 'var(--color-text)';
 const BORDER = 'var(--color-border)';
 
 const ITEMS = [
@@ -28,7 +28,7 @@ const Playground = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      data-header-theme="light"
+      data-header-theme="dark"
       className="playground-page"
       style={{ background: BLACK, color: WHITE, minHeight: '100vh' }}
     >

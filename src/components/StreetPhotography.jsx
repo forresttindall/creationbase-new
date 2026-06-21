@@ -41,11 +41,11 @@ const StreetPhotography = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      data-header-theme="light"
+      data-header-theme="dark"
       style={{
         padding: 0,
-        background: '#FFFFFF',
-        color: '#111111',
+        background: 'var(--color-bg)',
+        color: 'var(--color-text)',
         minHeight: '100vh',
       }}
     >

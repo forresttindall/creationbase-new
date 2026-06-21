@@ -14,12 +14,12 @@ const sections = [
 ];
 
 const RED = "#ED1C23";
-const WHITE = "#111111";
-const BLACK = "#FFFFFF";
-const UI_LIGHT = "#111111";
+const WHITE = "var(--color-text)";
+const BLACK = "var(--color-bg)";
+const UI_LIGHT = "var(--color-text)";
 const PAGE_BG = BLACK;
-const GRAY1 = "rgba(17, 17, 17, 0.56)";
-const GRAY2 = "#C9C9C9";
+const GRAY1 = "var(--color-text-dim)";
+const GRAY2 = "var(--color-border)";
 const BRAND_WHITE = "#FFFFFF";
 const BRAND_BLACK = "#111111";
 const BRAND_GRAY_DARK = "#353535";

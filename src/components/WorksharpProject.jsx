@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import DecryptText from './DecryptText';
 
-const BLACK = '#FFFFFF';
-const WHITE = '#111111';
+const BLACK = 'var(--color-bg)';
+const WHITE = 'var(--color-text)';
 
 const WORKSHARP_IMAGES = [
   { src: '/images/worksharp/_DSC6969.jpg', alt: 'Worksharp + Drill Doctor commercial editorial photography' },
@@ -85,10 +85,10 @@ const WorksharpProject = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      data-header-theme="light"
+      data-header-theme="dark"
       style={{ background: BLACK, color: WHITE, minHeight: '100vh' }}
     >
-      <section data-header-theme="light" style={{ position: 'relative', overflow: 'hidden', background: BLACK, color: WHITE }}>
+      <section data-header-theme="dark" style={{ position: 'relative', overflow: 'hidden', background: BLACK, color: WHITE }}>
         <div style={{ minHeight: '42vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
           <h1 className="home-hero__title" style={{ marginBottom: 'auto' }}>
             <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>

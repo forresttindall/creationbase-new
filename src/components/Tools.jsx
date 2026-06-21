@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heatmap, LiquidMetal } from '@paper-design/shaders-react';
 
-const UI_LIGHT = '#111111';
-const UI_DARK = '#FFFFFF';
+const UI_LIGHT = 'var(--color-text)';
+const UI_DARK = 'var(--color-bg)';
 
 const FRAME_PRESETS = [
   { id: 'ig-post-1350x1080', label: 'Instagram Post (1350×1080)', width: 1350, height: 1080 },
@@ -1468,21 +1468,39 @@ function Tools() {
 
   const pageBg = UI_DARK;
   const pageFg = UI_LIGHT;
+  const panelBorder = '1px solid var(--color-border)';
+  const panelBg = 'rgba(17, 17, 17, 0.82)';
   const fieldBaseStyle = useMemo(() => ({
     width: '100%',
     minWidth: 0,
     boxSizing: 'border-box',
     padding: '10px 10px',
     borderRadius: 10,
-    border: '1px solid rgba(17, 17, 17, 0.18)',
-    background: '#FFFFFF',
-    color: '#111111',
+    border: panelBorder,
+    background: 'rgba(17, 17, 17, 0.92)',
+    color: 'var(--color-text)',
     fontFamily: 'var(--font-mono)',
     fontWeight: 'var(--font-mono-weight)',
     fontSize: 'var(--fs-sm)',
     lineHeight: 1.1,
     letterSpacing: '0.02em',
-  }), []);
+  }), [panelBorder]);
+  const panelStyle = useMemo(() => ({
+    border: panelBorder,
+    borderRadius: 14,
+    background: panelBg,
+    backdropFilter: 'blur(18px)',
+    WebkitBackdropFilter: 'blur(18px)',
+    padding: 14,
+  }), [panelBg, panelBorder]);
+  const colorInputStyle = useMemo(() => ({
+    width: 44,
+    height: 40,
+    padding: 0,
+    border: panelBorder,
+    borderRadius: 10,
+    background: 'rgba(17, 17, 17, 0.92)',
+  }), [panelBorder]);
   const rangeStyle = useMemo(() => ({ width: '100%', minWidth: 0 }), []);
   const layoutColumns = stackLayout ? '1fr' : 'minmax(280px, 420px) minmax(0, 1fr)';
   const sidePanelMaxHeight = stackLayout ? 'none' : 'calc(var(--vh-stable, 100vh) - 160px)';
@@ -1547,7 +1565,7 @@ function Tools() {
   return (
     <motion.section
       className="shader-tool"
-      data-header-theme="light"
+      data-header-theme="dark"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.45, ease: 'easeOut' }}
@@ -1555,7 +1573,7 @@ function Tools() {
         background: pageBg,
         color: pageFg,
         minHeight: '100vh',
-        borderBottom: '1px solid #000000',
+        borderBottom: '1px solid var(--color-border)',
       }}
     >
       <div style={{ padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-xxl)', maxWidth: 1400, margin: '0 auto' }}>
@@ -1566,10 +1584,10 @@ function Tools() {
           </div>
         </div>
 
-        <div style={{ height: 1, background: '#000000', margin: 'var(--spacing-md) 0' }} />
+        <div style={{ height: 1, background: 'var(--color-border)', margin: 'var(--spacing-md) 0' }} />
 
         <div style={{ display: 'grid', gridTemplateColumns: layoutColumns, gap: 'var(--spacing-md)', alignItems: 'start' }}>
-          <div style={{ border: '1px solid rgba(17,17,17,0.18)', borderRadius: 14, background: 'rgba(255,255,255,0.86)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)', padding: 14, maxHeight: sidePanelMaxHeight, overflowY: 'auto', overflowX: 'hidden' }}>
+          <div style={{ ...panelStyle, maxHeight: sidePanelMaxHeight, overflowY: 'auto', overflowX: 'hidden' }}>
             <div className="small-text" style={{ fontWeight: 'var(--font-mono-weight-bold)', marginBottom: 10 }}>INPUT</div>
             <div style={{ display: 'grid', gap: 8 }}>
               <label className="small-text" style={{ display: 'grid', gap: 8, minWidth: 0 }}>
@@ -1817,7 +1835,7 @@ function Tools() {
                         <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>{`Color ${index + 1}`}</span>
                         <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr', gap: 10, alignItems: 'center' }}>
                           <input
-                            style={{ width: 44, height: 40, padding: 0, border: '1px solid rgba(17, 17, 17, 0.18)', borderRadius: 10, background: '#FFFFFF' }}
+                            style={colorInputStyle}
                             type="color"
                             value={value}
                             onChange={(ev) => {
@@ -1867,14 +1885,14 @@ function Tools() {
                     <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Tint</span>
                       <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr', gap: 10, alignItems: 'center' }}>
-                        <input style={{ width: 44, height: 40, padding: 0, border: '1px solid rgba(17, 17, 17, 0.18)', borderRadius: 10, background: '#FFFFFF' }} type="color" value={tintHex} onChange={(ev) => setTintHex(ev.target.value)} />
+                        <input style={colorInputStyle} type="color" value={tintHex} onChange={(ev) => setTintHex(ev.target.value)} />
                         <input style={fieldBaseStyle} value={tintHex} onChange={(ev) => setTintHex(ev.target.value)} />
                       </div>
                     </label>
                     <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Background</span>
                       <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr', gap: 10, alignItems: 'center' }}>
-                        <input style={{ width: 44, height: 40, padding: 0, border: '1px solid rgba(17, 17, 17, 0.18)', borderRadius: 10, background: '#FFFFFF' }} type="color" value={bgHex} onChange={(ev) => setBgHex(ev.target.value)} />
+                        <input style={colorInputStyle} type="color" value={bgHex} onChange={(ev) => setBgHex(ev.target.value)} />
                         <input style={fieldBaseStyle} value={bgHex} onChange={(ev) => setBgHex(ev.target.value)} />
                       </div>
                     </label>
@@ -1886,7 +1904,7 @@ function Tools() {
                 <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                   <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Background</span>
                   <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr', gap: 10, alignItems: 'center' }}>
-                    <input style={{ width: 44, height: 40, padding: 0, border: '1px solid rgba(17, 17, 17, 0.18)', borderRadius: 10, background: '#FFFFFF' }} type="color" value={bgHex} onChange={(ev) => setBgHex(ev.target.value)} />
+                    <input style={colorInputStyle} type="color" value={bgHex} onChange={(ev) => setBgHex(ev.target.value)} />
                     <input style={fieldBaseStyle} value={bgHex} onChange={(ev) => setBgHex(ev.target.value)} />
                   </div>
                 </label>
@@ -1954,7 +1972,7 @@ function Tools() {
                   >
                     {isMobileDevice ? 'Save to Photos' : 'Save MP4'}
                   </button>
-                  <div style={{ border: '1px solid rgba(17,17,17,0.18)', borderRadius: 12, overflow: 'hidden', background: '#FFFFFF' }}>
+                  <div style={{ border: panelBorder, borderRadius: 12, overflow: 'hidden', background: 'rgba(17, 17, 17, 0.92)' }}>
                     <video
                       src={mp4Download.url}
                       controls
@@ -1976,7 +1994,7 @@ function Tools() {
             </div>
           </div>
 
-          <div style={{ border: '1px solid rgba(17,17,17,0.18)', borderRadius: 14, background: 'rgba(255,255,255,0.86)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)', padding: 14 }}>
+          <div style={panelStyle}>
             <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
               <div className="small-text" style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>PREVIEW</div>
               <div className="small-text" style={{ opacity: 0.85 }}>
@@ -1984,7 +2002,7 @@ function Tools() {
               </div>
             </div>
 
-            <div style={{ height: 1, background: 'rgba(17,17,17,0.12)', margin: '12px 0' }} />
+            <div style={{ height: 1, background: 'var(--color-border)', margin: '12px 0' }} />
 
             <div style={{ display: 'grid', placeItems: 'center', width: '100%' }}>
               <div style={{ width: 'min(920px, 100%)' }}>

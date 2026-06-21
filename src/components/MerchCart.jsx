@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowUpRight } from '@phosphor-icons/react';
 
-const BLACK = '#FFFFFF';
-const GRAY1 = 'rgba(17, 17, 17, 0.56)';
-const GRAY2 = '#C9C9C9';
-const WHITE = '#111111';
+const BLACK = 'var(--color-bg)';
+const GRAY1 = 'var(--color-text-dim)';
+const GRAY2 = 'var(--color-border)';
+const WHITE = 'var(--color-text)';
 
 const CART_KEY = 'merchbase-cart-v1';
 
@@ -170,7 +170,7 @@ const MerchCart = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      data-header-theme="light"
+      data-header-theme="dark"
       style={{ background: BLACK, color: WHITE, minHeight: '100vh' }}
       role="main"
     >

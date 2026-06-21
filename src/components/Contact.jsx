@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from '@phosphor-icons/react';
 import { blastConfetti } from '../utils/confetti';
 
-const BLACK = '#FFFFFF';
-const GRAY1 = 'rgba(17, 17, 17, 0.56)';
-const WHITE = '#111111';
+const BLACK = 'var(--color-bg)';
+const GRAY1 = 'var(--color-text-dim)';
+const WHITE = 'var(--color-text)';
 const STRATEGY_CALL_URL = 'https://calendly.com/forrest-creationbase/30min';
 
 const Contact = () => {
@@ -61,7 +61,7 @@ const Contact = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      data-header-theme="light"
+      data-header-theme="dark"
       style={{ background: BLACK, color: WHITE, minHeight: '100vh' }}
       role="main"
     >

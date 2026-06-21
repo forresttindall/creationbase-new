@@ -10,7 +10,6 @@ import RicochetProject from './components/RicochetProject';
 import MicronProject from './components/MicronProject';
 import Services from './components/Services';
 import Playground from './components/Playground';
-import FastburgerProject from './components/FastburgerProject';
 import WimProject from './components/WimProject';
 import ContinuityProject from './components/ContinuityProject';
 import DecryptText from './components/DecryptText';
@@ -22,9 +21,9 @@ import MerchCart from './components/MerchCart';
 import { Analytics } from '@vercel/analytics/react';
 import { blogPosts } from './blog/posts';
 
-const UI_LIGHT = '#111111';
-const UI_DARK = '#FFFFFF';
-const HOME_SECTION_DIVIDER = '1px solid #000000';
+const UI_LIGHT = 'var(--color-text)';
+const UI_DARK = 'var(--color-bg)';
+const HOME_SECTION_DIVIDER = '1px solid var(--color-border)';
 const STRATEGY_CALL_URL = 'https://calendly.com/forrest-creationbase/30min';
 const HERO_AVAILABILITY = {
   label: 'Available',
@@ -54,17 +53,6 @@ const INDEX01_PROJECTS = [
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },
   {
-    id: 'fastburger',
-    titleLines: ['Fastburger'],
-    scope: 'Scope(Full Brand Identity System, Website)',
-    primaryImage: '/images/fastburger box.webp',
-    primaryAlt: 'Fastburger packaging mockup',
-    secondaryImage: '/images/fastburger website mockup 1.webp',
-    secondaryAlt: 'Fastburger website mockup',
-    secondaryFallbackImage: '/images/fastburger box.webp',
-    sideOffset: 'clamp(2rem, 7vw, 5rem)',
-  },
-  {
     id: 'on',
     titleLines: ['Open Netizen'],
     scope: 'Scope(Identity, Visual System)',
@@ -90,7 +78,6 @@ const SiteFooter = ({
   isMobile,
   onBlogClick,
   onContactClick,
-  onMerchClick,
   reserveRightRail = false,
   newsletterName,
   newsletterEmail,
@@ -142,7 +129,6 @@ const SiteFooter = ({
               <li><a href="https://calendly.com/forrest-creationbase/30min" target="_blank" rel="noreferrer">STRATEGY CALL</a></li>
               <li><a href="/contact" onClick={(ev) => { ev.preventDefault(); onContactClick(); }}>CONTACT FORM</a></li>
               <li><a href="/blog" onClick={(ev) => { ev.preventDefault(); onBlogClick(); }}>BLOG</a></li>
-              <li><a href="/merch" onClick={(ev) => { ev.preventDefault(); onMerchClick?.(); }}>MERCH</a></li>
               <li><a href="https://instagram.com/creationbase.io" target="_blank" rel="noreferrer">INSTAGRAM</a></li>
               <li><a href="https://www.linkedin.com/company/creationbaseio/" target="_blank" rel="noreferrer">LINKEDIN</a></li>
             </ul>
@@ -256,40 +242,25 @@ const projects = [
   },
   {
     title: "Amore",
-    category: "UI/UX Design & Dev",
+    category: "UI/UX + Product Design",
     image: "/images/amore mockup.png",
-    description: "Restaurant website design in figma and dev in REACT",
-    year: "2025"
-  },
-  {
-    title: "Fastburger",
-    category: "Brand & UI/UX Design",
-    image: "/images/fastburger website mockup 1.webp",
-    description: "Restaurant website design in figma and dev in REACT",
+    description: "Restaurant website design and prototyping in Figma",
     year: "2025"
   },
   {
     title: "Clearfeed",
-    category: "UI/UX Design & Dev",
+    category: "UI/UX + Product Design",
     image: "/images/clearfeed.png",
-    description: "Desktop application design in figma and dev in ELECTRON",
+    description: "Desktop application design and product workflows in Figma",
     year: "2025"
   },
   {
     title: "Arrowleaf",
-    category: "UI/UX Design & Dev",
+    category: "UI/UX + Product Design",
     image: "/images/arrowleaf2.webp",
-    description: "Website design in figma and dev in REACT",
+    description: "Website design system and page design in Figma",
     year: "2024"
   },
-    {
-    title: "Fastburger",
-    category: "Brand & UI/UX Design",
-    image: "/images/fastburger website mockup 2.webp",
-    description: "Restaurant website design in figma and dev in REACT",
-    year: "2025"
-  },
-
 ];
 
 const graphicDesign = [
@@ -339,13 +310,6 @@ const graphicDesign = [
     year: "2025"
   },
   {
-    title: "Conway The Machine",
-    category: "Album Art Design",
-    image: "/images/fastburger box.webp",
-    description: "Concept album artwork design.",
-    year: "2025"
-  },
-  {
     title: "Continuity",
     category: "Brand Identity",
     image: "/images/continuity/TSHIRT MOCKUP.webp",
@@ -389,13 +353,6 @@ const FOOTER_CAROUSEL_IMAGES = [
   { src: '/images/OPEN NETIZEN CARD.jpg', alt: 'Open Netizen footer carousel image' },
   { src: '/images/OPEN NETIZEN WEBSITE MOCKUP.jpg', alt: 'Open Netizen footer carousel image' },
   { src: '/images/OPEN NETIZEN.jpg', alt: 'Open Netizen footer carousel image' },
-  { src: '/images/FASTBURGER MENU MOCKUP.webp', alt: 'Fastburger menu mockup footer carousel image' },
-  { src: '/images/FASTBURGER MENU.webp', alt: 'Fastburger printed menu footer carousel image' },
-  { src: '/images/fastburger box.webp', alt: 'Fastburger box footer carousel image' },
-  { src: '/images/fastburger a board.webp', alt: 'Fastburger signage footer carousel image' },
-  { src: '/images/fastburger typemark.webp', alt: 'Fastburger typemark footer carousel image' },
-  { src: '/images/fastburger website mockup 1.webp', alt: 'Fastburger website mockup footer carousel image' },
-  { src: '/images/fastburger website mockup 2.webp', alt: 'Fastburger website mockup footer carousel image' },
   { src: '/images/continuity/screens.webp', alt: 'Continuity screens footer carousel image' },
   { src: '/images/continuity/app.webp', alt: 'Continuity app footer carousel image' },
   { src: '/images/continuity/continuity%20logo.webp', alt: 'Continuity logo footer carousel image' },
@@ -735,8 +692,7 @@ function App() {
     homeScrollYRef.current = y;
     sessionStorage.setItem('homeScrollY', String(y));
     pendingHomeScrollRestoreRef.current = true;
-    if (id === 'fastburger') navigate('/fastburger');
-    else if (id === 'wim') navigate('/wim');
+    if (id === 'wim') navigate('/wim');
     else if (id === 'continuity') navigate('/continuity');
     else if (id === 'on') navigate('/open-netizen');
     else if (id === 'bac') navigate('/boise-analog-club');
@@ -804,19 +760,6 @@ function App() {
     navigate('/services');
   };
 
-  const openMerch = () => {
-    setMobileNavOpen(false);
-    if (location.pathname === '/') {
-      const y = window.scrollY || 0;
-      homeScrollYRef.current = y;
-      sessionStorage.setItem('homeScrollY', String(y));
-      pendingHomeScrollRestoreRef.current = true;
-    } else {
-      pendingHomeScrollRestoreRef.current = false;
-    }
-    navigate('/merch');
-  };
-
   const goToSection = (id) => {
     setMobileNavOpen(false);
     pendingHomeScrollRestoreRef.current = false;
@@ -851,8 +794,7 @@ function App() {
 
   useEffect(() => {
     const pathname = location.pathname;
-    if (pathname === '/fastburger') setActiveCaseStudy('fastburger');
-    else if (pathname === '/wim') setActiveCaseStudy('wim');
+    if (pathname === '/wim') setActiveCaseStudy('wim');
     else if (pathname === '/continuity') setActiveCaseStudy('continuity');
     else if (pathname === '/open-netizen') setActiveCaseStudy('on');
     else if (pathname === '/boise-analog-club') setActiveCaseStudy('bac');
@@ -860,9 +802,10 @@ function App() {
     else if (pathname === '/micron') setActiveCaseStudy('micron');
     else if (pathname === '/playground') setActiveCaseStudy('playground');
     else if (pathname === '/services') setActiveCaseStudy('services');
-    else if (pathname === '/merch') setActiveCaseStudy('merch');
-    else if (pathname === '/merch/cart') setActiveCaseStudy('merch-cart');
-    else if (pathname === '/merch/checkout') setActiveCaseStudy('merch-checkout');
+    else if (pathname === '/merch' || pathname === '/merch/cart' || pathname === '/merch/checkout') {
+      setActiveCaseStudy(null);
+      navigate('/', { replace: true });
+    }
     else if (pathname === '/blog' || pathname.startsWith('/blog/')) setActiveCaseStudy('blog');
     else if (pathname === '/contact') setActiveCaseStudy('contact');
     else if (pathname === '/material-lab' || pathname.startsWith('/material-lab/')) setActiveCaseStudy('material-lab');
@@ -1088,16 +1031,13 @@ function App() {
             >
               <div className="mobile-nav-grid">
                 <button type="button" className="mobile-nav-link" onClick={() => goToSection('design')}>
-                  Design
+                  Brand
                 </button>
                 <button type="button" className="mobile-nav-link" onClick={() => goToSection('dev')}>
-                  Dev
+                  UI/UX
                 </button>
                 <button type="button" className="mobile-nav-link" onClick={openServices}>
                   Services
-                </button>
-                <button type="button" className="mobile-nav-link" onClick={openMerch}>
-                  Merch
                 </button>
                 <button type="button" className="mobile-nav-link" onClick={openMaterialLab}>
                   Material Lab
@@ -1144,8 +1084,6 @@ function App() {
           <Services key="services" />
         ) : activeCaseStudy === 'contact' ? (
           <Contact key="contact" />
-        ) : activeCaseStudy === 'fastburger' ? (
-          <FastburgerProject key="fastburger" />
         ) : activeCaseStudy === 'wim' ? (
           <WimProject key="wim" />
         ) : activeCaseStudy === 'continuity' ? (
@@ -1178,7 +1116,7 @@ function App() {
                   marginBottom: 'auto'
                 }}>
                   <div className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-                    <DecryptText as="span" text="Your Creation Studio" trigger="mount" delay={200} duration={900} />
+                    <DecryptText as="span" text="We build profitable brands and high-performance websites." trigger="mount" delay={200} duration={900} />
                   </div>
                 </h1>
                 <motion.div 
@@ -1196,7 +1134,7 @@ function App() {
                   <div className="small-text home-hero__identity" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
                     <div className="home-hero__identity-desktop" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Creationbase</span>
-                      <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: '#111111', display: 'inline-block', flex: '0 0 auto' }} />
+                      <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: 'var(--color-text)', display: 'inline-block', flex: '0 0 auto' }} />
                       <span>(CREATIVE STUDIO AND DIGITAL PARTNER)</span>
                     </div>
                     <div className="home-hero__identity-mobile">
@@ -1204,8 +1142,8 @@ function App() {
                       <div>(CREATIVE STUDIO AND DIGITAL PARTNER)</div>
                     </div>
                   </div>
-                  <div className="small-text home-hero__services" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2, textAlign: 'center', fontWeight: 'var(--font-mono-weight-bold)', marginTop: '1.2em' }}>
-                    Design + Development + Visual Systems
+                  <div className="home-hero__services" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.5, textAlign: 'left', maxWidth: 560, justifySelf: 'start', marginTop: 0 }}>
+                    Creationbase pairs distinct visual identity with fluid interaction design. We design your brand system and deploy your marketing site end-to-end, cutting out the traditional engineering bottleneck.
                   </div>
                   <div className="small-text home-hero__availability" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2, justifySelf: 'end', textAlign: 'right' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '6px' }}>
@@ -1270,6 +1208,10 @@ function App() {
                               hover: { opacity: 1 },
                             }}
                           >
+                            <div className="home-project-layer__media-overlay-panels" aria-hidden="true">
+                              <div className="home-project-layer__media-overlay-panel home-project-layer__media-overlay-panel--main" />
+                              <div className="home-project-layer__media-overlay-panel home-project-layer__media-overlay-panel--side" />
+                            </div>
                             <div className="home-project-layer__view-chip">View</div>
                           </motion.div>
                         </motion.div>
@@ -1347,7 +1289,7 @@ function App() {
                       SERVICES •
                     </div>
                     <div className="small-text" style={{ marginTop: 12, lineHeight: 1.35 }}>
-                      Design + Development + Visual Systems
+                      UI/UX + Product + Brand + Visual Systems
                     </div>
                     <div className="small-text" style={{ marginTop: 10, lineHeight: 1.35, opacity: 0.85 }}>
                       Brand + UI/UX • Web builds • Launch support
@@ -1454,6 +1396,7 @@ function App() {
                         <img
                           src="/images/micron.png"
                           alt="Micron"
+                          className="studio-client-logo studio-client-logo--invert"
                           style={{
                             height: 26,
                             width: 'auto',
@@ -1492,8 +1435,9 @@ function App() {
                         letterSpacing: '0.02em'
                       }}>
                         <img
-                          src="/images/ramboll.png"
+                          src="/images/ramboll-transparent.png"
                           alt="Ramboll"
+                          className="studio-client-logo"
                           style={{
                             height: 26,
                             width: 'auto',
@@ -1532,8 +1476,9 @@ function App() {
                         letterSpacing: '0.02em'
                       }}>
                         <img
-                          src="/images/superbasewhite.jpg"
+                          src="/images/superbase.jpg"
                           alt="Superbase"
+                          className="studio-client-logo"
                           style={{
                             height: 54,
                             width: 'auto',
@@ -1574,6 +1519,7 @@ function App() {
                         <img
                           src="/images/cmyk.jpg"
                           alt="CMYK Graffixs"
+                          className="studio-client-logo studio-client-logo--round"
                           style={{
                             height: 48,
                             width: 'auto',
@@ -1684,7 +1630,7 @@ function App() {
             <section id="dev" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
-                  <DecryptText as="span" text="UI/UX DESIGN + DEV" trigger="inView" duration={800} />
+                  <DecryptText as="span" text="UI/UX + PRODUCT DESIGN" trigger="inView" duration={800} />
                 </h2>
                 <span className="small-text">Index (04)</span>
               </div>
@@ -1880,7 +1826,6 @@ function App() {
         isMobile={isMobile}
         onBlogClick={openBlog}
         onContactClick={openContact}
-        onMerchClick={openMerch}
         reserveRightRail={activeCaseStudy === 'bac' || activeCaseStudy === 'on'}
         newsletterName={newsletterName}
         newsletterEmail={newsletterEmail}

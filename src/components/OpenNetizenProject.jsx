@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import DecryptText from './DecryptText';
+import ProjectNarrative from './ProjectNarrative';
 
-const BLACK = '#FFFFFF';
-const WHITE = '#111111';
+const BLACK = 'var(--color-bg)';
+const WHITE = 'var(--color-text)';
 
 const OPEN_NETIZEN_IMAGES = [
   { src: '/images/OPEN NETIZEN CARD.jpg', alt: 'Open Netizen card mockup' },
@@ -13,37 +14,38 @@ const OPEN_NETIZEN_IMAGES = [
 
 ];
 
+const OPEN_NETIZEN_NARRATIVE = {
+  meta: ['LOCATION( Boise, ID / Remote )', 'ROLE( Lead Brand Strategist, UI/UX Designer + Full-Stack Developer )', 'TECH( Figma, Adobe CC, React, Vite, Framer Motion )'],
+  sections: [
+    {
+      label: 'Context',
+      text: 'Open Netizen was a mission-driven initiative built to advocate for the open web through a brand and digital experience that felt both credible and approachable.',
+    },
+    {
+      label: 'Problem',
+      text: 'The project had to communicate a complex civic and technical mission without losing people in jargon or making the platform feel inaccessible to everyday users.',
+    },
+    {
+      label: 'Process',
+      text: 'I used the 4 Cs framework to connect the brand to the history of the open web, clarify the message, shape trust through accessible design, and build the site around intuitive interactions.',
+    },
+    {
+      label: 'Proposal',
+      text: 'The proposal combined a more authoritative identity system with a high-performance, thumb-friendly website that could serve as both a source of truth and an action-oriented hub.',
+    },
+    {
+      label: 'Result',
+      text: 'The final project delivered a civic-minded brand and digital platform that made advocacy clearer, more trustworthy, and easier for people to engage with.',
+    },
+  ],
+};
+
 const OpenNetizenProject = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const [readMoreOpen, setReadMoreOpen] = useState(false);
   const [loadedBySrc, setLoadedBySrc] = useState({});
-
-  useEffect(() => {
-    if (readMoreOpen) {
-      document.body.style.overflow = 'hidden';
-      document.body.classList.add('open-netizen-info-open');
-    } else {
-      document.body.style.overflow = '';
-      document.body.classList.remove('open-netizen-info-open');
-    }
-    const handleNavClick = (ev) => {
-      const el = ev.target.closest('.site-nav__menu-toggle');
-      if (readMoreOpen && el) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        setReadMoreOpen(false);
-      }
-    };
-    document.addEventListener('click', handleNavClick, true);
-    return () => {
-      document.body.style.overflow = '';
-      document.body.classList.remove('open-netizen-info-open');
-      document.removeEventListener('click', handleNavClick, true);
-    };
-  }, [readMoreOpen]);
 
   useEffect(() => {
     const adjustRowHeights = () => {
@@ -85,10 +87,10 @@ const OpenNetizenProject = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      data-header-theme="light"
+      data-header-theme="dark"
       style={{ background: BLACK, color: WHITE, minHeight: '100vh' }}
     >
-      <section data-header-theme="light" style={{ position: 'relative', overflow: 'hidden', background: BLACK, color: WHITE }}>
+      <section data-header-theme="dark" style={{ position: 'relative', overflow: 'hidden', background: BLACK, color: WHITE }}>
         <div style={{ minHeight: '42vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
           <h1 className="home-hero__title" style={{ marginBottom: 'auto' }}>
             <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
@@ -98,93 +100,8 @@ const OpenNetizenProject = () => {
         </div>
       </section>
 
-      <button
-        type="button"
-        className="open-netizen-readmore"
-        aria-label="Read more"
-        onClick={() => setReadMoreOpen(true)}
-      >
-        <div className="open-netizen-readmore__track">
-          {Array.from({ length: 24 }).map((_, i) => (
-            <span key={i} className="open-netizen-readmore__item small-text">
-              READ MORE •
-            </span>
-          ))}
-        </div>
-      </button>
-
-      {readMoreOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="open-netizen-overlay"
-          onClick={() => setReadMoreOpen(false)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(150,150,150,0.32)',
-            backdropFilter: 'blur(26px)',
-            WebkitBackdropFilter: 'blur(26px)',
-            zIndex: 390,
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-            overflowY: 'auto',
-            padding: '60px 20px'
-          }}
-        >
-          <motion.div
-            initial={{ y: 12, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 12, opacity: 0 }}
-            className="open-netizen-overlay__inner"
-            onClick={(ev) => ev.stopPropagation()}
-            style={{
-              position: 'relative',
-              width: 'min(820px, calc(100% - 40px))',
-              borderRadius: 16,
-              background: 'rgba(255,255,255,0.85)',
-              backdropFilter: 'blur(22px)',
-              WebkitBackdropFilter: 'blur(22px)',
-              border: 'none',
-              padding: 'var(--spacing-xl) var(--spacing-lg)',
-              color: '#111111',
-              marginTop: 'auto',
-              marginBottom: 'auto'
-            }}
-          >
-            <div className="small-text" style={{ marginBottom: 'var(--spacing-lg)', fontWeight: 'var(--font-mono-weight-bold)' }}>
-              OPEN NETIZEN •
-            </div>
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)' }}>LOCATION</div>
-            <div className="small-text" style={{ marginTop: 8 }}>Boise, ID / Remote</div>
-
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>ROLE</div>
-            <div className="small-text" style={{ marginTop: 8 }}>Lead Brand Strategist, UI/UX Designer & Full-Stack Developer</div>
-            
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>TECH</div>
-            <div className="small-text" style={{ marginTop: 8 }}>Figma, Adobe CC, React, Vite, Framer Motion</div>
-            
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>SCOPE</div>
-            <div className="small-text" style={{ marginTop: 8 }}>Identity system, application UI/UX design, motion systems, and digital brand guidelines.</div>
-            
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>STRATEGY & DESIGN</div>
-            <div className="small-text" style={{ marginTop: 12, lineHeight: 1.6, textTransform: 'none', maxWidth: 680 }}>
-              Open Netizen was a mission-driven project aimed at championing the principles of the open web. For this Boise-based initiative, we needed a brand that felt both authoritative and grassroots—bridging the gap between high-level digital advocacy and accessible community action.
-              <br /><br />
-              We utilized the 4 Cs framework to build trust and authority. By **Connecting** the visual language to the history of the open web, we **Clarified** their complex mission into a digestible narrative. We **Convinced** the audience through a high-performance, accessible digital platform and **Converted** them into active netizens through intuitive, "thumb-friendly" interface design.
-            </div>
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>PROJECT SUMMARY</div>
-            <div className="small-text" style={{ marginTop: 8, textTransform: 'none', lineHeight: 1.5 }}>
-              A civic-minded identity system and digital hub—built to stand as a source of truth in the evolving landscape of web advocacy.
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-
       <section style={{ padding: 'var(--spacing-md) 10px var(--spacing-xxl)' }}>
-        <div style={{ height: 1, background: '#000000', marginLeft: -10, marginRight: -10 }} />
+        <div style={{ height: 1, background: 'var(--color-border)', marginLeft: -10, marginRight: -10 }} />
         <div>
           <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', marginBottom: 20 }}>
             <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>OPEN NETIZEN</span>
@@ -242,6 +159,7 @@ const OpenNetizenProject = () => {
           </div>
         </div>
       </section>
+      <ProjectNarrative eyebrow="OPEN NETIZEN" meta={OPEN_NETIZEN_NARRATIVE.meta} sections={OPEN_NETIZEN_NARRATIVE.sections} />
 
       <style>{`
         .open-netizen-rows {
@@ -249,57 +167,6 @@ const OpenNetizenProject = () => {
           flex-direction: column;
           gap: 10px;
           padding-bottom: var(--spacing-xxl);
-        }
-
-        .open-netizen-readmore {
-          position: fixed;
-          left: 50%;
-          bottom: 78px;
-          transform: translateX(-50%);
-          display: block;
-          width: clamp(280px, 64vw, 740px);
-          height: 34px;
-          border-radius: 999px;
-          border: none;
-          background: rgba(191, 191, 191, 0.45);
-          backdrop-filter: blur(30px);
-          -webkit-backdrop-filter: blur(30px);
-          color: inherit;
-          overflow: hidden;
-          z-index: 402;
-          pointer-events: auto;
-        }
-        .open-netizen-readmore__track {
-          display: inline-flex;
-          align-items: center;
-          gap: 24px;
-          white-space: nowrap;
-          will-change: transform;
-          animation: openNetizenMarquee 12s linear infinite;
-          padding: 0 12px;
-        }
-        .open-netizen-readmore__item {
-          letter-spacing: 0.05em;
-        }
-        @keyframes openNetizenMarquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-
-        body.open-netizen-info-open .open-netizen-readmore { display: none; }
-        body.open-netizen-info-open .site-nav__menu-label {
-          position: relative;
-          color: transparent;
-        }
-        body.open-netizen-info-open .site-nav__menu-label::after {
-          content: 'Close';
-          position: absolute;
-          inset: 0;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          color: #111111;
-          pointer-events: none;
         }
 
         .open-netizen-row {
@@ -382,10 +249,6 @@ const OpenNetizenProject = () => {
             max-width: 100%;
             white-space: normal;
             overflow-wrap: anywhere;
-          }
-          .open-netizen-readmore {
-            bottom: 72px;
-            width: calc(100% - 20px);
           }
           .open-netizen-row {
             flex-direction: column;

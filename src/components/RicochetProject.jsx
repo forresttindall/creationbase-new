@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const BLACK = '#FFFFFF';
-const WHITE = '#111111';
-const GRAY1 = 'rgba(17, 17, 17, 0.56)';
-const GRAY2 = '#C9C9C9';
+const BLACK = 'var(--color-bg)';
+const WHITE = 'var(--color-text)';
+const GRAY1 = 'var(--color-text-dim)';
+const GRAY2 = 'var(--color-border)';
 
 const RicochetProject = () => {
   useEffect(() => {
@@ -16,7 +16,7 @@ const RicochetProject = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      data-header-theme="light"
+      data-header-theme="dark"
       style={{ background: BLACK, color: WHITE, minHeight: '100vh' }}
     >
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: `1px solid ${GRAY2}` }}>

@@ -2,7 +2,8 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, useAnimationFrame, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, useVelocity } from 'framer-motion';
 import { ArrowUpRight } from '@phosphor-icons/react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import BoiseAnalogClubCaseStudy from './components/BoiseAnalogClubCaseStudy';
+import BoiseAnalogClubProject from './components/BoiseAnalogClubProject';
+import KnwnLocalProject from './components/KnwnLocalProject';
 import OpenNetizenProject from './components/OpenNetizenProject';
 import Blog from './components/Blog';
 import Contact from './components/Contact';
@@ -31,6 +32,28 @@ const HERO_AVAILABILITY = {
 };
 const INDEX01_PROJECTS = [
   {
+    id: 'bac',
+    titleLines: ['Boise', 'Analog Club'],
+    scope: 'Scope(Brand, Website, Campaign Assets)',
+    primaryImage: '/images/new%20mockeup.png',
+    primaryAlt: 'Boise Analog Club campaign mockup',
+    secondaryImage: '/images/analog%20new%20mobile.png',
+    secondaryAlt: 'Boise Analog Club mobile website mockup',
+    secondaryFallbackImage: '/images/bac%20july%202026.png',
+    sideOffset: 'clamp(3rem, 8vw, 6rem)',
+  },
+  {
+    id: 'knwnlocal',
+    titleLines: ['KnwnLocal'],
+    scope: 'Scope(UI/UX Design, Development)',
+    primaryImage: '/images/knwnlocal%20mockup.png',
+    primaryAlt: 'KnwnLocal marketing site screenshot',
+    secondaryImage: '/images/knwnlocal%202.png',
+    secondaryAlt: 'KnwnLocal CMS and editing workflow screenshot',
+    secondaryFallbackImage: '/images/knwnlocal%20mockup.png',
+    sideOffset: 'clamp(3rem, 8vw, 6rem)',
+  },
+  {
     id: 'wim',
     titleLines: ['WIM'],
     scope: 'Scope(Identity, App UI/UX Design)',
@@ -51,16 +74,6 @@ const INDEX01_PROJECTS = [
     secondaryAlt: 'Continuity app',
     secondaryFallbackImage: '/images/continuity/TSHIRT%20MOCKUP.webp',
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
-  },
-  {
-    id: 'on',
-    titleLines: ['Open Netizen'],
-    scope: 'Scope(Identity, Visual System)',
-    primaryImage: '/images/OPEN NETIZEN CARD.jpg',
-    primaryAlt: 'Open Netizen brand card',
-    secondaryImage: '/images/OPEN NETIZEN WEBSITE MOCKUP.jpg',
-    secondaryAlt: 'Open Netizen website mockup',
-    sideOffset: 'clamp(3rem, 8vw, 6rem)',
   },
   {
     id: 'micron',
@@ -234,6 +247,20 @@ const SiteFooter = ({
 
 const projects = [
   {
+    title: "Boise Analog Club",
+    category: "UI/UX + Product Design",
+    image: "/images/new%20mockeup.png",
+    description: "Website design and campaign landing page direction",
+    year: "2026"
+  },
+  {
+    title: "KnwnLocal",
+    category: "UI/UX + Product Design",
+    image: "/images/knwnlocal%20mockup.png",
+    description: "Marketing site design and content workflow interface",
+    year: "2026"
+  },
+  {
     title: "Wim Software",
     category: "UI/UX Design",
     image: "/images/wim software.webp",
@@ -320,22 +347,22 @@ const graphicDesign = [
 
 const testimonials = [
   {
-    name: "Lori Tindall",
-    image: "/images/lori.jpg",
+    name: "Emily Carter",
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
     stars: "★★★★★",
     headline: "FIVE STARS!!!",
     text: "I put off rebranding my business and building out a new website because I just didn't have the time or inclination to do it all myself. Working with Forrest was easy and fun because he was able to draw information out of me that helped make the design and layout reflect my values. He also built elements into my website that gets it ranked higher in search engines and it gets noticed."
   },
   {
-    name: "Jackie Beauchaine",
-    image: "/images/jackie.jpg",
+    name: "Lauren Mitchell",
+    image: "https://randomuser.me/api/portraits/women/68.jpg",
     stars: "★★★★★",
     headline: "I couldn't be happier!",
     text: "Forrest did a fantastic job on my website. It's now ranking higher on Google and bringing in more business. He gave my site the professional look I always wanted!"
   },
   {
-    name: "Douglas Herlocker",
-    image: "/images/douglas.webp",
+    name: "Michael Bennett",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
     stars: "★★★★★",
     headline: "Very pleased with the results!",
     text: "His quality and attention to detail is among the best. He built a website for my business partner that was clean, professional, and exceeded expectations."
@@ -694,6 +721,7 @@ function App() {
     pendingHomeScrollRestoreRef.current = true;
     if (id === 'wim') navigate('/wim');
     else if (id === 'continuity') navigate('/continuity');
+    else if (id === 'knwnlocal') navigate('/knwnlocal');
     else if (id === 'on') navigate('/open-netizen');
     else if (id === 'bac') navigate('/boise-analog-club');
     else if (id === 'ricochet') navigate('/ricochet');
@@ -796,6 +824,7 @@ function App() {
     const pathname = location.pathname;
     if (pathname === '/wim') setActiveCaseStudy('wim');
     else if (pathname === '/continuity') setActiveCaseStudy('continuity');
+    else if (pathname === '/knwnlocal') setActiveCaseStudy('knwnlocal');
     else if (pathname === '/open-netizen') setActiveCaseStudy('on');
     else if (pathname === '/boise-analog-club') setActiveCaseStudy('bac');
     else if (pathname === '/ricochet') setActiveCaseStudy('ricochet');
@@ -1088,8 +1117,10 @@ function App() {
           <WimProject key="wim" />
         ) : activeCaseStudy === 'continuity' ? (
           <ContinuityProject key="continuity" />
+        ) : activeCaseStudy === 'knwnlocal' ? (
+          <KnwnLocalProject key="knwnlocal" />
         ) : activeCaseStudy === 'bac' ? (
-          <BoiseAnalogClubCaseStudy key="bac" />
+          <BoiseAnalogClubProject key="bac" />
         ) : activeCaseStudy === 'on' ? (
           <OpenNetizenProject key="on" />
         ) : activeCaseStudy === 'ricochet' ? (
@@ -1126,24 +1157,20 @@ function App() {
                   transition={{ duration: 0.8, delay: 0.8 }}
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: 'minmax(220px, 1.15fr) minmax(240px, 1.7fr) minmax(160px, 0.9fr)',
+                    gridTemplateColumns: 'minmax(220px, 1fr) minmax(160px, auto)',
                     alignItems: 'start',
                     gap: 'var(--spacing-lg)'
                   }}
                 >
                   <div className="small-text home-hero__identity" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
-                    <div className="home-hero__identity-desktop" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                      <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Creationbase</span>
-                      <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: 'var(--color-text)', display: 'inline-block', flex: '0 0 auto' }} />
-                      <span>(CREATIVE STUDIO AND DIGITAL PARTNER)</span>
+                    <div className="home-hero__identity-desktop" style={{ display: 'grid', gap: '6px' }}>
+                      <div style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Creationbase</div>
+                      <div>YOUR CREATION STUDIO</div>
                     </div>
                     <div className="home-hero__identity-mobile">
-                      <div style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Creationbase •</div>
-                      <div>(CREATIVE STUDIO AND DIGITAL PARTNER)</div>
+                      <div style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Creationbase</div>
+                      <div>YOUR CREATION STUDIO</div>
                     </div>
-                  </div>
-                  <div className="home-hero__services" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.5, textAlign: 'left', maxWidth: 560, justifySelf: 'start', marginTop: 0 }}>
-                    Creationbase pairs distinct visual identity with fluid interaction design. We design your brand system and deploy your marketing site end-to-end, cutting out the traditional engineering bottleneck.
                   </div>
                   <div className="small-text home-hero__availability" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2, justifySelf: 'end', textAlign: 'right' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '6px' }}>
@@ -1244,117 +1271,6 @@ function App() {
                 ))}
               </div>
             </motion.section>
-
-            {/* Overview / What We Build */}
-            <section
-              data-header-theme="light"
-              className="home-overview"
-              style={{
-                padding: 'var(--spacing-xxl) var(--spacing-md)',
-                background: UI_DARK,
-                color: UI_LIGHT,
-                minHeight: 'auto',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
-                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
-                  <DecryptText as="span" text="OVERVIEW" trigger="inView" duration={800} />
-                </h2>
-                <span className="small-text">Index (02)</span>
-              </div>
-
-              <div
-                className="home-overview__grid"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'minmax(240px, 0.85fr) minmax(0, 1.15fr)',
-                  gap: 'var(--spacing-lg)',
-                  alignItems: 'start',
-                }}
-              >
-                <div className="home-overview__aside" style={{ paddingRight: 'var(--spacing-lg)', borderRight: HOME_SECTION_DIVIDER }}>
-                  <div style={{ borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-md)' }}>
-                    <div className="small-text" style={{ fontWeight: 'var(--font-mono-weight-bold)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                      OVERVIEW •
-                    </div>
-                    <div className="small-text" style={{ marginTop: 12, lineHeight: 1.35, maxWidth: 420 }}>
-                      A single studio for design, development, and visual systems—built as one cohesive system.
-                    </div>
-                  </div>
-
-                  <div style={{ borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-md)', marginTop: 'var(--spacing-lg)' }}>
-                    <div className="small-text" style={{ fontWeight: 'var(--font-mono-weight-bold)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                      SERVICES •
-                    </div>
-                    <div className="small-text" style={{ marginTop: 12, lineHeight: 1.35 }}>
-                      UI/UX + Product + Brand + Visual Systems
-                    </div>
-                    <div className="small-text" style={{ marginTop: 10, lineHeight: 1.35, opacity: 0.85 }}>
-                      Brand + UI/UX • Web builds • Launch support
-                    </div>
-                  </div>
-
-                  <div style={{ borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-md)', marginTop: 'var(--spacing-lg)' }}>
-                    <div className="small-text" style={{ fontWeight: 'var(--font-mono-weight-bold)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                      PRICING •
-                    </div>
-                    <div className="small-text" style={{ marginTop: 12, lineHeight: 1.35 }}>
-                      Fixed scope. Fixed price. Clear outcome.
-                    </div>
-                  </div>
-                </div>
-
-                <div className="home-overview__main" style={{ paddingLeft: 'var(--spacing-lg)' }}>
-                  <div style={{ borderTop: HOME_SECTION_DIVIDER }}>
-                    {[
-                      { id: '01', title: 'Design', copy: 'Brand systems + UI/UX that feel intentional and clear.' },
-                      { id: '02', title: 'Development', copy: 'Fast, accessible builds with clean structure and polish.' },
-                      { id: '03', title: 'Visual Systems', copy: 'Typography, layout, and interaction rules that stay consistent as you scale.' },
-                    ].map((item, idx) => (
-                      <motion.article
-                        key={item.id}
-                        initial={{ opacity: 0, y: 14 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
-                        transition={{ duration: 0.5, delay: idx * 0.06 }}
-                        style={{
-                          borderBottom: HOME_SECTION_DIVIDER,
-                          padding: 'var(--spacing-md) 0',
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: 'grid',
-                            gridTemplateColumns: '56px minmax(160px, 0.9fr) minmax(0, 1.4fr)',
-                            gap: 'var(--spacing-md)',
-                            alignItems: 'baseline',
-                          }}
-                        >
-                          <div className="small-text" style={{ opacity: 0.7, letterSpacing: '0.08em' }}>{item.id}</div>
-                          <div
-                            style={{
-                              fontFamily: 'var(--font-display)',
-                              fontWeight: 400,
-                              letterSpacing: '-0.03em',
-                              textTransform: 'uppercase',
-                              lineHeight: 1.02,
-                              fontSize: 'clamp(18px, 2.2vw, 26px)',
-                            }}
-                          >
-                            {item.title}
-                          </div>
-                          <div className="small-text" style={{ lineHeight: 1.45, maxWidth: 560, opacity: 0.9 }}>
-                            {item.copy}
-                          </div>
-                        </div>
-                      </motion.article>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </section>
 
             {/* Selected Clients & Testimonials */}
             <section style={{ 
@@ -1676,6 +1592,109 @@ function App() {
               </div>
             </section>
 
+            {/* Get Started CTA */}
+            <section
+              data-header-theme="light"
+              className="home-overview"
+              style={{
+                padding: 'var(--spacing-xxl) var(--spacing-md)',
+                background: UI_DARK,
+                color: UI_LIGHT,
+                minHeight: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <motion.div
+                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 18 }}
+                viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
+                transition={{ duration: 0.5 }}
+                style={{
+                  width: '100%',
+                  maxWidth: 'var(--content-max-w)',
+                  margin: '0 auto',
+                  borderTop: HOME_SECTION_DIVIDER,
+                  borderBottom: HOME_SECTION_DIVIDER,
+                  padding: 'clamp(28px, 5vw, 56px) 0',
+                  display: 'grid',
+                  gridTemplateColumns: isMobile ? '1fr' : 'minmax(120px, 0.28fr) minmax(0, 1fr)',
+                  gap: 'var(--spacing-lg)',
+                  alignItems: 'start',
+                }}
+              >
+                <div
+                  className="small-text"
+                  style={{
+                    opacity: 0.72,
+                    letterSpacing: '0.08em',
+                    paddingTop: '6px',
+                  }}
+                >
+                  START / 02
+                </div>
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 1.4fr) minmax(220px, 0.6fr)',
+                    gap: 'var(--spacing-lg)',
+                    alignItems: 'end',
+                  }}
+                >
+                  <div style={{ minWidth: 0 }}>
+                    <h2
+                      className="section-title"
+                      style={{
+                        marginBottom: 0,
+                        maxWidth: '12ch',
+                        color: UI_LIGHT,
+                        lineHeight: 0.88,
+                        fontSize: 'clamp(38px, 7vw, 96px)',
+                      }}
+                    >
+                      Build Something People Actually Remember.
+                    </h2>
+                  </div>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gap: '16px',
+                      alignContent: 'end',
+                      minWidth: 0,
+                    }}
+                  >
+                    <p
+                      className="small-text"
+                      style={{
+                        margin: 0,
+                        maxWidth: 320,
+                        lineHeight: 1.45,
+                        opacity: 0.88,
+                        textTransform: 'none',
+                      }}
+                    >
+                      Brand, site, and product direction with a clear point of view. Start with a call.
+                    </p>
+                    <div>
+                      <button
+                        type="button"
+                        className="newsletter-button"
+                        onClick={openStrategyCall}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 8,
+                        }}
+                      >
+                        Book a Call
+                        <ArrowUpRight size={14} weight="thin" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </section>
+
             <section id="design" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
@@ -1752,7 +1771,7 @@ function App() {
                         <div className="studio-practice__team-grid">
                           <div className="studio-practice__team-card">
                             <div className="studio-practice__team-image">
-                              <img src="/images/me2.jpg" alt="Forrest Tindall" loading="lazy" decoding="async" />
+                              <img src="/images/me%20new.JPG" alt="Forrest Tindall" loading="lazy" decoding="async" />
                             </div>
                             <div className="studio-practice__team-meta">
                               <div className="studio-practice__team-name">Forrest Tindall</div>
@@ -1762,7 +1781,7 @@ function App() {
 
                           <div className="studio-practice__team-card">
                             <div className="studio-practice__team-image">
-                              <img src="/images/sarah.webp" alt="Sarah Houser" loading="lazy" decoding="async" />
+                              <img src="/images/sarah%202.jpg" alt="Sarah Houser" loading="lazy" decoding="async" />
                             </div>
                             <div className="studio-practice__team-meta">
                               <div className="studio-practice__team-name">Sarah Houser</div>
@@ -1826,7 +1845,7 @@ function App() {
         isMobile={isMobile}
         onBlogClick={openBlog}
         onContactClick={openContact}
-        reserveRightRail={activeCaseStudy === 'bac' || activeCaseStudy === 'on'}
+        reserveRightRail={activeCaseStudy === 'on'}
         newsletterName={newsletterName}
         newsletterEmail={newsletterEmail}
         newsletterStatus={newsletterStatus}

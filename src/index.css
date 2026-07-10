@@ -1441,12 +1441,12 @@ ul {
 
 .studio-practice__team-name {
   font-family: var(--font-mono);
-  font-weight: var(--font-mono-weight);
+  font-weight: var(--font-mono-weight-bold);
   font-size: var(--fs-sm);
   line-height: 1.2;
   letter-spacing: .02em;
   text-transform: uppercase;
-  color: #111;
+  color: var(--color-text);
 }
 
 .studio-practice__team-role {
@@ -1456,7 +1456,7 @@ ul {
   line-height: 1.2;
   letter-spacing: .02em;
   text-transform: uppercase;
-  color: rgba(136, 136, 136, 0.75);
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .studio-practice__team-card {
@@ -1485,6 +1485,8 @@ ul {
   padding: 0;
   min-width: 0;
   align-self: center;
+  display: grid;
+  gap: 6px;
 }
 
 .studio-practice-header {

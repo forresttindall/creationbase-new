@@ -7,10 +7,10 @@ const BLACK = 'var(--color-bg)';
 const WHITE = 'var(--color-text)';
 
 const BOISE_ANALOG_CLUB_IMAGES = [
-  { src: '/images/new%20mockeup.png', alt: 'Boise Analog Club campaign mockup' },
-  { src: '/images/analog%20new%20mobile.png', alt: 'Boise Analog Club mobile website mockup' },
-  { src: '/images/newseltter%20mockup%20reel.png', alt: 'Boise Analog Club newsletter reel mockup' },
-  { src: '/images/bac%20july%202026.png', alt: 'Boise Analog Club July 2026 campaign graphic' },
+  { src: '/images/new%20mockeup.webp', alt: 'Boise Analog Club campaign mockup' },
+  { src: '/images/analog%20new%20mobile.webp', alt: 'Boise Analog Club mobile website mockup' },
+  { src: '/images/newseltter%20mockup%20reel.webp', alt: 'Boise Analog Club newsletter reel mockup' },
+  { src: '/images/bac%20july%202026.webp', alt: 'Boise Analog Club July 2026 campaign graphic' },
 ];
 
 const BOISE_ANALOG_CLUB_NARRATIVE = {

@@ -7,8 +7,8 @@ const BLACK = 'var(--color-bg)';
 const WHITE = 'var(--color-text)';
 
 const KNWNLOCAL_IMAGES = [
-  { src: '/images/knwnlocal%20mockup.png', alt: 'KnwnLocal homepage and editorial layout' },
-  { src: '/images/knwnlocal%202.png', alt: 'KnwnLocal AI editing and content workflow interface' },
+  { src: '/images/knwnlocal%20mockup.webp', alt: 'KnwnLocal homepage and editorial layout' },
+  { src: '/images/knwnlocal%202.webp', alt: 'KnwnLocal AI editing and content workflow interface' },
 ];
 
 const KNWNLOCAL_NARRATIVE = {

@@ -422,7 +422,7 @@ const photographyProjects = [
   {
     title: 'Editorial',
     category: 'Commercial / Editorial / Event Photography',
-    image: '/images/_DSC4390.jpg',
+    image: '/images/_DSC9182.webp',
     description: 'Editorial photography',
     year: '2026'
   },

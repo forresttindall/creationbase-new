@@ -1478,7 +1478,7 @@ function App() {
                       [FULL STACK] [SYSTEM ADMIN] [DATA MIGRATION]
                     </div>
                   </motion.div>
-                  {/* Superbase */}
+                  {/* Worksharp */}
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -1496,8 +1496,8 @@ function App() {
                         letterSpacing: '0.02em'
                       }}>
                         <img
-                          src="/images/superbase.jpg"
-                          alt="Superbase"
+                          src="/images/worksharp.webp"
+                          alt="Worksharp"
                           className="studio-client-logo"
                           style={{
                             height: 54,
@@ -1513,13 +1513,13 @@ function App() {
                       </div>
                     </div>
                     <p className="small-text" style={{ maxWidth: '90%' }}>
-                      Partnered with the Superbase team to redesign Ricochet&apos;s website, updating the visual system and UI to match the product&apos;s scale and direction.
+                      Directed, produced, and photographed multiple campaigns for Worksharp and Drill Doctor, creating commercial editorial imagery for Popular Mechanics that balanced product clarity, brand consistency, and publication-ready execution.
                     </p>
                     <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontWeight: 'var(--font-mono-weight)', fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
-                      [VISUAL SYSTEM] [UI/UX] [WEB]
+                      [PHOTOGRAPHY] [CAMPAIGN] [POPULAR MECHANICS]
                     </div>
                   </motion.div>
-                  {/* CMYK Graffixs */}
+                  {/* Granite Gear */}
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -1537,9 +1537,9 @@ function App() {
                         letterSpacing: '0.02em'
                       }}>
                         <img
-                          src="/images/cmyk.jpg"
-                          alt="CMYK Graffixs"
-                          className="studio-client-logo studio-client-logo--round"
+                          src="/images/granitegear.png"
+                          alt="Granite Gear"
+                          className="studio-client-logo"
                           style={{
                             height: 48,
                             width: 'auto',
@@ -1554,10 +1554,10 @@ function App() {
                       </div>
                     </div>
                     <p className="small-text" style={{ maxWidth: '90%' }}>
-                      Partnered with CMYK Graffixs to deliver environmental signage for Micron, producing consistent, print-ready assets built for real-world deployment.
+                      Directed, produced, and photographed multiple campaigns for Granite Gear, creating imagery used for Backpacker Magazine and brand marketing with a focus on durable product storytelling and outdoor credibility.
                     </p>
                     <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontWeight: 'var(--font-mono-weight)', fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
-                      [BRAND] [PRINT] [ASSETS]
+                      [PHOTOGRAPHY] [CAMPAIGN] [BACKPACKER]
                     </div>
                   </motion.div>
                 </div>
@@ -1925,10 +1925,10 @@ function App() {
                     <div className="studio-practice__top">
                       <div className="studio-practice__copy">
                         <div className="small-text" style={{ maxWidth: '520px' }}>
-                          Creationbase is an independent creation studio based in Boise, Idaho—design and development. Founded in 2023, we partner with brands and teams to shape clear visual systems, design UI/UX, and build fast, durable websites. We’re currently leading the environmental signage design for the Micron expansion building in Boise—creating a cohesive wayfinding system designed for clarity, scale, and daily use.
+                          Creationbase is an independent full service creation studio based in Boise, Idaho. Founded in 2022, we partner with brands and teams to shape clear visual systems, build distinctive brand identities, design fast and durable websites, and create photography that fits the work.
                         </div>
                         <div className="small-text" style={{ maxWidth: '520px', marginTop: 'var(--spacing-md)' }}>
-                          We’re building an inclusive team and a studio culture grounded in craft, clarity, and respect. Our values show up in the details: collaborative process, accessible design decisions, maintainable code, and transparent partnerships built for the long term.
+                          We deliver cohesive brand, web, and photo systems built for clarity, recognition, and real use. Our work is grounded in thoughtful process, strong design decisions, maintainable development, and visual direction that helps clients look sharper and communicate faster across every touchpoint.
                         </div>
                       </div>
 

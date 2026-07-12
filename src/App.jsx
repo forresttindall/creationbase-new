@@ -13,6 +13,8 @@ import Services from './components/Services';
 import Playground from './components/Playground';
 import WimProject from './components/WimProject';
 import ContinuityProject from './components/ContinuityProject';
+import CommercialPhotography from './components/CommercialPhotography';
+import WorksharpProject from './components/WorksharpProject';
 import DecryptText from './components/DecryptText';
 import Tools from './components/Tools';
 import Schema from './components/Schema';
@@ -30,6 +32,38 @@ const HERO_AVAILABILITY = {
   label: 'Available',
   color: '#5FE37C',
 };
+const GALLERY_IMAGES = [
+  '/images/gallery/_DSC9182.webp',
+  '/images/gallery/_DSC6969.webp',
+  '/images/gallery/_DSC2741-2.webp',
+  '/images/gallery/_DSC2447.webp',
+  '/images/gallery/_DSC2444.webp',
+  '/images/gallery/_DSC2583%202.webp',
+  '/images/gallery/_DSC2680-2.webp',
+  '/images/gallery/_DSC2350.webp',
+  '/images/gallery/_DSC2439.webp',
+  '/images/gallery/_DSC2406.webp',
+  '/images/gallery/_DSC2349.webp',
+  '/images/gallery/_DSC2702-2.webp',
+  '/images/gallery/_DSC2560.webp',
+  '/images/gallery/_DSC2193-2.webp',
+  '/images/gallery/_DSC7999-4.webp',
+  '/images/gallery/_DSC2744-2.webp',
+  '/images/gallery/_DSC4899.webp',
+  '/images/gallery/_DSC3168-2.webp',
+  '/images/gallery/_DSC2733-2.webp',
+  '/images/gallery/_DSC1613-3.webp',
+  '/images/gallery/_DSC3991.webp',
+  '/images/gallery/_DSC2842.webp',
+  '/images/gallery/_DSC2674-2.webp',
+  '/images/gallery/_DSC6942.webp',
+  '/images/gallery/_DSC1954-2.webp',
+  '/images/gallery/_DSC6814.webp',
+  '/images/gallery/_DSC2823-2.webp',
+  '/images/gallery/_DSC3525.webp',
+  '/images/gallery/_DSC4685-2.webp',
+  '/images/gallery/_DSC2016.webp',
+];
 const INDEX01_PROJECTS = [
   {
     id: 'bac',
@@ -85,6 +119,17 @@ const INDEX01_PROJECTS = [
     secondaryAlt: 'Micron lobby environmental signage',
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },
+  {
+    id: 'worksharp',
+    titleLines: ['Worksharp + Drill Doctor'],
+    scope: 'Scope(Photography, Commercial Editorial, Popular Mechanics)',
+    primaryImage: '/images/worksharp/_DSC6969.jpg',
+    primaryAlt: 'Worksharp + Drill Doctor commercial editorial photography',
+    secondaryImage: '/images/worksharp/_DSC7142.jpg',
+    secondaryAlt: 'Worksharp + Drill Doctor photography',
+    secondaryFallbackImage: '/images/worksharp/_DSC6814.webp',
+    sideOffset: 'clamp(2rem, 7vw, 5rem)',
+  },
 ];
 
 const SiteFooter = ({
@@ -127,11 +172,11 @@ const SiteFooter = ({
               <h2 className="section-title" style={{ fontWeight: 400, marginBottom: 0, fontSize: 'clamp(22px, 9vw, 72px)' }}>Let&apos;s Work<br />Together</h2>
               <div className="footer-cta__actions">
                 <a href={STRATEGY_CALL_URL} target="_blank" rel="noreferrer" className="newsletter-button footer-cta__primary" style={{ textDecoration: 'none' }}>
-                  Book Strategy Call
+                  Get Started
                   <ArrowUpRight size={14} weight="thin" />
                 </a>
                 <button type="button" className="newsletter-button newsletter-button--outline footer-cta__secondary" onClick={onContactClick}>
-                  Contact Form
+                  Contact
                 </button>
               </div>
             </div>
@@ -139,8 +184,8 @@ const SiteFooter = ({
           <div className="footer-links-column">
             <p className="small-text" style={{ marginBottom: 'var(--spacing-md)', fontWeight: 'var(--font-mono-weight-bold)' }}>LINKS</p>
             <ul className="small-text footer-links-list">
-              <li><a href="https://calendly.com/forrest-creationbase/30min" target="_blank" rel="noreferrer">STRATEGY CALL</a></li>
-              <li><a href="/contact" onClick={(ev) => { ev.preventDefault(); onContactClick(); }}>CONTACT FORM</a></li>
+              <li><a href="https://calendly.com/forrest-creationbase/30min" target="_blank" rel="noreferrer">GET STARTED</a></li>
+              <li><a href="/contact" onClick={(ev) => { ev.preventDefault(); onContactClick(); }}>CONTACT</a></li>
               <li><a href="/blog" onClick={(ev) => { ev.preventDefault(); onBlogClick(); }}>BLOG</a></li>
               <li><a href="https://instagram.com/creationbase.io" target="_blank" rel="noreferrer">INSTAGRAM</a></li>
               <li><a href="https://www.linkedin.com/company/creationbaseio/" target="_blank" rel="noreferrer">LINKEDIN</a></li>
@@ -342,6 +387,51 @@ const graphicDesign = [
     image: "/images/continuity/TSHIRT MOCKUP.webp",
     description: "Promotional Poster Design",
     year: "2025"
+  }
+];
+
+const photographyProjects = [
+  {
+    title: 'Worksharp + Drill Doctor',
+    category: 'Popular Mechanics Magazine',
+    image: '/images/worksharp/_DSC6969.jpg',
+    description: 'Shoot for Popular Mechanics magazine',
+    year: '2026'
+  },
+  {
+    title: 'Worksharp + Drill Doctor',
+    category: 'Popular Mechanics Magazine',
+    image: '/images/worksharp/_DSC7142.jpg',
+    description: 'Shoot for Popular Mechanics magazine',
+    year: '2026'
+  },
+  {
+    title: 'Editorial',
+    category: 'Commercial / Editorial / Event Photography',
+    image: '/images/event/7.webp',
+    description: 'Editorial photography',
+    year: '2026'
+  },
+  {
+    title: 'Editorial',
+    category: 'Commercial / Editorial / Event Photography',
+    image: '/images/event/8.webp',
+    description: 'Editorial photography',
+    year: '2026'
+  },
+  {
+    title: 'Editorial',
+    category: 'Commercial / Editorial / Event Photography',
+    image: '/images/_DSC4390.jpg',
+    description: 'Editorial photography',
+    year: '2026'
+  },
+  {
+    title: 'Lifestyle',
+    category: 'Commercial / Editorial / Event Photography',
+    image: '/images/_DSC3168-2.jpg',
+    description: 'Lifestyle photography',
+    year: '2026'
   }
 ];
 
@@ -727,6 +817,9 @@ function App() {
     else if (id === 'ricochet') navigate('/ricochet');
     else if (id === 'micron') navigate('/micron');
     else if (id === 'playground') navigate('/playground');
+    else if (id === 'photography') navigate('/photography');
+    else if (id === 'gallery') navigate('/gallery');
+    else if (id === 'worksharp') navigate('/worksharp');
     else if (id === 'blog') navigate('/blog');
   };
 
@@ -830,6 +923,9 @@ function App() {
     else if (pathname === '/ricochet') setActiveCaseStudy('ricochet');
     else if (pathname === '/micron') setActiveCaseStudy('micron');
     else if (pathname === '/playground') setActiveCaseStudy('playground');
+    else if (pathname === '/photography') setActiveCaseStudy('photography');
+    else if (pathname === '/gallery') setActiveCaseStudy('gallery');
+    else if (pathname === '/worksharp') setActiveCaseStudy('worksharp');
     else if (pathname === '/services') setActiveCaseStudy('services');
     else if (pathname === '/merch' || pathname === '/merch/cart' || pathname === '/merch/checkout') {
       setActiveCaseStudy(null);
@@ -841,10 +937,6 @@ function App() {
     else if (pathname === '/tools' || pathname.startsWith('/tools/')) {
       setActiveCaseStudy('material-lab');
       navigate('/material-lab', { replace: true });
-    }
-    else if (pathname === '/photography' || pathname === '/gallery' || pathname === '/worksharp') {
-      setActiveCaseStudy(null);
-      navigate('/', { replace: true });
     }
     else setActiveCaseStudy(null);
   }, [location.pathname, navigate]);
@@ -1065,6 +1157,9 @@ function App() {
                 <button type="button" className="mobile-nav-link" onClick={() => goToSection('dev')}>
                   UI/UX
                 </button>
+                <button type="button" className="mobile-nav-link" onClick={() => goToSection('photography')}>
+                  Photography
+                </button>
                 <button type="button" className="mobile-nav-link" onClick={openServices}>
                   Services
                 </button>
@@ -1075,10 +1170,10 @@ function App() {
                   Blog
                 </button>
                 <button type="button" className="mobile-nav-link" onClick={openStrategyCall}>
-                  Strategy Call
+                  Get Started
                 </button>
                 <button type="button" className="mobile-nav-link" onClick={openContact}>
-                  Contact Form
+                  Contact
                 </button>
               </div>
             </motion.div>
@@ -1113,6 +1208,12 @@ function App() {
           <Services key="services" />
         ) : activeCaseStudy === 'contact' ? (
           <Contact key="contact" />
+        ) : activeCaseStudy === 'photography' ? (
+          <CommercialPhotography key="photography" />
+        ) : activeCaseStudy === 'gallery' ? (
+          <CommercialPhotography key="gallery" images={GALLERY_IMAGES} masonryClassName="mosaic-masonry mosaic-masonry--spaced" />
+        ) : activeCaseStudy === 'worksharp' ? (
+          <WorksharpProject key="worksharp" />
         ) : activeCaseStudy === 'wim' ? (
           <WimProject key="wim" />
         ) : activeCaseStudy === 'continuity' ? (
@@ -1147,7 +1248,10 @@ function App() {
                   marginBottom: 'auto'
                 }}>
                   <div className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-                    <DecryptText as="span" text="We build profitable brands and high-performance websites." trigger="mount" delay={200} duration={900} />
+                    <DecryptText as="span" text="Brand + Web + Photo" trigger="mount" delay={200} duration={900} />
+                  </div>
+                  <div className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
+                    <DecryptText as="span" text="Your Creation Studio" trigger="mount" delay={260} duration={900} />
                   </div>
                 </h1>
                 <motion.div 
@@ -1686,7 +1790,7 @@ function App() {
                           gap: 8,
                         }}
                       >
-                        Book a Call
+                        Get Started
                         <ArrowUpRight size={14} weight="thin" aria-hidden="true" />
                       </button>
                     </div>
@@ -1744,6 +1848,67 @@ function App() {
               </div>
             </section>
 
+            <section id="photography" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
+              <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
+                <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
+                  <DecryptText as="span" text="COMMERCIAL PHOTOGRAPHY" trigger="inView" duration={800} />
+                </h2>
+                <span className="small-text">Index (06)</span>
+              </div>
+
+              <div className="uiux-rows">
+                {photographyProjects.reduce((rows, project, idx) => {
+                  const rowIndex = Math.floor(idx / 2);
+                  if (!rows[rowIndex]) rows[rowIndex] = [];
+                  rows[rowIndex].push(project);
+                  return rows;
+                }, []).map((row, rIdx) => {
+                  const single = row.length === 1;
+                  const rowClass = single ? 'uiux-row uiux-row--single' : (rIdx % 2 === 0 ? 'uiux-row uiux-row--left' : 'uiux-row uiux-row--right');
+                  return (
+                    <div key={`photo-row-${rIdx}`} className={rowClass}>
+                      {row.map((project) => (
+                        <motion.div
+                          key={`${project.title}-${project.image}`}
+                          className="uiux-card"
+                          initial={{ opacity: 0, y: 50 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: "-10%" }}
+                          transition={{ duration: 0.6, ease: "easeOut" }}
+                          onClick={() => setSelectedProject(project)}
+                        >
+                          <div className="uiux-frame">
+                            <img
+                              src={project.image}
+                              alt={project.title}
+                              loading="lazy"
+                              decoding="async"
+                              onError={(ev) => {
+                                const card = ev.currentTarget.closest('.uiux-card');
+                                if (card) card.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  );
+                })}
+              </div>
+              <div style={{ marginTop: 10, display: 'flex', justifyContent: 'center' }}>
+                <motion.button
+                  type="button"
+                  onClick={() => openCaseStudy('gallery')}
+                  whileHover={{ opacity: 0.75 }}
+                  className="newsletter-button"
+                  style={{ minWidth: 180 }}
+                >
+                  View More
+                  <ArrowUpRight size={14} weight="thin" />
+                </motion.button>
+              </div>
+            </section>
+
             <section style={{ padding: '0', background: UI_DARK, color: UI_LIGHT, minHeight: 'auto', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
               <div className="studio-practice">
                 <div className="studio-practice__header">
@@ -1751,7 +1916,7 @@ function App() {
                     <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                       <DecryptText as="span" text="STUDIO PRACTICE" trigger="inView" duration={800} />
                     </h2>
-                    <span className="small-text">Index (06)</span>
+                    <span className="small-text">Index (07)</span>
                   </div>
                 </div>
 
@@ -1775,7 +1940,7 @@ function App() {
                             </div>
                             <div className="studio-practice__team-meta">
                               <div className="studio-practice__team-name">Forrest Tindall</div>
-                              <div className="studio-practice__team-role">Founder / Creative Director / Senior Designer / Fullstack Developer</div>
+                              <div className="studio-practice__team-role">Founder / Creative Director / Senior Designer / Fullstack Developer / Photographer</div>
                             </div>
                           </div>
 
@@ -1785,7 +1950,7 @@ function App() {
                             </div>
                             <div className="studio-practice__team-meta">
                               <div className="studio-practice__team-name">Sarah Houser</div>
-                              <div className="studio-practice__team-role">CMO / Art Director</div>
+                              <div className="studio-practice__team-role">CMO / Art Director / Photographer</div>
                             </div>
                           </div>
                         </div>
@@ -1797,7 +1962,7 @@ function App() {
                         <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
                           <DecryptText as="span" text="PASSION PROJECTS" trigger="inView" duration={800} />
                         </h2>
-                    <span className="small-text">Index (06.1)</span>
+                    <span className="small-text">Index (07.1)</span>
                       </div>
 
                       <div className="passion-projects-block">

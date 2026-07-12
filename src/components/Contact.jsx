@@ -121,7 +121,7 @@ const Contact = () => {
                   rel="noreferrer"
                   className="newsletter-button contact-primary-cta"
                 >
-                  BOOK STRATEGY CALL
+                  GET STARTED
                   <ArrowUpRight size={14} weight="thin" />
                 </a>
                 <div className="small-text" style={{ color: WHITE, marginBottom: 'var(--spacing-md)', opacity: 0.9 }}>

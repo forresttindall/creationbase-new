@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import DecryptText from './DecryptText';
+import ProjectNarrative from './ProjectNarrative';
 
 const BLACK = 'var(--color-bg)';
 const WHITE = 'var(--color-text)';
@@ -13,44 +14,50 @@ const WORKSHARP_IMAGES = [
   { src: '/images/worksharp/IMG_3004.jpg', alt: 'Worksharp + Drill Doctor commercial editorial photography' },
 ];
 
+const WORKSHARP_NARRATIVE = {
+  meta: [
+    'ROLE( Photographer )',
+    'CLIENT( Worksharp + Drill Doctor )',
+    'PUBLICATION( Popular Mechanics Magazine )',
+    'SCOPE( Commercial Editorial Photography, Product Imagery, Dual-Brand Shoot )',
+  ],
+  sections: [
+    {
+      label: 'Context',
+      text: 'Worksharp and Drill Doctor needed a set of editorial images that could present both brands clearly within one shared shoot built for Popular Mechanics.',
+    },
+    {
+      label: 'Problem',
+      text: 'The challenge was making two related tool brands feel cohesive in the same visual system without flattening their differences or losing the product clarity the publication needed.',
+    },
+    {
+      label: 'Process',
+      text: 'I planned and photographed the project as a dual-brand shoot, building setups that could move between hero angles, detail shots, and product-forward compositions while keeping lighting, tone, and styling consistent.',
+    },
+    {
+      label: 'Proposal',
+      text: 'The direction focused on sharp, credible photography that could work editorially for the magazine while still giving each brand usable assets for web, print, and broader marketing needs.',
+    },
+    {
+      label: 'Result',
+      text: 'The final image set gave Worksharp and Drill Doctor a cohesive library of commercial editorial photography that served the Popular Mechanics feature and extended naturally into brand use afterward.',
+    },
+  ],
+};
+
 const WorksharpProject = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const [readMoreOpen, setReadMoreOpen] = useState(false);
   const [loadedBySrc, setLoadedBySrc] = useState({});
 
   useEffect(() => {
-    if (readMoreOpen) {
-      document.body.style.overflow = 'hidden';
-      document.body.classList.add('wim-info-open');
-    } else {
-      document.body.style.overflow = '';
-      document.body.classList.remove('wim-info-open');
-    }
-    const handleNavClick = (ev) => {
-      const el = ev.target.closest('.site-nav__menu-toggle');
-      if (readMoreOpen && el) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        setReadMoreOpen(false);
-      }
-    };
-    document.addEventListener('click', handleNavClick, true);
-    return () => {
-      document.body.style.overflow = '';
-      document.body.classList.remove('wim-info-open');
-      document.removeEventListener('click', handleNavClick, true);
-    };
-  }, [readMoreOpen]);
-
-  useEffect(() => {
     const adjustRowHeights = () => {
-      const rows = Array.from(document.querySelectorAll('.wim-row'));
+      const rows = Array.from(document.querySelectorAll('.worksharp-row'));
       rows.forEach((row) => {
-        const frames = Array.from(row.querySelectorAll('.wim-frame'));
-        const imgs = Array.from(row.querySelectorAll('.wim-frame img'));
+        const frames = Array.from(row.querySelectorAll('.worksharp-frame'));
+        const imgs = Array.from(row.querySelectorAll('.worksharp-frame img'));
         if (frames.length !== imgs.length || frames.length === 0) return;
         const heights = imgs.map((img, idx) => {
           const frame = frames[idx];
@@ -81,7 +88,7 @@ const WorksharpProject = () => {
 
   return (
     <motion.div
-      className="wim-page"
+      className="worksharp-page"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -98,88 +105,15 @@ const WorksharpProject = () => {
         </div>
       </section>
 
-      <button
-        type="button"
-        className="wim-readmore"
-        aria-label="Read more"
-        onClick={() => setReadMoreOpen(true)}
-      >
-        <div className="wim-readmore__track">
-          {Array.from({ length: 24 }).map((_, i) => (
-            <span key={i} className="wim-readmore__item small-text">
-              READ MORE •
-            </span>
-          ))}
-        </div>
-      </button>
-
-      {readMoreOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="wim-overlay"
-          onClick={() => setReadMoreOpen(false)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(150,150,150,0.32)',
-            backdropFilter: 'blur(26px)',
-            WebkitBackdropFilter: 'blur(26px)',
-            zIndex: 390,
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-            overflowY: 'auto',
-            padding: '60px 20px'
-          }}
-        >
-          <motion.div
-            initial={{ y: 12, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 12, opacity: 0 }}
-            className="wim-overlay__inner"
-            onClick={(ev) => ev.stopPropagation()}
-            style={{
-              position: 'relative',
-              width: 'min(820px, calc(100% - 40px))',
-              borderRadius: 16,
-              background: 'rgba(255,255,255,0.85)',
-              backdropFilter: 'blur(22px)',
-              WebkitBackdropFilter: 'blur(22px)',
-              border: 'none',
-              padding: 'var(--spacing-xl) var(--spacing-lg)',
-              color: '#111111',
-              marginTop: 'auto',
-              marginBottom: 'auto'
-            }}
-          >
-            <div className="small-text" style={{ marginBottom: 'var(--spacing-lg)', fontWeight: 'var(--font-mono-weight-bold)' }}>
-              WORKSHARP + DRILL DOCTOR •
-            </div>
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)' }}>ROLE</div>
-            <div className="small-text" style={{ marginTop: 8 }}>PHOTOGRAPHER</div>
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>CLIENT</div>
-            <div className="small-text" style={{ marginTop: 8 }}>Worksharp + Drill Doctor</div>
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>PUBLICATION</div>
-            <div className="small-text" style={{ marginTop: 8 }}>Popular Mechanics</div>
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>SCOPE</div>
-            <div className="small-text" style={{ marginTop: 8 }}>COMMERCIAL EDITORIAL PHOTOGRAPHY</div>
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>PROJECT SUMMARY</div>
-            <div className="small-text" style={{ marginTop: 8, textTransform: 'none', lineHeight: 1.5 }}>
-              A commercial editorial shoot for Worksharp + Drill Doctor, created for Popular Mechanics—product-forward images built for clarity, credibility, and print + web use.
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-
       <section style={{ padding: 'var(--spacing-md) 10px var(--spacing-xxl)' }}>
-        <div style={{ height: 1, background: '#000000', marginLeft: -10, marginRight: -10 }} />
+        <div style={{ height: 1, background: 'var(--color-border)', marginLeft: -10, marginRight: -10 }} />
         <div>
           <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', marginBottom: 20 }}>
-            <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>WORKSHARP</span>
+            <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>WORKSHARP + DRILL DOCTOR</span>
+            <span style={{ margin: '0 14px' }}>•</span>
+            <span style={{ marginLeft: 14 }}>SCOPE( COMMERCIAL EDITORIAL PHOTOGRAPHY )</span>
           </div>
-          <div className="wim-rows">
+          <div className="worksharp-rows">
             {WORKSHARP_IMAGES.reduce((rows, img, idx) => {
               const rowIndex = Math.floor(idx / 2);
               if (!rows[rowIndex]) rows[rowIndex] = [];
@@ -187,7 +121,9 @@ const WorksharpProject = () => {
               return rows;
             }, []).map((row, rIdx) => {
               const single = row.length === 1;
-              const rowClass = single ? 'wim-row wim-row--single' : (rIdx % 2 === 0 ? 'wim-row wim-row--left' : 'wim-row wim-row--right');
+              const rowClass = single
+                ? 'worksharp-row worksharp-row--single'
+                : (rIdx % 2 === 0 ? 'worksharp-row worksharp-row--left' : 'worksharp-row worksharp-row--right');
               return (
                 <div key={`row-${rIdx}`} className={rowClass}>
                   {row.map((image) => {
@@ -195,16 +131,16 @@ const WorksharpProject = () => {
                     return (
                       <motion.div
                         key={image.src}
-                        className="wim-card"
+                        className="worksharp-card"
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '-10%' }}
                         transition={{ duration: 0.6, ease: 'easeOut' }}
                       >
-                        <div className={`wim-frame${isLoaded ? ' wim-frame--loaded' : ' wim-frame--loading'}`}>
-                          <div className="wim-skeleton" aria-hidden="true" />
+                        <div className={`worksharp-frame${isLoaded ? ' worksharp-frame--loaded' : ' worksharp-frame--loading'}`}>
+                          <div className="worksharp-skeleton" aria-hidden="true" />
                           <img
-                            className="wim-img"
+                            className="worksharp-img"
                             src={image.src}
                             alt={image.alt}
                             loading="lazy"
@@ -216,7 +152,7 @@ const WorksharpProject = () => {
                               });
                             }}
                             onError={(ev) => {
-                              const card = ev.currentTarget.closest('.wim-card');
+                              const card = ev.currentTarget.closest('.worksharp-card');
                               if (card) card.style.display = 'none';
                             }}
                           />
@@ -230,6 +166,101 @@ const WorksharpProject = () => {
           </div>
         </div>
       </section>
+      <ProjectNarrative eyebrow="WORKSHARP + DRILL DOCTOR" meta={WORKSHARP_NARRATIVE.meta} sections={WORKSHARP_NARRATIVE.sections} />
+
+      <style>{`
+        .worksharp-rows {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          padding-bottom: var(--spacing-xxl);
+        }
+
+        .worksharp-row {
+          display: flex;
+          gap: 10px;
+          width: 100%;
+          box-sizing: border-box;
+        }
+
+        .worksharp-card {
+          border-radius: 12px;
+          overflow: hidden;
+          background: ${BLACK};
+          min-width: 0;
+        }
+
+        .worksharp-frame {
+          height: auto;
+          position: relative;
+        }
+
+        .worksharp-skeleton {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            90deg,
+            rgba(17, 17, 17, 0.06) 0%,
+            rgba(17, 17, 17, 0.12) 50%,
+            rgba(17, 17, 17, 0.06) 100%
+          );
+          background-size: 200% 100%;
+          animation: worksharpSkeleton 1.2s ease-in-out infinite;
+          opacity: 1;
+          transition: opacity 260ms ease;
+        }
+
+        @keyframes worksharpSkeleton {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+
+        .worksharp-img {
+          width: 100%;
+          display: block;
+          object-fit: cover;
+          opacity: 0;
+          transition: opacity 260ms ease;
+        }
+
+        .worksharp-frame--loaded .worksharp-skeleton {
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        .worksharp-frame--loaded .worksharp-img {
+          opacity: 1;
+        }
+
+        .worksharp-row--left .worksharp-card:first-child,
+        .worksharp-row--right .worksharp-card:last-child {
+          flex: 0 0 calc(64% - 5px);
+        }
+
+        .worksharp-row--left .worksharp-card:last-child,
+        .worksharp-row--right .worksharp-card:first-child {
+          flex: 0 0 calc(36% - 5px);
+        }
+
+        .worksharp-row--single .worksharp-card {
+          flex: 0 0 100%;
+        }
+
+        @media (max-width: 700px) {
+          .worksharp-row,
+          .worksharp-row--left,
+          .worksharp-row--right {
+            flex-direction: column;
+          }
+
+          .worksharp-row .worksharp-card,
+          .worksharp-row--left .worksharp-card,
+          .worksharp-row--right .worksharp-card,
+          .worksharp-row--single .worksharp-card {
+            flex: 0 0 100%;
+          }
+        }
+      `}</style>
     </motion.div>
   );
 };

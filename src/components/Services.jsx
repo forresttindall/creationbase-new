@@ -18,6 +18,7 @@ const Services = () => {
       { id: 'four-cs', label: '4 Cs' },
       { id: 'uiux', label: 'UI/UX + Product Design' },
       { id: 'brand', label: 'Brand Design' },
+      { id: 'photo', label: 'Commercial + Event Photography' },
       { id: 'logos', label: 'Logo Psychology' },
       { id: 'color', label: 'Color Memory' },
     ],
@@ -60,7 +61,7 @@ const Services = () => {
           </header>
           <div style={{ height: 1, background: 'var(--color-border)', marginTop: 'var(--spacing-sm)' }} aria-hidden="true" />
           <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 760, opacity: 0.85 }}>
-            Strategy-first UI/UX and product design, brand systems, and visual identity work built to be understood fast and remembered longer.
+            Strategy-first UI/UX and product design, brand systems, commercial photography, and event coverage built to be understood fast and remembered longer.
           </div>
         </div>
       </section>
@@ -112,7 +113,7 @@ const Services = () => {
                   className="newsletter-button"
                   style={{ width: '100%' }}
                 >
-                  Book Strategy Call
+                  Get Started
                   <ArrowUpRight size={14} weight="thin" />
                 </button>
               </div>
@@ -124,14 +125,14 @@ const Services = () => {
                   Overview
                 </h2>
                 <p className="small-text" style={{ lineHeight: 1.6, margin: '0 0 var(--spacing-lg)', color: WHITE, maxWidth: 860 }}>
-                  Creationbase pairs UI/UX and product design with brand design so your site, product, and visual identity feel like one cohesive system. We help brands communicate faster, look sharper, and build trust through clear structure, memorable visuals, and polished interaction.
+                  Creationbase pairs UI/UX and product design with brand design and commercial photography so your site, product, campaign assets, and visual identity feel like one cohesive system. We help brands communicate faster, look sharper, and build trust through clear structure, memorable visuals, polished interaction, and image-making that fits the brand.
                 </p>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
                   {[
                     { k: 'UI/UX + Product Design', v: 'User flows, wireframes, interface systems, and polished screens built to reduce friction.' },
                     { k: 'Brand Design', v: 'Identity direction, logos, typography, color, and supporting visuals that make the brand recognizable.' },
+                    { k: 'Commercial + Event Photography', v: 'Editorial-style product, brand, and live-event imagery built to feel useful, credible, and on-brand.' },
                     { k: 'Visual Systems', v: 'Shared rules for layout, motion, imagery, and hierarchy so every touchpoint feels consistent.' },
-                    { k: 'Launch Support', v: 'Design handoff, refinement, and rollout support to get the system live cleanly.' },
                   ].map((item) => (
                     <div key={item.k} style={{ border: `1px solid ${GRAY2}`, borderRadius: 10, padding: 14 }}>
                       <div className="small-text" style={{ letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>
@@ -220,6 +221,24 @@ const Services = () => {
                 </div>
               </section>
 
+              <section id="photo" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
+                <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: '0 0 var(--spacing-md)' }}>
+                  Commercial + Event Photography
+                </h2>
+                <p className="small-text" style={{ lineHeight: 1.6, margin: '0 0 var(--spacing-lg)', color: WHITE, maxWidth: 860 }}>
+                  Photography works best when it feels like part of the brand system instead of a separate layer. We shoot commercial, editorial, and event imagery with the same attention to hierarchy, tone, and credibility that shapes the rest of the visual identity.
+                </p>
+                <div style={{ border: `1px solid ${GRAY2}`, borderRadius: 10, padding: 14 }}>
+                  <div className="small-text" style={{ letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>What you get</div>
+                  <ul className="small-text" style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6, color: WHITE }}>
+                    <li style={{ marginBottom: 10 }}>Commercial editorial product photography for web, print, and campaigns</li>
+                    <li style={{ marginBottom: 10 }}>Brand and lifestyle imagery designed to match the tone of the identity system</li>
+                    <li style={{ marginBottom: 10 }}>Event photography that captures atmosphere, detail, and proof of participation</li>
+                    <li>Image sets prepared for marketing pages, social assets, decks, and publication use</li>
+                  </ul>
+                </div>
+              </section>
+
               <section id="logos" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
                 <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: '0 0 var(--spacing-md)' }}>
                   Memorable Logo Psychology
@@ -266,7 +285,7 @@ const Services = () => {
                     Let’s build something that converts and lasts.
                   </h2>
                   <div className="small-text" style={{ color: GRAY1, maxWidth: 760, lineHeight: 1.6 }}>
-                    If you want a site or product that feels premium, communicates fast, and stays consistent as you grow, we’ll map the system and ship it clean.
+                    If you want a site, brand system, or photography direction that feels premium, communicates fast, and stays consistent as you grow, we’ll map the system and ship it clean.
                   </div>
                   <div style={{ marginTop: 'var(--spacing-lg)', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                     <button
@@ -274,7 +293,7 @@ const Services = () => {
                       onClick={openStrategyCall}
                       className="newsletter-button"
                     >
-                      Book Strategy Call
+                      Get Started
                       <ArrowUpRight size={14} weight="thin" />
                     </button>
                     <button
@@ -282,7 +301,7 @@ const Services = () => {
                       onClick={() => navigate('/contact')}
                       className="newsletter-button newsletter-button--outline"
                     >
-                      Contact Form
+                      Contact
                     </button>
                     <button
                       type="button"

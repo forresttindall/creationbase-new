@@ -1851,7 +1851,7 @@ function App() {
             <section id="photography" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
-                  <DecryptText as="span" text="COMMERCIAL PHOTOGRAPHY" trigger="inView" duration={800} />
+                  <DecryptText as="span" text="PHOTOGRAPHY" trigger="inView" duration={800} />
                 </h2>
                 <span className="small-text">Index (06)</span>
               </div>

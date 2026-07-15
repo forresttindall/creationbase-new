@@ -1380,7 +1380,7 @@ function App() {
               data-header-theme="light"
               className="home-overview"
               style={{
-                padding: 'calc(var(--spacing-xxl) * 2) var(--spacing-md) var(--spacing-xxl)',
+                padding: '204px var(--spacing-md) var(--spacing-xxl)',
                 background: UI_DARK,
                 color: UI_LIGHT,
                 minHeight: 'auto',

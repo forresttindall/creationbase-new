@@ -23,7 +23,7 @@ const Schema = ({ type = 'Organization', data = {} }) => {
       return {
         ...base,
         "@type": "ProfessionalService",
-        "description": "Creationbase is a creation studio for brand + UI/UX design, high-performance web development, and visual systems—built as one cohesive system.",
+        "description": "Creationbase is a Boise creative studio specializing in brand design, UI/UX, high-performance web development, and commercial photography.",
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
           "name": "Creative Services",
@@ -59,6 +59,14 @@ const Schema = ({ type = 'Organization', data = {} }) => {
                 "name": "UI/UX Design",
                 "description": "User-centric interface and experience design for apps and platforms."
               }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Photography",
+                "description": "Commercial and editorial photography designed to fit the same visual system as the brand and site."
+              }
             }
           ]
         },
@@ -70,13 +78,13 @@ const Schema = ({ type = 'Organization', data = {} }) => {
       return {
         "@context": "https://schema.org",
         "@type": "Service",
-        "serviceType": data.name || "Design, Development, and Visual Systems",
+        "serviceType": data.name || "Design, Development, Photography, and Visual Systems",
         "provider": {
           "@type": "Organization",
           "name": "Creationbase",
           "url": "https://creationbase.io"
         },
-        "description": data.description || "Brand + UI/UX design, high-performance web development, and visual systems focused on clarity, memorability, and trust."
+        "description": data.description || "Boise creative studio specializing in brand design, UI/UX, high-performance web development, and commercial photography."
       };
     }
 
@@ -136,17 +144,17 @@ const Schema = ({ type = 'Organization', data = {} }) => {
         }
       });
     } else if (type === 'Organization' || type === 'LocalBusiness') {
-      document.title = 'Creationbase — Design, Development & Visual Systems';
+      document.title = 'Creationbase — Design, Development, Photography & Visual Systems';
       
       const defaults = [
-        { name: 'description', content: 'Creationbase is a creation studio for brand + UI/UX design, high-performance web development, and visual systems.' },
-        { property: 'og:title', content: 'Creationbase — Design, Development & Visual Systems' },
-        { property: 'og:description', content: 'Creationbase is a creation studio for brand + UI/UX design, high-performance web development, and visual systems.' },
+        { name: 'description', content: 'Creationbase is a Boise creative studio specializing in brand design, UI/UX, high-performance web development, and commercial photography.' },
+        { property: 'og:title', content: 'Creationbase — Design, Development, Photography & Visual Systems' },
+        { property: 'og:description', content: 'Creationbase is a Boise creative studio specializing in brand design, UI/UX, high-performance web development, and commercial photography.' },
         { property: 'og:image', content: 'https://www.creationbase.io/images/socialshare.jpg?v=3' },
         { property: 'og:image:secure_url', content: 'https://www.creationbase.io/images/socialshare.jpg?v=3' },
         { property: 'og:url', content: 'https://www.creationbase.io/' },
-        { name: 'twitter:title', content: 'Creationbase — Design, Development & Visual Systems' },
-        { name: 'twitter:description', content: 'Creationbase is a creation studio for brand + UI/UX design, high-performance web development, and visual systems.' },
+        { name: 'twitter:title', content: 'Creationbase — Design, Development, Photography & Visual Systems' },
+        { name: 'twitter:description', content: 'Creationbase is a Boise creative studio specializing in brand design, UI/UX, high-performance web development, and commercial photography.' },
         { name: 'twitter:image', content: 'https://www.creationbase.io/images/socialshare.jpg?v=3' }
       ];
 

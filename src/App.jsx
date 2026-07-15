@@ -2032,7 +2032,7 @@ function App() {
                         <div className="small-text" style={{ maxWidth: '520px' }}>
                           Creationbase is an independent full service creation studio based in Boise, Idaho. Founded in 2022, we partner with brands and teams to shape clear visual systems, build distinctive brand identities, design fast and durable websites, and create photography that fits the work.
                         </div>
-                        <div className="small-text" style={{ maxWidth: '520px', marginTop: 'var(--spacing-md)' }}>
+                        <div className="small-text" style={{ maxWidth: '520px' }}>
                           We deliver cohesive brand, web, and photo systems built for clarity, recognition, and real use. Our work is grounded in thoughtful process, strong design decisions, maintainable development, and visual direction that helps clients look sharper and communicate faster across every touchpoint.
                         </div>
                       </div>
@@ -2056,6 +2056,16 @@ function App() {
                             <div className="studio-practice__team-meta">
                               <div className="studio-practice__team-name">Sarah Houser</div>
                               <div className="studio-practice__team-role">CMO / Art Director / Photographer</div>
+                            </div>
+                          </div>
+
+                          <div className="studio-practice__team-card">
+                            <div className="studio-practice__team-image">
+                              <img src="/images/travis.png" alt="Travis Winters" loading="lazy" decoding="async" />
+                            </div>
+                            <div className="studio-practice__team-meta">
+                              <div className="studio-practice__team-name">Travis Winters</div>
+                              <div className="studio-practice__team-role">Graphic Designer / Motion Designer / Illustrator</div>
                             </div>
                           </div>
                         </div>

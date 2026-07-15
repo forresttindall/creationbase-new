@@ -1452,8 +1452,8 @@ ul {
 .studio-practice__top {
   padding: 10px 0;
   border-bottom: 1px solid var(--color-border);
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-xl);
   align-items: start;
 }
@@ -1463,13 +1463,22 @@ ul {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: var(--spacing-md);
+  max-width: 960px;
+}
+
+.studio-practice__team {
+  width: 100%;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
 }
 
 .studio-practice__team-grid {
   margin-top: 0;
   display: grid;
-  grid-template-rows: auto auto;
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: auto;
+  gap: 14px;
   align-content: start;
 }
 
@@ -1494,15 +1503,15 @@ ul {
 }
 
 .studio-practice__team-card {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   align-items: start;
 }
 
 .studio-practice__team-image {
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 12px;
 }
@@ -1518,7 +1527,7 @@ ul {
 .studio-practice__team-meta {
   padding: 0;
   min-width: 0;
-  align-self: center;
+  align-self: stretch;
   display: grid;
   gap: 6px;
 }
@@ -1645,20 +1654,24 @@ ul {
   }
 
   .studio-practice__top {
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    align-items: stretch;
+    gap: var(--spacing-xl);
+    align-items: start;
   }
 
   .studio-practice__copy {
-    padding-right: 10px;
+    padding-right: 0;
   }
 
   .studio-practice__team {
-    padding-left: 10px;
-    border-left: 1px solid var(--color-border);
-    display: flex;
-    align-items: stretch;
+    padding-top: var(--spacing-lg);
+    padding-left: 0;
+    border-left: 0;
+    display: block;
+    align-items: initial;
+  }
+
+  .studio-practice__team-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .studio-typography-column {
@@ -1691,6 +1704,18 @@ ul {
 }
 
 @media (min-width: 1024px) {
+  .studio-practice__copy {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--spacing-lg);
+    align-items: start;
+    max-width: none;
+  }
+
+  .studio-practice__team-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .studio-practice-image {
     min-height: 100%;
   }

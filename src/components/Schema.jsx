@@ -142,12 +142,12 @@ const Schema = ({ type = 'Organization', data = {} }) => {
         { name: 'description', content: 'Creationbase is a creation studio for brand + UI/UX design, high-performance web development, and visual systems.' },
         { property: 'og:title', content: 'Creationbase — Design, Development & Visual Systems' },
         { property: 'og:description', content: 'Creationbase is a creation studio for brand + UI/UX design, high-performance web development, and visual systems.' },
-        { property: 'og:image', content: 'https://www.creationbase.io/images/socialshare.jpg?v=2' },
-        { property: 'og:image:secure_url', content: 'https://www.creationbase.io/images/socialshare.jpg?v=2' },
+        { property: 'og:image', content: 'https://www.creationbase.io/images/socialshare.jpg?v=3' },
+        { property: 'og:image:secure_url', content: 'https://www.creationbase.io/images/socialshare.jpg?v=3' },
         { property: 'og:url', content: 'https://www.creationbase.io/' },
         { name: 'twitter:title', content: 'Creationbase — Design, Development & Visual Systems' },
         { name: 'twitter:description', content: 'Creationbase is a creation studio for brand + UI/UX design, high-performance web development, and visual systems.' },
-        { name: 'twitter:image', content: 'https://www.creationbase.io/images/socialshare.jpg?v=2' }
+        { name: 'twitter:image', content: 'https://www.creationbase.io/images/socialshare.jpg?v=3' }
       ];
 
       defaults.forEach(update => {

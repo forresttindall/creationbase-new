@@ -1229,12 +1229,46 @@ ul {
 .home-project-stack {
   position: relative;
   background: var(--color-bg);
+  z-index: 0;
+  isolation: isolate;
 }
 
 .home-project-layer {
   position: relative;
   min-height: 200vh;
   background: transparent;
+}
+
+.home-project-layer:last-child {
+  min-height: auto;
+}
+
+.home-project-layer:last-child .home-project-layer__sticky {
+  position: relative;
+  top: auto;
+  min-height: auto;
+  padding-bottom: 0;
+}
+
+.home-project-layer:last-child .home-project-layer__panel {
+  min-height: auto;
+  padding-bottom: 0;
+}
+
+.home-project-layer:nth-last-child(2) {
+  min-height: calc(100vh - 10px);
+}
+
+.home-project-layer:nth-last-child(2) .home-project-layer__sticky {
+  position: relative;
+  top: auto;
+  min-height: auto;
+  padding-bottom: 0;
+}
+
+.home-project-layer:nth-last-child(2) .home-project-layer__panel {
+  min-height: auto;
+  padding-bottom: 0;
 }
 
 .home-project-layer + .home-project-layer {
@@ -1753,6 +1787,14 @@ ul {
 
   .home-project-layer {
     min-height: 170vh;
+  }
+
+  .home-project-layer:last-child {
+    min-height: auto;
+  }
+
+  .home-project-layer:nth-last-child(2) {
+    min-height: calc(100vh - 10px);
   }
 
   .home-project-layer + .home-project-layer {

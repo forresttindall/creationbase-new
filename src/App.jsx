@@ -1251,7 +1251,7 @@ function App() {
                     <DecryptText as="span" text="Brand + Web + Photo" trigger="mount" delay={200} duration={900} />
                   </div>
                   <div className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-                    <DecryptText as="span" text="Your Creation Studio" trigger="mount" delay={260} duration={900} />
+                    <DecryptText as="span" text="The Creation Studio For Bold Brands" trigger="mount" delay={260} duration={900} />
                   </div>
                 </h1>
                 <motion.div 
@@ -1376,6 +1376,110 @@ function App() {
               </div>
             </motion.section>
 
+            <section
+              data-header-theme="light"
+              className="home-overview"
+              style={{
+                padding: 'calc(var(--spacing-xxl) * 2) var(--spacing-md) var(--spacing-xxl)',
+                background: UI_DARK,
+                color: UI_LIGHT,
+                minHeight: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'relative',
+                zIndex: 2,
+              }}
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
+                transition={{ duration: 0.5 }}
+                style={{
+                  width: '100%',
+                  maxWidth: 'var(--content-max-w)',
+                  margin: '0 auto',
+                  borderTop: HOME_SECTION_DIVIDER,
+                  borderBottom: HOME_SECTION_DIVIDER,
+                  padding: 'clamp(28px, 5vw, 56px) 0',
+                  display: 'grid',
+                  gridTemplateColumns: isMobile ? '1fr' : 'minmax(120px, 0.28fr) minmax(0, 1fr)',
+                  gap: 'var(--spacing-lg)',
+                  alignItems: 'start',
+                }}
+              >
+                <div
+                  className="small-text"
+                  style={{
+                    opacity: 0.72,
+                    letterSpacing: '0.08em',
+                    paddingTop: '6px',
+                  }}
+                >
+                  START / 02
+                </div>
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 1.4fr) minmax(220px, 0.6fr)',
+                    gap: 'var(--spacing-lg)',
+                    alignItems: 'end',
+                  }}
+                >
+                  <div style={{ minWidth: 0 }}>
+                    <h2
+                      className="section-title"
+                      style={{
+                        marginBottom: 0,
+                        maxWidth: '12ch',
+                        color: UI_LIGHT,
+                        lineHeight: 0.88,
+                        fontSize: 'clamp(38px, 7vw, 96px)',
+                      }}
+                    >
+                      Start Something Sharp.
+                    </h2>
+                  </div>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gap: '16px',
+                      alignContent: 'end',
+                      minWidth: 0,
+                    }}
+                  >
+                    <p
+                      className="small-text"
+                      style={{
+                        margin: 0,
+                        maxWidth: 320,
+                        lineHeight: 1.45,
+                        opacity: 0.88,
+                        textTransform: 'none',
+                      }}
+                    >
+                      Identity, web design, development, and photography for bold brands.
+                    </p>
+                    <div>
+                      <button
+                        type="button"
+                        className="newsletter-button"
+                        onClick={openStrategyCall}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 8,
+                        }}
+                      >
+                        Get Started
+                        <ArrowUpRight size={14} weight="thin" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </section>
+
             {/* Selected Clients & Testimonials */}
             <section style={{ 
               padding: '0',
@@ -1385,6 +1489,7 @@ function App() {
               display: 'flex',
               flexDirection: 'column',
               position: 'relative',
+              zIndex: 3,
               overflow: 'hidden'
             }}>
               {/* Selected Clients Marquee/Grid */}

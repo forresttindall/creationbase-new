@@ -2041,7 +2041,7 @@ function App() {
                         <div className="studio-practice__team-grid">
                           <div className="studio-practice__team-card">
                             <div className="studio-practice__team-image">
-                              <img src="/images/me%20new.JPG" alt="Forrest Tindall" loading="lazy" decoding="async" />
+                              <img src="/images/me%20new.webp" alt="Forrest Tindall" loading="lazy" decoding="async" />
                             </div>
                             <div className="studio-practice__team-meta">
                               <div className="studio-practice__team-name">Forrest Tindall</div>
@@ -2051,7 +2051,7 @@ function App() {
 
                           <div className="studio-practice__team-card">
                             <div className="studio-practice__team-image">
-                              <img src="/images/sarah%202.png" alt="Sarah Houser" loading="lazy" decoding="async" />
+                              <img src="/images/sarah%202.webp" alt="Sarah Houser" loading="lazy" decoding="async" />
                             </div>
                             <div className="studio-practice__team-meta">
                               <div className="studio-practice__team-name">Sarah Houser</div>
@@ -2061,7 +2061,7 @@ function App() {
 
                           <div className="studio-practice__team-card">
                             <div className="studio-practice__team-image">
-                              <img src="/images/travis.png" alt="Travis Winters" loading="lazy" decoding="async" />
+                              <img src="/images/travis.webp" alt="Travis Winters" loading="lazy" decoding="async" />
                             </div>
                             <div className="studio-practice__team-meta">
                               <div className="studio-practice__team-name">Travis Winters</div>

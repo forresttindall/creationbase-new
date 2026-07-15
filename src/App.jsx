@@ -2051,7 +2051,7 @@ function App() {
 
                           <div className="studio-practice__team-card">
                             <div className="studio-practice__team-image">
-                              <img src="/images/sarah%202.jpg" alt="Sarah Houser" loading="lazy" decoding="async" />
+                              <img src="/images/sarah%202.png" alt="Sarah Houser" loading="lazy" decoding="async" />
                             </div>
                             <div className="studio-practice__team-meta">
                               <div className="studio-practice__team-name">Sarah Houser</div>

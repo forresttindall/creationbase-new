@@ -109,10 +109,12 @@ const BoiseAnalogClubProject = () => {
       <section style={{ padding: 'var(--spacing-md) 10px var(--spacing-xxl)' }}>
         <div style={{ height: 1, background: 'var(--color-border)', marginLeft: -10, marginRight: -10 }} />
         <div>
-          <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', marginBottom: 20 }}>
-            <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>BOISE ANALOG CLUB</span>
-            <span style={{ margin: '0 14px' }}>•</span>
-            <span style={{ marginLeft: 14 }}>SCOPE( BRAND, WEBSITE, CAMPAIGN ASSETS )</span>
+          <div style={{ marginTop: 'var(--spacing-sm)', marginBottom: 20 }}>
+            <div className="small-text">
+              <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>BOISE ANALOG CLUB</span>
+              <span style={{ margin: '0 14px' }}>•</span>
+              <span style={{ marginLeft: 14 }}>SCOPE( BRAND, WEBSITE, CAMPAIGN ASSETS )</span>
+            </div>
           </div>
           <div className="boise-analog-rows">
             {BOISE_ANALOG_CLUB_IMAGES.reduce((rows, img, idx) => {
@@ -165,6 +167,17 @@ const BoiseAnalogClubProject = () => {
                 </div>
               );
             })}
+          </div>
+          <div style={{ marginTop: 'var(--spacing-lg)', display: 'flex', justifyContent: 'center' }}>
+            <a
+              href="https://boiseanalogclub.com"
+              target="_blank"
+              rel="noreferrer"
+              className="newsletter-button"
+              style={{ textDecoration: 'none' }}
+            >
+              Visit Live Site
+            </a>
           </div>
         </div>
       </section>

@@ -943,7 +943,7 @@ function App() {
 
   const headerColor = UI_LIGHT;
   const headerLogoSrc = '/images/new logo.png';
-  const mobileNavBg = 'rgba(150,150,150,0.32)';
+  const mobileNavBg = 'rgba(8,8,8,0.72)';
   const reduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);

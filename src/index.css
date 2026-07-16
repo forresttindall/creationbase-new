@@ -862,12 +862,13 @@ ul {
   padding: 14px 22px 14px 24px;
   border: none;
   border-radius: 32px;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(10, 10, 10, 0.68);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   color: inherit;
   pointer-events: auto;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(72, 72, 72, 0.72);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.32);
 }
 
 .site-nav__home-link,
@@ -900,8 +901,8 @@ ul {
   width: 22px;
   height: 22px;
   display: block;
-  filter: invert(1) grayscale(1) brightness(0.55);
-  opacity: 0.95;
+  filter: invert(1) grayscale(1) brightness(0.82);
+  opacity: 0.96;
 }
 
 .site-nav__menu-label {
@@ -911,6 +912,8 @@ ul {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   text-align: right;
+  color: inherit;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
 }
 
 .cursor-follower {
@@ -989,7 +992,7 @@ ul {
   inset: 0;
   z-index: 350;
   pointer-events: auto;
-  background: rgba(0, 0, 0, 0.62);
+  background: rgba(8, 8, 8, 0.72);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   overflow: hidden;
@@ -1010,17 +1013,18 @@ ul {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   padding: 10px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(12, 12, 12, 0.64);
   border-radius: 10px;
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(68, 68, 68, 0.72);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
 }
 
 .mobile-nav-link {
   min-height: 96px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: rgba(24, 24, 24, 0.7);
+  border: 1px solid rgba(72, 72, 72, 0.7);
   padding: 14px;
   font-family: var(--font-mono);
   font-weight: var(--font-mono-weight);
@@ -1029,13 +1033,14 @@ ul {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   text-align: center;
-  color: var(--color-text);
+  color: inherit;
   cursor: pointer;
   border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgba(84, 84, 84, 0.22);
 }
 
 .mobile-nav-link:hover {
-  background: var(--color-surface-strong);
+  background: rgba(34, 34, 34, 0.82);
 }
 
 @media (max-width: 768px) {

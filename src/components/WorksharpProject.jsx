@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import DecryptText from './DecryptText';
+import ProjectNarrative from './ProjectNarrative';
 
 const BLACK = 'var(--color-bg)';
 const WHITE = 'var(--color-text)';
@@ -13,37 +14,43 @@ const WORKSHARP_IMAGES = [
   { src: '/images/worksharp/IMG_3004.jpg', alt: 'Worksharp + Drill Doctor commercial editorial photography' },
 ];
 
+const WORKSHARP_NARRATIVE = {
+  meta: [
+    'ROLE( Photographer )',
+    'CLIENT( Worksharp + Drill Doctor )',
+    'PUBLICATION( Popular Mechanics )',
+    'SCOPE( Commercial Editorial Photography )',
+  ],
+  sections: [
+    {
+      label: 'Context',
+      text: 'Worksharp and Drill Doctor needed a set of product-forward editorial images that could feel credible in a publication setting while still carrying the polish of a commercial campaign.',
+    },
+    {
+      label: 'Problem',
+      text: 'The challenge was to make technical sharpening tools feel clear, trustworthy, and visually engaging without over-stylizing the products or losing the practical context behind them.',
+    },
+    {
+      label: 'Process',
+      text: 'I approached the shoot with a commercial editorial mindset, shaping the lighting, framing, and sequencing around product clarity, believable use, and compositions that could hold up in both print and web placements.',
+    },
+    {
+      label: 'Proposal',
+      text: 'The solution focused on a clean, utility-driven image set that balanced editorial atmosphere with readable product detail, giving the brand assets that felt sharp, grounded, and publication-ready.',
+    },
+    {
+      label: 'Result',
+      text: 'The final photo set delivered a stronger visual story for Worksharp + Drill Doctor, creating images that supported Popular Mechanics while also giving the products a more elevated and credible presentation.',
+    },
+  ],
+};
+
 const WorksharpProject = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const [readMoreOpen, setReadMoreOpen] = useState(false);
   const [loadedBySrc, setLoadedBySrc] = useState({});
-
-  useEffect(() => {
-    if (readMoreOpen) {
-      document.body.style.overflow = 'hidden';
-      document.body.classList.add('wim-info-open');
-    } else {
-      document.body.style.overflow = '';
-      document.body.classList.remove('wim-info-open');
-    }
-    const handleNavClick = (ev) => {
-      const el = ev.target.closest('.site-nav__menu-toggle');
-      if (readMoreOpen && el) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        setReadMoreOpen(false);
-      }
-    };
-    document.addEventListener('click', handleNavClick, true);
-    return () => {
-      document.body.style.overflow = '';
-      document.body.classList.remove('wim-info-open');
-      document.removeEventListener('click', handleNavClick, true);
-    };
-  }, [readMoreOpen]);
 
   useEffect(() => {
     const adjustRowHeights = () => {
@@ -97,81 +104,6 @@ const WorksharpProject = () => {
           </h1>
         </div>
       </section>
-
-      <button
-        type="button"
-        className="wim-readmore"
-        aria-label="Read more"
-        onClick={() => setReadMoreOpen(true)}
-      >
-        <div className="wim-readmore__track">
-          {Array.from({ length: 24 }).map((_, i) => (
-            <span key={i} className="wim-readmore__item small-text">
-              READ MORE •
-            </span>
-          ))}
-        </div>
-      </button>
-
-      {readMoreOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="wim-overlay"
-          onClick={() => setReadMoreOpen(false)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(150,150,150,0.32)',
-            backdropFilter: 'blur(26px)',
-            WebkitBackdropFilter: 'blur(26px)',
-            zIndex: 390,
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-            overflowY: 'auto',
-            padding: '60px 20px'
-          }}
-        >
-          <motion.div
-            initial={{ y: 12, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 12, opacity: 0 }}
-            className="wim-overlay__inner"
-            onClick={(ev) => ev.stopPropagation()}
-            style={{
-              position: 'relative',
-              width: 'min(820px, calc(100% - 40px))',
-              borderRadius: 16,
-              background: 'rgba(255,255,255,0.85)',
-              backdropFilter: 'blur(22px)',
-              WebkitBackdropFilter: 'blur(22px)',
-              border: 'none',
-              padding: 'var(--spacing-xl) var(--spacing-lg)',
-              color: '#111111',
-              marginTop: 'auto',
-              marginBottom: 'auto'
-            }}
-          >
-            <div className="small-text" style={{ marginBottom: 'var(--spacing-lg)', fontWeight: 'var(--font-mono-weight-bold)' }}>
-              WORKSHARP + DRILL DOCTOR •
-            </div>
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)' }}>ROLE</div>
-            <div className="small-text" style={{ marginTop: 8 }}>PHOTOGRAPHER</div>
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>CLIENT</div>
-            <div className="small-text" style={{ marginTop: 8 }}>Worksharp + Drill Doctor</div>
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>PUBLICATION</div>
-            <div className="small-text" style={{ marginTop: 8 }}>Popular Mechanics</div>
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>SCOPE</div>
-            <div className="small-text" style={{ marginTop: 8 }}>COMMERCIAL EDITORIAL PHOTOGRAPHY</div>
-            <div className="small-text" style={{ color: '#111111', fontWeight: 'var(--font-mono-weight-bold)', marginTop: 'var(--spacing-lg)' }}>PROJECT SUMMARY</div>
-            <div className="small-text" style={{ marginTop: 8, textTransform: 'none', lineHeight: 1.5 }}>
-              A commercial editorial shoot for Worksharp + Drill Doctor, created for Popular Mechanics—product-forward images built for clarity, credibility, and print + web use.
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
 
       <section style={{ padding: 'var(--spacing-md) 10px var(--spacing-xxl)' }}>
         <div style={{ height: 1, background: '#000000', marginLeft: -10, marginRight: -10 }} />
@@ -230,6 +162,7 @@ const WorksharpProject = () => {
           </div>
         </div>
       </section>
+      <ProjectNarrative eyebrow="WORKSHARP + DRILL DOCTOR" meta={WORKSHARP_NARRATIVE.meta} sections={WORKSHARP_NARRATIVE.sections} />
     </motion.div>
   );
 };

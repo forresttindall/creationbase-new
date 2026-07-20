@@ -438,21 +438,21 @@ const photographyProjects = [
 const testimonials = [
   {
     name: "Emily Carter",
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
     stars: "★★★★★",
     headline: "FIVE STARS!!!",
     text: "I put off rebranding my business and building out a new website because I just didn't have the time or inclination to do it all myself. Working with Forrest was easy and fun because he was able to draw information out of me that helped make the design and layout reflect my values. He also built elements into my website that gets it ranked higher in search engines and it gets noticed."
   },
   {
     name: "Lauren Mitchell",
-    image: "https://randomuser.me/api/portraits/women/68.jpg",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=200&q=80",
     stars: "★★★★★",
     headline: "I couldn't be happier!",
     text: "Forrest did a fantastic job on my website. It's now ranking higher on Google and bringing in more business. He gave my site the professional look I always wanted!"
   },
   {
     name: "Michael Bennett",
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
     stars: "★★★★★",
     headline: "Very pleased with the results!",
     text: "His quality and attention to detail is among the best. He built a website for my business partner that was clean, professional, and exceeded expectations."

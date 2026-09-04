@@ -974,7 +974,7 @@ const StrategyGrowthGraph = ({ isMobile = false }) => {
   const series = [
     { key: 'web',    label: 'WEBSITE',  arr: webs,    color: STROKE, width: 3.2, dash: undefined, area: 0.14,      start: 0.08, lift: 198, dur: 4.6 },
     { key: 'social', label: 'SOCIAL',   arr: socials, color: DIM,    width: 2.7, dash: undefined, area: 0.08,      start: 0.24, lift: 212, dur: 4.6 },
-    { key: 'brand',  label: 'BRANDING', arr: brands,  color: STROKE, width: 2.6, dash: '5 5', area: undefined, start: 0.00, lift: 138, dur: 4.6 },
+    { key: 'brand',  label: 'BRANDING', arr: brands,  color: STROKE, width: 2.8, dash: undefined, area: 0.10,      start: 0.00, lift: 138, dur: 4.6 },
     { key: 'base',   label: 'BASELINE', arr: baseline, color: RULE, width: 1.2, dash: '2 4', area: undefined, start: 0.0, lift: null, dur: 3.2 },
   ];
 
@@ -1545,54 +1545,72 @@ const StrategyGrowthGraph = ({ isMobile = false }) => {
               style={{
                 gridColumn: isMobile ? '1 / -1' : '1 / -1',
                 display: 'grid',
-                gridTemplateColumns: isMobile ? 'minmax(0, 1fr) 86px' : 'repeat(3, minmax(0, 1fr))',
-                gap: 10,
-                alignItems: 'baseline',
+                gridTemplateColumns: isMobile ? 'minmax(0, 1fr) 92px' : 'repeat(3, minmax(0, 1fr))',
+                gap: isMobile ? 6 : 10,
+                alignItems: 'center',
                 background: UI_DARK,
-                padding: '14px',
+                padding: isMobile ? '12px 10px' : '14px',
                 borderTop: i === 0 ? 'none' : HOME_SECTION_DIVIDER,
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <svg width={28} height={10} role="img" aria-hidden="true">
+              <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 8 : 10, minWidth: 0 }}>
+                <svg width={isMobile ? 22 : 28} height={10} role="img" aria-hidden="true">
                   <line
                     x1={1}
                     y1={5}
-                    x2={26}
+                    x2={isMobile ? 20 : 26}
                     y2={5}
                     stroke={s.color}
-                    strokeWidth={s.dash ? 1.8 : 2.8}
+                    strokeWidth={s.dash ? 1.8 : (isMobile ? 2.4 : 2.8)}
                     strokeLinecap="round"
                     strokeDasharray={s.dash ? s.dash : undefined}
                   />
                 </svg>
                 <span
                   className="small-text"
-                  style={{ letterSpacing: '0.08em', textTransform: 'uppercase' }}
+                  style={{
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    opacity: isMobile ? 0.82 : 0.9,
+                    fontSize: isMobile ? 'calc(var(--fs-sm) - 1px)' : 'var(--fs-sm)',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    minWidth: 0,
+                  }}
                 >
-                  {s.key === 'web' ? '02' : s.key === 'social' ? '04' : '01'}
+                  {isMobile
+                    ? `${s.key === 'web' ? '02' : s.key === 'social' ? '04' : '01'} · ${s.label}`
+                    : (s.key === 'web' ? '02' : s.key === 'social' ? '04' : '01')}
                 </span>
               </div>
-              <span
-                className="small-text"
-                style={{
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  opacity: 0.9,
-                  textAlign: isMobile ? 'left' : 'start',
-                }}
-              >
-                {s.label}
-              </span>
+              {!isMobile && (
+                <span
+                  className="small-text"
+                  style={{
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    opacity: 0.9,
+                    textAlign: 'start',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    minWidth: 0,
+                  }}
+                >
+                  {s.label}
+                </span>
+              )}
               <span
                 className="small-text"
                 style={{
                   fontFamily: 'var(--font-mono)',
                   fontWeight: 'var(--font-mono-weight-bold)',
-                  fontSize: 'clamp(14px, 1.4vw, 18px)',
+                  fontSize: isMobile ? 'clamp(13px, 3.8vw, 16px)' : 'clamp(14px, 1.4vw, 18px)',
                   letterSpacing: '0.04em',
                   lineHeight: 1,
-                  textAlign: isMobile ? 'right' : 'right',
+                  textAlign: 'right',
+                  justifySelf: isMobile ? 'end' : 'auto',
                   color: i === 0 ? STROKE : DIM,
                 }}
               >
@@ -2521,7 +2539,7 @@ function App() {
 
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: isMobile ? '1fr' : 'repeat(6, minmax(0, 1fr))',
+                  gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(6, minmax(0, 1fr))',
                   gap: 0,
                   borderTop: HOME_SECTION_DIVIDER,
                   borderLeft: HOME_SECTION_DIVIDER,
@@ -3037,7 +3055,8 @@ function App() {
                         className="section-title"
                         style={{
                           marginBottom: 0,
-                          maxWidth: '12ch',
+                          maxWidth: isMobile ? '100%' : '12ch',
+                          width: '100%',
                           color: UI_LIGHT,
                           lineHeight: 0.9,
                           fontSize: 'clamp(26px, 5vw, 68px)',

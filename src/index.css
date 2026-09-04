@@ -1837,6 +1837,15 @@ ul {
     display: none;
   }
 
+  .home-project-layer__media-overlay-panels {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .home-project-layer__media-overlay-panel--side {
+    display: none;
+  }
+
   .home-project-layer__title-row,
   .home-project-layer__details,
   .home-project-layer__copy,

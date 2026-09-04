@@ -23,54 +23,46 @@ const Schema = ({ type = 'Organization', data = {} }) => {
       return {
         ...base,
         "@type": "ProfessionalService",
-        "description": "Creationbase is a Boise creative studio specializing in brand design, UI/UX, high-performance web development, and commercial photography.",
+        "description": "Creationbase is a Strategic Creation Consultancy — a Boise-based studio that runs a Digital Value Creation Plan (DVCP): scorecard, opportunity map, and roadmap before shipping branding, website, and social channels from one strategic seat so every deliverable compounds into measurable growth.",
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
-          "name": "Creative Services",
+          "name": "Strategic Creation Services",
           "itemListElement": [
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Web Design",
-                "description": "Modern website design that clarifies your offer and makes conversion feel effortless."
+                "name": "DVCP Strategy",
+                "description": "Scorecard, opportunity map, and execution roadmap — the strategic blueprint that aligns brand, website, and social around the same growth metrics."
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Full-Stack Web Development",
-                "description": "High-performance frontend development with durable, scalable implementation."
+                "name": "Branding & Identity",
+                "description": "Positioning-driven visual systems, logo, type, and color that turn memory of your company into a repeatable competitive edge."
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Visual Systems",
-                "description": "Typography, layout, and interaction rules designed to be distinct, repeatable, and consistent across pages and products."
+                "name": "Website Design & Development",
+                "description": "Fast, conversion-structured websites scored on pipeline impact, not vanity traffic — designed, built, and measured from the same strategic seat as your brand."
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "UI/UX Design",
-                "description": "User-centric interface and experience design for apps and platforms."
-              }
-            },
-            {
-              "@type": "Offer",
-              "itemOffered": {
-                "@type": "Service",
-                "name": "Photography",
-                "description": "Commercial and editorial photography designed to fit the same visual system as the brand and site."
+                "name": "Social Content Strategy",
+                "description": "Editorial calendars, creative direction, and production grounded in the positioning work so every post pulls pipeline, not just likes."
               }
             }
           ]
         },
-        "priceRange": "$$"
+        "priceRange": "$$$"
       };
     }
 
@@ -78,13 +70,13 @@ const Schema = ({ type = 'Organization', data = {} }) => {
       return {
         "@context": "https://schema.org",
         "@type": "Service",
-        "serviceType": data.name || "Design, Development, Photography, and Visual Systems",
+        "serviceType": data.name || "Strategic Creation, DVCP, Branding, Website, and Social Content Strategy",
         "provider": {
           "@type": "Organization",
           "name": "Creationbase",
           "url": "https://creationbase.io"
         },
-        "description": data.description || "Boise creative studio specializing in brand design, UI/UX, high-performance web development, and commercial photography."
+        "description": data.description || "Creationbase — Strategic Creation Consultancy. Boise-based studio running a DVCP: scorecard, opportunity map, roadmap, then branding, website, and social from one strategic seat for measurable growth."
       };
     }
 
@@ -144,17 +136,17 @@ const Schema = ({ type = 'Organization', data = {} }) => {
         }
       });
     } else if (type === 'Organization' || type === 'LocalBusiness') {
-      document.title = 'Creationbase — Design, Development, Photography & Visual Systems';
+      document.title = 'Creationbase — Strategic Creation Consultancy · Branding, Website, Social, Scorecard-Driven Growth';
       
       const defaults = [
-        { name: 'description', content: 'Creationbase is a Boise creative studio specializing in brand design, UI/UX, high-performance web development, and commercial photography.' },
-        { property: 'og:title', content: 'Creationbase — Design, Development, Photography & Visual Systems' },
-        { property: 'og:description', content: 'Creationbase is a Boise creative studio specializing in brand design, UI/UX, high-performance web development, and commercial photography.' },
+        { name: 'description', content: 'Creationbase is a Strategic Creation Consultancy — a Boise-based studio that runs a Digital Value Creation Plan (DVCP): scorecard, opportunity map, and roadmap before shipping branding, website, and social channels from the same strategic seat so every deliverable compounds into measurable growth.' },
+        { property: 'og:title', content: 'Creationbase — Strategic Creation Consultancy' },
+        { property: 'og:description', content: 'A Boise strategic creation studio that runs a DVCP (scorecard → opportunity map → roadmap) before shipping branding, website, and social from one seat so all deliverables compound into measurable growth.' },
         { property: 'og:image', content: 'https://www.creationbase.io/images/socialshare.jpg?v=3' },
         { property: 'og:image:secure_url', content: 'https://www.creationbase.io/images/socialshare.jpg?v=3' },
         { property: 'og:url', content: 'https://www.creationbase.io/' },
-        { name: 'twitter:title', content: 'Creationbase — Design, Development, Photography & Visual Systems' },
-        { name: 'twitter:description', content: 'Creationbase is a Boise creative studio specializing in brand design, UI/UX, high-performance web development, and commercial photography.' },
+        { name: 'twitter:title', content: 'Creationbase — Strategic Creation Consultancy' },
+        { name: 'twitter:description', content: 'A Boise strategic creation studio that runs a DVCP (scorecard → opportunity map → roadmap) before shipping branding, website, and social from one seat so all deliverables compound into measurable growth.' },
         { name: 'twitter:image', content: 'https://www.creationbase.io/images/socialshare.jpg?v=3' }
       ];
 

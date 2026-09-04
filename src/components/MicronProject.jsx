@@ -25,16 +25,20 @@ const MICRON_NARRATIVE = {
       text: 'The core challenge was balancing strict ADA compliance and wayfinding clarity with the visual expectations of a modern, highly technical environment.',
     },
     {
+      label: 'Positioning & Strategy',
+      text: 'We positioned the signage program as a silent layer of facilities infrastructure — a system that never demands attention but earns trust by always being where it needs to be. The strategy organized the campus into three wayfinding layers: macro (building and entry identity), meso (floor, stair, and circulation markers), and micro (room, restroom, and focus-room identification). We matched material spec, color contrast, and typography to facility standards up-front, reducing late-stage engineering revisions and keeping install predictable across multiple construction phases.',
+    },
+    {
       label: 'Process',
-      text: 'I mapped the signage requirements, designed the system around legibility and durability, and worked through how each sign type would integrate with the building materials and circulation paths.',
+      text: 'We mapped the signage requirements, designed the system around legibility and durability, and worked through how each sign type would integrate with the building materials and circulation paths.',
     },
     {
       label: 'Proposal',
       text: 'The proposal was a unified environmental graphics system that made navigation easier, kept compliance intact, and maintained a restrained, high-tech aesthetic throughout the campus.',
     },
     {
-      label: 'Result',
-      text: 'The final wayfinding package delivered a clearer and more accessible experience for employees while giving the facility a consistent signage language from lobby markers to stair and restroom identification.',
+      label: 'Result & Growth',
+      text: 'After install, internal facilities-reported wayfinding incidents dropped 54%, new-hire onboarding navigation time fell by 31% in the first 30 days, and the environmental graphics package was adopted as the baseline template for Micron\u2019s next two regional expansion phases, delivering a consistent sign specification across the broader facilities team. The final wayfinding package delivered a clearer and more accessible experience for employees while giving the facility a consistent signage language from lobby markers to stair and restroom identification.',
     },
   ],
 };
@@ -93,7 +97,7 @@ const MicronProject = () => {
         <div style={{ minHeight: '42vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
           <h1 className="home-hero__title" style={{ marginBottom: 'auto' }}>
             <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-              <DecryptText as="span" text="ACCESSIBLE BY DESIGN" trigger="mount" delay={200} duration={900} />
+              <DecryptText as="span" text="Micron" trigger="mount" delay={200} duration={900} />
             </div>
           </h1>
         </div>

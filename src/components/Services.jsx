@@ -1,25 +1,123 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUpRight } from '@phosphor-icons/react';
+import DecryptText from './DecryptText';
 
 const BLACK = 'var(--color-bg)';
 const GRAY1 = 'var(--color-text-dim)';
 const GRAY2 = 'var(--color-border)';
 const WHITE = 'var(--color-text)';
 const STRATEGY_CALL_URL = 'https://calendly.com/forrest-creationbase/30min';
+const HOME_SECTION_DIVIDER = '1px solid var(--color-border)';
+
+const CORE_PILLARS = [
+  {
+    category: 'Strategy',
+    index: 'P01',
+    tagline: 'Where direction gets clear.',
+    description:
+      'We align your business vision with market reality. From positioning to GTM architecture, we create the blueprint for sustainable growth.',
+    capabilities: [
+      'Brand Strategy & Positioning',
+      'Go-To-Market (GTM) Strategy',
+      'Digital Audits & Roadmapping',
+      'Martech Strategy & Selection',
+    ],
+  },
+  {
+    category: 'Branding',
+    index: 'P02',
+    tagline: 'Where identity gets forged.',
+    description:
+      'Distinctive visual systems and brand narratives built to command attention, earn trust, and create lasting brand equity.',
+    capabilities: [
+      'Visual Identity Systems',
+      'Brand Messaging & Copywriting',
+      'Brand Guidelines & Asset Kits',
+      'Rebranding & Evolution',
+    ],
+  },
+  {
+    category: 'Website',
+    index: 'P03',
+    tagline: 'Where attention turns into action.',
+    description:
+      'High-performance digital experiences and custom web applications engineered to convert traffic into long-term client value.',
+    capabilities: [
+      'Custom Website Design & UX/UI',
+      'Full-Stack Web Development',
+      'Ecommerce & Product Interfaces',
+      'Conversion Rate Optimization (CRO)',
+    ],
+  },
+  {
+    category: 'Social',
+    index: 'P04',
+    tagline: 'Where engagement builds community.',
+    description:
+      'Strategic content and organic social systems that build authority, deepen customer relationships, and keep your brand top-of-mind.',
+    capabilities: [
+      'Organic Social Strategy',
+      'Content Design & Production',
+      'Community Growth & CRM Alignment',
+      'Campaign Creative & Execution',
+    ],
+  },
+];
+
+const DVCP_PROCESS = {
+  title: 'Our Process',
+  subtitle: 'Digital Value Creation Plan [DVCP]',
+  description:
+    'Our Digital Value Creation Plan is a fast, focused framework designed to cut through complexity, eliminate visual and technical friction, and identify hidden growth opportunities.',
+  steps: [
+    {
+      step: '01',
+      title: 'Digital Scorecard',
+      description:
+        'Comprehensive audit of your current brand presence, website performance, tech stack, and digital touchpoints.',
+    },
+    {
+      step: '02',
+      title: 'Opportunity Mapping',
+      description:
+        'Identifying blind spots, positioning gaps, and technical inefficiencies to unlock quick wins and long-term leverage.',
+    },
+    {
+      step: '03',
+      title: 'Roadmap & Execution',
+      description:
+        'Delivering a clear, actionable execution plan to transform your brand identity, web experience, and growth engine.',
+    },
+  ],
+};
+
+const MOBILE_QUERY = typeof window !== 'undefined'
+  ? window.matchMedia('(max-width: 767px)')
+  : { matches: false };
 
 const Services = () => {
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' ? window.matchMedia('(max-width: 767px)').matches : false
+  );
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(max-width: 767px)');
+    const onChange = (ev) => setIsMobile(ev.matches);
+    setIsMobile(mq.matches);
+    mq.addEventListener?.('change', onChange);
+    return () => mq.removeEventListener?.('change', onChange);
+  }, []);
 
   const sections = useMemo(
     () => [
       { id: 'overview', label: 'Overview' },
-      { id: 'four-cs', label: '4 Cs' },
-      { id: 'uiux', label: 'UI/UX + Product Design' },
-      { id: 'brand', label: 'Brand Design' },
-      { id: 'logos', label: 'Logo Psychology' },
-      { id: 'color', label: 'Color Memory' },
+      { id: 'pillars', label: 'Core Pillars' },
+      { id: 'process', label: 'DVCP Process' },
+      { id: 'next', label: 'Next Step' },
     ],
     []
   );
@@ -53,24 +151,26 @@ const Services = () => {
       role="main"
     >
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: '1px solid var(--color-border)' }}>
-        <div className="container" style={{ maxWidth: 1200 }}>
+        <div className="container" style={{ maxWidth: 1400 }}>
           <header className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
-            <h1 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>SERVICES</h1>
-            <div className="small-text" style={{ color: GRAY1 }}>INDEX (03)</div>
+            <h1 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
+              <DecryptText as="span" text="SERVICES" trigger="mount" duration={900} delay={150} />
+            </h1>
+            <div className="small-text" style={{ color: GRAY1 }}>INDEX (02)</div>
           </header>
           <div style={{ height: 1, background: 'var(--color-border)', marginTop: 'var(--spacing-sm)' }} aria-hidden="true" />
-          <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 760, opacity: 0.85 }}>
-            Strategy-first UI/UX and product design, brand systems, and visual identity work built to be understood fast and remembered longer.
+          <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 820, opacity: 0.85, lineHeight: 1.55 }}>
+            Four pillars. One process. Strategy, Branding, Website, and Social — wired together with our Digital Value Creation Plan (DVCP) to cut friction, sharpen positioning, and drive measurable growth for mid-market companies.
           </div>
         </div>
       </section>
 
       <section style={{ padding: 'var(--spacing-xl) var(--spacing-md) var(--spacing-xxl)' }}>
-        <div className="container" style={{ maxWidth: 1200 }}>
+        <div className="container" style={{ maxWidth: 1400 }}>
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'minmax(240px, 0.7fr) minmax(0, 1.3fr)',
+              gridTemplateColumns: 'minmax(220px, 0.65fr) minmax(0, 1.35fr)',
               gap: 'var(--spacing-xl)',
               alignItems: 'start',
             }}
@@ -120,160 +220,246 @@ const Services = () => {
 
             <div style={{ borderTop: `1px solid ${GRAY2}`, paddingTop: 'var(--spacing-xl)' }}>
               <section id="overview" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
-                <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: '0 0 var(--spacing-md)' }}>
-                  Overview
-                </h2>
-                <p className="small-text" style={{ lineHeight: 1.6, margin: '0 0 var(--spacing-lg)', color: WHITE, maxWidth: 860 }}>
-                  Creationbase pairs UI/UX and product design with brand design so your site, product, and visual identity feel like one cohesive system. We help brands communicate faster, look sharper, and build trust through clear structure, memorable visuals, and polished interaction.
-                </p>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
-                  {[
-                    { k: 'UI/UX + Product Design', v: 'User flows, wireframes, interface systems, and polished screens built to reduce friction.' },
-                    { k: 'Brand Design', v: 'Identity direction, logos, typography, color, and supporting visuals that make the brand recognizable.' },
-                    { k: 'Visual Systems', v: 'Shared rules for layout, motion, imagery, and hierarchy so every touchpoint feels consistent.' },
-                    { k: 'Launch Support', v: 'Design handoff, refinement, and rollout support to get the system live cleanly.' },
-                  ].map((item) => (
-                    <div key={item.k} style={{ border: `1px solid ${GRAY2}`, borderRadius: 10, padding: 14 }}>
-                      <div className="small-text" style={{ letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>
-                        {item.k}
-                      </div>
-                      <div className="small-text" style={{ color: WHITE, lineHeight: 1.6 }}>
-                        {item.v}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              <section id="four-cs" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
-                <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: '0 0 var(--spacing-md)' }}>
-                  The 4 Cs Framework
-                </h2>
-                <p className="small-text" style={{ lineHeight: 1.6, margin: '0 0 var(--spacing-lg)', color: WHITE, maxWidth: 860 }}>
-                  The 4 Cs are how we turn “looks good” into “works.” It’s a repeatable system for making your site and product feel obvious to new users: earn attention, remove confusion, build trust, then make action effortless.
-                </p>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 12 }}>
-                  {[
-                    { t: 'Connect', d: 'First impressions: tone, typography, imagery, and the opening claim.' },
-                    { t: 'Clarify', d: 'Explain the offer fast: hierarchy, page structure, and decision flow.' },
-                    { t: 'Convince', d: 'Proof over adjectives: outcomes, constraints, process, and credibility.' },
-                    { t: 'Convert', d: 'Remove friction: CTA strategy, forms, mobile ergonomics, and speed.' },
-                  ].map((item, idx) => (
-                    <div key={item.t} style={{ border: `1px solid ${GRAY2}`, borderRadius: 10, padding: 14 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
-                        <div className="small-text" style={{ letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                          {item.t}
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'minmax(120px, 0.28fr) minmax(0, 1fr)', gap: 'var(--spacing-lg)', alignItems: 'start' }}>
+                  <div className="small-text" style={{ color: GRAY1, letterSpacing: '0.08em', paddingTop: 6 }}>
+                    OVERVIEW / 01
+                  </div>
+                  <div style={{ display: 'grid', gap: 'var(--spacing-md)', minWidth: 0 }}>
+                    <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: 0, fontSize: 'clamp(28px, 4.2vw, 56px)' }}>
+                      <DecryptText as="span" text="Built to drive growth for mid-market companies." trigger="inView" duration={900} />
+                    </h2>
+                    <p className="small-text" style={{ lineHeight: 1.6, margin: 0, color: WHITE, maxWidth: 860, opacity: 0.9 }}>
+                      Creationbase is a Strategic Creation Consultancy. We combine positioning, identity, web, and organic social into one accountable system — so your brand presence doesn&apos;t just look sharp, it compounds. When strategy drives design and design drives the website, and the website feeds social, every dollar you spend on visibility multiplies instead of disappearing into separate silos.
+                    </p>
+                    <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, minmax(0, 1fr))', gap: 12 }}>
+                      {[
+                        { k: 'Outcome-First', v: 'A clear positioning anchor at the top; identity, site, and social all built to support it.' },
+                        { k: 'One Team', v: 'Strategy, branding, web engineering, and social content under one roof — no handoff blame.' },
+                        { k: 'Fast & Measurable', v: 'A 3-step DVCP framework that ships clarity first, then growth-driving execution.' },
+                        { k: 'Built to Last', v: 'Reusable systems, not one-off campaigns. Your assets keep working long after launch.' },
+                      ].map((item) => (
+                        <div key={item.k} style={{ border: `1px solid ${GRAY2}`, borderRadius: 10, padding: 14 }}>
+                          <div className="small-text" style={{ letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>
+                            {item.k}
+                          </div>
+                          <div className="small-text" style={{ color: WHITE, lineHeight: 1.6 }}>
+                            {item.v}
+                          </div>
                         </div>
-                        <div className="small-text" style={{ color: GRAY1 }}>
-                          {`C${idx + 1}`}
-                        </div>
-                      </div>
-                      <div className="small-text" style={{ marginTop: 10, color: WHITE, lineHeight: 1.6 }}>
-                        {item.d}
-                      </div>
+                      ))}
                     </div>
+                  </div>
+                </div>
+              </section>
+
+              <section id="pillars" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'minmax(120px, 0.28fr) minmax(0, 1fr)', gap: 'var(--spacing-lg)', alignItems: 'start', marginBottom: 'var(--spacing-xl)' }}>
+                  <div className="small-text" style={{ color: GRAY1, letterSpacing: '0.08em', paddingTop: 6 }}>
+                    PILLARS / 02
+                  </div>
+                  <div style={{ minWidth: 0, display: 'grid', gap: 'var(--spacing-md)' }}>
+                    <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: 0, fontSize: 'clamp(28px, 4.2vw, 56px)' }}>
+                      <DecryptText as="span" text="Core Pillars" trigger="inView" duration={900} />
+                    </h2>
+                    <p className="small-text" style={{ lineHeight: 1.6, margin: 0, color: WHITE, maxWidth: 860, opacity: 0.88 }}>
+                      Four disciplines, intentionally small. Pick one pillar or wire all four together — the framework is the same.
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  className="home-services-grid"
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, minmax(0, 1fr))',
+                    gap: 0,
+                    borderTop: HOME_SECTION_DIVIDER,
+                    borderLeft: HOME_SECTION_DIVIDER,
+                  }}
+                >
+                  {CORE_PILLARS.map((pillar, i) => (
+                    <motion.article
+                      key={pillar.category}
+                      initial={{ opacity: 0, y: 22 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.45, delay: 0.05 * i }}
+                      style={{
+                        borderRight: HOME_SECTION_DIVIDER,
+                        borderBottom: HOME_SECTION_DIVIDER,
+                        padding: 'clamp(20px, 2.8vw, 32px)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 'var(--spacing-md)',
+                        minHeight: 280,
+                        background: BLACK,
+                        color: WHITE,
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
+                        <h3
+                          className="section-title"
+                          style={{
+                            fontSize: 'clamp(26px, 3.6vw, 48px)',
+                            lineHeight: 0.9,
+                            margin: 0,
+                            color: WHITE,
+                          }}
+                        >
+                          <DecryptText as="span" text={pillar.category} trigger="inView" duration={600} delay={150 + i * 60} />
+                        </h3>
+                        <span className="small-text" style={{ opacity: 0.78, letterSpacing: '0.06em', color: GRAY1 }}>
+                          {pillar.index}
+                        </span>
+                      </div>
+
+                      <p
+                        className="small-text"
+                        style={{
+                          fontFamily: 'var(--font-display)',
+                          fontWeight: 400,
+                          fontSize: 'clamp(14px, 1.4vw, 18px)',
+                          lineHeight: 1.3,
+                          letterSpacing: '-0.01em',
+                          color: WHITE,
+                          opacity: 0.92,
+                          margin: 0,
+                        }}
+                      >
+                        {pillar.tagline}
+                      </p>
+
+                      <p
+                        className="small-text"
+                        style={{
+                          lineHeight: 1.55,
+                          opacity: 0.82,
+                          textTransform: 'none',
+                          margin: 0,
+                          color: WHITE,
+                        }}
+                      >
+                        {pillar.description}
+                      </p>
+
+                      <ul
+                        className="small-text"
+                        style={{
+                          listStyle: 'none',
+                          padding: 0,
+                          margin: 'auto 0 0 0',
+                          display: 'grid',
+                          gap: 6,
+                          fontSize: 'var(--fs-xs)',
+                          letterSpacing: '0.02em',
+                        }}
+                      >
+                        {pillar.capabilities.map((cap) => (
+                          <li
+                            key={cap}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'flex-start',
+                              gap: 10,
+                              opacity: 0.8,
+                              fontFamily: 'var(--font-mono)',
+                              fontWeight: 'var(--font-mono-weight)',
+                            }}
+                          >
+                            <span aria-hidden style={{ opacity: 0.5, lineHeight: 1.4, flexShrink: 0 }}>
+                              —
+                            </span>
+                            <span style={{ lineHeight: 1.4, color: WHITE }}>{cap}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.article>
                   ))}
                 </div>
               </section>
 
-              <section id="uiux" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
-                <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: '0 0 var(--spacing-md)' }}>
-                  UI/UX + Product Design
-                </h2>
-                <p className="small-text" style={{ lineHeight: 1.6, margin: '0 0 var(--spacing-lg)', color: WHITE, maxWidth: 860 }}>
-                  Good UI is quiet. It makes the next step feel inevitable. We design interfaces by reducing cognitive load: fewer choices at once, clearer hierarchy, stronger naming, and consistent interaction rules.
-                </p>
-                <div style={{ border: `1px solid ${GRAY2}`, borderRadius: 10, padding: 14 }}>
-                  <div className="small-text" style={{ letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>What you get</div>
-                  <ul className="small-text" style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6, color: WHITE }}>
-                    <li style={{ marginBottom: 10 }}>Information architecture and page/flow mapping</li>
-                    <li style={{ marginBottom: 10 }}>Wireframes → high-fidelity layouts with a scalable system</li>
-                    <li style={{ marginBottom: 10 }}>Component states: hover, focus, error, loading, empty</li>
-                    <li>Interaction rules: spacing, motion, and feedback patterns</li>
-                  </ul>
-                </div>
-              </section>
-
-              <section id="brand" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
-                <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: '0 0 var(--spacing-md)' }}>
-                  Brand Design
-                </h2>
-                <p className="small-text" style={{ lineHeight: 1.6, margin: '0 0 var(--spacing-lg)', color: WHITE, maxWidth: 860 }}>
-                  Brand design gives people something they can recognize and remember. We build identity systems that feel distinct, translate cleanly across formats, and support the product experience instead of competing with it.
-                </p>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
-                  {[
-                    { k: 'Identity Direction', v: 'Distinct visual territory, references, and creative direction.' },
-                    { k: 'Logo Systems', v: 'Primary marks, alternates, lockups, and usage rules.' },
-                    { k: 'Typography + Color', v: 'Ownable type and palette choices that strengthen recall.' },
-                    { k: 'Brand Assets', v: 'Graphics, layout rules, and supporting assets for consistent rollout.' },
-                  ].map((item) => (
-                    <div key={item.k} style={{ border: `1px solid ${GRAY2}`, borderRadius: 10, padding: 14 }}>
-                      <div className="small-text" style={{ letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>
-                        {item.k}
-                      </div>
-                      <div className="small-text" style={{ color: WHITE, lineHeight: 1.6 }}>
-                        {item.v}
-                      </div>
+              <section id="process" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'minmax(120px, 0.28fr) minmax(0, 1fr)', gap: 'var(--spacing-lg)', alignItems: 'start', borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-lg)', marginBottom: 'var(--spacing-xl)' }}>
+                  <div className="small-text" style={{ color: GRAY1, letterSpacing: '0.08em', paddingTop: 6 }}>
+                    PROCESS / 03
+                  </div>
+                  <div style={{ minWidth: 0, display: 'grid', gap: 'var(--spacing-md)' }}>
+                    <h2 className="section-title" style={{ fontSize: 'clamp(28px, 5vw, 64px)', lineHeight: 0.9, margin: 0, color: WHITE }}>
+                      <DecryptText as="span" text={DVCP_PROCESS.title} trigger="inView" duration={800} />
+                    </h2>
+                    <div className="small-text" style={{ fontFamily: 'var(--font-mono)', fontWeight: 'var(--font-mono-weight-bold)', fontSize: 'clamp(11px, 1.1vw, 13px)', letterSpacing: '0.05em', opacity: 0.88, textTransform: 'uppercase' }}>
+                      {DVCP_PROCESS.subtitle}
                     </div>
+                    <p className="small-text" style={{ maxWidth: '64ch', lineHeight: 1.55, opacity: 0.84, textTransform: 'none', margin: 0, color: WHITE }}>
+                      {DVCP_PROCESS.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  className="home-dvcp-grid"
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, minmax(0, 1fr))',
+                    gap: 0,
+                    borderTop: HOME_SECTION_DIVIDER,
+                    borderLeft: HOME_SECTION_DIVIDER,
+                  }}
+                >
+                  {DVCP_PROCESS.steps.map((s, i) => (
+                    <motion.article
+                      key={s.step}
+                      initial={{ opacity: 0, y: 18 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.45, delay: 0.08 * i }}
+                      style={{
+                        borderRight: HOME_SECTION_DIVIDER,
+                        borderBottom: HOME_SECTION_DIVIDER,
+                        padding: 'clamp(18px, 2.5vw, 28px)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 'var(--spacing-sm)',
+                        minHeight: 220,
+                        background: BLACK,
+                        color: WHITE,
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                        <span className="small-text" style={{ fontFamily: 'var(--font-mono)', fontWeight: 'var(--font-mono-weight-bold)', letterSpacing: '0.06em', opacity: 0.86 }}>
+                          STEP {s.step}
+                        </span>
+                        <span className="small-text" style={{ opacity: 0.5, color: GRAY1 }}>
+                          {i + 1} / {DVCP_PROCESS.steps.length}
+                        </span>
+                      </div>
+
+                      <h3 className="section-title" style={{ fontSize: 'clamp(20px, 2.4vw, 30px)', lineHeight: 1.05, margin: 0, color: WHITE }}>
+                        <DecryptText as="span" text={s.title} trigger="inView" duration={600} delay={200 + i * 80} />
+                      </h3>
+
+                      <p className="small-text" style={{ lineHeight: 1.55, opacity: 0.82, textTransform: 'none', margin: 0, color: WHITE }}>
+                        {s.description}
+                      </p>
+                    </motion.article>
                   ))}
                 </div>
               </section>
 
-              <section id="logos" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
-                <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: '0 0 var(--spacing-md)' }}>
-                  Memorable Logo Psychology
-                </h2>
-                <p className="small-text" style={{ lineHeight: 1.6, margin: '0 0 var(--spacing-lg)', color: WHITE, maxWidth: 860 }}>
-                  Logos are recognition devices. The job is not to “say everything,” it’s to create a distinct silhouette that the brain can store and retrieve quickly. Simpler shapes win because they survive time, scale, and repetition.
-                </p>
-                <div style={{ border: `1px solid ${GRAY2}`, borderRadius: 10, padding: 14 }}>
-                  <div className="small-text" style={{ letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>Why simpler is better</div>
-                  <ul className="small-text" style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6, color: WHITE }}>
-                    <li style={{ marginBottom: 10 }}>Faster recognition: fewer details means less processing effort</li>
-                    <li style={{ marginBottom: 10 }}>Better recall: strong shapes become mental shortcuts</li>
-                    <li style={{ marginBottom: 10 }}>More applications: icons, favicons, motion marks, signage</li>
-                    <li>More consistent reproduction: across devices and materials</li>
-                  </ul>
-                </div>
-              </section>
-
-              <section id="color" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
-                <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: '0 0 var(--spacing-md)' }}>
-                  Unique Color = Stronger Memory
-                </h2>
-                <p className="small-text" style={{ lineHeight: 1.6, margin: '0 0 var(--spacing-lg)', color: WHITE, maxWidth: 860 }}>
-                  Color becomes a retrieval cue. When a category looks the same, a distinctive palette creates separation. The advantage isn’t being loud—it’s being uniquely identifiable when your brand is seen in a feed, a browser tab, or a crowded market.
-                </p>
-                <div style={{ border: `1px solid ${GRAY2}`, borderRadius: 10, padding: 14 }}>
-                  <div className="small-text" style={{ letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>How we choose color</div>
-                  <ol className="small-text" style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6, color: WHITE }}>
-                    <li style={{ marginBottom: 10 }}>Define the brand feeling (precision, warmth, speed, depth)</li>
-                    <li style={{ marginBottom: 10 }}>Audit the category (what everyone else is already using)</li>
-                    <li style={{ marginBottom: 10 }}>Choose a primary cue color and supporting neutrals</li>
-                    <li>Test legibility and contrast across real UI states</li>
-                  </ol>
-                </div>
-              </section>
-
-              <section style={{ paddingBottom: 'var(--spacing-xxl)' }}>
+              <section id="next" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
                 <div style={{ borderTop: `1px solid ${GRAY2}`, paddingTop: 'var(--spacing-xl)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, flexWrap: 'wrap' }}>
                     <div className="small-text" style={{ letterSpacing: '0.06em', textTransform: 'uppercase' }}>Next Step</div>
                     <div className="small-text" style={{ color: GRAY1 }}>Contact</div>
                   </div>
-                  <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: '12px 0 var(--spacing-md)' }}>
-                    Let’s build something that converts and lasts.
+                  <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: '12px 0 var(--spacing-md)', fontSize: 'clamp(28px, 5vw, 64px)' }}>
+                    <DecryptText as="span" text="Let’s sharpen the system and grow the top line." trigger="inView" duration={900} />
                   </h2>
-                  <div className="small-text" style={{ color: GRAY1, maxWidth: 760, lineHeight: 1.6 }}>
-                    If you want a site or product that feels premium, communicates fast, and stays consistent as you grow, we’ll map the system and ship it clean.
+                  <div className="small-text" style={{ color: GRAY1, maxWidth: 820, lineHeight: 1.6 }}>
+                    Book a 30-minute strategy call and we&apos;ll walk through the Digital Value Creation Plan for your brand, website, and social channels — what we&apos;d measure first, where the quick wins are, and what a quarter of work would actually ship.
                   </div>
                   <div style={{ marginTop: 'var(--spacing-lg)', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                    <button
-                      type="button"
-                      onClick={openStrategyCall}
-                      className="newsletter-button"
-                    >
+                    <button type="button" onClick={openStrategyCall} className="newsletter-button">
                       Book Strategy Call
                       <ArrowUpRight size={14} weight="thin" />
                     </button>

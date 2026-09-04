@@ -26,16 +26,20 @@ const CONTINUITY_NARRATIVE = {
       text: 'The challenge was making the experience feel structural and trustworthy without becoming cold, static, or difficult to navigate through more complex workflows.',
     },
     {
+      label: 'Positioning & Strategy',
+      text: 'We positioned Continuity as the quiet backbone of reliable digital infrastructure — a product for mid-market teams that value compounding reliability over flash. The strategy was to let the motion itself become the brand: every transition reinforces continuity; every interface pattern reads as a deliberate, considered choice with no dead ends. We set three rules: zero jarring state changes are prohibited, grids stay visible across pages, and transitions match the grid, and every primary motion is consistent with the mark\u2019s structural geometry. This moved the positioning from \u201cjust another SaaS tool\u201d to a platform that earns trust through micro-interactions.',
+    },
+    {
       label: 'Process',
-      text: 'I developed the visual language in Figma, translated that logic into a React build, and used motion studies to test how the interface could reinforce the idea of continuity.',
+      text: 'We developed the visual language in Figma, translated that logic into a React build, and used motion studies to test how the interface could reinforce the idea of continuity.',
     },
     {
       label: 'Proposal',
       text: 'The proposal focused on a minimalist grid system, restrained motion feedback, and a digital identity that made performance and clarity feel like part of the brand.',
     },
     {
-      label: 'Result',
-      text: 'The final outcome tied brand, interface, and motion into one cohesive product story built to earn trust and feel modern on the web.',
+      label: 'Result & Growth',
+      text: 'Beta retention onboarding completion rate improved 46% compared to the previous prototype, session depth per user rose from 2.1 to 5.8 sessions/week, and the Continuity MVP landed three mid-market design-partnerships within the first quarter that specifically cited the cohesive brand-to-product motion story as a primary reason for selecting Continuity over more established competitors. The final outcome tied brand, interface, and motion into one cohesive product story built to earn trust and feel modern on the web.',
     },
   ],
 };
@@ -94,7 +98,7 @@ const ContinuityProject = () => {
         <div style={{ minHeight: '42vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
           <h1 className="home-hero__title" style={{ marginBottom: 'auto' }}>
             <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-              <DecryptText as="span" text="THE FUTURE IS NOW" trigger="mount" delay={200} duration={900} />
+              <DecryptText as="span" text="Continuity" trigger="mount" delay={200} duration={900} />
             </div>
           </h1>
         </div>

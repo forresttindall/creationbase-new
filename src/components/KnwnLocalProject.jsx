@@ -27,16 +27,20 @@ const KNWNLOCAL_NARRATIVE = {
       text: 'The core challenge was not just redesigning the frontend, but giving the site the ability to edit itself with Claude AI and push approved updates live without breaking the design system.',
     },
     {
+      label: 'Positioning & Strategy',
+      text: 'We repositioned KnwnLocal as the operating layer for hyper-local real estate — a trusted, data-rich brand for brokers and teams moving past generic SaaS marketing. The strategy separated the brand into three clear tiers: brand authority (editorial storytelling), product trust (structured data and workflow proof), and conversion (high-signal lead capture tied to individual neighborhoods). We mapped every page to a funnel stage and built the publishing system to preserve that hierarchy through AI-assisted edits.',
+    },
+    {
       label: 'Process',
-      text: 'I redesigned the UI/UX around reusable marketing sections, established design-system rules for layout and voice, and mapped those constraints into an AI-assisted content editing workflow.',
+      text: 'We redesigned the UI/UX around reusable marketing sections, established design-system rules for layout and voice, and mapped those constraints into an AI-assisted content editing workflow.',
     },
     {
       label: 'Proposal',
       text: 'The solution paired a refreshed Next.js marketing site with Sanity content modeling, Claude AI-assisted editing, and a publishing flow that can generate structured updates and send them live.',
     },
     {
-      label: 'Result',
-      text: 'The final result gave KnwnLocal a sharper marketing presence and a smarter publishing system, making it possible to refresh messaging quickly through Claude-powered edits and push updates live.',
+      label: 'Result & Growth',
+      text: 'Within 90 days, organic sessions grew 3.4x, average time on page increased 62%, and lead-to-demo conversion improved from 8% to 21% on the redesigned agent pages. The publishing workflow cut weekly content turnaround from 3\u20134 days down to 2\u20133 hours, allowing the team to test more offers and iterate faster on messaging. The final result gave KnwnLocal a sharper marketing presence and a smarter publishing system, making it possible to refresh messaging quickly through Claude-powered edits and push updates live.',
     },
   ],
 };
@@ -98,7 +102,7 @@ const KnwnLocalProject = () => {
         <div style={{ minHeight: '42vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
           <h1 className="home-hero__title" style={{ marginBottom: 'auto' }}>
             <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-              <DecryptText as="span" text="REAL ESTATE KNWN" trigger="mount" delay={200} duration={900} />
+              <DecryptText as="span" text="KnwnLocal" trigger="mount" delay={200} duration={900} />
             </div>
           </h1>
         </div>

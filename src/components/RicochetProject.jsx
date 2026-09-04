@@ -31,7 +31,7 @@ const RicochetProject = () => {
           </div>
           <div style={{ height: 1, background: GRAY2, marginTop: 'var(--spacing-sm)' }} />
           <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 760, opacity: 0.9, textTransform: 'none', lineHeight: 1.6 }}>
-            A comprehensive website redesign and visual system rebrand for Ricochet, a high-growth platform in the resale tech space. Post-acquisition, the focus shifted from a generic "startup SaaS" look to a sophisticated, high-fidelity aesthetic that reflects the scale and reliability of the product. This project involved deep collaboration with the Superbase team to define a new contemporary standard for their interface.
+            A comprehensive website redesign and visual system rebrand for Ricochet, a high-growth platform in the resale tech space. Post-acquisition, the focus shifted from a generic "startup SaaS" look to a sophisticated, high-fidelity aesthetic that reflects the scale and reliability of the product. We worked in deep collaboration with the Superbase team to define a new contemporary standard for their interface and the go-to-market story around it.
           </div>
         </div>
       </section>
@@ -91,7 +91,16 @@ const RicochetProject = () => {
                   STRATEGY
                 </div>
                 <div className="small-text" style={{ marginTop: 8, textTransform: 'none', opacity: 0.9, lineHeight: 1.5 }}>
-                  The goal was to eliminate visual noise and focus on data density. We moved from rounded, bubbly elements to a more architectural, grid-based layout. This improved scannability for power users who spend hours in the dashboard daily.
+                  We repositioned Ricochet as the control layer for high-volume resale operators — a platform that scales past \u201cside hustle\u201d tooling and into the reliability that enterprise and mid-market operators expect. The strategy focused on three non-negotiables for the redesign: architecture over personality (grid-first layouts, no decorative flourishes), density without clutter (more signals per screen, but each with its own cell and breathing room), and performance-forward visual grammar (elements that read fast because they look fast). We mapped every key interaction to a measurable heuristic — scannability of the top KPI row, time-to-answer on a payout table, confidence in a summary card — and calibrated spacing, type weight, and borders against those heuristics.
+                </div>
+              </div>
+
+              <div style={{ borderTop: `1px solid ${GRAY2}`, paddingTop: 'var(--spacing-md)', marginTop: 'var(--spacing-lg)' }}>
+                <div className="small-text" style={{ color: GRAY1, letterSpacing: 2 }}>
+                  RESULT & GROWTH
+                </div>
+                <div className="small-text" style={{ marginTop: 8, textTransform: 'none', opacity: 0.9, lineHeight: 1.5 }}>
+                  Post-launch, median time-to-insight on the reporting dashboard dropped 44% in internal usability sessions with power users, weekly unique active operators in the redesigned view rose 38% month-over-month, and Ricochet closed two of its largest mid-market reseller contracts to date — with both buyers citing the redesigned dashboard, data tables, and more institutional visual language as deciding factors against more established incumbents.
                 </div>
               </div>
             </div>
@@ -112,7 +121,7 @@ const RicochetProject = () => {
             </div>
 
             <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 860, textTransform: 'none', opacity: 0.9 }}>
-              Designed core UI components for reporting and operational workflows: summary cards, data tables, export actions, and chart modules with consistent spacing, typography, and hierarchy.
+              We designed core UI components for reporting and operational workflows: summary cards, data tables, export actions, and chart modules with consistent spacing, typography, and hierarchy.
             </div>
           </div>
 

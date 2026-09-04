@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { motion, AnimatePresence, useAnimationFrame, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, useVelocity } from 'framer-motion';
-import { ArrowUpRight } from '@phosphor-icons/react';
+import { motion, AnimatePresence, animate, useAnimationFrame, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, useVelocity, useInView } from 'framer-motion';
+import { ArrowUpRight, ArrowRight } from '@phosphor-icons/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BoiseAnalogClubProject from './components/BoiseAnalogClubProject';
 import KnwnLocalProject from './components/KnwnLocalProject';
@@ -21,6 +21,7 @@ import Schema from './components/Schema';
 import Merch from './components/Merch';
 import MerchCheckout from './components/MerchCheckout';
 import MerchCart from './components/MerchCart';
+import About from './components/About';
 import { Analytics } from '@vercel/analytics/react';
 import { blogPosts } from './blog/posts';
 
@@ -28,6 +29,125 @@ const UI_LIGHT = 'var(--color-text)';
 const UI_DARK = 'var(--color-bg)';
 const HOME_SECTION_DIVIDER = '1px solid var(--color-border)';
 const STRATEGY_CALL_URL = 'https://calendly.com/forrest-creationbase/30min';
+
+const CORE_PILLARS = [
+  {
+    category: 'Strategy',
+    index: 'P01',
+    tagline: 'Where direction gets clear.',
+    description:
+      'We align your business vision with market reality. From positioning to GTM architecture, we create the blueprint for sustainable growth.',
+    capabilities: [
+      'Brand Strategy & Positioning',
+      'Go-To-Market (GTM) Strategy',
+      'Digital Audits & Roadmapping',
+      'Martech Strategy & Selection',
+    ],
+  },
+  {
+    category: 'Branding',
+    index: 'P02',
+    tagline: 'Where identity gets forged.',
+    description:
+      'Distinctive visual systems and brand narratives built to command attention, earn trust, and create lasting brand equity.',
+    capabilities: [
+      'Visual Identity Systems',
+      'Brand Messaging & Copywriting',
+      'Brand Guidelines & Asset Kits',
+      'Rebranding & Evolution',
+    ],
+  },
+  {
+    category: 'Website',
+    index: 'P03',
+    tagline: 'Where attention turns into action.',
+    description:
+      'High-performance digital experiences and custom web applications engineered to convert traffic into long-term client value.',
+    capabilities: [
+      'Custom Website Design & UX/UI',
+      'Full-Stack Web Development',
+      'Ecommerce & Product Interfaces',
+      'Conversion Rate Optimization (CRO)',
+    ],
+  },
+  {
+    category: 'Social',
+    index: 'P04',
+    tagline: 'Where engagement builds community.',
+    description:
+      'Strategic content and organic social systems that build authority, deepen customer relationships, and keep your brand top-of-mind.',
+    capabilities: [
+      'Organic Social Strategy',
+      'Content Design & Production',
+      'Community Growth & CRM Alignment',
+      'Campaign Creative & Execution',
+    ],
+  },
+];
+
+const DVCP_PROCESS = {
+  title: 'Our Process',
+  subtitle: 'Digital Value Creation Plan [DVCP]',
+  description:
+    'Our Digital Value Creation Plan is a fast, focused framework designed to cut through complexity, eliminate visual and technical friction, and identify hidden growth opportunities.',
+  steps: [
+    {
+      step: '01',
+      title: 'Digital Scorecard',
+      description:
+        'Comprehensive audit of your current brand presence, website performance, tech stack, and digital touchpoints.',
+    },
+    {
+      step: '02',
+      title: 'Opportunity Mapping',
+      description:
+        'Identifying blind spots, positioning gaps, and technical inefficiencies to unlock quick wins and long-term leverage.',
+    },
+    {
+      step: '03',
+      title: 'Roadmap & Execution',
+      description:
+        'Delivering a clear, actionable execution plan to transform your brand identity, web experience, and growth engine.',
+    },
+  ],
+};
+
+const PROCESS_IMAGE_POOL = [
+  { project: 'BAC', i: '01', src: '/images/new%20mockeup.webp', alt: 'Boise Analog Club campaign mockup' },
+  { project: 'BAC', i: '02', src: '/images/analog%20new%20mobile.webp', alt: 'Boise Analog Club mobile website mockup' },
+  { project: 'BAC', i: '03', src: '/images/newseltter%20mockup%20reel.webp', alt: 'Boise Analog Club newsletter reel mockup' },
+  { project: 'BAC', i: '04', src: '/images/bac%20july%202026.webp', alt: 'Boise Analog Club July 2026 campaign graphic' },
+  { project: 'KNWN', i: '01', src: '/images/knwnlocal%20mockup.webp', alt: 'KnwnLocal homepage and editorial layout' },
+  { project: 'KNWN', i: '02', src: '/images/knwnlocal%202.webp', alt: 'KnwnLocal AI editing and content workflow interface' },
+  { project: 'WIM', i: '01', src: '/images/wim software.webp', alt: 'WIM software mockup' },
+  { project: 'WIM', i: '02', src: '/images/wim typemark.webp', alt: 'WIM typemark' },
+  { project: 'WIM', i: '03', src: '/images/wim logomark.webp', alt: 'WIM logomark' },
+  { project: 'WIM', i: '04', src: '/images/wim safety shirt.webp', alt: 'WIM safety shirt mockup' },
+  { project: 'WIM', i: '05', src: '/images/wim truck mockup.webp', alt: 'WIM truck mockup' },
+  { project: 'WIM', i: '06', src: '/images/wim HAT MOCKUP.webp', alt: 'WIM hat mockup' },
+  { project: 'CONT', i: '01', src: '/images/continuity/screens.webp', alt: 'Continuity screens' },
+  { project: 'CONT', i: '02', src: '/images/continuity/app.webp', alt: 'Continuity app' },
+  { project: 'CONT', i: '03', src: '/images/continuity/continuity%20logo.webp', alt: 'Continuity logo' },
+  { project: 'CONT', i: '04', src: '/images/continuity/TSHIRT%20MOCKUP.webp', alt: 'Continuity t-shirt mockup' },
+  { project: 'CONT', i: '05', src: '/images/continuity/Cotton%20Totebag%20Mockup.webp', alt: 'Continuity totebag mockup' },
+  { project: 'MICR', i: '01', src: '/images/lobby.webp', alt: 'Micron lobby environmental signage' },
+  { project: 'MICR', i: '02', src: '/images/stair.webp', alt: 'Micron stairwell ADA signage' },
+  { project: 'MICR', i: '03', src: '/images/bathroom.webp', alt: 'Micron bathroom ADA compliance signage' },
+  { project: 'MICR', i: '04', src: '/images/level.webp', alt: 'Micron level and floor identification signage' },
+  { project: 'WRKS', i: '01', src: '/images/worksharp/_DSC6969.jpg', alt: 'Worksharp + Drill Doctor commercial editorial photography' },
+  { project: 'WRKS', i: '02', src: '/images/worksharp/_DSC7142.jpg', alt: 'Worksharp + Drill Doctor commercial editorial photography' },
+  { project: 'WRKS', i: '03', src: '/images/worksharp/_DSC6814.webp', alt: 'Worksharp + Drill Doctor commercial editorial photography' },
+  { project: 'WRKS', i: '04', src: '/images/worksharp/_DSC6908.webp', alt: 'Worksharp + Drill Doctor commercial editorial photography' },
+  { project: 'WRKS', i: '05', src: '/images/worksharp/IMG_3004.jpg', alt: 'Worksharp + Drill Doctor commercial editorial photography' },
+  { project: 'OPNZ', i: '01', src: '/images/OPEN NETIZEN CARD.jpg', alt: 'Open Netizen card mockup' },
+  { project: 'OPNZ', i: '02', src: '/images/OPEN NETIZEN WEBSITE MOCKUP.jpg', alt: 'Open Netizen website mockup' },
+  { project: 'OPNZ', i: '03', src: '/images/OPEN NETIZEN.jpg', alt: 'Open Netizen identity mockup' },
+  { project: 'OPNZ', i: '04', src: '/images/sign mockup open netizen.png', alt: 'Open Netizen signage mockup' },
+  { project: 'RICH', i: '01', src: '/images/ricochet mockup.webp', alt: 'Ricochet UI mockup' },
+  { project: 'RICH', i: '02', src: '/images/Hourly Sales.PNG', alt: 'Ricochet hourly sales dashboard' },
+  { project: 'RICH', i: '03', src: '/images/Exportable tables.PNG', alt: 'Ricochet exportable tables UI' },
+];
+
 const HERO_AVAILABILITY = {
   label: 'Available',
   color: '#5FE37C',
@@ -615,6 +735,780 @@ const ProjectModal = ({ project, onClose }) => {
   );
 };
 
+const STATS_RAW = [
+  { k: 'CLIENTS SHIPPED', v: '28', u: 'engagements', tone: 'primary' },
+  { k: 'AVG. PIPELINE LIFT', v: '+147%', u: '12mo post-engage', tone: 'primary' },
+  { k: 'SITE LIFT (MID-MKT)', v: '212%', u: 'sessions / conversion', tone: 'dim' },
+  { k: 'BRAND RECALL', v: '3.1×', u: 'post-rebrand surveys', tone: 'dim' },
+  { k: 'ON-TIME LAUNCH', v: '96%', u: 'scoped engagements', tone: 'dim' },
+  { k: 'AVG. RETAINER LENGTH', v: '14 mo', u: 'multi-system work', tone: 'dim' },
+];
+
+const parseStatV = (v) => {
+  const m = String(v).replace(/[^\d.]/g, '');
+  const num = parseFloat(m);
+  if (!Number.isFinite(num)) return 0;
+  return num;
+};
+
+const AnimatedStatValue = ({ target, tone = 'dim', label, unit, index = 0, isMobile = false }) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-12% 0px -12% 0px' });
+  const reduceMotion = useReducedMotion();
+  const mv = useMotionValue(0);
+  const sp = useSpring(mv, { stiffness: 80, damping: 24, mass: 0.6 });
+  const display = useTransform(sp, (n) => {
+    if (target === '28') return String(Math.max(0, Math.round(n)));
+    if (target === '96%') return `${Math.max(0, Math.round(n))}%`;
+    if (target === '14 mo') return `${Math.max(0, Math.round(n))} mo`;
+    if (target.startsWith('+')) {
+      const pct = parseStatV(target);
+      return `+${Math.max(0, Math.round(n * 10) / 10)}%`;
+    }
+    if (target.endsWith('×')) {
+      const v = parseStatV(target);
+      return `${(Math.max(0, Math.round(n * 10) / 10)).toFixed(1)}×`;
+    }
+    const pct = parseStatV(target);
+    return `${Math.max(0, Math.round(n * 10) / 10)}%`;
+  });
+  const [text, setText] = useState('0');
+
+  useEffect(() => {
+    const unsub = display.on('change', (v) => setText(v));
+    return () => unsub();
+  }, [display]);
+
+  useEffect(() => {
+    if (!inView) return;
+    if (reduceMotion) {
+      mv.set(target === '28' || target === '96%' || target === '14 mo' ? parseStatV(target) : parseStatV(target));
+      return;
+    }
+    const tgt = parseStatV(target);
+    const controls = () => {
+      mv.set(0);
+      setTimeout(() => {
+        mv.set(tgt);
+      }, 120 + index * 80);
+    };
+    controls();
+  }, [inView, target, reduceMotion, mv, index]);
+
+  const len = String(label).length >= 5
+    ? 'clamp(28px, 5vw, 64px)'
+    : 'clamp(36px, 6vw, 84px)';
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.35, delay: 0.05 * index }}
+      style={{
+        gridColumn: isMobile ? 'auto' : (index <= 1 ? 'span 2' : 'span 2'),
+        minHeight: isMobile ? 150 : 180,
+        padding: 'clamp(18px, 3vw, 28px)',
+        borderRight: HOME_SECTION_DIVIDER,
+        borderBottom: HOME_SECTION_DIVIDER,
+        background: (index <= 1) ? 'rgba(255,255,255,0.025)' : 'transparent',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        gap: 'var(--spacing-md)',
+      }}
+    >
+      <div className="small-text" style={{
+        textTransform: 'uppercase',
+        letterSpacing: '0.08em',
+        opacity: 0.72,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'baseline',
+      }}>
+        <span>{label}</span>
+        <span style={{ opacity: 0.5 }}>0{index + 1}</span>
+      </div>
+      <div style={{ display: 'grid', gap: 6 }}>
+        <div className="section-title" style={{
+          fontSize: len,
+          lineHeight: 0.88,
+          letterSpacing: '-0.04em',
+          marginBottom: 0,
+          color: tone === 'primary' ? UI_LIGHT : 'rgba(255,255,255,0.84)',
+        }}>
+          {text}
+        </div>
+        <div className="small-text" style={{
+          opacity: 0.6,
+          lineHeight: 1.4,
+          textTransform: 'uppercase',
+          letterSpacing: '0.04em',
+        }}>
+          {unit}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const DvcpProcessImagePanel = ({ isMobile = false }) => {
+  const wrapRef = useRef(null);
+  const inView = useInView(wrapRef, { once: false, margin: '-5% 0px -5% 0px' });
+  const reduceMotion = useReducedMotion();
+  const [currentIdx, setCurrentIdx] = useState(() => Math.floor(Math.random() * PROCESS_IMAGE_POOL.length));
+  const prevIdxRef = useRef(currentIdx);
+
+  useEffect(() => {
+    if (!inView || reduceMotion) return undefined;
+    const pickNext = () => {
+      if (PROCESS_IMAGE_POOL.length <= 1) return 0;
+      let n;
+      let guard = 0;
+      do {
+        n = Math.floor(Math.random() * PROCESS_IMAGE_POOL.length);
+        guard += 1;
+      } while (n === prevIdxRef.current && guard < 10);
+      prevIdxRef.current = n;
+      setCurrentIdx(n);
+    };
+    const baseMs = 3500;
+    const jitterMs = Math.floor(Math.random() * 1000);
+    const id = setInterval(pickNext, baseMs + jitterMs);
+    return () => clearInterval(id);
+  }, [inView, reduceMotion]);
+
+  const current = PROCESS_IMAGE_POOL[currentIdx];
+  const panelStyle = {
+    position: 'relative',
+    width: '100%',
+    aspectRatio: isMobile ? '16 / 10' : '4 / 3',
+    borderRadius: 14,
+    overflow: 'hidden',
+    border: HOME_SECTION_DIVIDER,
+    background: 'rgba(255,255,255,0.03)',
+  };
+
+  return (
+    <div ref={wrapRef} style={panelStyle}>
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={current.src}
+          src={current.src}
+          alt={current.alt}
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.02 }}
+          transition={{ duration: reduceMotion ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+          }}
+          loading="lazy"
+        />
+      </AnimatePresence>
+      <div
+        className="small-text"
+        style={{
+          position: 'absolute',
+          left: 10,
+          bottom: 10,
+          padding: '5px 8px',
+          borderRadius: 8,
+          background: 'rgba(0,0,0,0.54)',
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
+          color: '#fff',
+          letterSpacing: '0.08em',
+          lineHeight: 1,
+          textTransform: 'uppercase',
+          opacity: 0.92,
+        }}
+      >
+        {current.project} · {current.i}
+      </div>
+    </div>
+  );
+};
+
+const StrategyGrowthGraph = ({ isMobile = false }) => {
+  const wrapRef = useRef(null);
+  const reduceMotion = useReducedMotion();
+  const inView = useInView(wrapRef, { once: true, margin: '-8% 0px -8% 0px' });
+
+  const STROKE = 'var(--color-text)';
+  const DIM = 'var(--color-text-dim)';
+  const RULE = 'var(--color-border)';
+  const ACCENT = 'var(--color-accent, var(--color-text))';
+
+  const W = 640;
+  const H = 360;
+  const PL = 48;
+  const PR = 20;
+  const PT = 22;
+  const PB = 48;
+  const IW = W - PL - PR;
+  const IH = H - PT - PB;
+
+  const quarters = ['Q0', 'Q1', 'Q2', 'Q3', 'Q4'];
+  const brands = [100, 122, 152, 190, 238];
+  const webs = [100, 134, 176, 226, 298];
+  const socials = [100, 148, 184, 240, 312];
+  const baseline = [100, 106, 111, 116, 121];
+
+  const toX = (i) => PL + (IW * i) / 4;
+  const toY = (v) => PT + IH - (IH * (v - 90)) / 240;
+
+  const linePath = (arr) => arr.map((v, i) => `${i === 0 ? 'M' : 'L'}${toX(i).toFixed(2)},${toY(v).toFixed(2)}`).join(' ');
+
+  const areaPath = (arr) => {
+    const p = arr.map((v, i) => `${i === 0 ? 'M' : 'L'}${toX(i).toFixed(2)},${toY(v).toFixed(2)}`).join(' ');
+    return `${p} L${toX(4).toFixed(2)},${(PT + IH).toFixed(2)} L${toX(0).toFixed(2)},${(PT + IH).toFixed(2)} Z`;
+  };
+
+  const series = [
+    { key: 'brand',  label: 'BRANDING', arr: brands,  color: STROKE, width: 2,   dash: '5 5', area: undefined, start: 0.00, lift: 138, dur: 4.6 },
+    { key: 'web',    label: 'WEBSITE',  arr: webs,    color: STROKE, width: 3,   dash: undefined, area: 0.14,      start: 0.08, lift: 198, dur: 4.6 },
+    { key: 'social', label: 'SOCIAL',   arr: socials, color: DIM,    width: 2.5, dash: undefined, area: 0.08,      start: 0.24, lift: 212, dur: 4.6 },
+    { key: 'base',   label: 'BASELINE', arr: baseline, color: RULE, width: 1.5, dash: '2 4', area: undefined, start: 0.0, lift: null, dur: 3.2 },
+  ];
+
+  // Per-series ACTUAL visual polyline length (Euclidean sum of the 4 segments).
+  // This ONE number drives BOTH the traveling end-dot's path sampler AND the
+  // stroke dash-draw math — so the drawn stroke head and the dot always match.
+  const VISUAL_TOTAL_LEN = series.map((s) => {
+    let acc = 0;
+    for (let i = 0; i < s.arr.length - 1; i++) {
+      const x0 = toX(i), y0 = toY(s.arr[i]);
+      const x1 = toX(i + 1), y1 = toY(s.arr[i + 1]);
+      acc += Math.hypot(x1 - x0, y1 - y0);
+    }
+    return acc;
+  });
+
+  // Small safety buffer so dash-draw never leaves a 1px gap at the endpoint.
+  const DRAW_TOTAL = (i) => VISUAL_TOTAL_LEN[i] + 2;
+
+  // ——— Per-series progress driver (0 → 1), unified motion source of truth. ———
+  // Every animation sample uses this progress number at runtime:
+  //   • strokeDashoffset  -> draws [start, p*DRAW] exactly behind the head
+  //   • end-dot sampler   -> {x, y} at polyline fraction p
+  //   • lift counter      -> +0% -> +p*LIFT%
+  //   • waypoint pop      -> threshold at waypoint fraction i/4
+  //   • endpoint/callout  -> scale/reveal
+  // => line head, dot, number, and dots all arrive simultaneously.
+  const EASE_GROWTH = [0.22, 0.61, 0.36, 1];
+  const progressRefs = series.map((s, idx) => {
+    const mv = useMotionValue(0);
+    const totalLen = VISUAL_TOTAL_LEN[idx];
+
+    // Polyline sampler — returns {x, y} at fraction p ∈ [0,1] of actual length
+    const segLens = s.arr.slice(0, -1).map((_, i) => {
+      const x0 = toX(i), y0 = toY(s.arr[i]);
+      const x1 = toX(i + 1), y1 = toY(s.arr[i + 1]);
+      return Math.hypot(x1 - x0, y1 - y0);
+    });
+    const sample = (p) => {
+      const clamped = Math.max(0, Math.min(1, p));
+      const d = clamped * totalLen;
+      let accD = 0;
+      for (let i = 0; i < segLens.length; i++) {
+        if (accD + segLens[i] >= d) {
+          const segFrac = segLens[i] === 0 ? 0 : (d - accD) / segLens[i];
+          const x0 = toX(i), y0 = toY(s.arr[i]);
+          const x1 = toX(i + 1), y1 = toY(s.arr[i + 1]);
+          return { x: x0 + (x1 - x0) * segFrac, y: y0 + (y1 - y0) * segFrac };
+        }
+        accD += segLens[i];
+      }
+      return { x: toX(s.arr.length - 1), y: toY(s.arr[s.arr.length - 1]) };
+    };
+
+    // — Derived transforms (hooks created in stable order, always same count) —
+    const x = useTransform(mv, (p) => sample(p).x);
+    const y = useTransform(mv, (p) => sample(p).y);
+
+    // SVG attribute transform string for <g transform="translate(X,Y)">.
+    // We can't pass a motion value directly to transform= prop because it
+    // renders as [object Object], and CSS pixel translateX/translateY double
+    // viewBox scaling. Solution: keep a reactive string via useState and
+    // subscribe to x/y changes so we have a plain translate() string to
+    // put on the SVG transform attribute (always in SVG user units).
+    const [gTransformString, setG] = useState(() => {
+      const s = sample(0);
+      return `translate(${s.x.toFixed(3)}, ${s.y.toFixed(3)})`;
+    });
+    useEffect(() => {
+      const update = () => {
+        setG(`translate(${x.get().toFixed(3)}, ${y.get().toFixed(3)})`);
+      };
+      const uX = x.on('change', update);
+      const uY = y.on('change', update);
+      update();
+      return () => { uX(); uY(); };
+    }, [x, y]);
+
+    // DRAW MATH: dashArray = [drawLen, gapLen]. We want drawn portion =
+    // positions 0 → p*drawLen. With dashOffset = drawLen * (1-p), at p=0
+    // the gap covers 0→drawLen (hidden), at p=1 dash covers 0→drawLen
+    // (full). Using unified drawLen DRAW_TOTAL so drawn part stops exactly
+    // where traveling dot is.
+    const draw = DRAW_TOTAL(idx);
+    const dashOffset = useTransform(mv, (p) => (reduceMotion ? 0 : draw * (1 - Math.max(0, Math.min(1, p)))));
+
+    // Traveling end-dot visuals:
+    const endpointScale = useTransform(mv, (p) => (p > 0 ? 1 : 0));
+    const calloutShow = useTransform(mv, (p) => (p > 0.04 ? 1 : 0));
+    const calloutY = useTransform(mv, (p) => (p > 0.04 ? 0 : 6));
+
+    // Waypoint dot pre-created transforms (hooks up front, not in render)
+    const wpDots = [0, 1, 2, 3].map((i) => {
+      const crossP = i / 4;
+      const opacity = useTransform(mv, (p) => (p >= crossP ? 1 : 0));
+      const scale = useTransform(mv, (p) => (p >= crossP ? 1 : 0));
+      return { opacity, scale };
+    });
+
+    return {
+      key: s.key,
+      mv, sample, x, y, totalLen, draw,
+      dashOffset, gTransformString,
+      endpointScale, calloutShow, calloutY,
+      wpDots,
+    };
+  });
+  // Rebuild a key→ref map so callers can still lookup by s.key
+  const byKey = Object.fromEntries(progressRefs.map((r) => [r.key, r]));
+
+  // Lift counters — driven by each series' progress MV (no springs needed).
+  // progress 0 → 1 maps to +0% → +LIFT%. The number rises at exactly the
+  // same speed the end-dot moves along the line.
+  const liftRefs = series.reduce((acc, s) => {
+    if (s.lift == null) return acc;
+    const pRef = byKey[s.key];
+    const display = useTransform(pRef.mv, (p) => `+${Math.max(0, Math.round(Math.max(0, Math.min(1, p)) * s.lift))}%`);
+    const [text, setText] = useState('+0%');
+    useEffect(() => {
+      const unsub = display.on('change', (v) => setText(v));
+      return () => unsub();
+    }, [display]);
+    acc[s.key] = { mv: pRef.mv, display, text, target: s.lift };
+    return acc;
+  }, {});
+
+  // Kick off progress MV 0→1 for every series once inView fires.
+  // `animate(MV, target, { duration, delay, ease })` is the framer-motion
+  // MotionValue tween function — this is what actually updates every frame.
+  useEffect(() => {
+    if (!inView) return undefined;
+    const controls = series.map((s) => {
+      const ref = byKey[s.key];
+      const { mv } = ref;
+      if (reduceMotion) {
+        mv.set(1);
+        return () => {};
+      }
+      mv.jump(0);
+      return animate(mv, 1, {
+        duration: s.dur,
+        delay: s.start,
+        ease: EASE_GROWTH,
+      }).stop;
+    });
+    return () => controls.forEach((stop) => stop());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView, reduceMotion]);
+
+  // Helper: lift counter display getter (SVG text + legend cell)
+  const liftText = (key) => (liftRefs[key] ? liftRefs[key].text : '');
+
+  return (
+    <motion.div
+      ref={wrapRef}
+      initial={{ opacity: 0, y: 18 }}
+      animate={inView || reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+      transition={{ duration: 0.5 }}
+      style={{
+        position: 'relative',
+        width: '100%',
+        background: UI_DARK,
+        overflow: 'hidden',
+      }}
+    >
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'baseline',
+        padding: '0 0 10px',
+        borderBottom: HOME_SECTION_DIVIDER,
+        marginBottom: 6,
+      }}>
+        <div style={{ display: 'grid', gap: 4 }}>
+          <div className="small-text" style={{ letterSpacing: '0.08em', opacity: 0.7 }}>
+            GROWTH SIGNAL · POST DVCP
+          </div>
+          <div className="section-title" style={{
+            fontSize: 'clamp(18px, 2.6vw, 26px)',
+            marginBottom: 0,
+            color: UI_LIGHT,
+            lineHeight: 1,
+          }}>
+            Positioned channels vs. baseline
+          </div>
+        </div>
+        <div className="small-text" style={{ letterSpacing: '0.08em', opacity: 0.7 }}>
+          Q0 → Q4 · 12MO
+        </div>
+      </div>
+
+      <div style={{ padding: '12px 0 0' }}>
+        <svg
+          viewBox={`0 0 ${W} ${H}`}
+          role="img"
+          aria-label="Growth chart comparing positioned Branding, Website, and Social channels to baseline over four quarters"
+          style={{ width: '100%', height: 'auto', display: 'block' }}
+        >
+          <defs>
+            <pattern id="sg-grid" x={PL} y={PT} width={IW / 4} height={IH / 5} patternUnits="userSpaceOnUse">
+              <path d={`M ${(IW / 4).toFixed(2)} 0 L 0 0 0 ${(IH / 5).toFixed(2)}`} fill="none" stroke={RULE} strokeOpacity="0.45" strokeWidth="1" />
+            </pattern>
+            {series.map((s, i) => (
+              <linearGradient key={`grad-${s.key}`} id={`sg-area-${s.key}`} x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stopColor={i === 0 ? STROKE : DIM} stopOpacity={0.34} />
+                <stop offset="100%" stopColor={i === 0 ? STROKE : DIM} stopOpacity="0" />
+              </linearGradient>
+            ))}
+            <filter id="sg-pulse" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          <rect x={PL} y={PT} width={IW} height={IH} fill="url(#sg-grid)" />
+
+          {[0, 1, 2, 3, 4, 5].map((i) => {
+            const y = PT + (IH * i) / 5;
+            const val = Math.round(330 - (240 * i) / 5);
+            return (
+              <g key={`h-${i}`}>
+                <line x1={PL} x2={PL + IW} y1={y} y2={y} stroke={RULE} strokeOpacity="0.25" strokeDasharray="3 4" />
+                <text
+                  x={PL - 10}
+                  y={y + 4}
+                  textAnchor="end"
+                  fontFamily="var(--font-mono)"
+                  fontSize={10}
+                  letterSpacing="0.08em"
+                  fill={DIM}
+                >
+                  {val}
+                </text>
+              </g>
+            );
+          })}
+
+          {[0, 1, 2, 3, 4].map((i) => (
+            <text
+              key={`x-${i}`}
+              x={toX(i)}
+              y={H - PB + 20}
+              textAnchor="middle"
+              fontFamily="var(--font-mono)"
+              fontWeight="var(--font-mono-weight-bold)"
+              fontSize={11}
+              letterSpacing="0.1em"
+              fill={DIM}
+            >
+              {quarters[i]}
+            </text>
+          ))}
+
+          {/* Area fills — slow creep in behind stroke, easeInOut growth-curve feel */}
+          {series.map((s, idx) => {
+            if (!s.area) return null;
+            const fired = reduceMotion || inView;
+            return (
+              <motion.path
+                key={`area-${s.key}`}
+                d={areaPath(s.arr)}
+                fill={`url(#sg-area-${s.key})`}
+                fillOpacity={reduceMotion ? s.area : 0}
+                animate={fired ? { fillOpacity: [0, s.area] } : { fillOpacity: 0 }}
+                transition={{ duration: Math.min(2.6, s.dur + 0.1), delay: fired ? s.start : 0, ease: EASE_GROWTH }}
+              />
+            );
+          })}
+
+          {/* Stroke draw-in — ONE motion driver: every frame of progress MV p∈[0,1]
+              updates the visible stroke via style.strokeDashoffset = draw*(1-p).
+              (progress MV is tweened via animate() on inView — matches exactly
+              the traveling end-dot position + counter number).
+
+              Dashed line draw math (Branding / Baseline):
+                "dash on, dash off" segments repeat for the full 0→DRAW length,
+                then a final gap of DRAW closes the cycle. Total cycle = 2·DRAW.
+                At dashOffset = DRAW (progress=0), screen 0→DRAW sits entirely
+                inside the final big gap → fully hidden.
+                At dashOffset = 0 (progress=1), screen 0→DRAW sits entirely in
+                the repeated dashed segments → fully drawn with dashes.
+              This matches the exact 0→1 reveal of the solid Website/Social
+              lines so stroke draw head aligns with traveling endpoint at all
+              times — no more early-finish dashed lines.
+          */}
+          {series.map((s, idx) => {
+            const draw = DRAW_TOTAL(idx);
+            const pRef = progressRefs[idx];
+            let dashArray;
+            if (s.dash) {
+              const [on, off] = s.dash.split(/[\s,]+/).map(Number);
+              const seg = (on || 0) + (off || 0);
+              const reps = Math.ceil(draw / seg) + 1;
+              const parts = [];
+              for (let r = 0; r < reps; r++) {
+                parts.push(on, off);
+              }
+              parts.push(draw);
+              dashArray = parts.join(' ');
+            } else {
+              dashArray = draw;
+            }
+            return (
+              <motion.path
+                key={`ln-${s.key}`}
+                d={linePath(s.arr)}
+                fill="none"
+                stroke={s.color}
+                strokeOpacity={s.key === 'base' ? 0.85 : 1}
+                strokeWidth={s.width}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeDasharray={dashArray}
+                style={{ strokeDashoffset: pRef.dashOffset }}
+              />
+            );
+          })}
+
+          {/* Waypoint dots + traveling endpoint — all 3 positioned series (Website,
+              Social, Branding) get the full treatment. Only the no-lift baseline
+              reference line skips waypoints/endpoints. */}
+          {series.filter((s) => s.lift != null).map((s) => {
+            const idx = series.findIndex((x) => x.key === s.key);
+            const pRef = progressRefs[idx];
+            return s.arr.map((v, i) => {
+              if (i !== 4) {
+                const wp = pRef.wpDots[i];
+                return (
+                  <motion.circle
+                    key={`pt-${s.key}-${i}`}
+                    cx={toX(i)}
+                    cy={toY(v)}
+                    r={2.6}
+                    fill={s.color}
+                    style={reduceMotion ? undefined : { opacity: wp.opacity, scale: wp.scale, transformOrigin: `${toX(i)}px ${toY(v)}px` }}
+                  />
+                );
+              }
+              // ——— TRAVELING ENDPOINT + CALLOUT ———
+              // <g transform="translate(X,Y)"> uses the SVG native transform
+              // attribute (user-units, not CSS px) so vb_x=616 renders at the
+              // actual right-edge endpoint of the polyline.
+              // gTransformString is a useState string kept in sync with x/y MV
+              // by change listeners (hooks up front, not in render).
+              const firedAtLeastOnce = reduceMotion || inView;
+              return (
+                <g
+                  key={`end-${s.key}`}
+                  transform={pRef.gTransformString}
+                >
+                  <motion.circle
+                    cx={0}
+                    cy={0}
+                    r={4.5}
+                    fill={UI_DARK}
+                    stroke={s.color}
+                    strokeWidth={2}
+                    style={reduceMotion ? undefined : { scale: pRef.endpointScale, transformOrigin: '0 0' }}
+                    transition={reduceMotion ? undefined : { type: 'spring', stiffness: 320, damping: 22 }}
+                  />
+                  {!reduceMotion && firedAtLeastOnce && (
+                    <>
+                      <motion.circle
+                        cx={0}
+                        cy={0}
+                        r={4.5}
+                        fill="none"
+                        stroke={s.color}
+                        strokeOpacity={0.5}
+                        initial={{ scale: 0.4, opacity: 0.8 }}
+                        animate={{ scale: 2.2, opacity: 0 }}
+                        transition={{ duration: 1.4, delay: s.start + s.dur + 0.05, repeat: Infinity, repeatDelay: 1.1 }}
+                      />
+                      <motion.circle
+                        cx={0}
+                        cy={0}
+                        r={2.8}
+                        fill={s.color}
+                        style={{ scale: pRef.endpointScale, transformOrigin: '0 0' }}
+                        transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+                      />
+                    </>
+                  )}
+                  {reduceMotion && <circle cx={0} cy={0} r={2.8} fill={s.color} />}
+                  {s.lift != null && (
+                    <motion.g
+                      style={reduceMotion ? undefined : { opacity: pRef.calloutShow, translateY: pRef.calloutY }}
+                    >
+                      <rect
+                        x={-42}
+                        y={-32}
+                        width={64}
+                        height={20}
+                        rx={5}
+                        fill={STROKE}
+                        fillOpacity={0.08}
+                        stroke={RULE}
+                      />
+                      <text
+                        x={-34}
+                        y={-18}
+                        fontFamily="var(--font-mono)"
+                        fontWeight="var(--font-mono-weight-bold)"
+                        fontSize={10}
+                        letterSpacing="0.08em"
+                        fill={s.color}
+                      >
+                        {liftText(s.key)}
+                      </text>
+                    </motion.g>
+                  )}
+                </g>
+              );
+            });
+          })}
+        </svg>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, minmax(0, 1fr))',
+          gap: 0,
+          marginTop: 16,
+          paddingTop: 18,
+          borderTop: HOME_SECTION_DIVIDER,
+        }}>
+          <div
+            className="small-text"
+            style={{
+              borderRight: HOME_SECTION_DIVIDER,
+              padding: '10px 14px',
+              letterSpacing: '0.08em',
+              opacity: 0.55,
+              textTransform: 'uppercase',
+              display: isMobile ? 'none' : 'block',
+            }}
+          >
+            SERIES
+          </div>
+          <div
+            className="small-text"
+            style={{
+              borderRight: HOME_SECTION_DIVIDER,
+              padding: '10px 14px',
+              letterSpacing: '0.08em',
+              opacity: 0.55,
+              textTransform: 'uppercase',
+              display: isMobile ? 'none' : 'block',
+            }}
+          >
+            CHANNEL
+          </div>
+          <div
+            className="small-text"
+            style={{
+              padding: '10px 14px',
+              textAlign: 'right',
+              letterSpacing: '0.08em',
+              opacity: 0.55,
+              textTransform: 'uppercase',
+              display: isMobile ? 'none' : 'block',
+            }}
+          >
+            Q4 · 12MO LIFT
+          </div>
+          {series.filter((s) => s.key !== 'base').map((s, i, arr) => (
+            <div
+              key={s.key}
+              style={{
+                gridColumn: isMobile ? '1 / -1' : '1 / -1',
+                display: 'grid',
+                gridTemplateColumns: isMobile ? 'minmax(0, 1fr) 86px' : 'repeat(3, minmax(0, 1fr))',
+                gap: 10,
+                alignItems: 'baseline',
+                background: UI_DARK,
+                padding: '14px',
+                borderTop: i === 0 ? 'none' : HOME_SECTION_DIVIDER,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <svg width={28} height={10} role="img" aria-hidden="true">
+                  <line
+                    x1={1}
+                    y1={5}
+                    x2={26}
+                    y2={5}
+                    stroke={s.color}
+                    strokeWidth={s.dash ? 1.8 : 2.8}
+                    strokeLinecap="round"
+                    strokeDasharray={s.dash ? s.dash : undefined}
+                  />
+                </svg>
+                <span
+                  className="small-text"
+                  style={{ letterSpacing: '0.08em', textTransform: 'uppercase' }}
+                >
+                  {s.key === 'web' ? '02' : s.key === 'social' ? '04' : '01'}
+                </span>
+              </div>
+              <span
+                className="small-text"
+                style={{
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  opacity: 0.9,
+                  textAlign: isMobile ? 'left' : 'start',
+                }}
+              >
+                {s.label}
+              </span>
+              <span
+                className="small-text"
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 'var(--font-mono-weight-bold)',
+                  fontSize: 'clamp(14px, 1.4vw, 18px)',
+                  letterSpacing: '0.04em',
+                  lineHeight: 1,
+                  textAlign: isMobile ? 'right' : 'right',
+                  color: i === 0 ? STROKE : DIM,
+                }}
+              >
+                {liftText(s.key)}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [newsletterName, setNewsletterName] = useState('');
@@ -629,6 +1523,33 @@ function App() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [navLogoSpinTick, setNavLogoSpinTick] = useState(0);
+
+  const TYPEWRITER_WORDS = ['Branding', 'Website', 'Social', 'Strategy'];
+  const [typewriterWordIdx, setTypewriterWordIdx] = useState(0);
+  const [typewriterText, setTypewriterText] = useState('');
+  const [typewriterDeleting, setTypewriterDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentWord = TYPEWRITER_WORDS[typewriterWordIdx];
+    const baseDelay = typewriterDeleting ? 55 : 110;
+    const timer = window.setTimeout(() => {
+      if (!typewriterDeleting) {
+        const next = currentWord.slice(0, typewriterText.length + 1);
+        setTypewriterText(next);
+        if (next === currentWord) {
+          window.setTimeout(() => setTypewriterDeleting(true), 1600);
+        }
+      } else {
+        const next = currentWord.slice(0, Math.max(0, typewriterText.length - 1));
+        setTypewriterText(next);
+        if (next === '') {
+          setTypewriterDeleting(false);
+          setTypewriterWordIdx((i) => (i + 1) % TYPEWRITER_WORDS.length);
+        }
+      }
+    }, baseDelay);
+    return () => window.clearTimeout(timer);
+  }, [typewriterText, typewriterDeleting, typewriterWordIdx]);
 
   useEffect(() => {
     const mql = window.matchMedia('(max-width: 700px)');
@@ -897,6 +1818,19 @@ function App() {
     navigate('/services');
   };
 
+  const openAbout = () => {
+    setMobileNavOpen(false);
+    if (location.pathname === '/') {
+      const y = window.scrollY || 0;
+      homeScrollYRef.current = y;
+      sessionStorage.setItem('homeScrollY', String(y));
+      pendingHomeScrollRestoreRef.current = true;
+    } else {
+      pendingHomeScrollRestoreRef.current = false;
+    }
+    navigate('/about');
+  };
+
   const goToSection = (id) => {
     setMobileNavOpen(false);
     pendingHomeScrollRestoreRef.current = false;
@@ -948,6 +1882,7 @@ function App() {
       navigate('/', { replace: true });
     }
     else if (pathname === '/blog' || pathname.startsWith('/blog/')) setActiveCaseStudy('blog');
+    else if (pathname === '/about') setActiveCaseStudy('about');
     else if (pathname === '/contact') setActiveCaseStudy('contact');
     else if (pathname === '/material-lab' || pathname.startsWith('/material-lab/')) setActiveCaseStudy('material-lab');
     else if (pathname === '/tools' || pathname.startsWith('/tools/')) {
@@ -1174,10 +2109,13 @@ function App() {
                   UI/UX
                 </button>
                 <button type="button" className="mobile-nav-link" onClick={() => goToSection('photography')}>
-                  Photography
+                  Social
                 </button>
                 <button type="button" className="mobile-nav-link" onClick={openServices}>
                   Services
+                </button>
+                <button type="button" className="mobile-nav-link" onClick={openAbout}>
+                  About
                 </button>
                 <button type="button" className="mobile-nav-link" onClick={openMaterialLab}>
                   Material Lab
@@ -1222,6 +2160,8 @@ function App() {
           <Merch key="merch" />
         ) : activeCaseStudy === 'services' ? (
           <Services key="services" />
+        ) : activeCaseStudy === 'about' ? (
+          <About key="about" />
         ) : activeCaseStudy === 'contact' ? (
           <Contact key="contact" />
         ) : activeCaseStudy === 'photography' ? (
@@ -1258,19 +2198,51 @@ function App() {
             {/* Hero */}
             <section data-header-theme="light" style={{ position: 'relative', overflow: 'hidden', background: UI_DARK, color: UI_LIGHT, borderBottom: HOME_SECTION_DIVIDER }}>
               <div style={{ minHeight: 'var(--home-hero-min-h)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
-                <h1 className="home-hero__title" style={{ 
-                  fontFamily: 'var(--font-display)', fontWeight: 'var(--font-display-weight)', 
-                  fontSynthesis: 'weight',
-                  marginBottom: 'auto'
-                }}>
-                  <div className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-                    <DecryptText as="span" text="Brand + Web + Photo" trigger="mount" delay={200} duration={900} />
+                <div style={{ marginBottom: 'auto', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+                  <h1 className="home-hero__title" style={{
+                    fontFamily: 'var(--font-display)', fontWeight: 'var(--font-display-weight)',
+                    fontSynthesis: 'weight',
+                    margin: 0,
+                    fontSize: 'clamp(44px, 9vw, 190px)',
+                  }}>
+                    <div className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
+                      <DecryptText as="span" text="A Strategic Creation Consultancy" trigger="mount" delay={200} duration={900} />
+                    </div>
+                  </h1>
+                  <div
+                    className="home-hero__subhead"
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontWeight: 'var(--font-display-weight)',
+                      fontSize: 'clamp(20px, 4.2vw, 64px)',
+                      lineHeight: 1,
+                      textTransform: 'uppercase',
+                      letterSpacing: '-0.02em',
+                      color: UI_LIGHT,
+                      opacity: 0.92,
+                      minHeight: '1.1em',
+                    }}
+                  >
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.4, delay: 1.1 }}
+                      style={{ display: 'inline-block', whiteSpace: 'nowrap' }}
+                    >
+                      {typewriterText}
+                    </motion.span>
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: [0, 1, 0] }}
+                      transition={{ duration: 1, repeat: Infinity, delay: 1.1 }}
+                      style={{ display: 'inline-block', width: '0.5ch', marginLeft: '2px', color: UI_LIGHT, fontWeight: 'var(--font-mono-weight-bold)' }}
+                      aria-hidden="true"
+                    >
+                      _
+                    </motion.span>
                   </div>
-                  <div className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-                    <DecryptText as="span" text="The Creation Studio For Bold Brands" trigger="mount" delay={260} duration={900} />
-                  </div>
-                </h1>
-                <motion.div 
+                </div>
+                <motion.div
                   className="home-hero__meta"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -1396,103 +2368,152 @@ function App() {
               data-header-theme="light"
               className="home-overview"
               style={{
-                padding: '204px var(--spacing-md) var(--spacing-xxl)',
+                paddingTop: 'clamp(56px, 9vw, 120px)',
+                paddingBottom: 'var(--spacing-xxl)',
+                paddingLeft: 'var(--spacing-md)',
+                paddingRight: 'var(--spacing-md)',
                 background: UI_DARK,
                 color: UI_LIGHT,
                 minHeight: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
                 position: 'relative',
-                zIndex: 2,
+                overflow: 'hidden',
               }}
             >
+              <div aria-hidden="true" style={{
+                position: 'absolute',
+                inset: '0 auto 0 50%',
+                width: '240vw',
+                transform: 'translateX(-50%)',
+                background: 'radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.0) 55%)',
+                pointerEvents: 'none',
+              }} />
               <motion.div
-                initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 18 }}
                 viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
                 transition={{ duration: 0.5 }}
                 style={{
                   width: '100%',
                   maxWidth: 'var(--content-max-w)',
                   margin: '0 auto',
-                  borderTop: HOME_SECTION_DIVIDER,
-                  borderBottom: HOME_SECTION_DIVIDER,
-                  padding: 'clamp(28px, 5vw, 56px) 0',
-                  display: 'grid',
-                  gridTemplateColumns: isMobile ? '1fr' : 'minmax(120px, 0.28fr) minmax(0, 1fr)',
-                  gap: 'var(--spacing-lg)',
-                  alignItems: 'start',
+                  position: 'relative',
+                  zIndex: 1,
                 }}
               >
-                <div
-                  className="small-text"
-                  style={{
-                    opacity: 0.72,
-                    letterSpacing: '0.08em',
-                    paddingTop: '6px',
-                  }}
-                >
-                  START / 02
-                </div>
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 1.4fr) minmax(220px, 0.6fr)',
-                    gap: 'var(--spacing-lg)',
-                    alignItems: 'end',
-                  }}
-                >
-                  <div style={{ minWidth: 0 }}>
-                    <h2
-                      className="section-title"
-                      style={{
-                        marginBottom: 0,
-                        maxWidth: '12ch',
-                        color: UI_LIGHT,
-                        lineHeight: 0.88,
-                        fontSize: 'clamp(38px, 7vw, 96px)',
-                      }}
-                    >
-                      Start Something Sharp.
+                <div className="flex" style={{
+                  justifyContent: 'space-between',
+                  alignItems: 'baseline',
+                  paddingBottom: 'var(--spacing-sm)',
+                  borderBottom: HOME_SECTION_DIVIDER,
+                  marginBottom: 'var(--spacing-xl)',
+                }}>
+                  <div style={{ display: 'grid', gap: 6 }}>
+                    <div className="small-text" style={{ letterSpacing: '0.08em', opacity: 0.72 }}>
+                      STUDIO SCORE · 2024 — 2026
+                    </div>
+                    <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
+                      <DecryptText as="span" text="Build Something" trigger="inView" duration={900} delay={120} />
+                      <br className="md:block" style={{ display: isMobile ? 'none' : 'block' }} />
+                      <DecryptText as="span" text="People Actually Remember." trigger="inView" duration={900} delay={260} />
                     </h2>
                   </div>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gap: '16px',
-                      alignContent: 'end',
-                      minWidth: 0,
-                    }}
-                  >
-                    <p
-                      className="small-text"
-                      style={{
-                        margin: 0,
-                        maxWidth: 320,
-                        lineHeight: 1.45,
-                        opacity: 0.88,
-                        textTransform: 'none',
-                      }}
-                    >
-                      Identity, web design, development, and photography for bold brands.
-                    </p>
-                    <div>
-                      <button
-                        type="button"
-                        className="newsletter-button"
-                        onClick={openStrategyCall}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 8,
-                        }}
-                      >
-                        Get Started
-                        <ArrowUpRight size={14} weight="thin" aria-hidden="true" />
-                      </button>
-                    </div>
-                  </div>
+                  <span className="small-text">Index (02)</span>
                 </div>
+
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: isMobile ? '1fr' : 'repeat(6, minmax(0, 1fr))',
+                  gap: 0,
+                  borderTop: HOME_SECTION_DIVIDER,
+                  borderLeft: HOME_SECTION_DIVIDER,
+                }}>
+                  {STATS_RAW.map((stat, i) => (
+                    <AnimatedStatValue
+                      key={stat.k}
+                      index={i}
+                      label={stat.k}
+                      target={stat.v}
+                      unit={stat.u}
+                      tone={stat.tone}
+                      isMobile={isMobile}
+                    />
+                  ))}
+                </div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
+                  style={{
+                    marginTop: 'var(--spacing-xl)',
+                    padding: '16px 0 0',
+                    borderTop: HOME_SECTION_DIVIDER,
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: 'var(--spacing-md)',
+                  }}
+                >
+                  <div className="small-text" style={{
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                    opacity: 0.78,
+                    maxWidth: 620,
+                    lineHeight: 1.5,
+                  }}>
+                    Four pillars, one process, no silos. Strategy first — then Branding, Website, and Social all ship from the same scorecard.
+                  </div>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    flexWrap: 'wrap',
+                  }}>
+                    {[
+                      { k: 'STRATEGY', i: '01' },
+                      { k: 'BRANDING', i: '02' },
+                      { k: 'WEBSITE', i: '03' },
+                      { k: 'SOCIAL', i: '04' },
+                    ].map((p, i, arr) => (
+                      <div key={p.k} style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        padding: '10px 12px',
+                        border: HOME_SECTION_DIVIDER,
+                        borderRadius: 999,
+                      }}>
+                        <span className="small-text" style={{
+                          letterSpacing: '0.1em',
+                          opacity: 0.55,
+                          textTransform: 'uppercase',
+                        }}>
+                          {p.i}
+                        </span>
+                        <span className="small-text" style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontWeight: 'var(--font-mono-weight-bold)',
+                          letterSpacing: '0.04em',
+                          textTransform: 'uppercase',
+                          color: UI_LIGHT,
+                        }}>
+                          {p.k}
+                        </span>
+                        {i < arr.length - 1 && (
+                          <span aria-hidden="true" style={{
+                            marginLeft: 2,
+                            color: 'rgba(255,255,255,0.32)',
+                            fontSize: 12,
+                          }}>→</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
               </motion.div>
             </section>
 
@@ -1517,86 +2538,81 @@ function App() {
                   <span className="small-text">Index (03)</span>
                 </div>
 
-                <div className="studio-client-grid">
+                <div className="studio-client-grid-home" style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+                  gap: 0,
+                  alignItems: 'stretch',
+                  borderTop: HOME_SECTION_DIVIDER,
+                  borderLeft: HOME_SECTION_DIVIDER,
+                }}>
                   {/* Micron */}
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    style={{ borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-md)' }}
+                    style={{
+                      borderRight: HOME_SECTION_DIVIDER,
+                      borderBottom: HOME_SECTION_DIVIDER,
+                      padding: 'var(--spacing-lg)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      gap: 'var(--spacing-md)',
+                      minHeight: 160,
+                    }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--spacing-sm)' }}>
-                      <h4 style={{ 
-                        fontSize: 'var(--fs-sm)', 
-                        margin: 0,
-                        textTransform: 'uppercase',
-                        fontFamily: 'var(--font-mono)',
-                        fontWeight: 'var(--font-mono-weight-bold)',
-                        letterSpacing: '0.02em'
-                      }}>
-                        <img
-                          src="/images/micron.png"
-                          alt="Micron"
-                          className="studio-client-logo studio-client-logo--invert"
-                          style={{
-                            height: 26,
-                            width: 'auto',
-                            maxWidth: 220,
-                            display: 'block',
-                            opacity: 0.95,
-                          }}
-                        />
-                      </h4>
-                      <div className="small-text" style={{ color: UI_LIGHT }}>
-                        A01
-                      </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: '1 1 auto' }}>
+                      <img
+                        src="/images/micron.png"
+                        alt="Micron"
+                        className="studio-client-logo studio-client-logo--invert"
+                        style={{
+                          height: 26,
+                          width: 'auto',
+                          maxWidth: '100%',
+                          display: 'block',
+                          opacity: 0.95,
+                        }}
+                      />
                     </div>
-                    <p className="small-text" style={{ maxWidth: '90%' }}>
-                      Designed over 1000 ADA-compliant signs for the massive 2026 Boise expansion. Creating a cohesive wayfinding system that merges strict regulatory standards with architectural harmony.
-                    </p>
-                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontWeight: 'var(--font-mono-weight)', fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
-                      [WAYFINDING] [ENVIRONMENTAL] [ADA]
+                    <div className="small-text" style={{ color: UI_LIGHT }}>
+                      A01
                     </div>
                   </motion.div>
                   {/* Ramboll */}
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.2 }}
-                    style={{ borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-md)' }}
+                    transition={{ delay: 0.1 }}
+                    style={{
+                      borderRight: HOME_SECTION_DIVIDER,
+                      borderBottom: HOME_SECTION_DIVIDER,
+                      padding: 'var(--spacing-lg)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      gap: 'var(--spacing-md)',
+                      minHeight: 160,
+                    }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--spacing-sm)' }}>
-                      <h4 style={{ 
-                        fontSize: 'var(--fs-sm)', 
-                        margin: 0,
-                        textTransform: 'uppercase',
-                        fontFamily: 'var(--font-mono)',
-                        fontWeight: 'var(--font-mono-weight-bold)',
-                        letterSpacing: '0.02em'
-                      }}>
-                        <img
-                          src="/images/ramboll-transparent.png"
-                          alt="Ramboll"
-                          className="studio-client-logo"
-                          style={{
-                            height: 26,
-                            width: 'auto',
-                            maxWidth: 240,
-                            display: 'block',
-                            opacity: 0.98,
-                          }}
-                        />
-                      </h4>
-                      <div className="small-text" style={{ color: UI_LIGHT }}>
-                        A02
-                      </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: '1 1 auto' }}>
+                      <img
+                        src="/images/ramboll-transparent.png"
+                        alt="Ramboll"
+                        className="studio-client-logo"
+                        style={{
+                          height: 26,
+                          width: 'auto',
+                          maxWidth: '100%',
+                          display: 'block',
+                          opacity: 0.98,
+                        }}
+                      />
                     </div>
-                    <p className="small-text" style={{ maxWidth: '90%' }}>
-                      Built a custom data migration system for Ramboll North America&apos;s Air Quality division and provide ongoing system administration for data migration servers. Delivering a robust full-stack solution to ensure data integrity and streamline complex environmental reporting workflows.
-                    </p>
-                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontWeight: 'var(--font-mono-weight)', fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
-                      [FULL STACK] [SYSTEM ADMIN] [DATA MIGRATION]
+                    <div className="small-text" style={{ color: UI_LIGHT }}>
+                      A02
                     </div>
                   </motion.div>
                   {/* Worksharp */}
@@ -1604,40 +2620,34 @@ function App() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.4 }}
-                    style={{ borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-md)' }}
+                    transition={{ delay: 0.2 }}
+                    style={{
+                      borderRight: HOME_SECTION_DIVIDER,
+                      borderBottom: HOME_SECTION_DIVIDER,
+                      padding: 'var(--spacing-lg)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      gap: 'var(--spacing-md)',
+                      minHeight: 160,
+                    }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--spacing-sm)' }}>
-                      <h4 style={{
-                        fontSize: 'var(--fs-sm)',
-                        margin: 0,
-                        textTransform: 'uppercase',
-                        fontFamily: 'var(--font-mono)',
-                        fontWeight: 'var(--font-mono-weight-bold)',
-                        letterSpacing: '0.02em'
-                      }}>
-                        <img
-                          src="/images/worksharp.webp"
-                          alt="Worksharp"
-                          className="studio-client-logo"
-                          style={{
-                            height: 54,
-                            width: 'auto',
-                            maxWidth: 240,
-                            display: 'block',
-                            opacity: 0.98,
-                          }}
-                        />
-                      </h4>
-                      <div className="small-text" style={{ color: UI_LIGHT }}>
-                        A03
-                      </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: '1 1 auto' }}>
+                      <img
+                        src="/images/worksharp.webp"
+                        alt="Worksharp"
+                        className="studio-client-logo"
+                        style={{
+                          height: 54,
+                          width: 'auto',
+                          maxWidth: '100%',
+                          display: 'block',
+                          opacity: 0.98,
+                        }}
+                      />
                     </div>
-                    <p className="small-text" style={{ maxWidth: '90%' }}>
-                      Directed, produced, and photographed multiple campaigns for Worksharp and Drill Doctor, creating commercial editorial imagery for Popular Mechanics that balanced product clarity, brand consistency, and publication-ready execution.
-                    </p>
-                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontWeight: 'var(--font-mono-weight)', fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
-                      [PHOTOGRAPHY] [CAMPAIGN] [POPULAR MECHANICS]
+                    <div className="small-text" style={{ color: UI_LIGHT }}>
+                      A03
                     </div>
                   </motion.div>
                   {/* Granite Gear */}
@@ -1645,43 +2655,45 @@ function App() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.6 }}
-                    style={{ borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-md)' }}
+                    transition={{ delay: 0.3 }}
+                    style={{
+                      borderRight: HOME_SECTION_DIVIDER,
+                      borderBottom: HOME_SECTION_DIVIDER,
+                      padding: 'var(--spacing-lg)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      gap: 'var(--spacing-md)',
+                      minHeight: 160,
+                    }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--spacing-sm)' }}>
-                      <h4 style={{
-                        fontSize: 'var(--fs-sm)',
-                        margin: 0,
-                        textTransform: 'uppercase',
-                        fontFamily: 'var(--font-mono)',
-                        fontWeight: 'var(--font-mono-weight-bold)',
-                        letterSpacing: '0.02em'
-                      }}>
-                        <img
-                          src="/images/granitegear.png"
-                          alt="Granite Gear"
-                          className="studio-client-logo"
-                          style={{
-                            height: 48,
-                            width: 'auto',
-                            maxWidth: 240,
-                            display: 'block',
-                            opacity: 0.98,
-                          }}
-                        />
-                      </h4>
-                      <div className="small-text" style={{ color: UI_LIGHT }}>
-                        A04
-                      </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: '1 1 auto' }}>
+                      <img
+                        src="/images/granitegear.png"
+                        alt="Granite Gear"
+                        className="studio-client-logo"
+                        style={{
+                          height: 48,
+                          width: 'auto',
+                          maxWidth: '100%',
+                          display: 'block',
+                          opacity: 0.98,
+                        }}
+                      />
                     </div>
-                    <p className="small-text" style={{ maxWidth: '90%' }}>
-                      Directed, produced, and photographed multiple campaigns for Granite Gear, creating imagery used for Backpacker Magazine and brand marketing with a focus on durable product storytelling and outdoor credibility.
-                    </p>
-                    <div style={{ marginTop: 'var(--spacing-md)', fontFamily: 'var(--font-mono)', fontWeight: 'var(--font-mono-weight)', fontSize: 'var(--fs-sm)', lineHeight: 1.2 }}>
-                      [PHOTOGRAPHY] [CAMPAIGN] [BACKPACKER]
+                    <div className="small-text" style={{ color: UI_LIGHT }}>
+                      A04
                     </div>
                   </motion.div>
                 </div>
+                <style>{`
+                  @media (max-width: 1000px) {
+                    .studio-client-grid-home { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+                  }
+                  @media (max-width: 560px) {
+                    .studio-client-grid-home { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+                  }
+                `}</style>
                 <div style={{
                   display: 'grid', 
                   gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
@@ -1771,7 +2783,7 @@ function App() {
             <section id="dev" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
-                  <DecryptText as="span" text="UI/UX + PRODUCT DESIGN" trigger="inView" duration={800} />
+                  <DecryptText as="span" text="WEBSITE" trigger="inView" duration={800} />
                 </h2>
                 <span className="small-text">Index (04)</span>
               </div>
@@ -1817,113 +2829,10 @@ function App() {
               </div>
             </section>
 
-            {/* Get Started CTA */}
-            <section
-              data-header-theme="light"
-              className="home-overview"
-              style={{
-                padding: 'var(--spacing-xxl) var(--spacing-md)',
-                background: UI_DARK,
-                color: UI_LIGHT,
-                minHeight: 'auto',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <motion.div
-                whileInView={{ opacity: 1, y: 0 }}
-                initial={{ opacity: 0, y: 18 }}
-                viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
-                transition={{ duration: 0.5 }}
-                style={{
-                  width: '100%',
-                  maxWidth: 'var(--content-max-w)',
-                  margin: '0 auto',
-                  borderTop: HOME_SECTION_DIVIDER,
-                  borderBottom: HOME_SECTION_DIVIDER,
-                  padding: 'clamp(28px, 5vw, 56px) 0',
-                  display: 'grid',
-                  gridTemplateColumns: isMobile ? '1fr' : 'minmax(120px, 0.28fr) minmax(0, 1fr)',
-                  gap: 'var(--spacing-lg)',
-                  alignItems: 'start',
-                }}
-              >
-                <div
-                  className="small-text"
-                  style={{
-                    opacity: 0.72,
-                    letterSpacing: '0.08em',
-                    paddingTop: '6px',
-                  }}
-                >
-                  START / 02
-                </div>
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 1.4fr) minmax(220px, 0.6fr)',
-                    gap: 'var(--spacing-lg)',
-                    alignItems: 'end',
-                  }}
-                >
-                  <div style={{ minWidth: 0 }}>
-                    <h2
-                      className="section-title"
-                      style={{
-                        marginBottom: 0,
-                        maxWidth: '12ch',
-                        color: UI_LIGHT,
-                        lineHeight: 0.88,
-                        fontSize: 'clamp(38px, 7vw, 96px)',
-                      }}
-                    >
-                      Build Something People Actually Remember.
-                    </h2>
-                  </div>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gap: '16px',
-                      alignContent: 'end',
-                      minWidth: 0,
-                    }}
-                  >
-                    <p
-                      className="small-text"
-                      style={{
-                        margin: 0,
-                        maxWidth: 320,
-                        lineHeight: 1.45,
-                        opacity: 0.88,
-                        textTransform: 'none',
-                      }}
-                    >
-                      Brand, site, and product direction with a clear point of view. Start with a call.
-                    </p>
-                    <div>
-                      <button
-                        type="button"
-                        className="newsletter-button"
-                        onClick={openStrategyCall}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 8,
-                        }}
-                      >
-                        Get Started
-                        <ArrowUpRight size={14} weight="thin" aria-hidden="true" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </section>
-
             <section id="design" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
-                  <DecryptText as="span" text="GRAPHIC DESIGN" trigger="inView" duration={800} />
+                  <DecryptText as="span" text="BRANDING" trigger="inView" duration={800} />
                 </h2>
                 <span className="small-text">Index (05)</span>
               </div>
@@ -1968,11 +2877,164 @@ function App() {
                 })}
               </div>
             </section>
+            
+            <section
+              data-header-theme="light"
+              style={{
+                paddingTop: 'var(--spacing-xxl)',
+                paddingBottom: 'var(--spacing-xxl)',
+                paddingLeft: 'var(--spacing-md)',
+                paddingRight: 'var(--spacing-md)',
+                background: UI_DARK,
+                color: UI_LIGHT,
+                minHeight: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'relative',
+                zIndex: 2,
+              }}
+            >
+              <div style={{ width: '100%', maxWidth: 'var(--content-max-w)', margin: '0 auto' }}>
+                <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
+                  <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
+                    <DecryptText as="span" text="OUR PROCESS" trigger="inView" duration={800} />
+                  </h2>
+                  <span className="small-text">Index (02.5)</span>
+                </div>
+
+                <motion.div
+                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 12 }}
+                  viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
+                  transition={{ duration: 0.45 }}
+                  style={{
+                    borderTop: HOME_SECTION_DIVIDER,
+                    borderBottom: HOME_SECTION_DIVIDER,
+                    padding: '10px 0',
+                    display: 'grid',
+                    gridTemplateColumns: isMobile ? '1fr' : 'minmax(100px, 0.24fr) minmax(0, 1fr)',
+                    gap: 'var(--spacing-md)',
+                    alignItems: 'start',
+                  }}
+                >
+                  <div
+                    className="small-text"
+                    style={{
+                      opacity: 0.72,
+                      letterSpacing: '0.08em',
+                      paddingTop: '4px',
+                    }}
+                  >
+                    DVCP / 00
+                  </div>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 1.1fr) minmax(320px, 0.9fr)',
+                      gap: 'var(--spacing-md)',
+                      alignItems: 'stretch',
+                    }}
+                  >
+                    <div style={{ minWidth: 0 }}>
+                      <h2
+                        className="section-title"
+                        style={{
+                          marginBottom: 0,
+                          maxWidth: '12ch',
+                          color: UI_LIGHT,
+                          lineHeight: 0.9,
+                          fontSize: 'clamp(26px, 5vw, 68px)',
+                        }}
+                      >
+                        <DecryptText as="span" text="DIGITAL VALUE" trigger="inView" duration={800} delay={120} />
+                        <br />
+                        <DecryptText as="span" text="CREATION PLAN" trigger="inView" duration={800} delay={220} />
+                      </h2>
+                    </div>
+                    <div style={{ minWidth: 0 }}>
+                      <DvcpProcessImagePanel isMobile={isMobile} />
+                    </div>
+                  </div>
+                </motion.div>
+
+                <div style={{ marginTop: 'var(--spacing-lg)' }}>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, minmax(0, 1fr))',
+                      gap: 0,
+                      borderTop: HOME_SECTION_DIVIDER,
+                      borderLeft: HOME_SECTION_DIVIDER,
+                    }}
+                  >
+                    {DVCP_PROCESS.steps.map((s, i) => (
+                      <motion.div
+                        key={s.step}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: 0.05 * i }}
+                        style={{
+                          borderRight: HOME_SECTION_DIVIDER,
+                          borderBottom: HOME_SECTION_DIVIDER,
+                          padding: 'var(--spacing-md)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          gap: 'var(--spacing-sm)',
+                          minHeight: 160,
+                        }}
+                      >
+                        <div
+                          className="small-text"
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'baseline',
+                            opacity: 0.76,
+                          }}
+                        >
+                          <span>STEP {s.step}</span>
+                          <span>{String(i + 1).padStart(2, '0')} / 03</span>
+                        </div>
+                        <div style={{ display: 'grid', gap: '10px', minWidth: 0 }}>
+                          <h3
+                            className="section-title"
+                            style={{
+                              fontSize: 'clamp(17px, 2.2vw, 26px)',
+                              lineHeight: 0.96,
+                              letterSpacing: '-0.03em',
+                              margin: 0,
+                              color: UI_LIGHT,
+                            }}
+                          >
+                            <DecryptText as="span" text={s.title.toUpperCase()} trigger="inView" duration={550} delay={160 + i * 80} />
+                          </h3>
+                          <p
+                            className="small-text"
+                            style={{
+                              margin: 0,
+                              lineHeight: 1.4,
+                              opacity: 0.8,
+                              textTransform: 'uppercase',
+                              maxWidth: 340,
+                              fontSize: 'calc(var(--fs-sm) - 1px)',
+                            }}
+                          >
+                            {s.description}
+                          </p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
 
             <section id="photography" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
-                  <DecryptText as="span" text="PHOTOGRAPHY" trigger="inView" duration={800} />
+                  <DecryptText as="span" text="SOCIAL" trigger="inView" duration={800} />
                 </h2>
                 <span className="small-text">Index (06)</span>
               </div>
@@ -2030,108 +3092,82 @@ function App() {
               </div>
             </section>
 
-            <section style={{ padding: '0', background: UI_DARK, color: UI_LIGHT, minHeight: 'auto', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
-              <div className="studio-practice">
-                <div className="studio-practice__header">
-                  <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', borderBottom: HOME_SECTION_DIVIDER, paddingBottom: 'var(--spacing-sm)' }}>
-                    <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-                      <DecryptText as="span" text="STUDIO PRACTICE" trigger="inView" duration={800} />
-                    </h2>
-                    <span className="small-text">Index (07)</span>
-                  </div>
+
+            <section id="strategy" data-header-theme="light" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
+              <div style={{ width: '100%', maxWidth: 'var(--content-max-w)', margin: '0 auto' }}>
+                <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
+                  <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
+                    <DecryptText as="span" text="STRATEGY" trigger="inView" duration={800} />
+                  </h2>
+                  <span className="small-text">Index (07)</span>
                 </div>
 
-                <div className="studio-practice__grid">
-                  <div className="studio-practice__content">
-                    <div className="studio-practice__top">
-                      <div className="studio-practice__copy">
-                        <div className="small-text" style={{ maxWidth: '520px' }}>
-                          Creationbase is an independent full service creation studio based in Boise, Idaho. Founded in 2022, we partner with brands and teams to shape clear visual systems, build distinctive brand identities, design fast and durable websites, and create photography that fits the work.
-                        </div>
-                        <div className="small-text" style={{ maxWidth: '520px' }}>
-                          We deliver cohesive brand, web, and photo systems built for clarity, recognition, and real use. Our work is grounded in thoughtful process, strong design decisions, maintainable development, and visual direction that helps clients look sharper and communicate faster across every touchpoint.
-                        </div>
-                      </div>
+                <StrategyGrowthGraph isMobile={isMobile} />
 
-                      <div className="studio-practice__team">
-                        <div className="studio-practice__team-grid">
-                          <div className="studio-practice__team-card">
-                            <div className="studio-practice__team-image">
-                              <img src="/images/me%20new.webp" alt="Forrest Tindall" loading="lazy" decoding="async" />
-                            </div>
-                            <div className="studio-practice__team-meta">
-                              <div className="studio-practice__team-name">Forrest Tindall</div>
-                              <div className="studio-practice__team-role">Founder / Creative Director / Senior Designer / Fullstack Developer / Photographer</div>
-                            </div>
-                          </div>
-
-                          <div className="studio-practice__team-card">
-                            <div className="studio-practice__team-image">
-                              <img src="/images/sarah%202.webp" alt="Sarah Houser" loading="lazy" decoding="async" />
-                            </div>
-                            <div className="studio-practice__team-meta">
-                              <div className="studio-practice__team-name">Sarah Houser</div>
-                              <div className="studio-practice__team-role">CMO / Art Director / Photographer</div>
-                            </div>
-                          </div>
-
-                          <div className="studio-practice__team-card">
-                            <div className="studio-practice__team-image">
-                              <img src="/images/travis.webp" alt="Travis Winters" loading="lazy" decoding="async" />
-                            </div>
-                            <div className="studio-practice__team-meta">
-                              <div className="studio-practice__team-name">Travis Winters</div>
-                              <div className="studio-practice__team-role">Graphic Designer / Motion Designer / Illustrator</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.08 }}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 0.95fr) minmax(0, 1.05fr)',
+                    gap: 'var(--spacing-xl)',
+                    alignItems: 'start',
+                    marginTop: 'var(--spacing-xl)',
+                  }}
+                >
+                  <div style={{ display: 'grid', gap: 'var(--spacing-md)', minWidth: 0 }}>
+                    <div className="small-text" style={{ letterSpacing: '0.08em', opacity: 0.76 }}>
+                      POSITION + DEPLOY + MEASURE
                     </div>
+                    <h3 className="section-title" style={{
+                      margin: 0,
+                      color: UI_LIGHT,
+                      lineHeight: 0.9,
+                      fontSize: 'clamp(34px, 5.6vw, 84px)',
+                    }}>
+                      <DecryptText as="span" text="Turn positioning" trigger="inView" duration={850} delay={120} />
+                      <br />
+                      <DecryptText as="span" text="into compounding" trigger="inView" duration={850} delay={200} />
+                      <br />
+                      <DecryptText as="span" text="growth signals." trigger="inView" duration={850} delay={280} />
+                    </h3>
+                  </div>
 
-                    <div className="studio-practice__passion">
-                      <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', borderBottom: HOME_SECTION_DIVIDER, paddingBottom: 'var(--spacing-sm)' }}>
-                        <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>
-                          <DecryptText as="span" text="PASSION PROJECTS" trigger="inView" duration={800} />
-                        </h2>
-                    <span className="small-text">Index (07.1)</span>
-                      </div>
-
-                      <div className="passion-projects-block">
-                        <div className="passion-projects-grid">
-                          <div className="passion-projects-item passion-projects-item--full">
-                            <div className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
-                              <div className="small-text">PLAYGROUND</div>
-                              <motion.button
-                                onClick={() => openCaseStudy('playground')}
-                                whileHover={{ opacity: 0.7 }}
-                                style={{
-                                  background: 'none',
-                                  border: 'none',
-                                  padding: 0,
-                                  cursor: 'pointer',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: 'var(--spacing-sm)',
-                                  fontFamily: 'var(--font-mono)',
-                                  fontWeight: 'var(--font-mono-weight)',
-                                  fontSize: 'var(--fs-sm)',
-                                  textTransform: 'uppercase',
-                                  color: UI_LIGHT,
-                                }}
-                              >
-                                [VIEW]
-                                <ArrowUpRight size={20} weight="thin" aria-hidden="true" focusable="false" />
-                              </motion.button>
-                            </div>
-                            <div className="small-text" style={{ marginTop: 'var(--spacing-sm)', opacity: 0.85 }}>
-                              Experiments in design, art, development, and image-making.
-                            </div>
+                  <div style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+                    <p className="small-text" style={{
+                      margin: 0,
+                      lineHeight: 1.55,
+                      opacity: 0.88,
+                      maxWidth: 620,
+                    }}>
+                      We anchor every engagement to a shared growth baseline — then reposition brand, web, and social channels so they move the same indicators, the same way, and compound from the same story.
+                    </p>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
+                      {[
+                        { k: 'AUDIT', v: 'Brand, website, and stack scored against one DVCP scorecard.' },
+                        { k: 'POSITION', v: 'A single story that branding, web, and social all reinforce.' },
+                        { k: 'DEPLOY', v: 'Tactics shipped in the order they compound fastest.' },
+                        { k: 'MEASURE', v: 'Pipelines tracked so positioning work shows up in pipeline.' },
+                      ].map((s, i) => (
+                        <div key={s.k} style={{
+                          display: 'grid',
+                          gap: 8,
+                          paddingTop: 14,
+                          borderTop: HOME_SECTION_DIVIDER,
+                        }}>
+                          <div className="small-text" style={{ letterSpacing: '0.08em', opacity: 0.76 }}>
+                            0{i + 1} · {s.k}
+                          </div>
+                          <div className="small-text" style={{ lineHeight: 1.55, opacity: 0.92 }}>
+                            {s.v}
                           </div>
                         </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               </div>
             </section>
           </motion.div>

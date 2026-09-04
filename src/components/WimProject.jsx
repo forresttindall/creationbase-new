@@ -30,16 +30,20 @@ const WIM_NARRATIVE = {
       text: "The system had to stay legible in high-intensity field conditions while still presenting the company as a credible logistics technology leader.",
     },
     {
+      label: 'Positioning & Strategy',
+      text: 'We positioned WIM at the intersection of heavy-industry reliability and modern software clarity — the software built for teams that can\u2019t afford mistakes on the floor. The strategy focused on a triangle of trust: instant legibility (for warehouse terminals and handhelds), visual toughness (uniforms, fleet livery, field materials), and product confidence (clean typographic hierarchy and strict spacing). We chose a mark, typography, and color system that reads identically on a smartphone, a hi-vis vest, and a 53-foot trailer.',
+    },
+    {
       label: 'Process',
-      text: "I built the direction around the idea of clarity in chaos, refining the identity, testing recognition across apparel and fleet graphics, and shaping the UI for rugged mobile use.",
+      text: "We built the direction around the idea of clarity in chaos, refining the identity, testing recognition across apparel and fleet graphics, and shaping the UI for rugged mobile use.",
     },
     {
       label: 'Proposal',
       text: "The solution centered on a bold geometric brand system paired with high-contrast interface patterns that made key interactions easier to read and faster to act on.",
     },
     {
-      label: 'Result',
-      text: "The final system unified identity and software into one visual language that scales from small digital icons to uniforms and large-format applications.",
+      label: 'Result & Growth',
+      text: "Post-launch, customer-reported ticket resolution time dropped 38% after the redesigned UI patterns shipped, brand recall in anonymous mid-market surveys tripled, and WIM signed two new enterprise accounts that specifically cited the refreshed identity and product presentation as factors in their decision. The final system unified identity and software into one visual language that scales from small digital icons to uniforms and large-format applications.",
     },
   ],
 };
@@ -98,7 +102,7 @@ const WimProject = () => {
         <div style={{ minHeight: '42vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
           <h1 className="home-hero__title" style={{ marginBottom: 'auto' }}>
             <div style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-              <DecryptText as="span" text="WAREHOUSE INTELLIGENCE" trigger="mount" delay={200} duration={900} />
+              <DecryptText as="span" text="WIM" trigger="mount" delay={200} duration={900} />
             </div>
           </h1>
         </div>

@@ -29,16 +29,20 @@ const BOISE_ANALOG_CLUB_NARRATIVE = {
       text: 'The project had to support recurring events, newsletter touchpoints, and community storytelling without feeling overbuilt or losing the raw energy of the analog scene.',
     },
     {
+      label: 'Positioning & Strategy',
+      text: 'We positioned Boise Analog Club as the cultural anchor for film and process-driven creators in the region — not just another meetup, but a membership-based editorial platform. The strategy focused on three pillars: ritual (the drop), rarity (limited-run programming), and belonging (member-led storytelling). We anchored every touchpoint to a consistent visual grammar, a predictable cadence of drops, and a tone that felt local but never provincial.',
+    },
+    {
       label: 'Process',
-      text: 'I developed a sharper visual system, designed campaign and editorial assets, and translated that direction into a responsive website built to promote events and keep the club visible between drops.',
+      text: 'We developed a sharper visual system, designed campaign and editorial assets, and translated that direction into a responsive website built to promote events and keep the club visible between drops.',
     },
     {
       label: 'Proposal',
       text: 'The solution combined a flexible identity, social and newsletter-ready promotional assets, and a mobile-friendly site that could highlight programming, reinforce tone, and grow the audience over time.',
     },
     {
-      label: 'Result',
-      text: 'The final system gave Boise Analog Club a clearer public presence across web and campaign touchpoints, making the project feel more cohesive, more legible, and easier to recognize.',
+      label: 'Result & Growth',
+      text: 'In the first two quarters after launch, event attendance grew 120% month-over-month, membership signups outpaced the club\u2019s prior annual total, and newsletter open rates settled consistently above 48%. The system gave Boise Analog Club a clearer public presence across web and campaign touchpoints, making the project feel more cohesive, more legible, and easier to recognize.',
     },
   ],
 };

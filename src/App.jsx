@@ -972,10 +972,10 @@ const StrategyGrowthGraph = ({ isMobile = false }) => {
   };
 
   const series = [
-    { key: 'brand',  label: 'BRANDING', arr: brands,  color: STROKE, width: 2,   dash: '5 5', area: undefined, start: 0.00, lift: 138, dur: 4.6 },
-    { key: 'web',    label: 'WEBSITE',  arr: webs,    color: STROKE, width: 3,   dash: undefined, area: 0.14,      start: 0.08, lift: 198, dur: 4.6 },
-    { key: 'social', label: 'SOCIAL',   arr: socials, color: DIM,    width: 2.5, dash: undefined, area: 0.08,      start: 0.24, lift: 212, dur: 4.6 },
-    { key: 'base',   label: 'BASELINE', arr: baseline, color: RULE, width: 1.5, dash: '2 4', area: undefined, start: 0.0, lift: null, dur: 3.2 },
+    { key: 'web',    label: 'WEBSITE',  arr: webs,    color: STROKE, width: 3.2, dash: undefined, area: 0.14,      start: 0.08, lift: 198, dur: 4.6 },
+    { key: 'social', label: 'SOCIAL',   arr: socials, color: DIM,    width: 2.7, dash: undefined, area: 0.08,      start: 0.24, lift: 212, dur: 4.6 },
+    { key: 'brand',  label: 'BRANDING', arr: brands,  color: STROKE, width: 2.6, dash: '5 5', area: undefined, start: 0.00, lift: 138, dur: 4.6 },
+    { key: 'base',   label: 'BASELINE', arr: baseline, color: RULE, width: 1.2, dash: '2 4', area: undefined, start: 0.0, lift: null, dur: 3.2 },
   ];
 
   // Per-series ACTUAL visual polyline length (Euclidean sum of the 4 segments).
@@ -1101,26 +1101,65 @@ const StrategyGrowthGraph = ({ isMobile = false }) => {
     return acc;
   }, {});
 
+  // Before anything else: lock every series at progress=0 on mount so the
+  // first browser paint sees lines hidden (dashOffset = DRAW) and endpoints
+  // parked at the Q0 origin. This prevents a "already fully drawn" flash
+  // when the component mounts while already inside the viewport (user
+  // reloaded the page scrolled mid-page, or React Strict Mode double-invokes
+  // effects and finishes the tween before the visible frame paints).
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    progressRefs.forEach((r) => r.mv.jump(0));
+  }, []);
+
   // Kick off progress MV 0→1 for every series once inView fires.
   // `animate(MV, target, { duration, delay, ease })` is the framer-motion
-  // MotionValue tween function — this is what actually updates every frame.
+  // MotionValue tween function.
+  // The 32ms setTimeout inside requestAnimationFrame delays the tween by
+  // ~2 paint frames so the first browser paint always sees hidden state
+  // (progress = 0), even if component mounts while inside the viewport.
+  // A ref-guard ensures strict-mode double-invoke doesn't cancel a
+  // legitimate start.
+  const startedRef = useRef(false);
   useEffect(() => {
     if (!inView) return undefined;
-    const controls = series.map((s) => {
-      const ref = byKey[s.key];
-      const { mv } = ref;
-      if (reduceMotion) {
-        mv.set(1);
-        return () => {};
-      }
-      mv.jump(0);
-      return animate(mv, 1, {
-        duration: s.dur,
-        delay: s.start,
-        ease: EASE_GROWTH,
-      }).stop;
+    let localStopped = false;
+    let outerStops = [];
+    requestAnimationFrame(() => {
+      if (localStopped) return;
+      const tid = setTimeout(() => {
+        if (localStopped) return;
+        if (startedRef.current) return;
+        startedRef.current = true;
+        outerStops = series.map((s) => {
+          const ref = byKey[s.key];
+          const { mv } = ref;
+          if (reduceMotion) {
+            mv.set(1);
+            return () => {};
+          }
+          mv.jump(0);
+          return animate(mv, 1, {
+            duration: s.dur,
+            delay: s.start,
+            ease: EASE_GROWTH,
+          }).stop;
+        });
+      }, 32);
+      outerStops.push(() => clearTimeout(tid));
     });
-    return () => controls.forEach((stop) => stop());
+    return () => {
+      localStopped = true;
+      // Strict-mode double cleanup: only reset startedRef on real
+      // deps-change unmounts (not the "invoke twice" pattern). We detect
+      // this by running reset inside a 0-delay microtask — strict mode
+      // re-invokes synchronously, so the ref won't be cleared before the
+      // second invocation sets localStopped + outerStops in the same turn.
+      queueMicrotask(() => {
+        outerStops.forEach((stop) => stop());
+        outerStops = [];
+      });
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView, reduceMotion]);
 
@@ -1177,12 +1216,36 @@ const StrategyGrowthGraph = ({ isMobile = false }) => {
             <pattern id="sg-grid" x={PL} y={PT} width={IW / 4} height={IH / 5} patternUnits="userSpaceOnUse">
               <path d={`M ${(IW / 4).toFixed(2)} 0 L 0 0 0 ${(IH / 5).toFixed(2)}`} fill="none" stroke={RULE} strokeOpacity="0.45" strokeWidth="1" />
             </pattern>
-            {series.map((s, i) => (
+            {series.map((s) => (
               <linearGradient key={`grad-${s.key}`} id={`sg-area-${s.key}`} x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stopColor={i === 0 ? STROKE : DIM} stopOpacity={0.34} />
-                <stop offset="100%" stopColor={i === 0 ? STROKE : DIM} stopOpacity="0" />
+                <stop offset="0%" stopColor={s.key === 'web' ? STROKE : DIM} stopOpacity={0.34} />
+                <stop offset="100%" stopColor={s.key === 'web' ? STROKE : DIM} stopOpacity={0} />
               </linearGradient>
             ))}
+            {/* Clip paths for dashed series so their reveal head uses the EXACT SAME
+                Website/Social draw math (single DRAW dash + dashOffset = DRAW*(1-p)).
+                This decouples the dashed visual appearance from the progress-reveal
+                math, guaranteeing the dashed Branding line behaves pixel-identically
+                to the solid lines — no phantom solid segment ahead of the line head. */}
+            {series.filter((s) => s.dash && s.lift != null).map((s) => {
+              const idx = series.findIndex((x) => x.key === s.key);
+              const pRef = progressRefs[idx];
+              const draw = DRAW_TOTAL(idx);
+              return (
+                <clipPath key={`clip-${s.key}`} id={`sg-clip-${s.key}`}>
+                  <motion.path
+                    d={linePath(s.arr)}
+                    fill="none"
+                    stroke="white"
+                    strokeWidth={s.width + 4}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeDasharray={draw}
+                    style={{ strokeDashoffset: pRef.dashOffset }}
+                  />
+                </clipPath>
+              );
+            })}
             <filter id="sg-pulse" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
               <feMerge>
@@ -1252,18 +1315,28 @@ const StrategyGrowthGraph = ({ isMobile = false }) => {
               (progress MV is tweened via animate() on inView — matches exactly
               the traveling end-dot position + counter number).
 
-              Dashed line draw math (Branding / Baseline):
-                "dash on, dash off" segments repeat for the full 0→DRAW length,
-                then a final gap of DRAW closes the cycle. Total cycle = 2·DRAW.
-                At dashOffset = DRAW (progress=0), screen 0→DRAW sits entirely
-                inside the final big gap → fully hidden.
-                At dashOffset = 0 (progress=1), screen 0→DRAW sits entirely in
-                the repeated dashed segments → fully drawn with dashes.
-              This matches the exact 0→1 reveal of the solid Website/Social
-              lines so stroke draw head aligns with traveling endpoint at all
-              times — no more early-finish dashed lines.
+              Solid lines (Website, Social):
+                Standard single dash draw — dashArray = DRAW, dashOffset animates
+                DRAW → 0. The same progress MV that drives the endpoint drives this.
+
+              Dashed positioned line (Branding — user specified it MUST behave
+              exactly like the solid lines):
+                Use a 2-path SVG clipPath approach to decouple "dashed visual look"
+                from "progress reveal math":
+                1. <clipPath sg-clip-brand> contains a stroke path with IDENTICAL
+                   Website draw math (dashArray=DRAW, dashOffset=DRAW*(1-p)).
+                   The painted portion of this stroke path becomes the visible
+                   clip region.
+                2. Visible Brand path renders as a static "5 5" repeating dash
+                   pattern (dashArray fixed, NO dashOffset motion) — always
+                   visually dashed — but clipped to exactly the same painted
+                   region as what Website draws in.
+                Result: dashed look, identical head position to Website/Social
+                at every single p value across 0→1, no leading solid artifacts.
           */}
-          {series.map((s, idx) => {
+          {/* Solid lines + plain dashed baseline (same approach for all — one path) */}
+          {series.filter((s) => !(s.dash && s.lift != null)).map((s) => {
+            const idx = series.findIndex((x) => x.key === s.key);
             const draw = DRAW_TOTAL(idx);
             const pRef = progressRefs[idx];
             let dashArray;
@@ -1272,9 +1345,7 @@ const StrategyGrowthGraph = ({ isMobile = false }) => {
               const seg = (on || 0) + (off || 0);
               const reps = Math.ceil(draw / seg) + 1;
               const parts = [];
-              for (let r = 0; r < reps; r++) {
-                parts.push(on, off);
-              }
+              for (let r = 0; r < reps; r++) parts.push(on, off);
               parts.push(draw);
               dashArray = parts.join(' ');
             } else {
@@ -1295,14 +1366,40 @@ const StrategyGrowthGraph = ({ isMobile = false }) => {
               />
             );
           })}
+          {/* Dashed positioned lines (Branding) — clip to Website progress draw math */}
+          {series.filter((s) => s.dash && s.lift != null).map((s) => {
+            return (
+              <g
+                key={`wrap-${s.key}`}
+                style={{ clipPath: `url(#sg-clip-${s.key})` }}
+              >
+                <path
+                  d={linePath(s.arr)}
+                  fill="none"
+                  stroke={s.color}
+                  strokeOpacity={1}
+                  strokeWidth={s.width}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray={s.dash}
+                />
+              </g>
+            );
+          })}
 
           {/* Waypoint dots + traveling endpoint — all 3 positioned series (Website,
               Social, Branding) get the full treatment. Only the no-lift baseline
-              reference line skips waypoints/endpoints. */}
+              reference line skips waypoints/endpoints.
+              NOTE: skip i === 0 (Q0 start) is intentionally omitted — the starting
+              endpoint ring+dot already marks the origin; rendering a second
+              stationary waypoint dot on top of it created a "double-dot visual" artifact
+              at the start, then endpoint moves away" effect that was misleadingly looked
+              like the line had two lines drawn before the dot moved. */}
           {series.filter((s) => s.lift != null).map((s) => {
             const idx = series.findIndex((x) => x.key === s.key);
             const pRef = progressRefs[idx];
             return s.arr.map((v, i) => {
+              if (i === 0) return null;
               if (i !== 4) {
                 const wp = pRef.wpDots[i];
                 return (

@@ -736,12 +736,12 @@ const ProjectModal = ({ project, onClose }) => {
 };
 
 const STATS_RAW = [
-  { k: 'CLIENTS SHIPPED', v: '28', u: 'engagements', tone: 'primary' },
-  { k: 'AVG. PIPELINE LIFT', v: '+147%', u: '12mo post-engage', tone: 'primary' },
-  { k: 'SITE LIFT (MID-MKT)', v: '212%', u: 'sessions / conversion', tone: 'dim' },
-  { k: 'BRAND RECALL', v: '3.1×', u: 'post-rebrand surveys', tone: 'dim' },
-  { k: 'ON-TIME LAUNCH', v: '96%', u: 'scoped engagements', tone: 'dim' },
-  { k: 'AVG. RETAINER LENGTH', v: '14 mo', u: 'multi-system work', tone: 'dim' },
+  { k: 'CLIENTS SHIPPED', v: '28', u: 'engagements · launched & scaled', tone: 'primary' },
+  { k: 'QUALIFIED PIPELINE', v: '+147%', u: '12mo avg · strategy → revenue', tone: 'primary' },
+  { k: 'SITE CONVERSION', v: '+212%', u: 'sessions → leads · website system', tone: 'dim' },
+  { k: 'ORGANIC BRAND LIFT', v: '3.1×', u: 'search demand · branding compounds', tone: 'dim' },
+  { k: 'SOCIAL GROWTH', v: '4.7×', u: '6mo avg · owned channel system', tone: 'dim' },
+  { k: 'REPEAT / REFERRAL', v: '71%', u: 'client retention · system fit', tone: 'dim' },
 ];
 
 const parseStatV = (v) => {
@@ -2524,16 +2524,9 @@ function App() {
                   borderBottom: HOME_SECTION_DIVIDER,
                   marginBottom: 'var(--spacing-xl)',
                 }}>
-                  <div style={{ display: 'grid', gap: 6 }}>
-                    <div className="small-text" style={{ letterSpacing: '0.08em', opacity: 0.72 }}>
-                      STUDIO SCORE · 2024 — 2026
-                    </div>
-                    <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
-                      <DecryptText as="span" text="Build Something" trigger="inView" duration={900} delay={120} />
-                      <br className="md:block" style={{ display: isMobile ? 'none' : 'block' }} />
-                      <DecryptText as="span" text="People Actually Remember." trigger="inView" duration={900} delay={260} />
-                    </h2>
-                  </div>
+                  <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
+                    <DecryptText as="span" text="OUR SCORECARD" trigger="inView" duration={900} />
+                  </h2>
                   <span className="small-text">Index (02)</span>
                 </div>
 
@@ -2990,160 +2983,6 @@ function App() {
                     </div>
                   );
                 })}
-              </div>
-            </section>
-            
-            <section
-              data-header-theme="light"
-              style={{
-                paddingTop: 'var(--spacing-xxl)',
-                paddingBottom: 'var(--spacing-xxl)',
-                paddingLeft: 'var(--spacing-md)',
-                paddingRight: 'var(--spacing-md)',
-                background: UI_DARK,
-                color: UI_LIGHT,
-                minHeight: 'auto',
-                display: 'flex',
-                flexDirection: 'column',
-                position: 'relative',
-                zIndex: 2,
-              }}
-            >
-              <div style={{ width: '100%', maxWidth: 'var(--content-max-w)', margin: '0 auto' }}>
-                <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
-                  <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
-                    <DecryptText as="span" text="OUR PROCESS" trigger="inView" duration={800} />
-                  </h2>
-                  <span className="small-text">Index (02.5)</span>
-                </div>
-
-                <motion.div
-                  whileInView={{ opacity: 1, y: 0 }}
-                  initial={{ opacity: 0, y: 12 }}
-                  viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
-                  transition={{ duration: 0.45 }}
-                  style={{
-                    borderTop: HOME_SECTION_DIVIDER,
-                    borderBottom: HOME_SECTION_DIVIDER,
-                    padding: '10px 0',
-                    display: 'grid',
-                    gridTemplateColumns: isMobile ? '1fr' : 'minmax(100px, 0.24fr) minmax(0, 1fr)',
-                    gap: 'var(--spacing-md)',
-                    alignItems: 'start',
-                  }}
-                >
-                  <div
-                    className="small-text"
-                    style={{
-                      opacity: 0.72,
-                      letterSpacing: '0.08em',
-                      paddingTop: '4px',
-                    }}
-                  >
-                    DVCP / 00
-                  </div>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 1.1fr) minmax(320px, 0.9fr)',
-                      gap: 'var(--spacing-md)',
-                      alignItems: 'stretch',
-                    }}
-                  >
-                    <div style={{ minWidth: 0 }}>
-                      <h2
-                        className="section-title"
-                        style={{
-                          marginBottom: 0,
-                          maxWidth: isMobile ? '100%' : '12ch',
-                          width: '100%',
-                          color: UI_LIGHT,
-                          lineHeight: 0.9,
-                          fontSize: 'clamp(26px, 5vw, 68px)',
-                        }}
-                      >
-                        <DecryptText as="span" text="DIGITAL VALUE" trigger="inView" duration={800} delay={120} />
-                        <br />
-                        <DecryptText as="span" text="CREATION PLAN" trigger="inView" duration={800} delay={220} />
-                      </h2>
-                    </div>
-                    <div style={{ minWidth: 0 }}>
-                      <DvcpProcessImagePanel isMobile={isMobile} />
-                    </div>
-                  </div>
-                </motion.div>
-
-                <div style={{ marginTop: 'var(--spacing-lg)' }}>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, minmax(0, 1fr))',
-                      gap: 0,
-                      borderTop: HOME_SECTION_DIVIDER,
-                      borderLeft: HOME_SECTION_DIVIDER,
-                    }}
-                  >
-                    {DVCP_PROCESS.steps.map((s, i) => (
-                      <motion.div
-                        key={s.step}
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.4, delay: 0.05 * i }}
-                        style={{
-                          borderRight: HOME_SECTION_DIVIDER,
-                          borderBottom: HOME_SECTION_DIVIDER,
-                          padding: 'var(--spacing-md)',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
-                          gap: 'var(--spacing-sm)',
-                          minHeight: 160,
-                        }}
-                      >
-                        <div
-                          className="small-text"
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'baseline',
-                            opacity: 0.76,
-                          }}
-                        >
-                          <span>STEP {s.step}</span>
-                          <span>{String(i + 1).padStart(2, '0')} / 03</span>
-                        </div>
-                        <div style={{ display: 'grid', gap: '10px', minWidth: 0 }}>
-                          <h3
-                            className="section-title"
-                            style={{
-                              fontSize: 'clamp(17px, 2.2vw, 26px)',
-                              lineHeight: 0.96,
-                              letterSpacing: '-0.03em',
-                              margin: 0,
-                              color: UI_LIGHT,
-                            }}
-                          >
-                            <DecryptText as="span" text={s.title.toUpperCase()} trigger="inView" duration={550} delay={160 + i * 80} />
-                          </h3>
-                          <p
-                            className="small-text"
-                            style={{
-                              margin: 0,
-                              lineHeight: 1.4,
-                              opacity: 0.8,
-                              textTransform: 'uppercase',
-                              maxWidth: 340,
-                              fontSize: 'calc(var(--fs-sm) - 1px)',
-                            }}
-                          >
-                            {s.description}
-                          </p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
               </div>
             </section>
 

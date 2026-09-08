@@ -2221,7 +2221,7 @@ function App() {
                   Brand
                 </button>
                 <button type="button" className="mobile-nav-link" onClick={() => goToSection('dev')}>
-                  UI/UX
+                  Website
                 </button>
                 <button type="button" className="mobile-nav-link" onClick={() => goToSection('photography')}>
                   Social

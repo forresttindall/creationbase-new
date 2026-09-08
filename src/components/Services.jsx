@@ -937,48 +937,30 @@ const ServicesVerticalNav = ({ isMobile = false }) => {
   const H = 292;
 
   const topLeftSharp = [0, 0];
-  const pBevelTopCutEnd = [W - BEVEL, BEVEL];
-  const pBevelTopArcStart = [W - RAD, BEVEL];
+  const pBevelTopEnd = [W - RAD, BEVEL];
   const pBevelRightTop = [W, BEVEL + RAD];
   const pBevelRightBottom = [W, H - BEVEL - RAD];
-  const pBevelBottomArcEnd = [W - RAD, H - BEVEL];
-  const pBevelBottomCutStart = [W - BEVEL, H - BEVEL];
+  const pBevelBottomStart = [W - RAD, H - BEVEL];
   const bottomLeftSharp = [0, H];
-
-  const pTopQ = [
-    pBevelTopCutEnd[0] + (pBevelTopArcStart[0] - pBevelTopCutEnd[0]) * 0.5,
-    pBevelTopCutEnd[1] - Math.max(0, RAD - BEVEL * 0.5),
-  ];
-  const pBottomQ = [
-    pBevelBottomArcEnd[0] + (pBevelBottomCutStart[0] - pBevelBottomArcEnd[0]) * 0.5,
-    pBevelBottomArcEnd[1] + Math.max(0, RAD - BEVEL * 0.5),
-  ];
 
   const shapePath = `
     M ${topLeftSharp[0]} ${topLeftSharp[1]}
-    L ${pBevelTopCutEnd[0]} ${pBevelTopCutEnd[1]}
-    Q ${pTopQ[0]} ${pTopQ[1]}
-      ${pBevelTopArcStart[0]} ${pBevelTopArcStart[1]}
+    L ${pBevelTopEnd[0]} ${pBevelTopEnd[1]}
     A ${RAD} ${RAD} 0 0 1 ${pBevelRightTop[0]} ${pBevelRightTop[1]}
     L ${pBevelRightBottom[0]} ${pBevelRightBottom[1]}
-    A ${RAD} ${RAD} 0 0 1 ${pBevelBottomArcEnd[0]} ${pBevelBottomArcEnd[1]}
-    Q ${pBottomQ[0]} ${pBottomQ[1]}
-      ${pBevelBottomCutStart[0]} ${pBevelBottomCutStart[1]}
+    A ${RAD} ${RAD} 0 0 1 ${pBevelBottomStart[0]} ${pBevelBottomStart[1]}
     L ${bottomLeftSharp[0]} ${bottomLeftSharp[1]}
     Z
   `;
 
   const strokeShapePath = `
     M 0.5 0.5
-    L ${pBevelTopCutEnd[0] - 0.2} ${pBevelTopCutEnd[1] + 0.3}
-    Q ${pTopQ[0]} ${pTopQ[1] + 0.2}
-      ${pBevelTopArcStart[0] - 0.2} ${pBevelTopArcStart[1] + 0.3}
-    A ${RAD} ${RAD} 0 0 1 ${W - 0.5} ${BEVEL + RAD}
-    L ${W - 0.5} ${H - BEVEL - RAD}
-    A ${RAD} ${RAD} 0 0 1 ${pBevelBottomArcEnd[0] - 0.2} ${pBevelBottomArcEnd[1] - 0.3}
-    Q ${pBottomQ[0]} ${pBottomQ[1] - 0.2}
-      ${pBevelBottomCutStart[0] - 0.2} ${pBevelBottomCutStart[1] - 0.3}
+    L ${W - RAD - 0.5} ${BEVEL + 0.5}
+    A ${RAD} ${RAD} 0 0 1 ${W - 0.5} ${BEVEL + RAD - 0.5}
+    L ${W - 0.5} ${H - BEVEL - RAD + 0.5}
+    A ${RAD} ${RAD} 0 0 1 ${W - RAD - 0.5} ${H - BEVEL + 0.5}
     L 0.5 ${H - 0.5}
+    Z
   `;
 
   const CLIP_ID = `svc-nav-clip-${BEVEL}-${RAD}`;

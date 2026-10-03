@@ -23,19 +23,11 @@ const Schema = ({ type = 'Organization', data = {} }) => {
       return {
         ...base,
         "@type": "ProfessionalService",
-        "description": "Creationbase is a Strategic Creation Consultancy — a Boise-based studio that runs a Digital Value Creation Plan (DVCP): scorecard, opportunity map, and roadmap before shipping branding, website, and social channels from one strategic seat so every deliverable compounds into measurable growth.",
+        "description": "Creationbase is a Boise-based creative studio building brands, websites, and commercial photography for brave companies — identity systems, fast conversion-focused websites, and imagery that make you impossible to ignore.",
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
-          "name": "Strategic Creation Services",
+          "name": "Brand, Web & Photo Services",
           "itemListElement": [
-            {
-              "@type": "Offer",
-              "itemOffered": {
-                "@type": "Service",
-                "name": "DVCP Strategy",
-                "description": "Scorecard, opportunity map, and execution roadmap — the strategic blueprint that aligns brand, website, and social around the same growth metrics."
-              }
-            },
             {
               "@type": "Offer",
               "itemOffered": {
@@ -49,15 +41,15 @@ const Schema = ({ type = 'Organization', data = {} }) => {
               "itemOffered": {
                 "@type": "Service",
                 "name": "Website Design & Development",
-                "description": "Fast, conversion-structured websites scored on pipeline impact, not vanity traffic — designed, built, and measured from the same strategic seat as your brand."
+                "description": "Fast, conversion-structured websites designed and built hand-in-hand with your brand, so the site looks as good as it performs."
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Social Content Strategy",
-                "description": "Editorial calendars, creative direction, and production grounded in the positioning work so every post pulls pipeline, not just likes."
+                "name": "Commercial Photography",
+                "description": "Product, brand, and portrait photography art-directed to your identity — imagery built for web, print, and paid social."
               }
             }
           ]
@@ -70,13 +62,13 @@ const Schema = ({ type = 'Organization', data = {} }) => {
       return {
         "@context": "https://schema.org",
         "@type": "Service",
-        "serviceType": data.name || "Strategic Creation, DVCP, Branding, Website, and Social Content Strategy",
+        "serviceType": data.name || "Branding, Website Design & Development, and Commercial Photography",
         "provider": {
           "@type": "Organization",
           "name": "Creationbase",
           "url": "https://creationbase.io"
         },
-        "description": data.description || "Creationbase — Strategic Creation Consultancy. Boise-based studio running a DVCP: scorecard, opportunity map, roadmap, then branding, website, and social from one strategic seat for measurable growth."
+        "description": data.description || "Creationbase — brand + web + photo for brave companies. A Boise-based studio building brands, websites, and commercial photography."
       };
     }
 
@@ -136,17 +128,17 @@ const Schema = ({ type = 'Organization', data = {} }) => {
         }
       });
     } else if (type === 'Organization' || type === 'LocalBusiness') {
-      document.title = 'Creationbase — Strategic Creation Consultancy · Branding, Website, Social, Scorecard-Driven Growth';
+      document.title = 'Creationbase — Brand + Web + Photo for Brave Companies';
       
       const defaults = [
-        { name: 'description', content: 'Creationbase is a Strategic Creation Consultancy — a Boise-based studio that runs a Digital Value Creation Plan (DVCP): scorecard, opportunity map, and roadmap before shipping branding, website, and social channels from the same strategic seat so every deliverable compounds into measurable growth.' },
-        { property: 'og:title', content: 'Creationbase — Strategic Creation Consultancy' },
-        { property: 'og:description', content: 'A Boise strategic creation studio that runs a DVCP (scorecard → opportunity map → roadmap) before shipping branding, website, and social from one seat so all deliverables compound into measurable growth.' },
+        { name: 'description', content: 'Creationbase is a Boise-based creative studio building brands, websites, and commercial photography for brave companies — identity systems, fast conversion-focused websites, and imagery that make you impossible to ignore.' },
+        { property: 'og:title', content: 'Creationbase — Brand + Web + Photo for Brave Companies' },
+        { property: 'og:description', content: 'A Boise creative studio building brands, websites, and commercial photography for brave companies.' },
         { property: 'og:image', content: 'https://www.creationbase.io/images/socialshare.jpg?v=3' },
         { property: 'og:image:secure_url', content: 'https://www.creationbase.io/images/socialshare.jpg?v=3' },
         { property: 'og:url', content: 'https://www.creationbase.io/' },
-        { name: 'twitter:title', content: 'Creationbase — Strategic Creation Consultancy' },
-        { name: 'twitter:description', content: 'A Boise strategic creation studio that runs a DVCP (scorecard → opportunity map → roadmap) before shipping branding, website, and social from one seat so all deliverables compound into measurable growth.' },
+        { name: 'twitter:title', content: 'Creationbase — Brand + Web + Photo for Brave Companies' },
+        { name: 'twitter:description', content: 'A Boise creative studio building brands, websites, and commercial photography for brave companies.' },
         { name: 'twitter:image', content: 'https://www.creationbase.io/images/socialshare.jpg?v=3' }
       ];
 

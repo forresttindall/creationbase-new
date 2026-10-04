@@ -825,6 +825,7 @@ function App() {
   const [isMobile, setIsMobile] = useState(false);
   const [heroTitleEl, setHeroTitleEl] = useState(null);
   const [heroTitleFontSizePx, setHeroTitleFontSizePx] = useState(0);
+  const [heroTitleReady, setHeroTitleReady] = useState(false);
 
   // Size the hero title so its widest line spans the full container width.
   useLayoutEffect(() => {
@@ -864,8 +865,20 @@ function App() {
     const ro = new ResizeObserver(fit);
     ro.observe(heroTitleEl);
     let cancelled = false;
-    document.fonts?.ready.then(() => { if (!cancelled) fit(); });
     document.fonts?.addEventListener('loadingdone', fit);
+
+    // Hold the reveal until the display font is in, so the title animates at its final size.
+    const { fontWeight, fontFamily } = getComputedStyle(heroTitleEl);
+    const fontLoaded = document.fonts
+      ? document.fonts.load(`${fontWeight} ${REF_PX}px ${fontFamily}`, HOME_HERO_TITLE_LINES.join(' ')).catch(() => {})
+      : Promise.resolve();
+    const timeout = new Promise((resolve) => { window.setTimeout(resolve, 2500); });
+    Promise.race([fontLoaded, timeout]).then(() => {
+      if (cancelled) return;
+      fit();
+      setHeroTitleReady(true);
+    });
+
     return () => {
       cancelled = true;
       ro.disconnect();
@@ -1531,11 +1544,16 @@ function App() {
                     fontSynthesis: 'weight',
                     margin: 0,
                     position: 'relative',
-                    fontSize: heroTitleFontSizePx > 0 ? `${heroTitleFontSizePx}px` : 'clamp(32px, 7.6vw, 190px)',
+                    // Pre-fit estimate (~0.085 × available width) keeps the reserved height close to final.
+                    fontSize: heroTitleFontSizePx > 0 ? `${heroTitleFontSizePx}px` : 'calc((100vw - 2 * var(--spacing-md)) * 0.085)',
                   }}>
                     {HOME_HERO_TITLE_LINES.map((line, i) => (
                       <div key={line} className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em', whiteSpace: 'nowrap' }}>
-                        <DecryptText as="span" text={line} trigger="mount" delay={200 + i * 120} duration={900} />
+                        {heroTitleReady ? (
+                          <DecryptText as="span" text={line} trigger="mount" delay={100 + i * 120} duration={900} />
+                        ) : (
+                          <span style={{ visibility: 'hidden' }}>{line}</span>
+                        )}
                       </div>
                     ))}
                   </h1>

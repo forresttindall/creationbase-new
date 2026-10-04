@@ -835,11 +835,13 @@ function App() {
     probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;pointer-events:none;';
     heroTitleEl.appendChild(probe);
 
+    // Negative tracking is also applied after the last glyph, so its ink overhangs the box; add it back.
     const widestAt = (px) => {
       probe.style.fontSize = `${px}px`;
+      const overhang = Math.max(0, -(parseFloat(getComputedStyle(probe).letterSpacing) || 0)) + px * 0.01;
       return Math.max(...HOME_HERO_TITLE_LINES.map((line) => {
         probe.textContent = line;
-        return probe.getBoundingClientRect().width;
+        return probe.getBoundingClientRect().width + overhang;
       }));
     };
 

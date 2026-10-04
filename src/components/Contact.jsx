@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowUpRight } from '@phosphor-icons/react';
 import { blastConfetti } from '../utils/confetti';
 
 const BLACK = 'var(--color-bg)';
 const GRAY1 = 'var(--color-text-dim)';
 const WHITE = 'var(--color-text)';
-const STRATEGY_CALL_URL = 'https://calendly.com/forrest-creationbase/30min';
 
 const Contact = () => {
   const [name, setName] = useState('');
@@ -115,18 +113,6 @@ const Contact = () => {
                     INQUIRY FORM
                   </h2>
                 </header>
-                <a
-                  href={STRATEGY_CALL_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="newsletter-button contact-primary-cta"
-                >
-                  BOOK STRATEGY CALL
-                  <ArrowUpRight size={14} weight="thin" />
-                </a>
-                <div className="small-text" style={{ color: WHITE, marginBottom: 'var(--spacing-md)', opacity: 0.9 }}>
-                  OR SEND A MESSAGE
-                </div>
                 <form onSubmit={submit} className="contact-form">
                 <input
                   className="newsletter-input"

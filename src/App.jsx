@@ -28,7 +28,6 @@ import { blogPosts } from './blog/posts';
 const UI_LIGHT = 'var(--color-text)';
 const UI_DARK = 'var(--color-bg)';
 const HOME_SECTION_DIVIDER = '1px solid var(--color-border)';
-const STRATEGY_CALL_URL = 'https://calendly.com/forrest-creationbase/30min';
 
 const CORE_PILLARS = [
   {
@@ -299,12 +298,9 @@ const SiteFooter = ({
             <div>
               <h2 className="section-title" style={{ fontWeight: 400, marginBottom: 0, fontSize: 'clamp(22px, 9vw, 72px)' }}>Let&apos;s Work<br />Together</h2>
               <div className="footer-cta__actions">
-                <a href={STRATEGY_CALL_URL} target="_blank" rel="noreferrer" className="newsletter-button footer-cta__primary" style={{ textDecoration: 'none' }}>
-                  Get Started
-                  <ArrowUpRight size={14} weight="thin" />
-                </a>
-                <button type="button" className="newsletter-button newsletter-button--outline footer-cta__secondary" onClick={onContactClick}>
-                  Contact
+                <button type="button" className="newsletter-button footer-cta__primary" onClick={onContactClick}>
+                  Start a Project
+                  <ArrowRight size={14} weight="thin" />
                 </button>
               </div>
             </div>
@@ -312,7 +308,7 @@ const SiteFooter = ({
           <div className="footer-links-column">
             <p className="small-text" style={{ marginBottom: 'var(--spacing-md)', fontWeight: 'var(--font-mono-weight-bold)' }}>LINKS</p>
             <ul className="small-text footer-links-list">
-              <li><a href="https://calendly.com/forrest-creationbase/30min" target="_blank" rel="noreferrer">GET STARTED</a></li>
+              <li><a href="/contact" onClick={(ev) => { ev.preventDefault(); onContactClick(); }}>START A PROJECT</a></li>
               <li><a href="/contact" onClick={(ev) => { ev.preventDefault(); onContactClick(); }}>CONTACT</a></li>
               <li><a href="/blog" onClick={(ev) => { ev.preventDefault(); onBlogClick(); }}>BLOG</a></li>
               <li><a href="https://instagram.com/creationbase.io" target="_blank" rel="noreferrer">INSTAGRAM</a></li>
@@ -1117,12 +1113,6 @@ function App() {
     navigate('/contact');
   };
 
-  const openStrategyCall = () => {
-    setMobileNavOpen(false);
-    const win = window.open(STRATEGY_CALL_URL, '_blank', 'noopener,noreferrer');
-    if (win) win.opener = null;
-  };
-
   const openMaterialLab = () => {
     setMobileNavOpen(false);
     if (location.pathname === '/') {
@@ -1442,7 +1432,7 @@ function App() {
                   Website
                 </button>
                 <button type="button" className="mobile-nav-link" onClick={() => goToSection('photography')}>
-                  Social
+                  Photo
                 </button>
                 <button type="button" className="mobile-nav-link" onClick={openServices}>
                   Services
@@ -1456,11 +1446,8 @@ function App() {
                 <button type="button" className="mobile-nav-link" onClick={openBlog}>
                   Blog
                 </button>
-                <button type="button" className="mobile-nav-link" onClick={openStrategyCall}>
-                  Get Started
-                </button>
                 <button type="button" className="mobile-nav-link" onClick={openContact}>
-                  Contact
+                  Start a Project
                 </button>
               </div>
             </motion.div>
@@ -2040,7 +2027,7 @@ function App() {
             <section id="photography" style={{ padding: 'var(--spacing-xxl) var(--spacing-md)', background: UI_DARK, color: UI_LIGHT }}>
               <div className="flex" style={{ justifyContent: 'space-between', marginBottom: 'var(--spacing-xl)', alignItems: 'baseline', paddingBottom: 'var(--spacing-sm)', borderBottom: HOME_SECTION_DIVIDER }}>
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
-                  <DecryptText as="span" text="SOCIAL" trigger="inView" duration={800} />
+                  <DecryptText as="span" text="PHOTO" trigger="inView" duration={800} />
                 </h2>
                 <span className="small-text">Index (06)</span>
               </div>

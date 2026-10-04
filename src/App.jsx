@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, animate, useAnimationFrame, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, useVelocity, useInView } from 'framer-motion';
 import { ArrowUpRight, ArrowRight } from '@phosphor-icons/react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -148,6 +148,7 @@ const PROCESS_IMAGE_POOL = [
   { project: 'RICH', i: '03', src: '/images/Exportable tables.PNG', alt: 'Ricochet exportable tables UI' },
 ];
 
+const HOME_HERO_TITLE_LINES = ['Brand + Web + Photo', 'for Brave Companies'];
 const HERO_AVAILABILITY = {
   label: 'Available',
   color: '#5FE37C',
@@ -822,6 +823,55 @@ function App() {
   });
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [heroTitleEl, setHeroTitleEl] = useState(null);
+  const [heroTitleFontSizePx, setHeroTitleFontSizePx] = useState(0);
+
+  // Size the hero title so its widest line spans the full container width.
+  useLayoutEffect(() => {
+    if (!heroTitleEl) return undefined;
+    const REF_PX = 100;
+    const probe = document.createElement('span');
+    probe.setAttribute('aria-hidden', 'true');
+    probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;pointer-events:none;';
+    heroTitleEl.appendChild(probe);
+
+    const widestAt = (px) => {
+      probe.style.fontSize = `${px}px`;
+      return Math.max(...HOME_HERO_TITLE_LINES.map((line) => {
+        probe.textContent = line;
+        return probe.getBoundingClientRect().width;
+      }));
+    };
+
+    // Glyph widths don't scale perfectly linearly with font size, so refine at the target size.
+    const fit = () => {
+      const available = heroTitleEl.clientWidth;
+      if (!available) return;
+      let px = REF_PX;
+      for (let i = 0; i < 4; i += 1) {
+        const widest = widestAt(px);
+        if (!widest) return;
+        px *= available / widest;
+      }
+      while (px > 1 && widestAt(px) > available) px *= 0.995;
+      const next = Math.floor(px * 100) / 100;
+      setHeroTitleFontSizePx((prev) => (Math.abs(prev - next) < 0.05 ? prev : next));
+    };
+
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(heroTitleEl);
+    let cancelled = false;
+    document.fonts?.ready.then(() => { if (!cancelled) fit(); });
+    document.fonts?.addEventListener('loadingdone', fit);
+    return () => {
+      cancelled = true;
+      ro.disconnect();
+      document.fonts?.removeEventListener('loadingdone', fit);
+      probe.remove();
+    };
+  }, [heroTitleEl]);
+
   const [navLogoSpinTick, setNavLogoSpinTick] = useState(0);
 
 
@@ -1474,15 +1524,18 @@ function App() {
             <section data-header-theme="light" style={{ position: 'relative', overflow: 'hidden', background: UI_DARK, color: UI_LIGHT, borderBottom: HOME_SECTION_DIVIDER }}>
               <div style={{ minHeight: 'var(--home-hero-min-h)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
                 <div style={{ marginBottom: 'auto', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
-                  <h1 className="home-hero__title" style={{
+                  <h1 className="home-hero__title" ref={setHeroTitleEl} style={{
                     fontFamily: 'var(--font-display)', fontWeight: 'var(--font-display-weight)',
                     fontSynthesis: 'weight',
                     margin: 0,
-                    fontSize: 'clamp(44px, 9vw, 190px)',
+                    position: 'relative',
+                    fontSize: heroTitleFontSizePx > 0 ? `${heroTitleFontSizePx}px` : 'clamp(32px, 7.6vw, 190px)',
                   }}>
-                    <div className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em' }}>
-                      <DecryptText as="span" text="Brand + Web + Photo for Brave Companies" trigger="mount" delay={200} duration={900} />
-                    </div>
+                    {HOME_HERO_TITLE_LINES.map((line, i) => (
+                      <div key={line} className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em', whiteSpace: 'nowrap' }}>
+                        <DecryptText as="span" text={line} trigger="mount" delay={200 + i * 120} duration={900} />
+                      </div>
+                    ))}
                   </h1>
                 </div>
                 <motion.div

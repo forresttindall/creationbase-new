@@ -340,9 +340,9 @@ const SiteFooter = ({
         <div className="newsletter-block footer-newsletter">
           <div className="footer-newsletter__grid">
             <div className="footer-newsletter__content">
-              <h1 className="section-title" style={{ marginBottom: 14, fontWeight: 400, fontSize: 'clamp(22px, 4vw, 40px)' }}>
+              <h2 className="section-title" style={{ marginBottom: 14, fontWeight: 400, fontSize: 'clamp(22px, 4vw, 40px)' }}>
                 get our free brand and website guide
-              </h1>
+              </h2>
               <form
                 onSubmit={onSubmitNewsletter}
                 className="newsletter-form"
@@ -1340,7 +1340,7 @@ function App() {
           }} 
         />
       ) : (
-        <Schema type="LocalBusiness" />
+        <Schema path={location.pathname} />
       )}
       {cursorEnabled && (
          <motion.div
@@ -1487,7 +1487,7 @@ function App() {
         ) : activeCaseStudy === 'photography' ? (
           <CommercialPhotography key="photography" />
         ) : activeCaseStudy === 'gallery' ? (
-          <CommercialPhotography key="gallery" images={GALLERY_IMAGES} masonryClassName="mosaic-masonry mosaic-masonry--spaced" />
+          <CommercialPhotography key="gallery" images={GALLERY_IMAGES} masonryClassName="mosaic-masonry mosaic-masonry--spaced" heading="Photography Gallery: Creationbase, Boise, Idaho" />
         ) : activeCaseStudy === 'worksharp' ? (
           <WorksharpProject key="worksharp" />
         ) : activeCaseStudy === 'wim' ? (

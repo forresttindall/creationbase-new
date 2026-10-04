@@ -153,7 +153,12 @@ const Blog = () => {
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: '1px solid var(--color-border)' }}>
         <div className="container" style={{ maxWidth: 1200 }}>
           <header className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
-            <h1 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>BLOG</h1>
+            {/* On a post page the post title is the h1. */}
+            {post ? (
+              <div className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>BLOG</div>
+            ) : (
+              <h1 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0 }}>BLOG</h1>
+            )}
             <div className="small-text" style={{ color: GRAY1 }}>INDEX (06.2)</div>
           </header>
           <div style={{ height: 1, background: 'var(--color-border)', marginTop: 'var(--spacing-sm)' }} aria-hidden="true" />

@@ -6,3 +6,5 @@ Allow: /
 
 User-agent: Facebot
 Allow: /
+
+Sitemap: https://www.creationbase.io/sitemap.xml

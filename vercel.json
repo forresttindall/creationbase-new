@@ -1,6 +1,10 @@
 {
+  "cleanUrls": true,
   "rewrites": [
-    { "source": "/webhook", "destination": "/api/stripe-webhook" },
+    {
+      "source": "/webhook",
+      "destination": "/api/stripe-webhook"
+    },
     {
       "source": "/blog/:slug",
       "has": [
@@ -12,7 +16,13 @@
       ],
       "destination": "/api/blog-ssr?slug=:slug"
     },
-    { "source": "/blog/(.*)", "destination": "/index.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/blog/(.*)",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }

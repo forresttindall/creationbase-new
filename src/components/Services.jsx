@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from '@phosphor-icons/react';
 import DecryptText from './DecryptText';
 import SectionVerticalNav from './SectionVerticalNav';
+import { FAQ } from '../seo/site';
 
 const BLACK = 'var(--color-bg)';
 const GRAY1 = 'var(--color-text-dim)';
@@ -193,6 +194,7 @@ const SECTIONS = [
   { id: 'overview', label: 'OVERVIEW' },
   { id: 'services', label: 'WHAT WE MAKE' },
   { id: 'process', label: 'HOW IT WORKS' },
+  { id: 'faq', label: 'FAQ' },
   { id: 'next', label: 'NEXT STEP' },
 ];
 
@@ -246,7 +248,7 @@ const Services = () => {
           </header>
           <div style={{ height: 1, background: 'var(--color-border)', marginTop: 'var(--spacing-sm)' }} aria-hidden="true" />
           <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 820, opacity: 0.85, lineHeight: 1.55 }}>
-            Branding, Website, and Photo. Three services from one creation studio, made to work together.
+            Branding, Website, and Photo. Three services from one Boise, Idaho creation studio, made to work together.
           </div>
         </div>
       </section>
@@ -263,7 +265,7 @@ const Services = () => {
                 <DecryptText as="span" text="The assets your company needs to grow." trigger="inView" duration={900} />
               </h2>
               <p className="small-text" style={{ lineHeight: 1.6, margin: 0, color: WHITE, maxWidth: 860, opacity: 0.9 }}>
-                Creationbase is a creation studio. We make the brand identity, website, and photography that brave companies build on, designed as one system so everything looks and feels like it belongs together. You own every file, and it keeps working long after launch.
+                Creationbase is a creation studio in Boise, Idaho. We make the brand identity, website, and photography that brave companies across the Treasure Valley and beyond build on, designed as one system so everything looks and feels like it belongs together. You own every file, and it keeps working long after launch.
               </p>
             </div>
           </div>
@@ -449,6 +451,41 @@ const Services = () => {
                     </p>
                   </div>
                 </motion.div>
+              ))}
+            </div>
+          </section>
+
+          <section id="faq" style={{ paddingBottom: 'var(--spacing-xxl)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'minmax(120px, 0.28fr) minmax(0, 1fr)', gap: 'var(--spacing-lg)', alignItems: 'start', borderTop: HOME_SECTION_DIVIDER, paddingTop: 'var(--spacing-xl)', marginBottom: 'var(--spacing-xl)' }}>
+              <div className="small-text" style={{ color: GRAY1, letterSpacing: '0.08em', paddingTop: 6 }}>
+                FAQ / 05
+              </div>
+              <div style={{ minWidth: 0, display: 'grid', gap: 'var(--spacing-md)' }}>
+                <h2 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '-0.04em', lineHeight: 1.02, margin: 0, fontSize: 'clamp(28px, 4.2vw, 56px)' }}>
+                  <DecryptText as="span" text="Questions" trigger="inView" duration={900} />
+                </h2>
+              </div>
+            </div>
+
+            <div style={{ borderTop: HOME_SECTION_DIVIDER }}>
+              {FAQ.map(({ q, a }) => (
+                <div
+                  key={q}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 0.9fr) minmax(0, 1.1fr)',
+                    gap: isMobile ? 8 : 'var(--spacing-lg)',
+                    padding: 'var(--spacing-md) 0',
+                    borderBottom: HOME_SECTION_DIVIDER,
+                  }}
+                >
+                  <h3 className="small-text" style={{ margin: 0, color: WHITE, letterSpacing: '0.04em', lineHeight: 1.5, fontWeight: 'var(--font-mono-weight-bold)' }}>
+                    {q}
+                  </h3>
+                  <p className="small-text" style={{ margin: 0, color: WHITE, opacity: 0.82, lineHeight: 1.6, textTransform: 'none' }}>
+                    {a}
+                  </p>
+                </div>
               ))}
             </div>
           </section>

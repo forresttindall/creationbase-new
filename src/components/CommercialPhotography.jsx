@@ -24,7 +24,11 @@ const commercialPhotographyImages = [
   '/images/_DSC2016.jpg',
 ];
 
-const CommercialPhotography = ({ images = commercialPhotographyImages, masonryClassName = 'mosaic-masonry' }) => {
+const CommercialPhotography = ({
+  images = commercialPhotographyImages,
+  masonryClassName = 'mosaic-masonry',
+  heading = 'Commercial Photography in Boise, Idaho: Creationbase',
+}) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -42,6 +46,10 @@ const CommercialPhotography = ({ images = commercialPhotographyImages, masonryCl
         minHeight: '100vh',
       }}
     >
+      {/* Visually hidden page heading for search engines and screen readers; the page is image-only. */}
+      <h1 style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)', clipPath: 'inset(50%)', whiteSpace: 'nowrap' }}>
+        {heading}
+      </h1>
       <div className="full-bleed">
         <div className={masonryClassName}>
           {images.map((src) => (

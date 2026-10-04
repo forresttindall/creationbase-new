@@ -1,5 +1,12 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
+import fs from 'node:fs'
+import path from 'node:path'
+import {
+  SITE_URL, SITE_NAME, SHARE_IMAGE, STATIC_PATHS,
+  businessJsonLd, faqJsonLd, crawlableFallbackHtml, metaForPath, canonicalFor, escapeAttr, llmsTxt,
+} from './src/seo/site.js'
+import { blogPosts } from './src/blog/posts.js'
 
 const createPrintifyDevApiPlugin = (env) => {
   const token = String(env.PRINTIFY_API_TOKEN ?? process.env.PRINTIFY_API_TOKEN ?? '').trim();
@@ -348,10 +355,117 @@ const createPrintifyDevApiPlugin = (env) => {
   };
 };
 
+// SEO / AEO / GEO for a client-rendered app:
+// 1. index.html gets the business JSON-LD (Boise, Idaho) and a plain-HTML summary inside #root.
+// 2. After the build, every route is written as its own HTML file (services.html, blog/<slug>.html, ...)
+//    with its own title, description, canonical, and social tags, plus readable page text and links.
+//    Vercel's cleanUrls serves /services from services.html, so crawlers that don't run JavaScript
+//    still get correct, indexable pages. The summary is visually hidden and replaced when React mounts.
+const POST_LINKS = blogPosts.map((p) => ({ slug: p.slug, title: p.title }));
+const postDescription = (post) => (Array.isArray(post.body) ? post.body[0] : '').slice(0, 160);
+
+const setHead = (html, { title, description, canonical, image = SHARE_IMAGE, type = 'website' }) => {
+  const t = escapeAttr(title);
+  const d = escapeAttr(description);
+  const set = (re, value) => html.replace(re, (m, pre) => `${pre}${value}"`);
+  html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${t}</title>`);
+  html = set(/(<meta name="title" content=")[^"]*"/, t);
+  html = set(/(<meta name="description" content=")[^"]*"/, d);
+  html = set(/(<link rel="canonical" href=")[^"]*"/, canonical);
+  html = set(/(<meta property="og:type" content=")[^"]*"/, type);
+  html = set(/(<meta property="og:url" content=")[^"]*"/, canonical);
+  html = set(/(<meta property="og:title" content=")[^"]*"/, t);
+  html = set(/(<meta property="og:description" content=")[^"]*"/, d);
+  html = set(/(<meta property="og:image" content=")[^"]*"/, escapeAttr(image));
+  html = set(/(<meta property="og:image:secure_url" content=")[^"]*"/, escapeAttr(image));
+  html = set(/(<meta name="twitter:url" content=")[^"]*"/, canonical);
+  html = set(/(<meta name="twitter:title" content=")[^"]*"/, t);
+  html = set(/(<meta name="twitter:description" content=")[^"]*"/, d);
+  html = set(/(<meta name="twitter:image" content=")[^"]*"/, escapeAttr(image));
+  return html;
+};
+
+const setFallback = (html, fallback) => html.replace(/<!--seo-fallback-start-->[\s\S]*?<!--seo-fallback-end-->/, fallback);
+const addJsonLd = (html, data) => html.replace('</head>', `    <script type="application/ld+json">${JSON.stringify(data)}</script>\n  </head>`);
+
+const seoHtmlPlugin = () => {
+  let outDir = 'dist';
+  return {
+    name: 'seo-html',
+    configResolved(config) {
+      outDir = path.resolve(config.root, config.build.outDir);
+    },
+    transformIndexHtml(html) {
+      const hideCss = '<style>.seo-fallback{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;}</style>';
+      html = addJsonLd(html, businessJsonLd());
+      html = html.replace('</head>', `    ${hideCss}\n  </head>`);
+      return html.replace('<div id="root"></div>', `<div id="root">${crawlableFallbackHtml({ includeFaq: true }, POST_LINKS)}</div>`);
+    },
+    closeBundle() {
+      const indexFile = path.join(outDir, 'index.html');
+      if (!fs.existsSync(indexFile)) return;
+      const base = fs.readFileSync(indexFile, 'utf8');
+      const write = (route, html) => {
+        const file = path.join(outDir, `${route.replace(/^\//, '')}.html`);
+        fs.mkdirSync(path.dirname(file), { recursive: true });
+        fs.writeFileSync(file, html);
+      };
+
+      for (const route of STATIC_PATHS) {
+        if (route === '/') continue;
+        const meta = metaForPath(route);
+        let html = setHead(base, { ...meta, canonical: canonicalFor(route) });
+        html = setFallback(html, crawlableFallbackHtml({
+          heading: meta.title,
+          intro: meta.description,
+          includeFaq: route === '/services',
+          bodyHtml: route === '/blog'
+            ? `<ul>${blogPosts.map((p) => `<li><a href="/blog/${p.slug}">${escapeAttr(p.title)}</a> (${p.date})</li>`).join('')}</ul>`
+            : '',
+        }, POST_LINKS));
+        if (route === '/services') html = addJsonLd(html, faqJsonLd());
+        write(route, html);
+      }
+
+      fs.writeFileSync(path.join(outDir, 'llms.txt'), llmsTxt(POST_LINKS));
+
+      for (const post of blogPosts) {
+        const canonical = `${SITE_URL}/blog/${post.slug}`;
+        const description = postDescription(post);
+        let html = setHead(base, {
+          title: `${post.title} | ${SITE_NAME}`,
+          description,
+          canonical,
+          image: post.image ? new URL(post.image, SITE_URL).href : SHARE_IMAGE,
+          type: 'article',
+        });
+        const body = (Array.isArray(post.body) ? post.body : []).map((para) => `<p>${escapeAttr(para)}</p>`).join('\n');
+        html = setFallback(html, crawlableFallbackHtml({
+          heading: post.title,
+          intro: `Published ${post.date} by ${SITE_NAME}, a creation studio in Boise, Idaho.`,
+          bodyHtml: `<article>${body}</article>`,
+        }, POST_LINKS));
+        html = addJsonLd(html, {
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: post.title,
+          datePublished: post.date,
+          description,
+          image: post.image ? new URL(post.image, SITE_URL).href : SHARE_IMAGE,
+          author: { '@id': `${SITE_URL}/#business` },
+          publisher: { '@id': `${SITE_URL}/#business` },
+          mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+        });
+        write(`/blog/${post.slug}`, html);
+      }
+    },
+  };
+};
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
-    plugins: [react(), createPrintifyDevApiPlugin(env)],
+    plugins: [react(), createPrintifyDevApiPlugin(env), seoHtmlPlugin()],
     server: {
       host: true,
       port: 5173,

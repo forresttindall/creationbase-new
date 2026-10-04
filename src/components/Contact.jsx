@@ -75,7 +75,7 @@ const Contact = () => {
           </header>
           <div style={{ height: 1, background: 'var(--color-border)', marginTop: 'var(--spacing-sm)' }} aria-hidden="true" />
           <div className="small-text" style={{ marginTop: 'var(--spacing-md)', maxWidth: 680, opacity: 0.85, color: WHITE }}>
-            FOR BRAND SYSTEMS, UI/UX DESIGN, AND HIGH-PERFORMANCE WEB DEVELOPMENT INQUIRIES.
+            FOR BRANDING, WEBSITE, AND PHOTOGRAPHY PROJECTS IN BOISE, THE TREASURE VALLEY, AND BEYOND.
           </div>
         </div>
       </section>
@@ -95,9 +95,9 @@ const Contact = () => {
                     CREATIONBASE •
                   </div>
                   <address className="small-text" style={{ marginTop: 6, fontStyle: 'normal', lineHeight: 1.5 }}>
-                    REMOTE STUDIO<br />
-                    WORKING WITH STARTUPS + TEAMS<br />
-                    BRAND SYSTEMS • UI/UX • WEB
+                    BOISE, IDAHO<br />
+                    SERVING THE TREASURE VALLEY + REMOTE<br />
+                    BRAND • WEB • PHOTO
                   </address>
                   <div className="small-text" style={{ marginTop: 'var(--spacing-md)', color: WHITE }}>
                     FORREST@CREATIONBASE.IO<br />

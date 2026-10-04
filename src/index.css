@@ -1114,6 +1114,9 @@ ul {
 }
 
 .home-hero__title {
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  text-size-adjust: none;
   font-family: var(--font-display);
   font-weight: var(--font-display-weight) !important;
   font-synthesis: weight;

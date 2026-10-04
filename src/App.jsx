@@ -827,65 +827,56 @@ function App() {
   const [heroTitleFontSizePx, setHeroTitleFontSizePx] = useState(0);
   const [heroTitleReady, setHeroTitleReady] = useState(false);
 
-  // Size the hero title so its widest line spans the full container width.
+  // Size the hero title so its widest line spans the full container width. It measures the real
+  // rendered lines and refits whenever their width changes (late font or CSS, resize, rotation),
+  // so it settles at the right size however slowly the page loads.
   useLayoutEffect(() => {
     if (!heroTitleEl) return undefined;
-    const REF_PX = 100;
-    const probe = document.createElement('span');
-    probe.setAttribute('aria-hidden', 'true');
-    probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;pointer-events:none;';
-    heroTitleEl.appendChild(probe);
 
-    // Negative tracking is also applied after the last glyph, so its ink overhangs the box; add it back.
-    const widestAt = (px) => {
-      probe.style.fontSize = `${px}px`;
-      const overhang = Math.max(0, -(parseFloat(getComputedStyle(probe).letterSpacing) || 0)) + px * 0.01;
-      return Math.max(...HOME_HERO_TITLE_LINES.map((line) => {
-        probe.textContent = line;
-        return probe.getBoundingClientRect().width + overhang;
-      }));
-    };
-
-    // Glyph widths don't scale perfectly linearly with font size, so refine at the target size.
     const fit = () => {
       const available = heroTitleEl.clientWidth;
-      if (!available) return;
-      let px = REF_PX;
-      for (let i = 0; i < 4; i += 1) {
-        const widest = widestAt(px);
-        if (!widest) return;
-        px *= available / widest;
-      }
-      while (px > 1 && widestAt(px) > available) px *= 0.995;
-      const next = Math.floor(px * 100) / 100;
-      setHeroTitleFontSizePx((prev) => (Math.abs(prev - next) < 0.05 ? prev : next));
+      const lines = [...heroTitleEl.querySelectorAll('.home-hero__title-line > span')];
+      if (!available || !lines.length) return;
+      const style = getComputedStyle(heroTitleEl);
+      const current = parseFloat(style.fontSize);
+      // Negative tracking is also applied after the last glyph, so its ink overhangs the box; add it back.
+      const overhang = Math.max(0, -(parseFloat(style.letterSpacing) || 0)) + current * 0.01;
+      const widest = Math.max(...lines.map((el) => el.getBoundingClientRect().width)) + overhang;
+      if (!current || !widest) return;
+      const next = Math.floor(current * (available / widest) * 100) / 100;
+      if (Math.abs(next - current) < 0.05) return;
+      setHeroTitleFontSizePx(next);
     };
 
     fit();
     const ro = new ResizeObserver(fit);
     ro.observe(heroTitleEl);
-    let cancelled = false;
+    heroTitleEl.querySelectorAll('.home-hero__title-line > span').forEach((el) => ro.observe(el));
     document.fonts?.addEventListener('loadingdone', fit);
-
-    // Hold the reveal until the display font is in, so the title animates at its final size.
-    const { fontWeight, fontFamily } = getComputedStyle(heroTitleEl);
-    const fontLoaded = document.fonts
-      ? document.fonts.load(`${fontWeight} ${REF_PX}px ${fontFamily}`, HOME_HERO_TITLE_LINES.join(' ')).catch(() => {})
-      : Promise.resolve();
-    const timeout = new Promise((resolve) => { window.setTimeout(resolve, 2500); });
-    Promise.race([fontLoaded, timeout]).then(() => {
-      if (cancelled) return;
-      fit();
-      setHeroTitleReady(true);
-    });
+    window.addEventListener('load', fit);
 
     return () => {
-      cancelled = true;
       ro.disconnect();
       document.fonts?.removeEventListener('loadingdone', fit);
-      probe.remove();
+      window.removeEventListener('load', fit);
     };
-  }, [heroTitleEl]);
+  }, [heroTitleEl, heroTitleReady]);
+
+  // Hold the reveal until the display font is in, so the title animates at its final size.
+  useEffect(() => {
+    if (!heroTitleEl || heroTitleReady) return undefined;
+    let cancelled = false;
+    const { fontWeight, fontFamily } = getComputedStyle(heroTitleEl);
+    const fontLoaded = document.fonts
+      ? document.fonts.load(`${fontWeight} 100px ${fontFamily}`, HOME_HERO_TITLE_LINES.join(' ')).catch(() => {})
+      : Promise.resolve();
+    const timeout = new Promise((resolve) => { window.setTimeout(resolve, 5000); });
+    Promise.race([fontLoaded, timeout]).then(() => {
+      // Wait a frame so the refit triggered by the font swap lands before the reveal.
+      window.requestAnimationFrame(() => { if (!cancelled) setHeroTitleReady(true); });
+    });
+    return () => { cancelled = true; };
+  }, [heroTitleEl, heroTitleReady]);
 
   const [navLogoSpinTick, setNavLogoSpinTick] = useState(0);
 
@@ -1371,8 +1362,10 @@ function App() {
       <motion.header 
         className="site-header"
         data-mobile-nav-open={mobileNavOpen ? 'true' : 'false'}
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        // Opacity only: a transform here would make the fixed-position nav pill anchor to the
+        // header (top of the screen) instead of the viewport while the entrance animation runs.
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         style={{ 
           color: headerColor
@@ -1550,7 +1543,7 @@ function App() {
                     {HOME_HERO_TITLE_LINES.map((line, i) => (
                       <div key={line} className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em', whiteSpace: 'nowrap' }}>
                         {heroTitleReady ? (
-                          <DecryptText as="span" text={line} trigger="mount" delay={100 + i * 120} duration={900} />
+                          <DecryptText as="span" text={line} trigger="mount" delay={100 + i * 120} duration={900} stableWidth />
                         ) : (
                           <span style={{ visibility: 'hidden' }}>{line}</span>
                         )}

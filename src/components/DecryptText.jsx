@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 const CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*+-=?<>[]{}';
 
@@ -30,6 +30,7 @@ export default function DecryptText({
   delay = 0,
   duration = 700,
   threshold = 0.4,
+  stableWidth = false,
   className,
   style,
 }) {
@@ -124,6 +125,45 @@ export default function DecryptText({
   }, [clearTimers, delay, runAnimation, text, threshold, trigger]);
 
   useEffect(() => () => clearTimers(), [clearTimers]);
+
+  // stableWidth: the real text always holds the layout (hidden while scrambling), and the scrambled
+  // glyphs are overlaid at each real character's measured position, so the line never changes width.
+  const finalTextRef = useRef(null);
+  const [slots, setSlots] = useState(null);
+  const isScrambling = stableWidth && displayText !== text;
+
+  useLayoutEffect(() => {
+    if (!isScrambling) return;
+    const host = elementRef.current;
+    const node = finalTextRef.current?.firstChild;
+    if (!host || !node) return;
+    const hostLeft = host.getBoundingClientRect().left;
+    const range = document.createRange();
+    const next = text.split('').map((_, i) => {
+      range.setStart(node, i);
+      range.setEnd(node, i + 1);
+      const r = range.getBoundingClientRect();
+      return r.left - hostLeft + r.width / 2;
+    });
+    setSlots((prev) => (prev && prev.length === next.length && prev.every((v, i) => Math.abs(v - next[i]) < 0.5) ? prev : next));
+  }, [isScrambling, text, displayText]);
+
+  if (stableWidth) {
+    return (
+      <Tag ref={elementRef} className={className} style={{ ...style, position: 'relative', display: 'inline-block' }}>
+        <span ref={finalTextRef} style={{ visibility: isScrambling ? 'hidden' : 'visible' }}>{text}</span>
+        {isScrambling && slots && (
+          <span aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+            {displayText.split('').map((char, i) => (
+              char.trim() ? (
+                <span key={i} style={{ position: 'absolute', top: 0, left: slots[i], transform: 'translateX(-50%)', letterSpacing: 0 }}>{char}</span>
+              ) : null
+            ))}
+          </span>
+        )}
+      </Tag>
+    );
+  }
 
   return (
     <Tag ref={elementRef} className={className} style={style}>

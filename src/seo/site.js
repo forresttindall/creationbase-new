@@ -51,7 +51,7 @@ export const FAQ = [
   },
   {
     q: 'What services does Creationbase offer?',
-    a: 'Three services: branding (logos, brand identity, and guidelines), website design and development, and commercial photography (product, brand, and portrait photography).',
+    a: 'Creationbase offers brand, web, and photo services first, plus messaging strategy, SEO, AEO, social media management, campaigns, launch support, email marketing, and ongoing retainers.',
   },
   {
     q: 'Do you work with businesses outside of Boise?',
@@ -59,7 +59,11 @@ export const FAQ = [
   },
   {
     q: 'Can I hire Creationbase for just one service?',
-    a: 'Yes. You can start with branding, a website, or photography on its own, or bring us all three so everything is designed as one system.',
+    a: 'Yes. You can start with brand, web, photo, or one of the growth services on its own, or bring multiple pieces together so everything works as one system.',
+  },
+  {
+    q: 'Do you offer ongoing retainer support?',
+    a: 'Yes. Creationbase offers retainers for ongoing website updates, SEO and AEO optimization, social media management, email marketing support, campaign rollouts, and monthly creative requests.',
   },
   {
     q: 'Do I own the final files?',
@@ -67,7 +71,7 @@ export const FAQ = [
   },
   {
     q: 'How do I start a project?',
-    a: `Send a message through the contact form at ${SITE_URL}/contact with a few details about your brand, website, or photography project, and we will follow up with next steps.`,
+    a: `Send a message through the contact form at ${SITE_URL}/contact with a few details about your brand, website, photo, or marketing project, and we will follow up with next steps.`,
   },
 ];
 

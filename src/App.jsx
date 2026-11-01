@@ -15,6 +15,7 @@ import WimProject from './components/WimProject';
 import ContinuityProject from './components/ContinuityProject';
 import CommercialPhotography from './components/CommercialPhotography';
 import WorksharpProject from './components/WorksharpProject';
+import PhotographyProject from './components/PhotographyProject';
 import DecryptText from './components/DecryptText';
 import Tools from './components/Tools';
 import Schema from './components/Schema';
@@ -147,7 +148,7 @@ const PROCESS_IMAGE_POOL = [
   { project: 'RICH', i: '03', src: '/images/Exportable tables.PNG', alt: 'Ricochet exportable tables UI' },
 ];
 
-const HOME_HERO_TITLE_LINES = ['Brand + Web + Photo', 'for Brave Companies'];
+const HOME_HERO_TITLE_LINES = ['Become Unignorable'];
 const HERO_AVAILABILITY = {
   label: 'Available',
   color: '#5FE37C',
@@ -256,6 +257,17 @@ const INDEX01_PROJECTS = [
     secondaryAlt: 'Worksharp + Drill Doctor photography',
     secondaryFallbackImage: '/images/worksharp/_DSC6814.webp',
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
+  },
+  {
+    id: 'photography-portfolio',
+    titleLines: ['Photography', 'Portfolio'],
+    scope: 'Scope(UI/UX Design, Web Design, Development)',
+    primaryImage: '/images/1.webp',
+    primaryAlt: 'Photography portfolio website design',
+    secondaryImage: '/images/2.webp',
+    secondaryAlt: 'Photography portfolio website layout',
+    secondaryFallbackImage: '/images/3.webp',
+    sideOffset: 'clamp(3rem, 8vw, 6rem)',
   },
 ];
 
@@ -439,7 +451,7 @@ const projects = [
   {
     title: "Amore",
     category: "UI/UX + Product Design",
-    image: "/images/amore mockup.png",
+    image: "/images/1.webp",
     description: "Restaurant website design and prototyping in Figma",
     year: "2025"
   },
@@ -460,8 +472,7 @@ const projects = [
 ];
 
 const graphicDesign = [
-
-    {
+  {
     title: "WIM",
     category: "Brand Identity",
     image: "/images/wim safety shirt.webp",
@@ -511,6 +522,13 @@ const graphicDesign = [
     image: "/images/continuity/TSHIRT MOCKUP.webp",
     description: "Promotional Poster Design",
     year: "2025"
+  },
+  {
+    title: "Epiphany Coffee Co",
+    category: "Brand Identity",
+    image: "/images/bag brand mockup 3.png",
+    description: "Coffee packaging and label design",
+    year: "2026"
   }
 ];
 
@@ -1082,6 +1100,7 @@ function App() {
     else if (id === 'micron') navigate('/micron');
     else if (id === 'playground') navigate('/playground');
     else if (id === 'photography') navigate('/photography');
+    else if (id === 'photography-portfolio') navigate('/photography-portfolio');
     else if (id === 'gallery') navigate('/gallery');
     else if (id === 'worksharp') navigate('/worksharp');
     else if (id === 'blog') navigate('/blog');
@@ -1195,6 +1214,7 @@ function App() {
     else if (pathname === '/micron') setActiveCaseStudy('micron');
     else if (pathname === '/playground') setActiveCaseStudy('playground');
     else if (pathname === '/photography') setActiveCaseStudy('photography');
+    else if (pathname === '/photography-portfolio') setActiveCaseStudy('photography-portfolio');
     else if (pathname === '/gallery') setActiveCaseStudy('gallery');
     else if (pathname === '/worksharp') setActiveCaseStudy('worksharp');
     else if (pathname === '/services') setActiveCaseStudy('services');
@@ -1486,6 +1506,8 @@ function App() {
           <Contact key="contact" />
         ) : activeCaseStudy === 'photography' ? (
           <CommercialPhotography key="photography" />
+        ) : activeCaseStudy === 'photography-portfolio' ? (
+          <PhotographyProject key="photography-portfolio" />
         ) : activeCaseStudy === 'gallery' ? (
           <CommercialPhotography key="gallery" images={GALLERY_IMAGES} masonryClassName="mosaic-masonry mosaic-masonry--spaced" heading="Photography Gallery: Creationbase, Boise, Idaho" />
         ) : activeCaseStudy === 'worksharp' ? (
@@ -1980,7 +2002,7 @@ function App() {
                 <h2 className="section-title" style={{ fontSize: 'var(--fs-xl)', marginBottom: 0, color: UI_LIGHT }}>
                   <DecryptText as="span" text="BRANDING" trigger="inView" duration={800} />
                 </h2>
-                <span className="small-text">Index (05)</span>
+                <span className="small-text">Index (06)</span>
               </div>
 
               <div className="uiux-rows">

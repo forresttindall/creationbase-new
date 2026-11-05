@@ -1183,6 +1183,54 @@ ul {
   }
 }
 
+/* Hero physics pills (matter-js) that fall and pile onto the H1 wordmark */
+.hero-pills-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: auto;
+  touch-action: pan-y;
+}
+
+.hero-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4em 0.9em;
+  border-radius: 999px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-family: var(--font-mono);
+  font-weight: var(--font-mono-weight-bold);
+  font-size: clamp(11px, 0.95vw, 16px);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  will-change: transform;
+  transform: translate(-50%, -50%);
+}
+
+.hero-pill:active {
+  cursor: grabbing;
+}
+
+.hero-pill--symbol {
+  padding: 0.4em 0.55em;
+  font-size: clamp(12px, 1.05vw, 18px);
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
 .project-grid {
   display: grid;
   gap: var(--spacing-xl);

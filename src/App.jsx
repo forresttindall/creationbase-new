@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, animate, useAnimationFrame, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform, useVelocity, useInView } from 'framer-motion';
-import { ArrowUpRight, ArrowRight } from '@phosphor-icons/react';
+import { ArrowRight } from '@phosphor-icons/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BoiseAnalogClubProject from './components/BoiseAnalogClubProject';
 import KnwnLocalProject from './components/KnwnLocalProject';
@@ -18,6 +18,7 @@ import WorksharpProject from './components/WorksharpProject';
 import PhotographyProject from './components/PhotographyProject';
 import VozeyProject from './components/VozeyProject';
 import DecryptText from './components/DecryptText';
+import HeroPhysicsPills from './components/HeroPhysicsPills';
 import Tools from './components/Tools';
 import Schema from './components/Schema';
 import Merch from './components/Merch';
@@ -149,7 +150,7 @@ const PROCESS_IMAGE_POOL = [
   { project: 'RICH', i: '03', src: '/images/Exportable tables.PNG', alt: 'Ricochet exportable tables UI' },
 ];
 
-const HOME_HERO_TITLE_LINES = ['Brand + Web + Photo', 'for brave companies'];
+const HOME_HERO_TITLE_LINES = ['CREATIONBASE®'];
 const HERO_AVAILABILITY = {
   label: 'Available',
   color: '#5FE37C',
@@ -247,18 +248,6 @@ const INDEX01_PROJECTS = [
     secondaryFallbackImage: '/images/wim HAT MOCKUP.webp',
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },
-  {
-    id: 'continuity',
-    titleLines: ['Continuity'],
-    scope: 'Scope(Identity, App UI/UX Design)',
-    primaryImage: '/images/continuity/screens.webp',
-    primaryAlt: 'Continuity screens',
-    secondaryImage: '/images/continuity/app.webp',
-    secondaryAlt: 'Continuity app',
-    secondaryFallbackImage: '/images/continuity/TSHIRT%20MOCKUP.webp',
-    sideOffset: 'clamp(2rem, 7vw, 5rem)',
-  },
-
   {
     id: 'worksharp',
     titleLines: ['Worksharp + Drill Doctor'],
@@ -501,10 +490,10 @@ const graphicDesign = [
   },
  
   {
-    title: "Continuity",
+    title: "Foundway",
     category: "Brand Identity",
-    image: "/images/continuity/screens.webp",
-    description: "Social Media Promotional Asset Design",
+    image: "/images/foundway.webp",
+    description: "Brand Identity System",
     year: "2026"
   },
  
@@ -629,12 +618,19 @@ const FOOTER_CAROUSEL_IMAGES = [
   { src: '/images/continuity/continuity%20logo.webp', alt: 'Continuity logo footer carousel image' },
   { src: '/images/continuity/TSHIRT%20MOCKUP.webp', alt: 'Continuity t-shirt mockup footer carousel image' },
   { src: '/images/continuity/Cotton%20Totebag%20Mockup.webp', alt: 'Continuity totebag mockup footer carousel image' },
+  { src: '/images/foundway.webp', alt: 'Foundway branding footer carousel image' },
   { src: '/images/wim software.webp', alt: 'WIM software mockup footer carousel image' },
   { src: '/images/wim typemark.webp', alt: 'WIM typemark footer carousel image' },
   { src: '/images/wim logomark.webp', alt: 'WIM logomark footer carousel image' },
   { src: '/images/wim safety shirt.webp', alt: 'WIM safety shirt mockup footer carousel image' },
   { src: '/images/wim truck mockup.webp', alt: 'WIM truck mockup footer carousel image' },
   { src: '/images/wim HAT MOCKUP.webp', alt: 'WIM hat mockup footer carousel image' },
+  { src: '/images/1.webp', alt: 'Photography portfolio website design footer carousel image' },
+  { src: '/images/2.webp', alt: 'Photography portfolio website layout footer carousel image' },
+  { src: '/images/3.webp', alt: 'Photography portfolio website interface footer carousel image' },
+  { src: '/images/4.webp', alt: 'Photography portfolio website detail footer carousel image' },
+  { src: '/images/Vozey/vozey-2.webp', alt: 'Vozey podcast production software interface footer carousel image' },
+  { src: '/images/Vozey/vozey-2-copy.webp', alt: 'Vozey episode workspace footer carousel image' },
 ];
 
 const ProjectModal = ({ project, onClose }) => {
@@ -851,6 +847,8 @@ function App() {
   const [isMobile, setIsMobile] = useState(false);
   const [heroTitleEl, setHeroTitleEl] = useState(null);
   const [heroTitleFontSizePx, setHeroTitleFontSizePx] = useState(0);
+  const [heroTitleInkLeftPx, setHeroTitleInkLeftPx] = useState(0);
+  const heroTitleInkLeftRef = useRef(0);
   const [heroTitleReady, setHeroTitleReady] = useState(false);
 
   // Size the hero title so its widest line spans the full container width. It measures the real
@@ -861,17 +859,41 @@ function App() {
 
     const fit = () => {
       const available = heroTitleEl.clientWidth;
-      const lines = [...heroTitleEl.querySelectorAll('.home-hero__title-line > span')];
-      if (!available || !lines.length) return;
+      if (!available) return;
       const style = getComputedStyle(heroTitleEl);
       const current = parseFloat(style.fontSize);
-      // Negative tracking is also applied after the last glyph, so its ink overhangs the box; add it back.
-      const overhang = Math.max(0, -(parseFloat(style.letterSpacing) || 0)) + current * 0.01;
-      const widest = Math.max(...lines.map((el) => el.getBoundingClientRect().width)) + overhang;
-      if (!current || !widest) return;
-      const next = Math.floor(current * (available / widest) * 100) / 100;
-      if (Math.abs(next - current) < 0.05) return;
-      setHeroTitleFontSizePx(next);
+      if (!current) return;
+
+      // Measure the painted ink (not the advance box) so the glyphs themselves reach the gutters. The
+      // display font carries left/right side bearings, so fitting the advance width would leave visible
+      // slack on both sides. Measure the known source text: the live spans are scrambled mid-reveal.
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.font = `${style.fontStyle} ${style.fontWeight} ${current}px ${style.fontFamily}`;
+      if ('letterSpacing' in ctx && style.letterSpacing && style.letterSpacing !== 'normal') {
+        ctx.letterSpacing = style.letterSpacing;
+      }
+
+      let inkWidth = 0;
+      let inkLeft = 0;
+      HOME_HERO_TITLE_LINES.forEach((line) => {
+        const m = ctx.measureText(line);
+        const lineInk = m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
+        if (lineInk > inkWidth) {
+          inkWidth = lineInk;
+          inkLeft = -m.actualBoundingBoxLeft;
+        }
+      });
+      if (!inkWidth) return;
+
+      const next = Math.floor(current * (available / inkWidth) * 100) / 100;
+      // Pull the line left by its left side bearing so the ink's left edge lands on the gutter too.
+      const nextInkLeft = inkLeft * (next / current);
+      if (Math.abs(next - current) >= 0.05) setHeroTitleFontSizePx(next);
+      if (Math.abs(nextInkLeft - heroTitleInkLeftRef.current) >= 0.5) {
+        heroTitleInkLeftRef.current = nextInkLeft;
+        setHeroTitleInkLeftPx(nextInkLeft);
+      }
     };
 
     fit();
@@ -1555,7 +1577,7 @@ function App() {
           >
             {/* Hero */}
             <section data-header-theme="light" style={{ position: 'relative', overflow: 'hidden', background: UI_DARK, color: UI_LIGHT, borderBottom: HOME_SECTION_DIVIDER }}>
-              <div style={{ minHeight: 'var(--home-hero-min-h)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) var(--spacing-md) var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
+              <div style={{ minHeight: 'var(--home-hero-min-h)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) 20px var(--spacing-sm)', position: 'relative', zIndex: 1 }}>
                 <div style={{ marginBottom: 'auto', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
                   <h1 className="home-hero__title" ref={setHeroTitleEl} style={{
                     fontFamily: 'var(--font-display)', fontWeight: 'var(--font-display-weight)',
@@ -1563,12 +1585,12 @@ function App() {
                     margin: 0,
                     position: 'relative',
                     // Pre-fit estimate (~0.085 × available width) keeps the reserved height close to final.
-                    fontSize: heroTitleFontSizePx > 0 ? `${heroTitleFontSizePx}px` : 'calc((100vw - 2 * var(--spacing-md)) * 0.085)',
+                    fontSize: heroTitleFontSizePx > 0 ? `${heroTitleFontSizePx}px` : 'calc((100vw - 40px) * 0.085)',
                   }}>
                     {HOME_HERO_TITLE_LINES.map((line, i) => (
-                      <div key={line} className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em', whiteSpace: 'nowrap' }}>
+                      <div key={line} className="home-hero__title-line" style={{ overflow: 'hidden', paddingBottom: '0.1em', whiteSpace: 'nowrap', textIndent: heroTitleInkLeftPx > 0 ? `-${heroTitleInkLeftPx}px` : undefined }}>
                         {heroTitleReady ? (
-                          <DecryptText as="span" text={line} trigger="mount" delay={100 + i * 120} duration={900} stableWidth />
+                          <DecryptText as="span" text={line} trigger="mount" delay={100 + i * 120} duration={900} stableWidth style={{ textIndent: 0 }} />
                         ) : (
                           <span style={{ visibility: 'hidden' }}>{line}</span>
                         )}
@@ -1594,11 +1616,11 @@ function App() {
                         <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Creationbase</span>
                         <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: 'var(--color-text)', display: 'inline-block', flex: '0 0 auto' }} />
                       </div>
-                      <div className="home-hero__meta-bottom">Your Creation Studio</div>
+                      <div className="home-hero__meta-bottom">Brand + Web + Photo for brave companies</div>
                     </div>
                     <div className="home-hero__identity-mobile">
                       <div style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Creationbase •</div>
-                      <div>Your Creation Studio</div>
+                      <div>Brand + Web + Photo for brave companies</div>
                     </div>
                   </div>
                   <div className="small-text home-hero__availability home-hero__meta-col" style={{ fontSize: 'var(--fs-sm)', lineHeight: 1.2, justifySelf: 'end', textAlign: 'right' }}>
@@ -2108,18 +2130,6 @@ function App() {
                     </div>
                   );
                 })}
-              </div>
-              <div style={{ marginTop: 10, display: 'flex', justifyContent: 'center' }}>
-                <motion.button
-                  type="button"
-                  onClick={() => openCaseStudy('gallery')}
-                  whileHover={{ opacity: 0.75 }}
-                  className="newsletter-button"
-                  style={{ minWidth: 180 }}
-                >
-                  View More
-                  <ArrowUpRight size={14} weight="thin" />
-                </motion.button>
               </div>
             </section>
 

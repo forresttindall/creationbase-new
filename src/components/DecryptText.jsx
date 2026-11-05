@@ -3,7 +3,8 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 const CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*+-=?<>[]{}';
 
 function isScrambleChar(char) {
-  return /[A-Za-z0-9]/.test(char);
+  // Include the registered-trademark glyph so it takes part in the decrypt reveal.
+  return /[A-Za-z0-9®]/.test(char);
 }
 
 function scrambleText(text, revealCount) {
@@ -143,9 +144,15 @@ export default function DecryptText({
       range.setStart(node, i);
       range.setEnd(node, i + 1);
       const r = range.getBoundingClientRect();
-      return r.left - hostLeft + r.width / 2;
+      return { left: r.left - hostLeft, width: r.width };
     });
-    setSlots((prev) => (prev && prev.length === next.length && prev.every((v, i) => Math.abs(v - next[i]) < 0.5) ? prev : next));
+    setSlots((prev) =>
+      prev &&
+      prev.length === next.length &&
+      prev.every((v, i) => Math.abs(v.left - next[i].left) < 0.5 && Math.abs(v.width - next[i].width) < 0.5)
+        ? prev
+        : next
+    );
   }, [isScrambling, text, displayText]);
 
   if (stableWidth) {
@@ -156,7 +163,21 @@ export default function DecryptText({
           <span aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
             {displayText.split('').map((char, i) => (
               char.trim() ? (
-                <span key={i} style={{ position: 'absolute', top: 0, left: slots[i], transform: 'translateX(-50%)', letterSpacing: 0 }}>{char}</span>
+                <span
+                  key={i}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: slots[i].left,
+                    width: slots[i].width,
+                    overflow: 'hidden',
+                    display: 'inline-flex',
+                    justifyContent: 'center',
+                    letterSpacing: 0,
+                  }}
+                >
+                  {char}
+                </span>
               ) : null
             ))}
           </span>

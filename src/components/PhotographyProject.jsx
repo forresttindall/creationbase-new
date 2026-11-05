@@ -29,10 +29,6 @@ const PHOTOGRAPHY_NARRATIVE = {
       text: 'I designed and built the experience end to end — layout, type system, image grid, and navigation — then implemented it with performance-focused front-end code.',
     },
     {
-      label: 'Proposal',
-      text: 'The direction centered on a minimal, editorial layout that lets full-bleed photographs carry the page, supported by restrained interface elements and considered motion.',
-    },
-    {
       label: 'Result',
       text: 'The result is a fast, responsive portfolio at forresttindall.art that presents the work cleanly and doubles as a proof point for my design and engineering practice.',
     },

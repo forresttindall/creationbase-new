@@ -16,6 +16,7 @@ import ContinuityProject from './components/ContinuityProject';
 import CommercialPhotography from './components/CommercialPhotography';
 import WorksharpProject from './components/WorksharpProject';
 import PhotographyProject from './components/PhotographyProject';
+import VozeyProject from './components/VozeyProject';
 import DecryptText from './components/DecryptText';
 import Tools from './components/Tools';
 import Schema from './components/Schema';
@@ -148,7 +149,7 @@ const PROCESS_IMAGE_POOL = [
   { project: 'RICH', i: '03', src: '/images/Exportable tables.PNG', alt: 'Ricochet exportable tables UI' },
 ];
 
-const HOME_HERO_TITLE_LINES = ['Become Unignorable'];
+const HOME_HERO_TITLE_LINES = ['Brand + Web + Photo', 'for brave companies'];
 const HERO_AVAILABILITY = {
   label: 'Available',
   color: '#5FE37C',
@@ -202,6 +203,17 @@ const GALLERY_IMAGES = [
   '/images/gallery/_DSC3579.webp',
 ];
 const INDEX01_PROJECTS = [
+  {
+    id: 'photography-portfolio',
+    titleLines: ['Photography', 'Portfolio'],
+    scope: 'Scope(UI/UX Design, Web Design, Development)',
+    primaryImage: '/images/1.webp',
+    primaryAlt: 'Photography portfolio website design',
+    secondaryImage: '/images/2.webp',
+    secondaryAlt: 'Photography portfolio website layout',
+    secondaryFallbackImage: '/images/3.webp',
+    sideOffset: 'clamp(3rem, 8vw, 6rem)',
+  },
   {
     id: 'bac',
     titleLines: ['Boise', 'Analog Club'],
@@ -259,15 +271,15 @@ const INDEX01_PROJECTS = [
     sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },
   {
-    id: 'photography-portfolio',
-    titleLines: ['Photography', 'Portfolio'],
-    scope: 'Scope(UI/UX Design, Web Design, Development)',
-    primaryImage: '/images/1.webp',
-    primaryAlt: 'Photography portfolio website design',
-    secondaryImage: '/images/2.webp',
-    secondaryAlt: 'Photography portfolio website layout',
-    secondaryFallbackImage: '/images/3.webp',
-    sideOffset: 'clamp(3rem, 8vw, 6rem)',
+    id: 'vozey',
+    titleLines: ['Vozey'],
+    scope: 'Scope(Product UI/UX, Design System, Prototyping)',
+    primaryImage: '/images/Vozey/vozey-2.webp',
+    primaryAlt: 'Vozey podcast production software interface',
+    secondaryImage: '/images/Vozey/vozey-2-copy.webp',
+    secondaryAlt: 'Vozey product screens',
+    secondaryFallbackImage: '/images/Vozey/vozey-2.webp',
+    sideOffset: 'clamp(2rem, 7vw, 5rem)',
   },
 ];
 
@@ -1101,6 +1113,7 @@ function App() {
     else if (id === 'playground') navigate('/playground');
     else if (id === 'photography') navigate('/photography');
     else if (id === 'photography-portfolio') navigate('/photography-portfolio');
+    else if (id === 'vozey') navigate('/vozey');
     else if (id === 'gallery') navigate('/gallery');
     else if (id === 'worksharp') navigate('/worksharp');
     else if (id === 'blog') navigate('/blog');
@@ -1215,6 +1228,7 @@ function App() {
     else if (pathname === '/playground') setActiveCaseStudy('playground');
     else if (pathname === '/photography') setActiveCaseStudy('photography');
     else if (pathname === '/photography-portfolio') setActiveCaseStudy('photography-portfolio');
+    else if (pathname === '/vozey') setActiveCaseStudy('vozey');
     else if (pathname === '/gallery') setActiveCaseStudy('gallery');
     else if (pathname === '/worksharp') setActiveCaseStudy('worksharp');
     else if (pathname === '/services') setActiveCaseStudy('services');
@@ -1508,6 +1522,8 @@ function App() {
           <CommercialPhotography key="photography" />
         ) : activeCaseStudy === 'photography-portfolio' ? (
           <PhotographyProject key="photography-portfolio" />
+        ) : activeCaseStudy === 'vozey' ? (
+          <VozeyProject key="vozey" />
         ) : activeCaseStudy === 'gallery' ? (
           <CommercialPhotography key="gallery" images={GALLERY_IMAGES} masonryClassName="mosaic-masonry mosaic-masonry--spaced" heading="Photography Gallery: Creationbase, Boise, Idaho" />
         ) : activeCaseStudy === 'worksharp' ? (

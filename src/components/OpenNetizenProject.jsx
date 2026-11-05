@@ -26,19 +26,11 @@ const OPEN_NETIZEN_NARRATIVE = {
       text: 'The project had to communicate a complex civic and technical mission without losing people in jargon or making the platform feel inaccessible to everyday users.',
     },
     {
-      label: 'Positioning & Strategy',
-      text: 'We positioned Open Netizen as the modern civic voice for the open web — not a niche tech forum, but a broad, principled platform for anyone who cares about a more public internet. The strategy separated messaging into three concentric tiers: conviction (timeless principles tied to the history of the open web), clarity (accessible language, never jargon-first), and action (specific things a visitor could do next, always one click away). We anchored the entire visual system to public-good signifiers rather than platform-native aesthetics so the brand reads as civic infrastructure, not another startup.',
-    },
-    {
       label: 'Process',
       text: 'We used the 4 Cs framework to connect the brand to the history of the open web, clarify the message, shape trust through accessible design, and build the site around intuitive interactions.',
     },
     {
-      label: 'Proposal',
-      text: 'The proposal combined a more authoritative identity system with a high-performance, thumb-friendly website that could serve as both a source of truth and an action-oriented hub.',
-    },
-    {
-      label: 'Result & Growth',
+      label: 'Result',
       text: 'In the first 90 days, signups for the open-web advocacy coalition grew 2.6x above target, social advocacy reach climbed 4.1x through sharper share-ready assets, and bounce rate fell 33% as the clearer messaging ladder led more readers from curiosity into commitment. The final project delivered a civic-minded brand and digital platform that made advocacy clearer, more trustworthy, and easier for people to engage with.',
     },
   ],

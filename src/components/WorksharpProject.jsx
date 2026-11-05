@@ -31,19 +31,11 @@ const WORKSHARP_NARRATIVE = {
       text: 'The challenge was to make technical sharpening tools feel clear, trustworthy, and visually engaging without over-stylizing the products or losing the practical context behind them.',
     },
     {
-      label: 'Positioning & Strategy',
-      text: 'We positioned the shoot around a single idea: tools that perform the way Popular Mechanics readers expect — honest, capable, and proven under real pressure. The strategy was split into three tiers: hero product studies (clean key-art for covers and paid placements), process demonstrations (hands-in-frame, gritty, believable real-use context), and supporting detail captures (texture, edge geometry, surface finish) to prove build quality without narration. We planned the capture list to ensure every image could crop cleanly into print grids, web commerce, and paid social formats.',
-    },
-    {
       label: 'Process',
       text: 'We approached the shoot with a commercial editorial mindset, shaping the lighting, framing, and sequencing around product clarity, believable use, and compositions that could hold up in both print and web placements.',
     },
     {
-      label: 'Proposal',
-      text: 'The solution focused on a clean, utility-driven image set that balanced editorial atmosphere with readable product detail, giving the brand assets that felt sharp, grounded, and publication-ready.',
-    },
-    {
-      label: 'Result & Growth',
+      label: 'Result',
       text: 'The final assets powered a 9-page feature package in Popular Mechanics, lifted click-through rates on Worksharp\u2019s Amazon detail pages by 29% where the photography replaced previous product shots, and drove a 41% increase in site traffic from the print feature back to the Worksharp homepage over the issue cycle. The final photo set delivered a stronger visual story for Worksharp + Drill Doctor, creating images that supported Popular Mechanics while also giving the products a more elevated and credible presentation.',
     },
   ],

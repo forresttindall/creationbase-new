@@ -874,14 +874,22 @@ function App() {
         ctx.letterSpacing = style.letterSpacing;
       }
 
+      // The canvas can resolve the font stack differently from the DOM (e.g. a locally installed
+      // family isn't visible to canvas yet on first paint), so never trust its absolute widths. Take
+      // the real advance width from the rendered line and use the canvas only for the ink/advance
+      // ratio; otherwise the first fit lands on the fallback font's size and jumps once canvas catches up.
+      const lineEls = heroTitleEl.querySelectorAll('.home-hero__title-line > span');
       let inkWidth = 0;
       let inkLeft = 0;
-      HOME_HERO_TITLE_LINES.forEach((line) => {
+      HOME_HERO_TITLE_LINES.forEach((line, i) => {
         const m = ctx.measureText(line);
-        const lineInk = m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
+        if (!m.width) return;
+        const domAdvance = lineEls[i]?.getBoundingClientRect().width || m.width;
+        const k = domAdvance / m.width;
+        const lineInk = (m.actualBoundingBoxLeft + m.actualBoundingBoxRight) * k;
         if (lineInk > inkWidth) {
           inkWidth = lineInk;
-          inkLeft = -m.actualBoundingBoxLeft;
+          inkLeft = -m.actualBoundingBoxLeft * k;
         }
       });
       if (!inkWidth) return;

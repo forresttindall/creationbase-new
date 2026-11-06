@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8" /><title>fit debug</title></head>
+  <body style="margin:0">
+    <pre id="out" style="font:11px monospace"></pre>
+    <script>
+      const q = new URLSearchParams(location.search);
+      const w = Number(q.get('w') || 1512);
+      const h = Number(q.get('h') || 982);
+      const path = q.get('path') || '/';
+      const samples = [];
+      let last = '';
+      let start = 0;
+      const f = document.createElement('iframe');
+      f.src = path;
+      f.style.cssText = `width:${w}px;height:${h}px;border:0`;
+      document.body.appendChild(f);
+      const tick = () => {
+        try {
+          const win = f.contentWindow;
+          const d = f.contentDocument;
+          const h1 = d && d.querySelector('.home-hero__title');
+          if (h1 && win) {
+            if (!start) start = performance.now();
+            const line = d.querySelector('.home-hero__title-line');
+            const inner = line && line.firstElementChild;
+            const r = h1.getBoundingClientRect();
+            const rec = [
+              Math.round(performance.now() - start),
+              'fs=' + (Math.round(parseFloat(getComputedStyle(h1).fontSize) * 100) / 100),
+              'box=' + [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)].join(','),
+              'ind=' + (line ? (line.style.textIndent || '-') : 'noline'),
+              'in=' + (inner ? Math.round(inner.getBoundingClientRect().width * 100) / 100 : -1),
+              'sh=' + win.document.documentElement.scrollHeight,
+              'sy=' + win.scrollY,
+              'pills=' + d.querySelectorAll('.hero-pill').length,
+              'txt=' + (inner ? inner.textContent.length : -1),
+            ].join(' ');
+            const key = rec.slice(rec.indexOf(' '));
+            if (key !== last) { samples.push(rec); last = key; }
+            document.getElementById('out').textContent =
+              `W=${w} H=${h} ${path}\n` + samples.join('\n').slice(-5000);
+          }
+        } catch (e) { samples.push('ERR ' + e.message); }
+        if (samples.length < 500) setTimeout(tick, 16);
+      };
+      tick();
+    </script>
+  </body>
+</html>

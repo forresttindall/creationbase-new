@@ -1,44 +1,77 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Heatmap, LiquidMetal } from '@paper-design/shaders-react';
+import {
+  ColorPanels,
+  GrainGradient,
+  Heatmap,
+  LiquidMetal,
+  MeshGradient,
+  PerlinNoise,
+  SimplexNoise,
+  SmokeRing,
+} from '@paper-design/shaders-react';
 
 const UI_LIGHT = 'var(--color-text)';
 const UI_DARK = 'var(--color-bg)';
 
 const FRAME_PRESETS = [
-  { id: 'ig-post-1350x1080', label: 'Instagram Post (1350×1080)', width: 1350, height: 1080 },
+  { id: 'ig-post-1080x1350', label: 'Instagram Post (1080×1350)', width: 1080, height: 1350 },
   { id: 'ig-reel-1080x1920', label: 'Instagram Reel (1080×1920)', width: 1080, height: 1920 },
   { id: 'ig-square-1080', label: 'Instagram Square (1080×1080)', width: 1080, height: 1080 },
   { id: '16x9-1920x1080', label: '16:9 (1920×1080)', width: 1920, height: 1080 },
 ];
 
+// Master label list for every shader still offered. The Logo and Background
+// layers expose curated subsets of this list (see below).
+const SHADER_OPTIONS = [
+  { id: 'none', label: 'None' },
+  { id: 'liquid-metal', label: 'Liquid Metal' },
+  { id: 'heatmap', label: 'Heatmap' },
+  { id: 'mesh-gradient', label: 'Mesh Gradient' },
+  { id: 'grain-gradient', label: 'Grain Gradient' },
+  { id: 'smoke-ring', label: 'Smoke Ring' },
+  { id: 'color-panels', label: 'Color Panels' },
+  { id: 'simplex-noise', label: 'Simplex Noise' },
+  { id: 'perlin-noise', label: 'Perlin Noise' },
+];
+
+const optionsFor = (ids) => ids.map((id) => SHADER_OPTIONS.find((opt) => opt.id === id));
+
+// The Logo layer offers the image shaders (they shape themselves to the
+// uploaded logo's silhouette) plus a few full-frame shaders that fill the logo.
+const LOGO_SHADER_OPTIONS = optionsFor([
+  'none',
+  'liquid-metal',
+  'heatmap',
+  'mesh-gradient',
+  'grain-gradient',
+  'smoke-ring',
+  'color-panels',
+]);
+
+// The Background layer only offers full-frame shaders.
+const BG_SHADER_OPTIONS = optionsFor([
+  'none',
+  'grain-gradient',
+  'mesh-gradient',
+  'simplex-noise',
+  'perlin-noise',
+]);
+
+const FONT_OPTIONS = [
+  { value: "'PP Neue Machina', system-ui, sans-serif", label: 'Neue Machina' },
+  { value: "'Ark es', system-ui, sans-serif", label: 'Ark ES' },
+  { value: "'Tiposka', Georgia, serif", label: 'Tiposka' },
+  { value: "'Bucklane Script', cursive", label: 'Bucklane Script' },
+  { value: "'Mark W1G', cursive", label: 'Mark W1G' },
+  { value: "'Doto', system-ui, sans-serif", label: 'Doto' },
+];
+
+const DEFAULT_TEXT_FONT = FONT_OPTIONS[0].value;
+
+const DEMO_MASK_URL = '/images/isometric-city-blue.svg';
+
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
-
-const parseHex = (hex) => {
-  if (!hex) return null;
-  const value = hex.trim().replace('#', '');
-  if (value.length === 3) {
-    const r = parseInt(value[0] + value[0], 16);
-    const g = parseInt(value[1] + value[1], 16);
-    const b = parseInt(value[2] + value[2], 16);
-    if ([r, g, b].some((x) => Number.isNaN(x))) return null;
-    return { r, g, b };
-  }
-  if (value.length === 6) {
-    const r = parseInt(value.slice(0, 2), 16);
-    const g = parseInt(value.slice(2, 4), 16);
-    const b = parseInt(value.slice(4, 6), 16);
-    if ([r, g, b].some((x) => Number.isNaN(x))) return null;
-    return { r, g, b };
-  }
-  return null;
-};
-
-const hexToVec3 = (hex, fallback) => {
-  const rgb = parseHex(hex);
-  if (!rgb) return fallback;
-  return [rgb.r / 255, rgb.g / 255, rgb.b / 255];
-};
 
 const sanitizeSvgMarkup = (raw) => {
   if (!raw) return raw;
@@ -68,260 +101,281 @@ const sanitizeSvgMarkup = (raw) => {
   }
 };
 
-const createShader = (gl, type, source) => {
-  const shader = gl.createShader(type);
-  if (!shader) return null;
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    const info = gl.getShaderInfoLog(shader);
-    gl.deleteShader(shader);
-    throw new Error(info || 'Shader compile failed');
-  }
-  return shader;
-};
+const buildTextMaskDataUrl = ({ text, color, bold, tracking, fill, font, width, height }) => {
+  const value = (text || '').trim();
+  if (!value) return null;
+  if (typeof document === 'undefined') return null;
 
-const createProgram = (gl, vsSource, fsSource) => {
-  const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
-  const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
-  if (!vs || !fs) throw new Error('Shader creation failed');
-  const program = gl.createProgram();
-  if (!program) throw new Error('Program creation failed');
-  gl.attachShader(program, vs);
-  gl.attachShader(program, fs);
-  gl.linkProgram(program);
-  gl.deleteShader(vs);
-  gl.deleteShader(fs);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    const info = gl.getProgramInfoLog(program);
-    gl.deleteProgram(program);
-    throw new Error(info || 'Program link failed');
-  }
-  return program;
-};
-
-const createTextureFromImage = (gl, image) => {
-  const tex = gl.createTexture();
-  if (!tex) return null;
-  gl.bindTexture(gl.TEXTURE_2D, tex);
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-  gl.bindTexture(gl.TEXTURE_2D, null);
-  return tex;
-};
-
-const VERTEX_SHADER = `#version 300 es
-in vec2 a_position;
-out vec2 v_uv;
-void main() {
-  v_uv = (a_position + 1.0) * 0.5;
-  gl_Position = vec4(a_position, 0.0, 1.0);
-}
-`;
-
-const FRAGMENT_SHADER = `#version 300 es
-precision highp float;
-
-in vec2 v_uv;
-out vec4 outColor;
-
-uniform sampler2D u_image;
-uniform vec2 u_canvasSize;
-uniform vec2 u_imageSize;
-uniform int u_fitMode;
-uniform vec2 u_pan;
-uniform float u_zoom;
-uniform int u_effect;
-uniform float u_intensity;
-uniform float u_grain;
-uniform float u_shine;
-uniform float u_hue;
-uniform vec3 u_tint;
-uniform vec3 u_bg;
-uniform float u_time;
-
-float hash12(vec2 p) {
-  vec3 p3 = fract(vec3(p.xyx) * 0.1031);
-  p3 += dot(p3, p3.yzx + 33.33);
-  return fract((p3.x + p3.y) * p3.z);
-}
-
-float noise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
-  float a = hash12(i);
-  float b = hash12(i + vec2(1.0, 0.0));
-  float c = hash12(i + vec2(0.0, 1.0));
-  float d = hash12(i + vec2(1.0, 1.0));
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
-}
-
-float fbm(vec2 p) {
-  float v = 0.0;
-  float a = 0.5;
-  mat2 m = mat2(1.6, 1.2, -1.2, 1.6);
-  for (int i = 0; i < 5; i++) {
-    v += a * noise(p);
-    p = m * p;
-    a *= 0.5;
-  }
-  return v;
-}
-
-vec3 rgb2hsv(vec3 c) {
-  vec4 K = vec4(0.0, -1.0/3.0, 2.0/3.0, -1.0);
-  vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
-  vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
-  float d = q.x - min(q.w, q.y);
-  float e = 1e-10;
-  return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
-}
-
-vec3 hsv2rgb(vec3 c) {
-  vec3 p = abs(fract(c.xxx + vec3(0.0, 1.0/3.0, 2.0/3.0)) * 6.0 - 3.0);
-  vec3 rgb = clamp(p - 1.0, 0.0, 1.0);
-  return c.z * mix(vec3(1.0), rgb, c.y);
-}
-
-vec3 hueShift(vec3 rgb, float shift) {
-  vec3 hsv = rgb2hsv(rgb);
-  hsv.x = fract(hsv.x + shift);
-  return hsv2rgb(hsv);
-}
-
-vec2 imageUvFromCanvasUv(vec2 uv) {
-  float canvasAR = u_canvasSize.x / max(1.0, u_canvasSize.y);
-  float imgAR = u_imageSize.x / max(1.0, u_imageSize.y);
-  float scaleX = 1.0;
-  float scaleY = 1.0;
-
-  if (u_fitMode == 0) {
-    if (imgAR > canvasAR) {
-      scaleY = canvasAR / imgAR;
-    } else {
-      scaleX = imgAR / canvasAR;
-    }
-  } else {
-    if (imgAR > canvasAR) {
-      scaleX = imgAR / canvasAR;
-    } else {
-      scaleY = canvasAR / imgAR;
-    }
-  }
-
-  vec2 centered = uv - 0.5;
-  vec2 scaled = centered / vec2(scaleX, scaleY);
-  vec2 zoomed = scaled / max(0.05, u_zoom);
-  return zoomed + 0.5 + u_pan;
-}
-
-void main() {
-  vec2 iuv = imageUvFromCanvasUv(v_uv);
-  vec4 src = vec4(0.0);
-  if (iuv.x >= 0.0 && iuv.x <= 1.0 && iuv.y >= 0.0 && iuv.y <= 1.0) {
-    src = texture(u_image, iuv);
-  }
-
-  vec3 base = mix(u_bg, src.rgb, src.a);
-  base = hueShift(base, u_hue);
-
-  vec3 tinted = mix(base, base * u_tint, clamp(u_intensity, 0.0, 1.0));
-
-  if (u_effect == 1) {
-    float g = fbm(v_uv * 780.0 + vec2(u_time * 0.02, u_time * 0.015));
-    float fibers = fbm(v_uv * vec2(420.0, 1200.0) + vec2(11.2, 3.7));
-    float grain = (g * 2.0 - 1.0) * 0.085 + (fibers * 2.0 - 1.0) * 0.04;
-    float strength = clamp(u_grain, 0.0, 1.0);
-    vec3 paper = tinted + grain * strength;
-    paper = mix(paper, paper * vec3(0.98, 0.985, 0.99), 0.4 * strength);
-    outColor = vec4(clamp(paper, 0.0, 1.0), 1.0);
-    return;
-  }
-
-  if (u_effect == 2) {
-    vec2 p = v_uv * 2.0 - 1.0;
-    float r = length(p);
-    float t = u_time * 0.35;
-    float n = fbm(v_uv * 6.0 + vec2(t, -t));
-    float w = fbm(v_uv * 14.0 + vec2(-t * 1.3, t * 0.9));
-    float height = n * 0.75 + w * 0.25;
-    float dhdx = dFdx(height);
-    float dhdy = dFdy(height);
-    vec3 normal = normalize(vec3(-dhdx * 6.0, -dhdy * 6.0, 1.0));
-
-    vec3 lightDir = normalize(vec3(0.35, 0.55, 0.75));
-    vec3 viewDir = normalize(vec3(0.0, 0.0, 1.0));
-    float ndl = clamp(dot(normal, lightDir), 0.0, 1.0);
-    vec3 halfDir = normalize(lightDir + viewDir);
-    float ndh = clamp(dot(normal, halfDir), 0.0, 1.0);
-
-    float fresnel = pow(1.0 - clamp(dot(normal, viewDir), 0.0, 1.0), 3.0);
-    float specPow = mix(35.0, 120.0, clamp(u_shine, 0.0, 1.0));
-    float spec = pow(ndh, specPow);
-    float ripples = 0.4 + 0.6 * fbm(v_uv * 48.0 + vec2(t * 0.65, -t * 0.6));
-    spec *= ripples;
-
-    vec3 metalBase = mix(tinted, tinted * vec3(0.85, 0.9, 0.95), 0.55);
-    vec3 lit = metalBase * (0.35 + 0.75 * ndl);
-    vec3 highlight = vec3(1.0) * spec * (0.85 + 1.1 * fresnel);
-    float vignette = smoothstep(1.08, 0.15, r);
-    vec3 outRgb = mix(tinted, lit + highlight, clamp(u_intensity, 0.0, 1.0));
-    outRgb = mix(outRgb, outRgb * vignette, 0.22);
-    outColor = vec4(clamp(outRgb, 0.0, 1.0), 1.0);
-    return;
-  }
-
-  outColor = vec4(clamp(tinted, 0.0, 1.0), 1.0);
-}
-`;
-
-const createDemoCanvas = (size = 1024) => {
+  const w = Math.max(64, Math.round(width || 1024));
+  const h = Math.max(64, Math.round(height || 1024));
   const canvas = document.createElement('canvas');
-  canvas.width = size;
-  canvas.height = size;
+  canvas.width = w;
+  canvas.height = h;
   const ctx = canvas.getContext('2d');
-  if (!ctx) return canvas;
+  if (!ctx) return null;
 
-  const g = ctx.createLinearGradient(0, 0, size, size);
-  g.addColorStop(0, '#1b1b1b');
-  g.addColorStop(0.4, '#3b3b3b');
-  g.addColorStop(1, '#f2f2f2');
-  ctx.fillStyle = g;
-  ctx.fillRect(0, 0, size, size);
+  const lines = value.split('\n').map((line) => line.trimEnd()).filter((line) => line.length > 0);
+  if (!lines.length) return null;
 
-  ctx.globalAlpha = 0.9;
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(size * 0.08, size * 0.12, size * 0.84, size * 0.18);
-  ctx.globalAlpha = 1;
+  const weight = bold ? 700 : 400;
+  const family = font || DEFAULT_TEXT_FONT;
+  const spacing = clamp(tracking ?? 0, -0.2, 0.6);
+  const targetHeight = h * clamp(fill ?? 0.8, 0.12, 1);
+  const maxLineWidth = w * 0.9;
 
-  ctx.fillStyle = '#111111';
-  ctx.font = `${Math.floor(size * 0.075)}px system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial`;
+  const BASE = 100;
+  ctx.font = `${weight} ${BASE}px ${family}`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = `${(spacing * BASE).toFixed(2)}px`;
+
+  const widest = lines.reduce((max, line) => Math.max(max, ctx.measureText(line).width), 1);
+  const blockHeight = lines.length * BASE * 1.08;
+
+  const scale = Math.min(maxLineWidth / widest, targetHeight / blockHeight);
+  const fontSize = Math.max(8, BASE * scale);
+  const lineHeight = fontSize * 1.08;
+
+  ctx.font = `${weight} ${fontSize}px ${family}`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = `${(spacing * fontSize).toFixed(2)}px`;
+  ctx.fillStyle = color || '#ffffff';
+  ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('CREATIONBASE', size * 0.11, size * 0.21);
 
-  ctx.globalAlpha = 0.75;
-  ctx.fillStyle = '#0b57ff';
-  ctx.beginPath();
-  ctx.arc(size * 0.22, size * 0.7, size * 0.17, 0, Math.PI * 2);
-  ctx.fill();
+  const totalHeight = lineHeight * lines.length;
+  const startY = h / 2 - totalHeight / 2 + lineHeight / 2;
+  lines.forEach((line, index) => {
+    ctx.fillText(line, w / 2, startY + index * lineHeight);
+  });
 
-  ctx.fillStyle = '#ff2d55';
-  ctx.beginPath();
-  ctx.arc(size * 0.6, size * 0.64, size * 0.23, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.globalAlpha = 0.85;
-  ctx.fillStyle = '#10b981';
-  ctx.fillRect(size * 0.18, size * 0.78, size * 0.62, size * 0.11);
-  ctx.globalAlpha = 1;
-
-  return canvas;
+  try {
+    return canvas.toDataURL('image/png');
+  } catch {
+    return null;
+  }
 };
+
+const loadImageElement = (src) => new Promise((resolve) => {
+  if (!src) {
+    resolve(null);
+    return;
+  }
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => resolve(img);
+  img.onerror = () => resolve(null);
+  img.src = src;
+});
+
+const fitRect = (iw, ih, w, h, mode, extraScale = 1) => {
+  if (!iw || !ih) {
+    const dw = w * extraScale;
+    const dh = h * extraScale;
+    return { x: (w - dw) / 2, y: (h - dh) / 2, w: dw, h: dh };
+  }
+  const s = (mode === 'cover' ? Math.max(w / iw, h / ih) : Math.min(w / iw, h / ih)) * extraScale;
+  const dw = iw * s;
+  const dh = ih * s;
+  return { x: (w - dw) / 2, y: (h - dh) / 2, w: dw, h: dh };
+};
+
+// Draws the background shader full-frame, then composites the logo shader on
+// top. Generative logo shaders are clipped to the logo's opaque area (CSS
+// mask-image in preview, destination-in here); image shaders are already
+// confined to the source alpha and are drawn through unclipped.
+const composeLayersWithSource = (ctx, { bgCanvas, logoCanvas, logoPlain, clipLogo = true, sourceImg, width, height, fitMode, logoScale, scratch }) => {
+  if (bgCanvas) ctx.drawImage(bgCanvas, 0, 0, width, height);
+  if (logoPlain) {
+    if (!sourceImg) return;
+    const pr = fitRect(sourceImg.naturalWidth || width, sourceImg.naturalHeight || height, width, height, fitMode, logoScale);
+    ctx.drawImage(sourceImg, pr.x, pr.y, pr.w, pr.h);
+    return;
+  }
+  if (!logoCanvas) return;
+  if (!clipLogo || !sourceImg) {
+    ctx.drawImage(logoCanvas, 0, 0, width, height);
+    return;
+  }
+  if (scratch.width !== width) scratch.width = width;
+  if (scratch.height !== height) scratch.height = height;
+  const sc = scratch.getContext('2d');
+  if (!sc) {
+    ctx.drawImage(logoCanvas, 0, 0, width, height);
+    return;
+  }
+  sc.clearRect(0, 0, width, height);
+  sc.drawImage(logoCanvas, 0, 0, width, height);
+  sc.globalCompositeOperation = 'destination-in';
+  const r = fitRect(sourceImg.naturalWidth || width, sourceImg.naturalHeight || height, width, height, fitMode, logoScale);
+  sc.drawImage(sourceImg, r.x, r.y, r.w, r.h);
+  sc.globalCompositeOperation = 'source-over';
+  ctx.drawImage(scratch, 0, 0);
+};
+
+const RangeField = ({ label, value, min, max, step, onChange, rangeStyle }) => (
+  <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
+    <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>{label}</span>
+    <input
+      style={rangeStyle}
+      type="range"
+      min={min}
+      max={max}
+      step={step}
+      value={value}
+      onChange={(ev) => onChange(Number(ev.target.value))}
+    />
+  </label>
+);
+
+const SelectField = ({ label, value, options, onChange, fieldBaseStyle }) => (
+  <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
+    <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>{label}</span>
+    <select style={fieldBaseStyle} value={value} onChange={(ev) => onChange(ev.target.value)}>
+      {options.map((opt) => (
+        <option key={opt.value} value={opt.value}>{opt.label}</option>
+      ))}
+    </select>
+  </label>
+);
+
+const ColorField = ({ label, value, onChange, styles }) => (
+  <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
+    <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>{label}</span>
+    <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr', gap: 10, alignItems: 'center' }}>
+      <input style={styles.colorInputStyle} type="color" value={value} onChange={(ev) => onChange(ev.target.value)} />
+      <input style={styles.fieldBaseStyle} value={value} onChange={(ev) => onChange(ev.target.value)} />
+    </div>
+  </label>
+);
+
+const ColorListField = ({ label, values, onChange, styles }) => (
+  <div style={{ display: 'grid', gap: 10 }}>
+    <div className="small-text" style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>{label}</div>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+      {values.map((value, index) => (
+        <label key={index} className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
+          <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>{`Color ${index + 1}`}</span>
+          <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr', gap: 10, alignItems: 'center' }}>
+            <input style={styles.colorInputStyle} type="color" value={value} onChange={(ev) => onChange(index, ev.target.value)} />
+            <input style={styles.fieldBaseStyle} value={value} onChange={(ev) => onChange(index, ev.target.value)} />
+          </div>
+        </label>
+      ))}
+    </div>
+  </div>
+);
+
+const GRAIN_SHAPES = [
+  { value: 'wave', label: 'Wave' },
+  { value: 'dots', label: 'Dots' },
+  { value: 'truchet', label: 'Truchet' },
+  { value: 'corners', label: 'Corners' },
+  { value: 'ripple', label: 'Ripple' },
+  { value: 'blob', label: 'Blob' },
+  { value: 'sphere', label: 'Sphere' },
+];
+
+// Shaders that take the source image as an input; everything else is a
+// full-frame generative shader.
+const IMAGE_SHADER_IDS = [
+  'liquid-metal',
+  'heatmap',
+];
+
+const isImageShaderId = (id) => IMAGE_SHADER_IDS.includes(id);
+
+// Every shader parameter lives on a layer object so the Logo and Background
+// layers each carry a complete, independent shader configuration.
+const createLayerDefaults = () => ({
+  effect: 'liquid-metal',
+  animate: true,
+  speed: 1,
+  scale: 0.65,
+  rotation: 0,
+  offsetX: 0,
+  offsetY: 0,
+
+  lmRepetition: 2,
+  lmSoftness: 0.1,
+  lmShiftRed: 0.3,
+  lmShiftBlue: 0.3,
+  lmDistortion: 0.07,
+  lmContour: 0.4,
+  lmAngle: 70,
+
+  hmContour: 0.5,
+  hmNoise: 0,
+  hmInnerGlow: 0.5,
+  hmOuterGlow: 0.5,
+  hmAngle: 0,
+  hmColors: ['#112069', '#1f3ca3', '#3265e7', '#6bd8ff', '#ffe77a', '#ff9a1f', '#ff4d00'],
+
+  ggColors: ['#7300ff', '#eba8ff', '#00bfff', '#2a00ff'],
+  ggColorBack: '#000000',
+  ggSoftness: 0.5,
+  ggIntensity: 0.5,
+  ggNoise: 0.25,
+  ggShape: 'corners',
+
+  mgColors: ['#e0eaff', '#241d9a', '#f75092', '#9f50d3'],
+  mgDistortion: 0.8,
+  mgSwirl: 0.1,
+  mgGrainMixer: 0,
+  mgGrainOverlay: 0,
+
+  srColors: ['#ffffff', '#ffca0a', '#fc6203'],
+  srColorBack: '#000000',
+  srNoiseScale: 2,
+  srNoiseIterations: 4,
+  srRadius: 0.4,
+  srThickness: 0.8,
+  srInnerShape: 2,
+
+  cpColors: ['#ff9d00', '#fd4f30', '#809bff', '#6d2eff', '#333aff', '#f15cff', '#ffd557'],
+  cpColorBack: '#000000',
+  cpLength: 1.1,
+  cpDensity: 3,
+  cpBlur: 0,
+  cpFadeIn: 1,
+  cpFadeOut: 0.3,
+  cpGradient: 0,
+
+  snColors: ['#4449cf', '#ffd1e0', '#f94446', '#ffd36b', '#ffffff'],
+  snStepsPerColor: 2,
+  snSoftness: 0,
+
+  pnColorFront: '#fccff7',
+  pnColorBack: '#632ad5',
+  pnProportion: 0.35,
+  pnSoftness: 0.1,
+  pnOctaveCount: 1,
+  pnPersistence: 1,
+});
+
+// Curated palettes for the generative shaders. `colors` are the main gradient
+// stops and `back` is the backdrop colour (used as colorBack / gap colour).
+const SHADER_PALETTES = [
+  { id: 'creationbase', label: 'Creationbase', colors: ['#7300ff', '#eba8ff', '#00bfff', '#2a00ff'], back: '#000000' },
+  { id: 'spectral', label: 'Spectral', colors: ['#a600ff', '#6200ff', '#33fff5', '#ffffff'], back: '#05000f' },
+  { id: 'sunset', label: 'Sunset', colors: ['#ffd166', '#ff8a5c', '#ff4d6d', '#7a1e5a'], back: '#1b0620' },
+  { id: 'ocean', label: 'Ocean', colors: ['#5ef1ff', '#00a6ff', '#0057b8', '#001a33'], back: '#00080f' },
+  { id: 'acid', label: 'Acid', colors: ['#d0ff00', '#00ffa3', '#00b3ff', '#3b00ff'], back: '#04000f' },
+  { id: 'clay', label: 'Clay', colors: ['#f5e6d3', '#d9a066', '#8c4a2f', '#3d1f14'], back: '#160a05' },
+  { id: 'noir', label: 'Noir', colors: ['#ffffff', '#c9ccd1', '#5a6069', '#14171c'], back: '#000000' },
+  { id: 'paper', label: 'Paper', colors: ['#ffffff', '#efe7db', '#cbbca6', '#8a7a63'], back: '#f7f4ee' },
+  { id: 'ember', label: 'Ember', colors: ['#fff3b0', '#ffb703', '#fb8500', '#e63946'], back: '#1a0a00' },
+  { id: 'forest', label: 'Forest', colors: ['#d9f99d', '#4ade80', '#15803d', '#052e16'], back: '#02120a' },
+  { id: 'candy', label: 'Candy', colors: ['#ffd6e0', '#ff8fab', '#c77dff', '#7b2cbf'], back: '#1a0a1f' },
+  { id: 'cyber', label: 'Cyber', colors: ['#00fff0', '#ff00e5', '#7a00ff', '#001eff'], back: '#050014' },
+  { id: 'desert', label: 'Desert', colors: ['#ffe8c2', '#e9b872', '#c1663f', '#5c2a18'], back: '#1b0d06' },
+  { id: 'mint', label: 'Mint', colors: ['#e6fff7', '#7dffd4', '#00d1a0', '#045c46'], back: '#001410' },
+  { id: 'cobalt', label: 'Cobalt', colors: ['#dbeafe', '#60a5fa', '#1d4ed8', '#0b1f5c'], back: '#020617' },
+  { id: 'grape', label: 'Grape', colors: ['#f5d0fe', '#e879f9', '#a21caf', '#4a044e'], back: '#160016' },
+];
+
+const normalizeHex = (value) => String(value || '').trim().toLowerCase();
+
+const sameHexList = (a, b) => Array.isArray(a) && Array.isArray(b)
+  && a.length === b.length
+  && a.every((c, i) => normalizeHex(c) === normalizeHex(b[i]));
 
 function Tools() {
   const withTimeout = useCallback((promise, ms, label) => {
@@ -351,34 +405,21 @@ function Tools() {
     return /iPhone|iPad|iPod/i.test(ua);
   }, []);
 
-  const canvasRef = useRef(null);
-  const glRef = useRef(null);
-  const programRef = useRef(null);
-  const vaoRef = useRef(null);
-  const texRef = useRef(null);
-  const sourceRef = useRef(null);
-  const rafRef = useRef(0);
   const lastUrlRef = useRef('');
-  const lastTimeRef = useRef(performance.now());
-  const timeAccRef = useRef(0);
-  const forcePixelRatioRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const recordTimeoutRef = useRef(0);
   const recordIntervalRef = useRef(0);
   const recordChunksRef = useRef([]);
-  const iosReadPixelsRef = useRef(null);
-  const iosImageDataRef = useRef(null);
   const recordCanvasElRef = useRef(null);
-  const recordFboRef = useRef(null);
-  const recordFboTexRef = useRef(null);
-  const recordFboSizeRef = useRef({ w: 0, h: 0 });
   const ffmpegRef = useRef(null);
   const ffmpegLoadingRef = useRef(null);
   const saveFileHandleRef = useRef(null);
   const lastAutoDownloadUrlRef = useRef('');
-  const prevAnimateRef = useRef(true);
-  const paperPreviewMountRef = useRef(null);
-  const paperExportMountRef = useRef(null);
+  const previewBgMountRef = useRef(null);
+  const previewLogoMountRef = useRef(null);
+  const exportBgMountRef = useRef(null);
+  const exportLogoMountRef = useRef(null);
+  const exportScratchRef = useRef(null);
   const [paperExportActive, setPaperExportActive] = useState(false);
   const [paperImageUrl, setPaperImageUrl] = useState('/images/creationbase logo new png.png');
 
@@ -392,46 +433,103 @@ function Tools() {
   const frameH = useCustomFrame ? clamp(customH || preset.height, 64, 4096) : preset.height;
 
   const [fitMode, setFitMode] = useState('contain');
-  const [effect, setEffect] = useState('liquid-metal');
-  const [intensity, setIntensity] = useState(0.85);
-  const [grain, setGrain] = useState(0.55);
-  const [shine, setShine] = useState(0.75);
-  const [hue, setHue] = useState(0);
-  const [tintHex, setTintHex] = useState('#d7d7d7');
   const [bgHex, setBgHex] = useState('#ffffff');
-  const [zoom, setZoom] = useState(0.75);
-  const [panX, setPanX] = useState(0);
-  const [panY, setPanY] = useState(0);
-  const [animate, setAnimate] = useState(true);
-  const [paperSpeed, setPaperSpeed] = useState(1);
-  const [paperScale, setPaperScale] = useState(0.65);
-  const [paperRotation, setPaperRotation] = useState(0);
-  const [paperOffsetX, setPaperOffsetX] = useState(0);
-  const [paperOffsetY, setPaperOffsetY] = useState(0);
-  const [lmRepetition, setLmRepetition] = useState(2);
-  const [lmSoftness, setLmSoftness] = useState(0.1);
-  const [lmShiftRed, setLmShiftRed] = useState(0.3);
-  const [lmShiftBlue, setLmShiftBlue] = useState(0.3);
-  const [lmDistortion, setLmDistortion] = useState(0.07);
-  const [lmContour, setLmContour] = useState(0.4);
-  const [lmAngle, setLmAngle] = useState(70);
-  const [hmContour, setHmContour] = useState(0.5);
-  const [hmNoise, setHmNoise] = useState(0);
-  const [hmInnerGlow, setHmInnerGlow] = useState(0.5);
-  const [hmOuterGlow, setHmOuterGlow] = useState(0.5);
-  const [hmAngle, setHmAngle] = useState(0);
-  const [hmColors, setHmColors] = useState([
-    '#112069',
-    '#1f3ca3',
-    '#3265e7',
-    '#6bd8ff',
-    '#ffe77a',
-    '#ff9a1f',
-    '#ff4d00',
-  ]);
+  const [logoLayer, setLogoLayer] = useState(() => ({ ...createLayerDefaults(), effect: 'liquid-metal' }));
+  const [bgLayer, setBgLayer] = useState(() => ({ ...createLayerDefaults(), effect: 'grain-gradient' }));
+  const [layerTab, setLayerTab] = useState('logo');
+
+  const L = layerTab === 'logo' ? logoLayer : bgLayer;
+  const update = (patch) => {
+    const setter = layerTab === 'logo' ? setLogoLayer : setBgLayer;
+    setter((prev) => ({ ...prev, ...patch }));
+  };
+
+  const [sourceMode, setSourceMode] = useState('image');
+  const [textValue, setTextValue] = useState('CREATIONBASE');
+  const [textColor, setTextColor] = useState('#ffffff');
+  const [textBold, setTextBold] = useState(true);
+  const [textTracking, setTextTracking] = useState(0);
+  const [textFill, setTextFill] = useState(0.8);
+  const [textFont, setTextFont] = useState(DEFAULT_TEXT_FONT);
+  const [fontTick, setFontTick] = useState(0);
+  const [logoScale, setLogoScale] = useState(1);
+  const [sourceAspect, setSourceAspect] = useState(0);
+
+  // The active layer drives both the flag set below and the control panels.
+  // Flag names mirror the previous single-shader implementation so the panels
+  // stay unchanged apart from how they read and write values.
+  const effect = L.effect;
   const isPaperLiquidMetal = effect === 'liquid-metal';
   const isPaperHeatmap = effect === 'heatmap';
-  const isPaperShader = isPaperLiquidMetal || isPaperHeatmap;
+  const isGrainGradient = effect === 'grain-gradient';
+  const isMeshGradient = effect === 'mesh-gradient';
+  const isSmokeRing = effect === 'smoke-ring';
+  const isColorPanels = effect === 'color-panels';
+  const isSimplexNoise = effect === 'simplex-noise';
+  const isPerlinNoise = effect === 'perlin-noise';
+  const isGenerativeShader = effect !== 'none' && !isImageShaderId(effect);
+  const setP = (key) => (value) => update({ [key]: value });
+  const colorSetter = (key) => (index, value) => update({ [key]: L[key].map((c, i) => (i === index ? value : c)) });
+
+  // Maps a curated palette onto whichever generative shader is active. Shaders
+  // with a colour list take the full ramp; the single/dual-colour shaders are
+  // mapped onto their own slots. Keeps the manual colour fields fully editable.
+  const applyPalette = (id) => {
+    const p = SHADER_PALETTES.find((x) => x.id === id);
+    if (!p) return;
+    const cols = p.colors;
+    const back = p.back || cols[cols.length - 1];
+    if (isGrainGradient) {
+      update({ ggColors: cols, ggColorBack: back });
+    } else if (isMeshGradient) {
+      update({ mgColors: cols });
+    } else if (isSmokeRing) {
+      update({ srColors: cols, srColorBack: back });
+    } else if (isColorPanels) {
+      update({ cpColors: cols, cpColorBack: back });
+    } else if (isSimplexNoise) {
+      update({ snColors: cols });
+    } else if (isPerlinNoise) {
+      update({ pnColorFront: cols[0], pnColorBack: back });
+    }
+  };
+
+  // Derived (not stored) so the dropdown stays truthful the moment any colour
+  // field is edited by hand — it simply falls back to "Custom".
+  const activePaletteId = useMemo(() => {
+    let current = null;
+    if (isGrainGradient) current = { colors: L.ggColors, back: L.ggColorBack };
+    else if (isMeshGradient) current = { colors: L.mgColors, back: null };
+    else if (isSmokeRing) current = { colors: L.srColors, back: L.srColorBack };
+    else if (isColorPanels) current = { colors: L.cpColors, back: L.cpColorBack };
+    else if (isSimplexNoise) current = { colors: L.snColors, back: null };
+    else if (isPerlinNoise) current = { colors: [L.pnColorFront], back: L.pnColorBack };
+    if (!current) return 'custom';
+    const match = SHADER_PALETTES.find((p) => (
+      sameHexList(current.colors, p.colors.slice(0, current.colors.length))
+      && (!current.back || normalizeHex(p.back) === normalizeHex(current.back))
+    ));
+    return match ? match.id : 'custom';
+  }, [isGrainGradient, isMeshGradient, isSmokeRing, isColorPanels, isSimplexNoise, isPerlinNoise, L]);
+
+  const textMaskUrl = useMemo(() => {
+    if (sourceMode !== 'text') return null;
+    return buildTextMaskDataUrl({
+      text: textValue,
+      color: textColor,
+      bold: textBold,
+      tracking: textTracking,
+      fill: textFill,
+      font: textFont,
+      width: clamp(frameW, 512, 2048),
+      height: clamp(frameH, 512, 2048),
+    });
+    // fontTick forces a rebuild once the webfont has actually loaded
+  }, [sourceMode, textValue, textColor, textBold, textTracking, textFill, textFont, frameW, frameH, fontTick]);
+
+  const paperImage = sourceMode === 'text'
+    ? (textMaskUrl || DEMO_MASK_URL)
+    : (paperImageUrl || DEMO_MASK_URL);
   const [videoDuration, setVideoDuration] = useState(5);
   const [videoFps, setVideoFps] = useState(30);
   const [isRecording, setIsRecording] = useState(false);
@@ -455,81 +553,8 @@ function Tools() {
     return () => mq.removeListener(onChange);
   }, []);
 
-  const uniformLocationsRef = useRef(null);
-
-  const initGlIfNeeded = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return null;
-    const existing = glRef.current;
-    if (existing && programRef.current && vaoRef.current) return existing;
-
-    setStatusMessage('');
-    const gl = canvas.getContext('webgl2', { alpha: true, antialias: true, preserveDrawingBuffer: true });
-    if (!gl) {
-      setStatusMessage('WebGL2 is not available in this browser.');
-      return null;
-    }
-    const program = createProgram(gl, VERTEX_SHADER, FRAGMENT_SHADER);
-    const vao = gl.createVertexArray();
-    const vbo = gl.createBuffer();
-    if (!vao || !vbo) {
-      gl.deleteProgram(program);
-      setStatusMessage('WebGL init failed.');
-      return null;
-    }
-    gl.bindVertexArray(vao);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
-    const posLoc = gl.getAttribLocation(program, 'a_position');
-    gl.enableVertexAttribArray(posLoc);
-    gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
-    gl.bindVertexArray(null);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-    const uniforms = {
-      u_image: gl.getUniformLocation(program, 'u_image'),
-      u_canvasSize: gl.getUniformLocation(program, 'u_canvasSize'),
-      u_imageSize: gl.getUniformLocation(program, 'u_imageSize'),
-      u_fitMode: gl.getUniformLocation(program, 'u_fitMode'),
-      u_pan: gl.getUniformLocation(program, 'u_pan'),
-      u_zoom: gl.getUniformLocation(program, 'u_zoom'),
-      u_effect: gl.getUniformLocation(program, 'u_effect'),
-      u_intensity: gl.getUniformLocation(program, 'u_intensity'),
-      u_grain: gl.getUniformLocation(program, 'u_grain'),
-      u_shine: gl.getUniformLocation(program, 'u_shine'),
-      u_hue: gl.getUniformLocation(program, 'u_hue'),
-      u_tint: gl.getUniformLocation(program, 'u_tint'),
-      u_bg: gl.getUniformLocation(program, 'u_bg'),
-      u_time: gl.getUniformLocation(program, 'u_time'),
-    };
-
-    glRef.current = gl;
-    programRef.current = program;
-    vaoRef.current = vao;
-    uniformLocationsRef.current = uniforms;
-    return gl;
-  };
-
-  const ensureDemoTexture = useCallback((gl) => {
-    if (texRef.current && sourceRef.current) return;
-    const demo = createDemoCanvas(1024);
-    sourceRef.current = demo;
-    texRef.current = createTextureFromImage(gl, demo);
-  }, []);
-
-  const destroyTexture = () => {
-    const gl = glRef.current;
-    if (!gl) return;
-    if (texRef.current) {
-      gl.deleteTexture(texRef.current);
-      texRef.current = null;
-    }
-  };
-
   const loadImageFromFile = async (file) => {
     if (!file) return;
-    destroyTexture();
-    sourceRef.current = null;
     if (lastUrlRef.current) URL.revokeObjectURL(lastUrlRef.current);
     const isSvg = file.type === 'image/svg+xml' || String(file.name || '').toLowerCase().endsWith('.svg');
     let blobForUrl = file;
@@ -539,143 +564,45 @@ function Tools() {
       blobForUrl = new Blob([cleaned], { type: 'image/svg+xml' });
     }
     lastUrlRef.current = URL.createObjectURL(blobForUrl);
-    const url = lastUrlRef.current;
-    setPaperImageUrl(url);
-    const img = new Image();
-    img.decoding = 'async';
-    img.crossOrigin = 'anonymous';
-    await new Promise((resolve, reject) => {
-      img.onload = resolve;
-      img.onerror = reject;
-      img.src = url;
+    setPaperImageUrl(lastUrlRef.current);
+  };
+
+  useEffect(() => {
+    if (typeof document === 'undefined' || !document.fonts?.ready) return undefined;
+    let cancelled = false;
+    document.fonts.ready.then(() => { if (!cancelled) setFontTick((t) => t + 1); }).catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
+    if (typeof document === 'undefined' || !document.fonts?.load) return undefined;
+    let cancelled = false;
+    const weight = textBold ? 700 : 400;
+    Promise.resolve(document.fonts.load(`${weight} 100px ${textFont}`))
+      .catch(() => {})
+      .then(() => { if (!cancelled) setFontTick((t) => t + 1); });
+    return () => { cancelled = true; };
+  }, [textFont, textBold]);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadImageElement(paperImage).then((img) => {
+      if (cancelled || !img) return;
+      const aw = img.naturalWidth || frameW;
+      const ah = img.naturalHeight || frameH;
+      setSourceAspect(ah ? aw / ah : 0);
     });
-    sourceRef.current = img;
-    const gl = initGlIfNeeded();
-    if (!gl) return;
-    texRef.current = createTextureFromImage(gl, img);
-    setStatusMessage('');
-  };
-
-  const setCanvasDrawingBuffer = (gl, width, height, pixelRatio) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const dpr = clamp(pixelRatio, 1, 2);
-    const w = Math.max(1, Math.round(width * dpr));
-    const h = Math.max(1, Math.round(height * dpr));
-    if (canvas.width !== w || canvas.height !== h) {
-      canvas.width = w;
-      canvas.height = h;
-    }
-    gl.viewport(0, 0, w, h);
-  };
-
-  const render = useCallback((options) => {
-    const gl = initGlIfNeeded();
-    if (!gl || !programRef.current || !vaoRef.current) return;
-    const source = sourceRef.current;
-    const tex = texRef.current;
-
-    if (!tex || !source) ensureDemoTexture(gl);
-    const nextSource = sourceRef.current;
-    const nextTex = texRef.current;
-
-    const forcedPixelRatio = forcePixelRatioRef.current;
-    const pixelRatio = options?.pixelRatio ?? (forcedPixelRatio ?? Math.min(window.devicePixelRatio || 1, 2));
-    const canvasW = options?.width ?? frameW;
-    const canvasH = options?.height ?? frameH;
-    const targetFramebuffer = options?.framebuffer ?? null;
-    if (targetFramebuffer) {
-      gl.bindFramebuffer(gl.FRAMEBUFFER, targetFramebuffer);
-      gl.viewport(0, 0, Math.max(1, Math.round(canvasW)), Math.max(1, Math.round(canvasH)));
-    } else {
-      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-      setCanvasDrawingBuffer(gl, canvasW, canvasH, pixelRatio);
-    }
-
-    gl.clearColor(0, 0, 0, 0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.useProgram(programRef.current);
-    gl.bindVertexArray(vaoRef.current);
-
-    const uniforms = uniformLocationsRef.current;
-    if (!uniforms) return;
-    gl.uniform2f(uniforms.u_canvasSize, canvasW, canvasH);
-    if (nextSource && nextTex) {
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, nextTex);
-      gl.uniform1i(uniforms.u_image, 0);
-      gl.uniform2f(uniforms.u_imageSize, nextSource.width || 1, nextSource.height || 1);
-    } else {
-      gl.uniform2f(uniforms.u_imageSize, 1, 1);
-    }
-
-    gl.uniform1i(uniforms.u_fitMode, fitMode === 'cover' ? 1 : 0);
-    gl.uniform2f(uniforms.u_pan, panX, panY);
-    gl.uniform1f(uniforms.u_zoom, zoom);
-    gl.uniform1i(uniforms.u_effect, effect === 'legacy-paper' ? 1 : effect === 'legacy-liquid-metal' ? 2 : 0);
-    gl.uniform1f(uniforms.u_intensity, intensity);
-    gl.uniform1f(uniforms.u_grain, grain);
-    gl.uniform1f(uniforms.u_shine, shine);
-    gl.uniform1f(uniforms.u_hue, hue);
-    gl.uniform3fv(uniforms.u_tint, hexToVec3(tintHex, [1, 1, 1]));
-    gl.uniform3fv(uniforms.u_bg, hexToVec3(bgHex, [1, 1, 1]));
-    gl.uniform1f(uniforms.u_time, timeAccRef.current);
-
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
-    gl.bindVertexArray(null);
-  }, [bgHex, effect, ensureDemoTexture, fitMode, frameH, frameW, grain, hue, intensity, panX, panY, shine, tintHex, zoom]);
-
-  const scheduleRender = useCallback(() => {
-    cancelAnimationFrame(rafRef.current);
-    rafRef.current = requestAnimationFrame(() => render());
-  }, [render]);
-
-  useEffect(() => {
-    if (!String(effect).startsWith('legacy-')) return;
-    scheduleRender();
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [effect, scheduleRender]);
-
-  useEffect(() => {
-    if (!String(effect).startsWith('legacy-')) return;
-    if (!animate) return;
-    let mounted = true;
-    const tick = (now) => {
-      if (!mounted) return;
-      const dt = Math.min(40, Math.max(0, now - lastTimeRef.current));
-      lastTimeRef.current = now;
-      timeAccRef.current += dt / 1000;
-      render();
-      rafRef.current = requestAnimationFrame(tick);
-    };
-    lastTimeRef.current = performance.now();
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      mounted = false;
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, [animate, effect, render]);
+    return () => { cancelled = true; };
+  }, [paperImage, frameW, frameH]);
 
   useEffect(() => {
     return () => {
-      cancelAnimationFrame(rafRef.current);
       if (lastUrlRef.current) URL.revokeObjectURL(lastUrlRef.current);
       lastUrlRef.current = '';
       if (recordTimeoutRef.current) window.clearTimeout(recordTimeoutRef.current);
       if (recordCanvasElRef.current) {
         try { recordCanvasElRef.current.remove(); } catch (e) { void e; }
         recordCanvasElRef.current = null;
-      }
-      const gl = glRef.current;
-      if (gl) {
-        if (recordFboRef.current) {
-          try { gl.deleteFramebuffer(recordFboRef.current); } catch (e) { void e; }
-          recordFboRef.current = null;
-        }
-        if (recordFboTexRef.current) {
-          try { gl.deleteTexture(recordFboTexRef.current); } catch (e) { void e; }
-          recordFboTexRef.current = null;
-        }
       }
     };
   }, []);
@@ -890,46 +817,38 @@ function Tools() {
   }, [downloadFromUrl, isMobileDevice, mp4Download]);
 
   const downloadPng = useCallback(async () => {
-    if (isPaperShader) {
-      setStatusMessage('Preparing export…');
-      setPaperExportActive(true);
-      await new Promise((r) => requestAnimationFrame(() => r()));
-      const shaderCanvas = await waitForCanvasIn(() => paperExportMountRef.current);
-      const out = document.createElement('canvas');
-      out.width = frameW;
-      out.height = frameH;
-      const ctx = out.getContext('2d');
-      if (!ctx || !shaderCanvas) {
-        setStatusMessage('Export failed (canvas not ready).');
-        setPaperExportActive(false);
-        return;
-      }
-      ctx.clearRect(0, 0, frameW, frameH);
-      ctx.drawImage(shaderCanvas, 0, 0, frameW, frameH);
-      const url = out.toDataURL('image/png');
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `creationbase-tools-${frameW}x${frameH}.png`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+    setStatusMessage('Preparing export…');
+    setPaperExportActive(true);
+    await new Promise((r) => requestAnimationFrame(() => r()));
+    const logoPlain = logoLayer.effect === 'none';
+    const clipLogo = !logoPlain && !isImageShaderId(logoLayer.effect);
+    const bgCanvas = bgLayer.effect === 'none' ? null : await waitForCanvasIn(() => exportBgMountRef.current);
+    const logoCanvas = logoPlain ? null : await waitForCanvasIn(() => exportLogoMountRef.current);
+    const out = document.createElement('canvas');
+    out.width = frameW;
+    out.height = frameH;
+    const ctx = out.getContext('2d');
+    if (!ctx || (!logoCanvas && !logoPlain)) {
+      setStatusMessage('Export failed (canvas not ready).');
       setPaperExportActive(false);
-      setStatusMessage('');
       return;
     }
-
-    render({ width: frameW, height: frameH, pixelRatio: 1 });
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const url = canvas.toDataURL('image/png');
+    ctx.clearRect(0, 0, frameW, frameH);
+    ctx.fillStyle = bgHex || '#FFFFFF';
+    ctx.fillRect(0, 0, frameW, frameH);
+    const sourceImg = await loadImageElement(paperImage);
+    const scratch = exportScratchRef.current || (exportScratchRef.current = document.createElement('canvas'));
+    composeLayersWithSource(ctx, { bgCanvas, logoCanvas, logoPlain, clipLogo, sourceImg, width: frameW, height: frameH, fitMode, logoScale, scratch });
+    const url = out.toDataURL('image/png');
     const a = document.createElement('a');
     a.href = url;
     a.download = `creationbase-tools-${frameW}x${frameH}.png`;
     document.body.appendChild(a);
     a.click();
     a.remove();
-    scheduleRender();
-  }, [frameH, frameW, isPaperShader, render, scheduleRender, waitForCanvasIn]);
+    setPaperExportActive(false);
+    setStatusMessage('');
+  }, [bgHex, fitMode, frameH, frameW, logoLayer.effect, logoScale, bgLayer.effect, paperImage, waitForCanvasIn]);
 
   const stopRecording = useCallback(() => {
     if (recordTimeoutRef.current) {
@@ -978,375 +897,125 @@ function Tools() {
       if (handle) saveFileHandleRef.current = handle;
     }
 
-    if (isPaperShader) {
-      setStatusMessage('Preparing recording…');
-      const usePreviewCanvas = isIOSDevice;
-      if (!usePreviewCanvas) {
-        setPaperExportActive(true);
-      }
-      await new Promise((r) => requestAnimationFrame(() => r()));
-      const shaderCanvas = await waitForCanvasIn(() => (usePreviewCanvas ? paperPreviewMountRef.current : paperExportMountRef.current));
-      if (!shaderCanvas) {
-        setStatusMessage('Recording failed (canvas not ready).');
-        setPaperExportActive(false);
-        return;
-      }
-
-      const out = document.createElement('canvas');
-      out.width = frameW;
-      out.height = frameH;
-      out.style.position = 'fixed';
-      out.style.left = '-10000px';
-      out.style.top = '0';
-      out.style.width = `${frameW}px`;
-      out.style.height = `${frameH}px`;
-      out.style.opacity = '0';
-      out.style.pointerEvents = 'none';
-      out.setAttribute('aria-hidden', 'true');
-      document.body.appendChild(out);
-      recordCanvasElRef.current = out;
-      const ctx = out.getContext('2d');
-      if (!ctx) {
-        setStatusMessage('Recording failed (2D context unavailable).');
-        try { out.remove(); } catch (e) { void e; }
-        if (recordCanvasElRef.current === out) recordCanvasElRef.current = null;
-        setPaperExportActive(false);
-        return;
-      }
-
-      if (isIOSDevice) {
-        const maxFrames = 180;
-        const fps = Math.max(6, Math.min(videoFps, Math.floor(maxFrames / Math.max(1, videoDuration))));
-        const totalFrames = Math.max(1, Math.round(videoDuration * fps));
-        const pad = (n) => String(n).padStart(5, '0');
-        const canvasToPng = () => new Promise((resolve) => {
-          out.toBlob((b) => resolve(b), 'image/png');
-        });
-        const mount = paperExportMountRef.current?.paperShaderMount;
-
-        const glPaper = shaderCanvas.getContext('webgl2') || shaderCanvas.getContext('webgl');
-        const captureW2 = Math.max(1, glPaper?.drawingBufferWidth || shaderCanvas.width || frameW);
-        const captureH2 = Math.max(1, glPaper?.drawingBufferHeight || shaderCanvas.height || frameH);
-        const expectedLen = captureW2 * captureH2 * 4;
-        const pixels = new Uint8Array(expectedLen);
-
-        const tmp = document.createElement('canvas');
-        tmp.width = captureW2;
-        tmp.height = captureH2;
-        const tmpCtx = tmp.getContext('2d');
-        const imageData = tmpCtx ? tmpCtx.createImageData(captureW2, captureH2) : ctx.createImageData(captureW2, captureH2);
-
-        setIsRecording(true);
-        setIsFinalizing(true);
-        try {
-          setStatusMessage(`Preparing frames… (${fps}fps)`);
-          const { ffmpeg, fetchFile } = await withTimeout(getFfmpeg(), 60000, 'FFmpeg load');
-
-          for (let i = 0; i < totalFrames; i += 1) {
-            if (i % 12 === 0) setStatusMessage(`Preparing frames… ${i}/${totalFrames}`);
-            await new Promise((r) => requestAnimationFrame(() => r()));
-            await new Promise((r) => requestAnimationFrame(() => r()));
-
-            ctx.clearRect(0, 0, frameW, frameH);
-            ctx.fillStyle = bgHex || (isPaperHeatmap ? '#000000' : '#FFFFFF');
-            ctx.fillRect(0, 0, frameW, frameH);
-
-            if (glPaper) {
-              try { glPaper.finish(); } catch (e) { void e; }
-              try {
-                glPaper.readPixels(0, 0, captureW2, captureH2, glPaper.RGBA, glPaper.UNSIGNED_BYTE, pixels);
-                let hasNonZero = false;
-                for (let k = 0; k < pixels.length; k += 16384) {
-                  if (pixels[k] || pixels[k + 1] || pixels[k + 2] || pixels[k + 3]) { hasNonZero = true; break; }
-                }
-                if (hasNonZero) {
-                  const rowBytes = captureW2 * 4;
-                  for (let y = 0; y < captureH2; y += 1) {
-                    const srcStart = (captureH2 - 1 - y) * rowBytes;
-                    const dstStart = y * rowBytes;
-                    imageData.data.set(pixels.subarray(srcStart, srcStart + rowBytes), dstStart);
-                  }
-                  if (tmpCtx) tmpCtx.putImageData(imageData, 0, 0);
-                  ctx.drawImage(tmp, 0, 0);
-                } else {
-                  try { ctx.drawImage(shaderCanvas, 0, 0); } catch (err) { void err; }
-                }
-              } catch (e) {
-                void e;
-                try { ctx.drawImage(shaderCanvas, 0, 0); } catch (err) { void err; }
-              }
-            } else {
-              try { ctx.drawImage(shaderCanvas, 0, 0); } catch (e) { void e; }
-            }
-
-            const pngBlob = await canvasToPng();
-            if (!pngBlob) throw new Error('Frame encode failed');
-            await ffmpeg.writeFile(`frame-${pad(i)}.png`, await fetchFile(pngBlob));
-          }
-
-          setStatusMessage('Encoding MP4…');
-          const outputName = `out-ios-paper-${Date.now()}.mp4`;
-          await withTimeout(
-            ffmpeg.exec([
-              '-framerate', String(fps),
-              '-start_number', '0',
-              '-i', 'frame-%05d.png',
-              '-an',
-              '-c:v', 'libx264',
-              '-preset', 'veryfast',
-              '-crf', '23',
-              '-profile:v', 'baseline',
-              '-level', '4.0',
-              '-pix_fmt', 'yuv420p',
-              '-movflags', '+faststart',
-              outputName,
-            ]),
-            180000,
-            'MP4 encode',
-          );
-          const bytes = await withTimeout(ffmpeg.readFile(outputName), 20000, 'MP4 read');
-          const mp4 = new Blob([bytes], { type: 'video/mp4' });
-          for (let i = 0; i < totalFrames; i += 1) {
-            try { await ffmpeg.deleteFile(`frame-${pad(i)}.png`); } catch (e) { void e; }
-          }
-          try { await ffmpeg.deleteFile(outputName); } catch (e) { void e; }
-          setMp4DownloadFromBlob(mp4, outFilename);
-          setStatusMessage('MP4 ready.');
-        } catch {
-          setStatusMessage('MP4 encoding failed.');
-        } finally {
-          if (recordCanvasElRef.current) {
-            try { recordCanvasElRef.current.remove(); } catch (e) { void e; }
-            recordCanvasElRef.current = null;
-          }
-          setIsRecording(false);
-          setIsFinalizing(false);
-          setPaperExportActive(false);
-        }
-        return;
-      }
-
-      const fps = Math.max(10, Math.min(60, videoFps));
-      const baseFill = bgHex || (isPaperHeatmap ? '#000000' : '#FFFFFF');
-      const draw = () => {
-        ctx.fillStyle = baseFill;
-        ctx.fillRect(0, 0, frameW, frameH);
-        ctx.drawImage(shaderCanvas, 0, 0, frameW, frameH);
-      };
-      draw();
-      recordIntervalRef.current = window.setInterval(draw, Math.round(1000 / fps));
-
-      await new Promise((r) => requestAnimationFrame(() => r()));
-      await new Promise((r) => requestAnimationFrame(() => r()));
-      await new Promise((r) => globalThis.setTimeout(r, Math.round(1000 / fps)));
-      draw();
-
-      const stream = out.captureStream(fps);
-      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
-
-      recordChunksRef.current = [];
-      recorder.ondataavailable = (ev) => {
-        if (ev.data && ev.data.size > 0) recordChunksRef.current.push(ev.data);
-      };
-      recorder.onstop = async () => {
-        if (recordIntervalRef.current) {
-          window.clearInterval(recordIntervalRef.current);
-          recordIntervalRef.current = 0;
-        }
-        if (recordCanvasElRef.current) {
-          try { recordCanvasElRef.current.remove(); } catch (e) { void e; }
-          recordCanvasElRef.current = null;
-        }
-        const blobType = recorder.mimeType || mimeType || '';
-        const inputExt = String(blobType).includes('mp4') ? 'mp4' : 'webm';
-        const blob = new Blob(recordChunksRef.current, { type: blobType || 'video/webm' });
-        try {
-          if (needsTranscode || !String(blobType).startsWith('video/mp4')) {
-            setStatusMessage('Encoding MP4…');
-            const mp4 = await encodeMp4(blob, inputExt);
-            const handle = saveFileHandleRef.current;
-            saveFileHandleRef.current = null;
-            if (handle && await writeFileHandle(handle, mp4)) {
-              setStatusMessage('Saved.');
-              clearMp4Download();
-            } else {
-              setMp4DownloadFromBlob(mp4, outFilename);
-              setStatusMessage('MP4 ready.');
-            }
-          } else {
-            const handle = saveFileHandleRef.current;
-            saveFileHandleRef.current = null;
-            if (handle && await writeFileHandle(handle, blob)) {
-              setStatusMessage('Saved.');
-              clearMp4Download();
-            } else {
-              setMp4DownloadFromBlob(blob, outFilename);
-              setStatusMessage('MP4 ready.');
-            }
-          }
-        } catch {
-          const handle = saveFileHandleRef.current;
-          saveFileHandleRef.current = null;
-          if (handle && await writeFileHandle(handle, blob)) {
-            setStatusMessage('Saved.');
-            clearMp4Download();
-          } else {
-            setMp4DownloadFromBlob(blob, outFilename);
-            setStatusMessage('MP4 ready.');
-          }
-        } finally {
-          recordChunksRef.current = [];
-          mediaRecorderRef.current = null;
-          setIsRecording(false);
-          setPaperExportActive(false);
-          setIsFinalizing(false);
-        }
-      };
-
-      mediaRecorderRef.current = recorder;
-      setIsRecording(true);
-      setIsFinalizing(false);
-      setStatusMessage(`Recording ${videoDuration}s video…`);
-      recorder.start(250);
-      recordTimeoutRef.current = window.setTimeout(() => {
-        stopRecording();
-      }, Math.max(1, videoDuration) * 1000 + extraStopMs);
+    setStatusMessage('Preparing recording…');
+    const usePreviewCanvas = isIOSDevice;
+    if (!usePreviewCanvas) {
+      setPaperExportActive(true);
+    }
+    await new Promise((r) => requestAnimationFrame(() => r()));
+    const pick = (previewRef, exportRef) => (usePreviewCanvas ? previewRef.current : exportRef.current);
+    const logoPlain = logoLayer.effect === 'none';
+    const clipLogo = !logoPlain && !isImageShaderId(logoLayer.effect);
+    const bgShaderCanvas = bgLayer.effect === 'none' ? null : await waitForCanvasIn(() => pick(previewBgMountRef, exportBgMountRef));
+    const logoShaderCanvas = logoPlain ? null : await waitForCanvasIn(() => pick(previewLogoMountRef, exportLogoMountRef));
+    if (!logoShaderCanvas && !logoPlain) {
+      setStatusMessage('Recording failed (canvas not ready).');
+      setPaperExportActive(false);
       return;
     }
 
+    const out = document.createElement('canvas');
+    out.width = frameW;
+    out.height = frameH;
+    out.style.position = 'fixed';
+    out.style.left = '-10000px';
+    out.style.top = '0';
+    out.style.width = `${frameW}px`;
+    out.style.height = `${frameH}px`;
+    out.style.opacity = '0';
+    out.style.pointerEvents = 'none';
+    out.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(out);
+    recordCanvasElRef.current = out;
+    const ctx = out.getContext('2d');
+    if (!ctx) {
+      setStatusMessage('Recording failed (2D context unavailable).');
+      try { out.remove(); } catch (e) { void e; }
+      if (recordCanvasElRef.current === out) recordCanvasElRef.current = null;
+      setPaperExportActive(false);
+      return;
+    }
+
+    const sourceImg = await loadImageElement(paperImage);
+    const scratch = exportScratchRef.current || (exportScratchRef.current = document.createElement('canvas'));
+
     if (isIOSDevice) {
-      const gl = initGlIfNeeded();
-      if (!gl) {
-        setStatusMessage('WebGL init failed.');
-        return;
-      }
-
-      forcePixelRatioRef.current = 1;
-
-      const maxFrames = 300;
-      const fps = Math.max(10, Math.min(videoFps, Math.floor(maxFrames / Math.max(1, videoDuration))));
+      const maxFrames = 180;
+      const fps = Math.max(6, Math.min(videoFps, Math.floor(maxFrames / Math.max(1, videoDuration))));
       const totalFrames = Math.max(1, Math.round(videoDuration * fps));
-
-      if (!recordFboRef.current || recordFboSizeRef.current.w !== frameW || recordFboSizeRef.current.h !== frameH) {
-        if (recordFboRef.current) {
-          try { gl.deleteFramebuffer(recordFboRef.current); } catch (e) { void e; }
-          recordFboRef.current = null;
-        }
-        if (recordFboTexRef.current) {
-          try { gl.deleteTexture(recordFboTexRef.current); } catch (e) { void e; }
-          recordFboTexRef.current = null;
-        }
-
-        const tex = gl.createTexture();
-        const fbo = gl.createFramebuffer();
-        if (!tex || !fbo) {
-          if (tex) try { gl.deleteTexture(tex); } catch (e) { void e; }
-          if (fbo) try { gl.deleteFramebuffer(fbo); } catch (e) { void e; }
-          setStatusMessage('Recording failed (framebuffer unavailable).');
-          return;
-        }
-
-        gl.bindTexture(gl.TEXTURE_2D, tex);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, frameW, frameH, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-        gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
-        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
-        const ok = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-        if (!ok) {
-          try { gl.deleteTexture(tex); } catch (e) { void e; }
-          try { gl.deleteFramebuffer(fbo); } catch (e) { void e; }
-          setStatusMessage('Recording failed (framebuffer incomplete).');
-          return;
-        }
-
-        recordFboRef.current = fbo;
-        recordFboTexRef.current = tex;
-        recordFboSizeRef.current = { w: frameW, h: frameH };
-      }
-
-      const out = document.createElement('canvas');
-      out.width = frameW;
-      out.height = frameH;
-      out.style.position = 'fixed';
-      out.style.left = '-10000px';
-      out.style.top = '0';
-      out.style.width = `${frameW}px`;
-      out.style.height = `${frameH}px`;
-      out.style.opacity = '0';
-      out.style.pointerEvents = 'none';
-      out.setAttribute('aria-hidden', 'true');
-      document.body.appendChild(out);
-      recordCanvasElRef.current = out;
-      const ctx = out.getContext('2d');
-      if (!ctx) {
-        setStatusMessage('Recording failed (2D context unavailable).');
-        try { out.remove(); } catch (e) { void e; }
-        if (recordCanvasElRef.current === out) recordCanvasElRef.current = null;
-        return;
-      }
-
-      const expectedLen = frameW * frameH * 4;
-      if (!iosReadPixelsRef.current || iosReadPixelsRef.current.length !== expectedLen) {
-        iosReadPixelsRef.current = new Uint8Array(expectedLen);
-      }
-      if (!iosImageDataRef.current || iosImageDataRef.current.width !== frameW || iosImageDataRef.current.height !== frameH) {
-        iosImageDataRef.current = ctx.createImageData(frameW, frameH);
-      }
-
-      setIsRecording(true);
-      setIsFinalizing(true);
-
       const pad = (n) => String(n).padStart(5, '0');
       const canvasToPng = () => new Promise((resolve) => {
         out.toBlob((b) => resolve(b), 'image/png');
       });
 
-      const prevTime = timeAccRef.current;
+      // Reads a WebGL shader canvas back into a 2D canvas (flipping vertically)
+      // so both layers can be composited through the shared 2D path.
+      const grabShaderFrame = (glCanvas) => {
+        const gl = glCanvas.getContext('webgl2') || glCanvas.getContext('webgl');
+        const w = Math.max(1, gl?.drawingBufferWidth || glCanvas.width || frameW);
+        const h = Math.max(1, gl?.drawingBufferHeight || glCanvas.height || frameH);
+        const gc = document.createElement('canvas');
+        gc.width = w;
+        gc.height = h;
+        const gctx = gc.getContext('2d');
+        if (!gl || !gctx) return glCanvas;
+        const px = new Uint8Array(w * h * 4);
+        try {
+          gl.finish();
+          gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, px);
+        } catch (e) {
+          void e;
+          return glCanvas;
+        }
+        const data = gctx.createImageData(w, h);
+        const rowBytes = w * 4;
+        for (let y = 0; y < h; y += 1) {
+          const srcStart = (h - 1 - y) * rowBytes;
+          data.data.set(px.subarray(srcStart, srcStart + rowBytes), y * rowBytes);
+        }
+        gctx.putImageData(data, 0, 0);
+        return gc;
+      };
+
+      setIsRecording(true);
+      setIsFinalizing(true);
       try {
         setStatusMessage(`Preparing frames… (${fps}fps)`);
         const { ffmpeg, fetchFile } = await withTimeout(getFfmpeg(), 60000, 'FFmpeg load');
-        for (let i = 0; i < totalFrames; i += 1) {
-          if (i % 20 === 0) setStatusMessage(`Preparing frames… ${i}/${totalFrames}`);
-          timeAccRef.current = prevTime + i / fps;
-          render({ width: frameW, height: frameH, pixelRatio: 1, framebuffer: recordFboRef.current });
-          try { gl.finish(); } catch (e) { void e; }
-          gl.bindFramebuffer(gl.FRAMEBUFFER, recordFboRef.current);
-          gl.readPixels(0, 0, frameW, frameH, gl.RGBA, gl.UNSIGNED_BYTE, iosReadPixelsRef.current);
-          gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
-          const src = iosReadPixelsRef.current;
-          let hasNonZero = false;
-          for (let k = 0; k < src.length; k += 16384) {
-            if (src[k] || src[k + 1] || src[k + 2] || src[k + 3]) { hasNonZero = true; break; }
-          }
-          if (hasNonZero) {
-            const dst = iosImageDataRef.current.data;
-            const rowBytes = frameW * 4;
-            for (let y = 0; y < frameH; y += 1) {
-              const srcStart = (frameH - 1 - y) * rowBytes;
-              const dstStart = y * rowBytes;
-              dst.set(src.subarray(srcStart, srcStart + rowBytes), dstStart);
-            }
-            for (let p = 3; p < dst.length; p += 4) dst[p] = 255;
-            ctx.putImageData(iosImageDataRef.current, 0, 0);
-          } else {
-            ctx.fillStyle = bgHex || '#FFFFFF';
-            ctx.fillRect(0, 0, frameW, frameH);
+        for (let i = 0; i < totalFrames; i += 1) {
+          if (i % 12 === 0) setStatusMessage(`Preparing frames… ${i}/${totalFrames}`);
+          await new Promise((r) => requestAnimationFrame(() => r()));
+          await new Promise((r) => requestAnimationFrame(() => r()));
+
+          ctx.clearRect(0, 0, frameW, frameH);
+          ctx.fillStyle = bgHex || '#FFFFFF';
+          ctx.fillRect(0, 0, frameW, frameH);
+
+          try {
+            composeLayersWithSource(ctx, {
+              bgCanvas: bgShaderCanvas ? grabShaderFrame(bgShaderCanvas) : null,
+              logoCanvas: logoShaderCanvas ? grabShaderFrame(logoShaderCanvas) : null,
+              logoPlain,
+              clipLogo,
+              sourceImg,
+              width: frameW,
+              height: frameH,
+              fitMode,
+              logoScale,
+              scratch,
+            });
+          } catch (e) {
+            void e;
           }
 
           const pngBlob = await canvasToPng();
           if (!pngBlob) throw new Error('Frame encode failed');
-          const data = await fetchFile(pngBlob);
-          await ffmpeg.writeFile(`frame-${pad(i)}.png`, data);
+          await ffmpeg.writeFile(`frame-${pad(i)}.png`, await fetchFile(pngBlob));
         }
 
         setStatusMessage('Encoding MP4…');
-        const outputName = `out-ios-${Date.now()}.mp4`;
+        const outputName = `out-ios-paper-${Date.now()}.mp4`;
         await withTimeout(
           ffmpeg.exec([
             '-framerate', String(fps),
@@ -1376,30 +1045,33 @@ function Tools() {
       } catch {
         setStatusMessage('MP4 encoding failed.');
       } finally {
-        timeAccRef.current = prevTime;
         if (recordCanvasElRef.current) {
           try { recordCanvasElRef.current.remove(); } catch (e) { void e; }
           recordCanvasElRef.current = null;
         }
-        forcePixelRatioRef.current = null;
         setIsRecording(false);
         setIsFinalizing(false);
-        scheduleRender();
+        setPaperExportActive(false);
       }
       return;
     }
 
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const fps = Math.max(10, Math.min(60, videoFps));
+    const baseFill = bgHex || '#FFFFFF';
+    const draw = () => {
+      ctx.fillStyle = baseFill;
+      ctx.fillRect(0, 0, frameW, frameH);
+      composeLayersWithSource(ctx, { bgCanvas: bgShaderCanvas, logoCanvas: logoShaderCanvas, logoPlain, clipLogo, sourceImg, width: frameW, height: frameH, fitMode, logoScale, scratch });
+    };
+    draw();
+    recordIntervalRef.current = window.setInterval(draw, Math.round(1000 / fps));
 
-    prevAnimateRef.current = animate;
-    if (!animate) setAnimate(true);
-    forcePixelRatioRef.current = 1;
-    render({ width: frameW, height: frameH, pixelRatio: 1 });
     await new Promise((r) => requestAnimationFrame(() => r()));
     await new Promise((r) => requestAnimationFrame(() => r()));
+    await new Promise((r) => globalThis.setTimeout(r, Math.round(1000 / fps)));
+    draw();
 
-    const stream = canvas.captureStream(Math.max(10, Math.min(60, videoFps)));
+    const stream = out.captureStream(fps);
     const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
 
     recordChunksRef.current = [];
@@ -1407,6 +1079,14 @@ function Tools() {
       if (ev.data && ev.data.size > 0) recordChunksRef.current.push(ev.data);
     };
     recorder.onstop = async () => {
+      if (recordIntervalRef.current) {
+        window.clearInterval(recordIntervalRef.current);
+        recordIntervalRef.current = 0;
+      }
+      if (recordCanvasElRef.current) {
+        try { recordCanvasElRef.current.remove(); } catch (e) { void e; }
+        recordCanvasElRef.current = null;
+      }
       const blobType = recorder.mimeType || mimeType || '';
       const inputExt = String(blobType).includes('mp4') ? 'mp4' : 'webm';
       const blob = new Blob(recordChunksRef.current, { type: blobType || 'video/webm' });
@@ -1447,11 +1127,9 @@ function Tools() {
       } finally {
         recordChunksRef.current = [];
         mediaRecorderRef.current = null;
-        forcePixelRatioRef.current = null;
         setIsRecording(false);
+        setPaperExportActive(false);
         setIsFinalizing(false);
-        if (!prevAnimateRef.current) setAnimate(false);
-        scheduleRender();
       }
     };
 
@@ -1460,11 +1138,10 @@ function Tools() {
     setIsFinalizing(false);
     setStatusMessage(`Recording ${videoDuration}s video…`);
     recorder.start(250);
-
     recordTimeoutRef.current = window.setTimeout(() => {
       stopRecording();
     }, Math.max(1, videoDuration) * 1000 + extraStopMs);
-  }, [animate, bgHex, clearMp4Download, encodeMp4, frameH, frameW, isFinalizing, isIOSDevice, isMobileDevice, isPaperHeatmap, isPaperShader, isRecording, pickVideoMime, render, requestSaveFileHandle, scheduleRender, setMp4DownloadFromBlob, stopRecording, videoDuration, videoFps, waitForCanvasIn, writeFileHandle]);
+  }, [bgHex, bgLayer.effect, clearMp4Download, encodeMp4, fitMode, frameH, frameW, isFinalizing, isIOSDevice, isMobileDevice, isRecording, logoLayer.effect, logoScale, paperImage, pickVideoMime, requestSaveFileHandle, setMp4DownloadFromBlob, stopRecording, videoDuration, videoFps, waitForCanvasIn, writeFileHandle]);
 
   const pageBg = UI_DARK;
   const pageFg = UI_LIGHT;
@@ -1504,40 +1181,323 @@ function Tools() {
   const rangeStyle = useMemo(() => ({ width: '100%', minWidth: 0 }), []);
   const layoutColumns = stackLayout ? '1fr' : 'minmax(280px, 420px) minmax(0, 1fr)';
   const sidePanelMaxHeight = stackLayout ? 'none' : 'calc(var(--vh-stable, 100vh) - 160px)';
-  const isLegacyShader = String(effect).startsWith('legacy-');
-  const demoMaskUrl = '/images/isometric-city-blue.svg';
-  const paperImage = paperImageUrl || demoMaskUrl;
-  const computedPaperSpeed = animate ? paperSpeed : 0;
-  const heatmapColors = hmColors;
 
-  const renderPaperShader = (mode) => {
+  const boxAspect = frameW / frameH;
+  const srcAspect = sourceAspect || boxAspect;
+  const fitW = fitMode === 'cover'
+    ? (srcAspect >= boxAspect ? srcAspect / boxAspect : 1)
+    : (srcAspect >= boxAspect ? 1 : srcAspect / boxAspect);
+  const fitH = fitMode === 'cover'
+    ? (srcAspect >= boxAspect ? 1 : boxAspect / srcAspect)
+    : (srcAspect >= boxAspect ? boxAspect / srcAspect : 1);
+  const sourceMaskSize = `${(fitW * logoScale * 100).toFixed(3)}% ${(fitH * logoScale * 100).toFixed(3)}%`;
+  // Image shaders confine their own output to the source alpha, so they must
+  // NOT be clipped again (that would cut the soft dispersion edges). Generative
+  // shaders render a full-frame pattern and therefore need the silhouette mask.
+  const logoClipToShape = logoLayer.effect !== 'none' && !isImageShaderId(logoLayer.effect);
+
+  const renderLayerShader = (layer, mode, isLogoLayer = false) => {
+    const e = layer.effect;
+    if (e === 'none') return null;
+    // The logo layer must be transparent outside the logo so the background
+    // layer shows through. Image shaders already confine their own output to
+    // the source's alpha (opacity = img.g) — masking them would clip the soft
+    // dispersion/glow edges, so they only get a transparent backdrop here.
+    // Generative shaders have no source, so they are clipped to the silhouette.
+    const layerBack = isLogoLayer ? '#00000000' : bgHex;
     const common = {
       fit: fitMode,
-      scale: paperScale,
-      rotation: paperRotation,
-      offsetX: paperOffsetX,
-      offsetY: paperOffsetY,
-      speed: computedPaperSpeed,
+      scale: layer.scale,
+      rotation: layer.rotation,
+      offsetX: layer.offsetX,
+      offsetY: layer.offsetY,
+      speed: layer.animate ? layer.speed : 0,
     };
     const webGlContextAttributes = isIOSDevice ? { preserveDrawingBuffer: true, alpha: true, premultipliedAlpha: false } : undefined;
     const sizing = mode === 'export'
       ? { width: frameW, height: frameH, minPixelRatio: 1, maxPixelCount: Math.max(1, frameW * frameH * 4) }
       : { style: { width: '100%', height: '100%' } };
 
-    if (isPaperHeatmap) {
+    if (e === 'heatmap') {
       return (
         <Heatmap
           {...sizing}
           {...common}
           webGlContextAttributes={webGlContextAttributes}
           image={paperImage}
-          colors={heatmapColors}
-          colorBack={bgHex}
-          contour={hmContour}
-          angle={hmAngle}
-          noise={hmNoise}
-          innerGlow={hmInnerGlow}
-          outerGlow={hmOuterGlow}
+          colors={layer.hmColors}
+          colorBack={layerBack}
+          contour={layer.hmContour}
+          angle={layer.hmAngle}
+          noise={layer.hmNoise}
+          innerGlow={layer.hmInnerGlow}
+          outerGlow={layer.hmOuterGlow}
+        />
+      );
+    }
+
+    if (e === 'image-dithering') {
+      return (
+        <ImageDithering
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          image={paperImage}
+          type={layer.idType}
+          size={layer.idSize}
+          colorFront={layer.idColorFront}
+          colorBack={layerBack}
+          colorHighlight={layer.idColorHighlight}
+          colorSteps={layer.idColorSteps}
+          originalColors={layer.idOriginalColors}
+        />
+      );
+    }
+
+    if (e === 'halftone-dots') {
+      return (
+        <HalftoneDots
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          image={paperImage}
+          type={layer.hdType}
+          grid={layer.hdGrid}
+          size={layer.hdSize}
+          radius={layer.hdRadius}
+          contrast={layer.hdContrast}
+          colorFront={layer.hdColorFront}
+          colorBack={layerBack}
+        />
+      );
+    }
+
+    if (e === 'halftone-cmyk') {
+      return (
+        <HalftoneCmyk
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          image={paperImage}
+          type={layer.hcType}
+          size={layer.hcSize}
+          contrast={layer.hcContrast}
+          softness={layer.hcSoftness}
+          colorBack={layerBack}
+        />
+      );
+    }
+
+    if (e === 'fluted-glass') {
+      return (
+        <FlutedGlass
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          image={paperImage}
+          shape={layer.fgShape}
+          distortionShape={layer.fgDistortionShape}
+          size={layer.fgSize}
+          angle={layer.fgAngle}
+          distortion={layer.fgDistortion}
+          blur={layer.fgBlur}
+          edges={layer.fgEdges}
+          shadows={layer.fgShadows}
+          highlights={layer.fgHighlights}
+          colorBack={layerBack}
+        />
+      );
+    }
+
+    if (e === 'water') {
+      return (
+        <Water
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          image={paperImage}
+          size={layer.wtSize}
+          highlights={layer.wtHighlights}
+          layering={layer.wtLayering}
+          edges={layer.wtEdges}
+          caustic={layer.wtCaustic}
+          waves={layer.wtWaves}
+          colorBack={layerBack}
+        />
+      );
+    }
+
+    if (e === 'paper-texture') {
+      return (
+        <PaperTexture
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          image={paperImage}
+          contrast={layer.ptContrast}
+          roughness={layer.ptRoughness}
+          fiber={layer.ptFiber}
+          folds={layer.ptFolds}
+          foldCount={layer.ptFoldCount}
+          fade={layer.ptFade}
+          colorBack={layerBack}
+        />
+      );
+    }
+
+    if (e === 'gem-smoke') {
+      return (
+        <GemSmoke
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          image={paperImage}
+          shape={layer.gsShape}
+          colors={['#333333', '#e7e6df']}
+          colorInner={layer.gsColorInner}
+          innerGlow={layer.gsInnerGlow}
+          outerGlow={layer.gsOuterGlow}
+          innerDistortion={layer.gsInnerDistortion}
+          outerDistortion={layer.gsOuterDistortion}
+          colorBack={layerBack}
+        />
+      );
+    }
+
+    if (e === 'swirl') {
+      return (
+        <Swirl
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          colors={layer.swColors}
+          colorBack={layer.swColorBack}
+          bandCount={layer.swBandCount}
+          twist={layer.swTwist}
+          center={layer.swCenter}
+          proportion={layer.swProportion}
+          softness={layer.swSoftness}
+          noise={layer.swNoise}
+          noiseFrequency={layer.swNoiseFrequency}
+        />
+      );
+    }
+
+    if (e === 'warp') {
+      return (
+        <Warp
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          colors={layer.wpColors}
+          proportion={layer.wpProportion}
+          softness={layer.wpSoftness}
+          distortion={layer.wpDistortion}
+          swirl={layer.wpSwirl}
+          swirlIterations={layer.wpSwirlIterations}
+          shape={layer.wpShape}
+          shapeScale={layer.wpShapeScale}
+        />
+      );
+    }
+
+    if (e === 'spiral') {
+      return (
+        <Spiral
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          colorBack={layer.spColorBack}
+          colorFront={layer.spColorFront}
+          density={layer.spDensity}
+          distortion={layer.spDistortion}
+          strokeWidth={layer.spStrokeWidth}
+          strokeTaper={layer.spStrokeTaper}
+          noise={layer.spNoise}
+          noiseFrequency={layer.spNoiseFrequency}
+          softness={layer.spSoftness}
+        />
+      );
+    }
+
+    if (e === 'god-rays') {
+      return (
+        <GodRays
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          colors={layer.grColors}
+          colorBack={layer.grColorBack}
+          colorBloom={layer.grColorBloom}
+          density={layer.grDensity}
+          spotty={layer.grSpotty}
+          midIntensity={layer.grMidIntensity}
+          midSize={layer.grMidSize}
+          intensity={layer.grIntensity}
+          bloom={layer.grBloom}
+        />
+      );
+    }
+
+    if (e === 'grain-gradient') {
+      return (
+        <GrainGradient
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          colors={layer.ggColors}
+          colorBack={layer.ggColorBack}
+          softness={layer.ggSoftness}
+          intensity={layer.ggIntensity}
+          noise={layer.ggNoise}
+          shape={layer.ggShape}
+        />
+      );
+    }
+
+    if (e === 'mesh-gradient') {
+      return (
+        <MeshGradient
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          colors={layer.mgColors}
+          distortion={layer.mgDistortion}
+          swirl={layer.mgSwirl}
+          grainMixer={layer.mgGrainMixer}
+          grainOverlay={layer.mgGrainOverlay}
+        />
+      );
+    }
+
+    if (e === 'neuro-noise') {
+      return (
+        <NeuroNoise
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          colorFront={layer.nnColorFront}
+          colorMid={layer.nnColorMid}
+          colorBack={layer.nnColorBack}
+          brightness={layer.nnBrightness}
+          contrast={layer.nnContrast}
+        />
+      );
+    }
+
+    if (e === 'voronoi') {
+      return (
+        <Voronoi
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          colors={layer.vrColors}
+          stepsPerColor={layer.vrStepsPerColor}
+          colorGlow={layer.vrColorGlow}
+          colorGap={layer.vrColorGap}
+          distortion={layer.vrDistortion}
+          gap={layer.vrGap}
+          glow={layer.vrGlow}
         />
       );
     }
@@ -1549,15 +1509,15 @@ function Tools() {
         webGlContextAttributes={webGlContextAttributes}
         image={paperImage}
         shape="none"
-        colorBack={bgHex}
+        colorBack={layerBack}
         colorTint="#ffffff"
-        repetition={lmRepetition}
-        softness={lmSoftness}
-        shiftRed={lmShiftRed}
-        shiftBlue={lmShiftBlue}
-        distortion={lmDistortion}
-        contour={lmContour}
-        angle={lmAngle}
+        repetition={layer.lmRepetition}
+        softness={layer.lmSoftness}
+        shiftRed={layer.lmShiftRed}
+        shiftBlue={layer.lmShiftBlue}
+        distortion={layer.lmDistortion}
+        contour={layer.lmContour}
+        angle={layer.lmAngle}
       />
     );
   };
@@ -1580,7 +1540,7 @@ function Tools() {
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
           <h1 className="section-title" style={{ marginBottom: 0 }}>Material Lab</h1>
           <div className="small-text" style={{ fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Image shader editor
+            Shader editor
           </div>
         </div>
 
@@ -1590,25 +1550,66 @@ function Tools() {
           <div style={{ ...panelStyle, maxHeight: sidePanelMaxHeight, overflowY: 'auto', overflowX: 'hidden' }}>
             <div className="small-text" style={{ fontWeight: 'var(--font-mono-weight-bold)', marginBottom: 10 }}>INPUT</div>
             <div style={{ display: 'grid', gap: 8 }}>
-              <label className="small-text" style={{ display: 'grid', gap: 8, minWidth: 0 }}>
-                <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Upload PNG or SVG</span>
-                <input
-                  type="file"
-                  accept="image/png,image/svg+xml"
-                  style={{ width: '100%', minWidth: 0 }}
-                  onChange={async (ev) => {
-                    const file = ev.target.files && ev.target.files[0];
-                    if (!file) return;
-                    try {
-                      await loadImageFromFile(file);
-                      scheduleRender();
-                    } catch (e) {
-                      setStatusMessage(e instanceof Error ? e.message : 'Failed to load image');
-                      scheduleRender();
-                    }
-                  }}
-                />
-              </label>
+              <SelectField
+                label="Source"
+                value={sourceMode}
+                options={[{ value: 'image', label: 'Image' }, { value: 'text', label: 'Text' }]}
+                onChange={setSourceMode}
+                fieldBaseStyle={fieldBaseStyle}
+              />
+
+              {sourceMode === 'image' ? (
+                <label className="small-text" style={{ display: 'grid', gap: 8, minWidth: 0 }}>
+                  <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>
+                    Upload PNG or SVG
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/png,image/svg+xml"
+                    style={{ width: '100%', minWidth: 0 }}
+                    onChange={async (ev) => {
+                      const file = ev.target.files && ev.target.files[0];
+                      if (!file) return;
+                      try {
+                        await loadImageFromFile(file);
+                      } catch (e) {
+                        setStatusMessage(e instanceof Error ? e.message : 'Failed to load image');
+                      }
+                    }}
+                  />
+                </label>
+              ) : (
+                <>
+                  <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
+                    <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Text</span>
+                    <textarea
+                      style={{ ...fieldBaseStyle, minHeight: 64, resize: 'vertical', lineHeight: 1.3 }}
+                      value={textValue}
+                      rows={2}
+                      onChange={(ev) => setTextValue(ev.target.value)}
+                    />
+                  </label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <SelectField
+                      label="Weight"
+                      value={textBold ? 'bold' : 'regular'}
+                      options={[{ value: 'bold', label: 'Bold' }, { value: 'regular', label: 'Regular' }]}
+                      onChange={(v) => setTextBold(v === 'bold')}
+                      fieldBaseStyle={fieldBaseStyle}
+                    />
+                    <ColorField label="Text color" value={textColor} onChange={setTextColor} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  </div>
+                  <SelectField
+                    label="Font"
+                    value={textFont}
+                    options={FONT_OPTIONS}
+                    onChange={setTextFont}
+                    fieldBaseStyle={fieldBaseStyle}
+                  />
+                  <RangeField label="Tracking" value={textTracking} min={-0.1} max={0.4} step={0.005} onChange={setTextTracking} rangeStyle={rangeStyle} />
+                  <RangeField label="Fill" value={textFill} min={0.2} max={1} step={0.01} onChange={setTextFill} rangeStyle={rangeStyle} />
+                </>
+              )}
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                 <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
@@ -1660,12 +1661,10 @@ function Tools() {
                       min={20}
                       max={200}
                       step={1}
-                      value={Math.round((isPaperShader ? paperScale : zoom) * 100)}
+                      value={Math.round(L.scale * 100)}
                       onChange={(ev) => {
                         const pct = clamp(Number(ev.target.value), 20, 200);
-                        const v = pct / 100;
-                        if (isPaperShader) setPaperScale(v);
-                        else setZoom(v);
+                        update({ scale: pct / 100 });
                       }}
                     />
                     <input
@@ -1674,19 +1673,45 @@ function Tools() {
                       min={20}
                       max={200}
                       step={1}
-                      value={Math.round((isPaperShader ? paperScale : zoom) * 100)}
+                      value={Math.round(L.scale * 100)}
                       onChange={(ev) => {
                         const raw = Number(ev.target.value);
                         if (!Number.isFinite(raw)) return;
                         const pct = clamp(raw, 20, 200);
-                        const v = pct / 100;
-                        if (isPaperShader) setPaperScale(v);
-                        else setZoom(v);
+                        update({ scale: pct / 100 });
                       }}
                     />
                   </div>
                 </label>
               </div>
+
+              <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
+                <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Logo size</span>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 92px', gap: 10, alignItems: 'center' }}>
+                  <input
+                    style={rangeStyle}
+                    type="range"
+                    min={10}
+                    max={400}
+                    step={1}
+                    value={Math.round(logoScale * 100)}
+                    onChange={(ev) => setLogoScale(clamp(Number(ev.target.value), 10, 400) / 100)}
+                  />
+                  <input
+                    style={fieldBaseStyle}
+                    type="number"
+                    min={10}
+                    max={400}
+                    step={1}
+                    value={Math.round(logoScale * 100)}
+                    onChange={(ev) => {
+                      const raw = Number(ev.target.value);
+                      if (!Number.isFinite(raw)) return;
+                      setLogoScale(clamp(raw, 10, 400) / 100);
+                    }}
+                  />
+                </div>
+              </label>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                 <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
@@ -1697,12 +1722,8 @@ function Tools() {
                     min={-1}
                     max={1}
                     step={0.001}
-                    value={isPaperShader ? paperOffsetX : panX}
-                    onChange={(ev) => {
-                      const v = Number(ev.target.value);
-                      if (isPaperShader) setPaperOffsetX(v);
-                      else setPanX(v);
-                    }}
+                    value={L.offsetX}
+                    onChange={(ev) => update({ offsetX: Number(ev.target.value) })}
                   />
                 </label>
                 <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
@@ -1713,85 +1734,118 @@ function Tools() {
                     min={-1}
                     max={1}
                     step={0.001}
-                    value={isPaperShader ? paperOffsetY : panY}
-                    onChange={(ev) => {
-                      const v = Number(ev.target.value);
-                      if (isPaperShader) setPaperOffsetY(v);
-                      else setPanY(v);
-                    }}
+                    value={L.offsetY}
+                    onChange={(ev) => update({ offsetY: Number(ev.target.value) })}
                   />
                 </label>
               </div>
 
               <div className="small-text" style={{ fontWeight: 'var(--font-mono-weight-bold)', marginTop: 12 }}>EFFECT</div>
 
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                {[{ id: 'logo', label: 'Logo layer' }, { id: 'bg', label: 'Background' }].map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setLayerTab(tab.id)}
+                    style={{
+                      padding: '9px 8px',
+                      borderRadius: 10,
+                      border: layerTab === tab.id ? '1px solid var(--color-text)' : panelBorder,
+                      background: layerTab === tab.id ? 'rgba(255, 255, 255, 0.10)' : 'rgba(17, 17, 17, 0.92)',
+                      color: 'var(--color-text)',
+                      fontFamily: 'var(--font-mono)',
+                      fontWeight: 'var(--font-mono-weight-bold)',
+                      fontSize: 'var(--fs-sm)',
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                 <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                   <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Shader</span>
-                  <select style={fieldBaseStyle} value={effect} onChange={(ev) => setEffect(ev.target.value)}>
-                    <option value="liquid-metal">Liquid Metal</option>
-                    <option value="heatmap">Heatmap</option>
+                  <select style={fieldBaseStyle} value={L.effect} onChange={(ev) => update({ effect: ev.target.value })}>
+                    {(layerTab === 'bg' ? BG_SHADER_OPTIONS : LOGO_SHADER_OPTIONS).map((opt) => (
+                      <option key={opt.id} value={opt.id}>{opt.label}</option>
+                    ))}
                   </select>
                 </label>
                 <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                   <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Animate</span>
-                  <select style={fieldBaseStyle} value={animate ? 'on' : 'off'} onChange={(ev) => setAnimate(ev.target.value === 'on')}>
+                  <select style={fieldBaseStyle} value={L.animate ? 'on' : 'off'} onChange={(ev) => update({ animate: ev.target.value === 'on' })}>
                     <option value="on">On</option>
                     <option value="off">Off</option>
                   </select>
                 </label>
               </div>
 
-              {isPaperShader && (
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                  <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
-                    <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Speed</span>
-                    <input style={rangeStyle} type="range" min={0} max={2} step={0.01} value={paperSpeed} onChange={(ev) => setPaperSpeed(Number(ev.target.value))} />
-                  </label>
-                  <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
-                    <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Rotation</span>
-                    <input style={rangeStyle} type="range" min={0} max={360} step={1} value={paperRotation} onChange={(ev) => setPaperRotation(Number(ev.target.value))} />
-                  </label>
-                </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
+                  <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Speed</span>
+                  <input style={rangeStyle} type="range" min={0} max={2} step={0.01} value={L.speed} onChange={(ev) => update({ speed: Number(ev.target.value) })} />
+                </label>
+                <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
+                  <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Rotation</span>
+                  <input style={rangeStyle} type="range" min={0} max={360} step={1} value={L.rotation} onChange={(ev) => update({ rotation: Number(ev.target.value) })} />
+                </label>
+              </div>
+
+              {isGenerativeShader && (
+                <SelectField
+                  label="Palette"
+                  value={activePaletteId}
+                  options={[
+                    ...SHADER_PALETTES.map((p) => ({ value: p.id, label: p.label })),
+                    { value: 'custom', label: 'Custom' },
+                  ]}
+                  onChange={applyPalette}
+                  fieldBaseStyle={fieldBaseStyle}
+                />
               )}
 
               {isPaperLiquidMetal && (
                 <>
                   <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                     <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Distortion</span>
-                    <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={lmDistortion} onChange={(ev) => setLmDistortion(Number(ev.target.value))} />
+                    <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={L.lmDistortion} onChange={(ev) => update({ lmDistortion: Number(ev.target.value) })} />
                   </label>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                     <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Repetition</span>
-                      <input style={rangeStyle} type="range" min={1} max={10} step={0.1} value={lmRepetition} onChange={(ev) => setLmRepetition(Number(ev.target.value))} />
+                      <input style={rangeStyle} type="range" min={1} max={10} step={0.1} value={L.lmRepetition} onChange={(ev) => update({ lmRepetition: Number(ev.target.value) })} />
                     </label>
                     <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Softness</span>
-                      <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={lmSoftness} onChange={(ev) => setLmSoftness(Number(ev.target.value))} />
+                      <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={L.lmSoftness} onChange={(ev) => update({ lmSoftness: Number(ev.target.value) })} />
                     </label>
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                     <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Shift Red</span>
-                      <input style={rangeStyle} type="range" min={-1} max={1} step={0.01} value={lmShiftRed} onChange={(ev) => setLmShiftRed(Number(ev.target.value))} />
+                      <input style={rangeStyle} type="range" min={-1} max={1} step={0.01} value={L.lmShiftRed} onChange={(ev) => update({ lmShiftRed: Number(ev.target.value) })} />
                     </label>
                     <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Shift Blue</span>
-                      <input style={rangeStyle} type="range" min={-1} max={1} step={0.01} value={lmShiftBlue} onChange={(ev) => setLmShiftBlue(Number(ev.target.value))} />
+                      <input style={rangeStyle} type="range" min={-1} max={1} step={0.01} value={L.lmShiftBlue} onChange={(ev) => update({ lmShiftBlue: Number(ev.target.value) })} />
                     </label>
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                     <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Contour</span>
-                      <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={lmContour} onChange={(ev) => setLmContour(Number(ev.target.value))} />
+                      <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={L.lmContour} onChange={(ev) => update({ lmContour: Number(ev.target.value) })} />
                     </label>
                     <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Angle</span>
-                      <input style={rangeStyle} type="range" min={0} max={360} step={1} value={lmAngle} onChange={(ev) => setLmAngle(Number(ev.target.value))} />
+                      <input style={rangeStyle} type="range" min={0} max={360} step={1} value={L.lmAngle} onChange={(ev) => update({ lmAngle: Number(ev.target.value) })} />
                     </label>
                   </div>
                 </>
@@ -1801,114 +1855,296 @@ function Tools() {
                 <>
                   <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                     <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Contour</span>
-                    <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={hmContour} onChange={(ev) => setHmContour(Number(ev.target.value))} />
+                    <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={L.hmContour} onChange={(ev) => update({ hmContour: Number(ev.target.value) })} />
                   </label>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                     <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Inner glow</span>
-                      <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={hmInnerGlow} onChange={(ev) => setHmInnerGlow(Number(ev.target.value))} />
+                      <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={L.hmInnerGlow} onChange={(ev) => update({ hmInnerGlow: Number(ev.target.value) })} />
                     </label>
                     <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Outer glow</span>
-                      <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={hmOuterGlow} onChange={(ev) => setHmOuterGlow(Number(ev.target.value))} />
+                      <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={L.hmOuterGlow} onChange={(ev) => update({ hmOuterGlow: Number(ev.target.value) })} />
                     </label>
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                     <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Noise</span>
-                      <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={hmNoise} onChange={(ev) => setHmNoise(Number(ev.target.value))} />
+                      <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={L.hmNoise} onChange={(ev) => update({ hmNoise: Number(ev.target.value) })} />
                     </label>
                     <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                       <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Angle</span>
-                      <input style={rangeStyle} type="range" min={0} max={360} step={1} value={hmAngle} onChange={(ev) => setHmAngle(Number(ev.target.value))} />
+                      <input style={rangeStyle} type="range" min={0} max={360} step={1} value={L.hmAngle} onChange={(ev) => update({ hmAngle: Number(ev.target.value) })} />
                     </label>
                   </div>
 
-                  <div className="small-text" style={{ fontWeight: 'var(--font-mono-weight-bold)', marginTop: 6 }}>
-                    Colors
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    {hmColors.map((value, index) => (
-                      <label key={index} className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
-                        <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>{`Color ${index + 1}`}</span>
-                        <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr', gap: 10, alignItems: 'center' }}>
-                          <input
-                            style={colorInputStyle}
-                            type="color"
-                            value={value}
-                            onChange={(ev) => {
-                              const next = ev.target.value;
-                              setHmColors((prev) => prev.map((c, i) => (i === index ? next : c)));
-                            }}
-                          />
-                          <input
-                            style={fieldBaseStyle}
-                            value={value}
-                            onChange={(ev) => {
-                              const next = ev.target.value;
-                              setHmColors((prev) => prev.map((c, i) => (i === index ? next : c)));
-                            }}
-                          />
-                        </div>
-                      </label>
-                    ))}
-                  </div>
+                  <ColorListField label="Colors" values={L.hmColors} onChange={colorSetter('hmColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
                 </>
               )}
 
-              {isLegacyShader && (
+              {isPaperImageDithering && (
                 <>
-                  <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
-                    <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Intensity</span>
-                    <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={intensity} onChange={(ev) => setIntensity(Number(ev.target.value))} />
-                  </label>
-
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
-                      <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Paper grain</span>
-                      <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={grain} onChange={(ev) => setGrain(Number(ev.target.value))} />
-                    </label>
-                    <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
-                      <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Metal shine</span>
-                      <input style={rangeStyle} type="range" min={0} max={1} step={0.01} value={shine} onChange={(ev) => setShine(Number(ev.target.value))} />
-                    </label>
+                    <SelectField label="Type" value={L.idType} options={DITHER_TYPES} onChange={setP('idType')} fieldBaseStyle={fieldBaseStyle} />
+                    <SelectField
+                      label="Original colors"
+                      value={L.idOriginalColors ? 'on' : 'off'}
+                      options={[{ value: 'off', label: 'Off' }, { value: 'on', label: 'On' }]}
+                      onChange={(v) => update({ idOriginalColors: v === 'on' })}
+                      fieldBaseStyle={fieldBaseStyle}
+                    />
                   </div>
-
-                  <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
-                    <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Hue shift</span>
-                    <input style={rangeStyle} type="range" min={-1} max={1} step={0.005} value={hue} onChange={(ev) => setHue(Number(ev.target.value))} />
-                  </label>
-
+                  <RangeField label="Pixel size" value={L.idSize} min={1} max={12} step={0.5} onChange={setP('idSize')} rangeStyle={rangeStyle} />
+                  <RangeField label="Color steps" value={L.idColorSteps} min={1} max={8} step={1} onChange={setP('idColorSteps')} rangeStyle={rangeStyle} />
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
-                      <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Tint</span>
-                      <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr', gap: 10, alignItems: 'center' }}>
-                        <input style={colorInputStyle} type="color" value={tintHex} onChange={(ev) => setTintHex(ev.target.value)} />
-                        <input style={fieldBaseStyle} value={tintHex} onChange={(ev) => setTintHex(ev.target.value)} />
-                      </div>
-                    </label>
-                    <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
-                      <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Background</span>
-                      <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr', gap: 10, alignItems: 'center' }}>
-                        <input style={colorInputStyle} type="color" value={bgHex} onChange={(ev) => setBgHex(ev.target.value)} />
-                        <input style={fieldBaseStyle} value={bgHex} onChange={(ev) => setBgHex(ev.target.value)} />
-                      </div>
-                    </label>
+                    <ColorField label="Front" value={L.idColorFront} onChange={setP('idColorFront')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                    <ColorField label="Highlight" value={L.idColorHighlight} onChange={setP('idColorHighlight')} styles={{ colorInputStyle, fieldBaseStyle }} />
                   </div>
                 </>
               )}
 
-              {isPaperShader && (
-                <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
-                  <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Background</span>
-                  <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr', gap: 10, alignItems: 'center' }}>
-                    <input style={colorInputStyle} type="color" value={bgHex} onChange={(ev) => setBgHex(ev.target.value)} />
-                    <input style={fieldBaseStyle} value={bgHex} onChange={(ev) => setBgHex(ev.target.value)} />
+              {isPaperHalftoneDots && (
+                <>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <SelectField label="Type" value={L.hdType} options={HALFTONE_DOT_TYPES} onChange={setP('hdType')} fieldBaseStyle={fieldBaseStyle} />
+                    <SelectField label="Grid" value={L.hdGrid} options={HALFTONE_GRIDS} onChange={setP('hdGrid')} fieldBaseStyle={fieldBaseStyle} />
                   </div>
-                </label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Size" value={L.hdSize} min={0.05} max={2} step={0.01} onChange={setP('hdSize')} rangeStyle={rangeStyle} />
+                    <RangeField label="Radius" value={L.hdRadius} min={0} max={2} step={0.01} onChange={setP('hdRadius')} rangeStyle={rangeStyle} />
+                  </div>
+                  <RangeField label="Contrast" value={L.hdContrast} min={0} max={1} step={0.01} onChange={setP('hdContrast')} rangeStyle={rangeStyle} />
+                  <ColorField label="Dot color" value={L.hdColorFront} onChange={setP('hdColorFront')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                </>
               )}
+
+              {isPaperHalftoneCmyk && (
+                <>
+                  <SelectField label="Type" value={L.hcType} options={HALFTONE_CMYK_TYPES} onChange={setP('hcType')} fieldBaseStyle={fieldBaseStyle} />
+                  <RangeField label="Size" value={L.hcSize} min={0.05} max={1} step={0.01} onChange={setP('hcSize')} rangeStyle={rangeStyle} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Contrast" value={L.hcContrast} min={0} max={1} step={0.01} onChange={setP('hcContrast')} rangeStyle={rangeStyle} />
+                    <RangeField label="Softness" value={L.hcSoftness} min={0} max={1} step={0.01} onChange={setP('hcSoftness')} rangeStyle={rangeStyle} />
+                  </div>
+                </>
+              )}
+
+              {isPaperFlutedGlass && (
+                <>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <SelectField label="Shape" value={L.fgShape} options={GLASS_SHAPES} onChange={setP('fgShape')} fieldBaseStyle={fieldBaseStyle} />
+                    <SelectField label="Distortion" value={L.fgDistortionShape} options={GLASS_DISTORTIONS} onChange={setP('fgDistortionShape')} fieldBaseStyle={fieldBaseStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Size" value={L.fgSize} min={0.05} max={2} step={0.01} onChange={setP('fgSize')} rangeStyle={rangeStyle} />
+                    <RangeField label="Angle" value={L.fgAngle} min={0} max={360} step={1} onChange={setP('fgAngle')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Distortion" value={L.fgDistortion} min={0} max={1} step={0.01} onChange={setP('fgDistortion')} rangeStyle={rangeStyle} />
+                    <RangeField label="Blur" value={L.fgBlur} min={0} max={1} step={0.01} onChange={setP('fgBlur')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Shadows" value={L.fgShadows} min={0} max={1} step={0.01} onChange={setP('fgShadows')} rangeStyle={rangeStyle} />
+                    <RangeField label="Highlights" value={L.fgHighlights} min={0} max={1} step={0.01} onChange={setP('fgHighlights')} rangeStyle={rangeStyle} />
+                  </div>
+                  <RangeField label="Edges" value={L.fgEdges} min={0} max={1} step={0.01} onChange={setP('fgEdges')} rangeStyle={rangeStyle} />
+                </>
+              )}
+
+              {isPaperWater && (
+                <>
+                  <RangeField label="Size" value={L.wtSize} min={0.1} max={3} step={0.01} onChange={setP('wtSize')} rangeStyle={rangeStyle} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Highlights" value={L.wtHighlights} min={0} max={1} step={0.01} onChange={setP('wtHighlights')} rangeStyle={rangeStyle} />
+                    <RangeField label="Layering" value={L.wtLayering} min={0} max={2} step={0.01} onChange={setP('wtLayering')} rangeStyle={rangeStyle} />
+                  </div>
+                  <RangeField label="Edges" value={L.wtEdges} min={0} max={1} step={0.01} onChange={setP('wtEdges')} rangeStyle={rangeStyle} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Caustic" value={L.wtCaustic} min={0} max={1} step={0.01} onChange={setP('wtCaustic')} rangeStyle={rangeStyle} />
+                    <RangeField label="Waves" value={L.wtWaves} min={0} max={1} step={0.01} onChange={setP('wtWaves')} rangeStyle={rangeStyle} />
+                  </div>
+                </>
+              )}
+
+              {isPaperTexture && (
+                <>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Contrast" value={L.ptContrast} min={0} max={1} step={0.01} onChange={setP('ptContrast')} rangeStyle={rangeStyle} />
+                    <RangeField label="Roughness" value={L.ptRoughness} min={0} max={1} step={0.01} onChange={setP('ptRoughness')} rangeStyle={rangeStyle} />
+                  </div>
+                  <RangeField label="Fiber" value={L.ptFiber} min={0} max={1} step={0.01} onChange={setP('ptFiber')} rangeStyle={rangeStyle} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Folds" value={L.ptFolds} min={0} max={1} step={0.01} onChange={setP('ptFolds')} rangeStyle={rangeStyle} />
+                    <RangeField label="Fold count" value={L.ptFoldCount} min={0} max={12} step={1} onChange={setP('ptFoldCount')} rangeStyle={rangeStyle} />
+                  </div>
+                  <RangeField label="Fade" value={L.ptFade} min={0} max={1} step={0.01} onChange={setP('ptFade')} rangeStyle={rangeStyle} />
+                </>
+              )}
+
+              {isPaperGemSmoke && (
+                <>
+                  <SelectField label="Shape" value={L.gsShape} options={GEM_SHAPES} onChange={setP('gsShape')} fieldBaseStyle={fieldBaseStyle} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Inner glow" value={L.gsInnerGlow} min={0} max={1} step={0.01} onChange={setP('gsInnerGlow')} rangeStyle={rangeStyle} />
+                    <RangeField label="Outer glow" value={L.gsOuterGlow} min={0} max={1} step={0.01} onChange={setP('gsOuterGlow')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Inner distort" value={L.gsInnerDistortion} min={0} max={2} step={0.01} onChange={setP('gsInnerDistortion')} rangeStyle={rangeStyle} />
+                    <RangeField label="Outer distort" value={L.gsOuterDistortion} min={0} max={2} step={0.01} onChange={setP('gsOuterDistortion')} rangeStyle={rangeStyle} />
+                  </div>
+                  <ColorField label="Inner color" value={L.gsColorInner} onChange={setP('gsColorInner')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                </>
+              )}
+
+              {isSwirl && (
+                <>
+                  <ColorListField label="Colors" values={L.swColors} onChange={colorSetter('swColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <ColorField label="Back color" value={L.swColorBack} onChange={setP('swColorBack')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Bands" value={L.swBandCount} min={1} max={10} step={1} onChange={setP('swBandCount')} rangeStyle={rangeStyle} />
+                    <RangeField label="Twist" value={L.swTwist} min={0} max={1} step={0.01} onChange={setP('swTwist')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Center" value={L.swCenter} min={0} max={1} step={0.01} onChange={setP('swCenter')} rangeStyle={rangeStyle} />
+                    <RangeField label="Proportion" value={L.swProportion} min={0} max={1} step={0.01} onChange={setP('swProportion')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Softness" value={L.swSoftness} min={0} max={1} step={0.01} onChange={setP('swSoftness')} rangeStyle={rangeStyle} />
+                    <RangeField label="Noise" value={L.swNoise} min={0} max={1} step={0.01} onChange={setP('swNoise')} rangeStyle={rangeStyle} />
+                  </div>
+                  <RangeField label="Noise freq" value={L.swNoiseFrequency} min={0} max={1} step={0.01} onChange={setP('swNoiseFrequency')} rangeStyle={rangeStyle} />
+                </>
+              )}
+
+              {isWarp && (
+                <>
+                  <SelectField label="Shape" value={L.wpShape} options={WARP_SHAPES} onChange={setP('wpShape')} fieldBaseStyle={fieldBaseStyle} />
+                  <ColorListField label="Colors" values={L.wpColors} onChange={colorSetter('wpColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Proportion" value={L.wpProportion} min={0} max={1} step={0.01} onChange={setP('wpProportion')} rangeStyle={rangeStyle} />
+                    <RangeField label="Softness" value={L.wpSoftness} min={0} max={1} step={0.01} onChange={setP('wpSoftness')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Distortion" value={L.wpDistortion} min={0} max={1} step={0.01} onChange={setP('wpDistortion')} rangeStyle={rangeStyle} />
+                    <RangeField label="Swirl" value={L.wpSwirl} min={0} max={1} step={0.01} onChange={setP('wpSwirl')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Swirl iter" value={L.wpSwirlIterations} min={1} max={20} step={1} onChange={setP('wpSwirlIterations')} rangeStyle={rangeStyle} />
+                    <RangeField label="Shape scale" value={L.wpShapeScale} min={0} max={1} step={0.01} onChange={setP('wpShapeScale')} rangeStyle={rangeStyle} />
+                  </div>
+                </>
+              )}
+
+              {isSpiral && (
+                <>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <ColorField label="Front color" value={L.spColorFront} onChange={setP('spColorFront')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                    <ColorField label="Back color" value={L.spColorBack} onChange={setP('spColorBack')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Density" value={L.spDensity} min={0} max={2} step={0.01} onChange={setP('spDensity')} rangeStyle={rangeStyle} />
+                    <RangeField label="Distortion" value={L.spDistortion} min={0} max={1} step={0.01} onChange={setP('spDistortion')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Stroke width" value={L.spStrokeWidth} min={0} max={1} step={0.01} onChange={setP('spStrokeWidth')} rangeStyle={rangeStyle} />
+                    <RangeField label="Stroke taper" value={L.spStrokeTaper} min={0} max={1} step={0.01} onChange={setP('spStrokeTaper')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Noise" value={L.spNoise} min={0} max={1} step={0.01} onChange={setP('spNoise')} rangeStyle={rangeStyle} />
+                    <RangeField label="Noise freq" value={L.spNoiseFrequency} min={0} max={1} step={0.01} onChange={setP('spNoiseFrequency')} rangeStyle={rangeStyle} />
+                  </div>
+                  <RangeField label="Softness" value={L.spSoftness} min={0} max={1} step={0.01} onChange={setP('spSoftness')} rangeStyle={rangeStyle} />
+                </>
+              )}
+
+              {isGodRays && (
+                <>
+                  <ColorListField label="Colors" values={L.grColors} onChange={colorSetter('grColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <ColorField label="Back color" value={L.grColorBack} onChange={setP('grColorBack')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                    <ColorField label="Bloom color" value={L.grColorBloom} onChange={setP('grColorBloom')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Density" value={L.grDensity} min={0} max={1} step={0.01} onChange={setP('grDensity')} rangeStyle={rangeStyle} />
+                    <RangeField label="Spotty" value={L.grSpotty} min={0} max={1} step={0.01} onChange={setP('grSpotty')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Mid intensity" value={L.grMidIntensity} min={0} max={1} step={0.01} onChange={setP('grMidIntensity')} rangeStyle={rangeStyle} />
+                    <RangeField label="Mid size" value={L.grMidSize} min={0} max={1} step={0.01} onChange={setP('grMidSize')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Intensity" value={L.grIntensity} min={0} max={1} step={0.01} onChange={setP('grIntensity')} rangeStyle={rangeStyle} />
+                    <RangeField label="Bloom" value={L.grBloom} min={0} max={1} step={0.01} onChange={setP('grBloom')} rangeStyle={rangeStyle} />
+                  </div>
+                </>
+              )}
+
+              {isGrainGradient && (
+                <>
+                  <SelectField label="Shape" value={L.ggShape} options={GRAIN_SHAPES} onChange={setP('ggShape')} fieldBaseStyle={fieldBaseStyle} />
+                  <ColorListField label="Colors" values={L.ggColors} onChange={colorSetter('ggColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <ColorField label="Back color" value={L.ggColorBack} onChange={setP('ggColorBack')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Softness" value={L.ggSoftness} min={0} max={1} step={0.01} onChange={setP('ggSoftness')} rangeStyle={rangeStyle} />
+                    <RangeField label="Intensity" value={L.ggIntensity} min={0} max={1} step={0.01} onChange={setP('ggIntensity')} rangeStyle={rangeStyle} />
+                  </div>
+                  <RangeField label="Noise" value={L.ggNoise} min={0} max={1} step={0.01} onChange={setP('ggNoise')} rangeStyle={rangeStyle} />
+                </>
+              )}
+
+              {isMeshGradient && (
+                <>
+                  <ColorListField label="Colors" values={L.mgColors} onChange={colorSetter('mgColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Distortion" value={L.mgDistortion} min={0} max={1} step={0.01} onChange={setP('mgDistortion')} rangeStyle={rangeStyle} />
+                    <RangeField label="Swirl" value={L.mgSwirl} min={0} max={1} step={0.01} onChange={setP('mgSwirl')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Grain mixer" value={L.mgGrainMixer} min={0} max={1} step={0.01} onChange={setP('mgGrainMixer')} rangeStyle={rangeStyle} />
+                    <RangeField label="Grain overlay" value={L.mgGrainOverlay} min={0} max={1} step={0.01} onChange={setP('mgGrainOverlay')} rangeStyle={rangeStyle} />
+                  </div>
+                </>
+              )}
+
+              {isNeuroNoise && (
+                <>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <ColorField label="Front color" value={L.nnColorFront} onChange={setP('nnColorFront')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                    <ColorField label="Mid color" value={L.nnColorMid} onChange={setP('nnColorMid')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  </div>
+                  <ColorField label="Back color" value={L.nnColorBack} onChange={setP('nnColorBack')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Brightness" value={L.nnBrightness} min={0} max={1} step={0.01} onChange={setP('nnBrightness')} rangeStyle={rangeStyle} />
+                    <RangeField label="Contrast" value={L.nnContrast} min={0} max={1} step={0.01} onChange={setP('nnContrast')} rangeStyle={rangeStyle} />
+                  </div>
+                </>
+              )}
+
+              {isVoronoi && (
+                <>
+                  <ColorListField label="Colors" values={L.vrColors} onChange={colorSetter('vrColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <ColorField label="Glow color" value={L.vrColorGlow} onChange={setP('vrColorGlow')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                    <ColorField label="Gap color" value={L.vrColorGap} onChange={setP('vrColorGap')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  </div>
+                  <RangeField label="Steps per color" value={L.vrStepsPerColor} min={1} max={3} step={1} onChange={setP('vrStepsPerColor')} rangeStyle={rangeStyle} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Distortion" value={L.vrDistortion} min={0} max={0.5} step={0.01} onChange={setP('vrDistortion')} rangeStyle={rangeStyle} />
+                    <RangeField label="Glow" value={L.vrGlow} min={0} max={1} step={0.01} onChange={setP('vrGlow')} rangeStyle={rangeStyle} />
+                  </div>
+                  <RangeField label="Gap" value={L.vrGap} min={0} max={0.1} step={0.001} onChange={setP('vrGap')} rangeStyle={rangeStyle} />
+                </>
+              )}
+
+              <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
+                <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Canvas fill</span>
+                <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr', gap: 10, alignItems: 'center' }}>
+                  <input style={colorInputStyle} type="color" value={bgHex} onChange={(ev) => setBgHex(ev.target.value)} />
+                  <input style={fieldBaseStyle} value={bgHex} onChange={(ev) => setBgHex(ev.target.value)} />
+                </div>
+              </label>
 
               <button
                 type="button"
@@ -1998,7 +2234,7 @@ function Tools() {
             <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
               <div className="small-text" style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>PREVIEW</div>
               <div className="small-text" style={{ opacity: 0.85 }}>
-                {`${frameW}×${frameH}`} • {fitMode} • {effect}
+                {`${frameW}×${frameH}`} • {fitMode} • BG {SHADER_OPTIONS.find((opt) => opt.id === bgLayer.effect)?.label || bgLayer.effect} • LOGO {SHADER_OPTIONS.find((opt) => opt.id === logoLayer.effect)?.label || logoLayer.effect}
               </div>
             </div>
 
@@ -2008,20 +2244,43 @@ function Tools() {
               <div style={{ width: 'min(920px, 100%)' }}>
                 <div style={{ position: 'relative', width: '100%', borderRadius: 12, overflow: 'hidden', background: bgHex }}>
                   <div style={{ width: '100%', aspectRatio: `${frameW} / ${frameH}` }}>
-                    {isPaperShader ? (
-                      <div ref={paperPreviewMountRef} style={{ width: '100%', height: '100%' }}>
-                        {renderPaperShader('preview')}
+                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                      <div
+                        ref={previewBgMountRef}
+                        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+                      >
+                        {renderLayerShader(bgLayer, 'preview')}
                       </div>
-                    ) : (
-                      <canvas
-                        ref={canvasRef}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          display: 'block',
-                        }}
-                      />
-                    )}
+                      {paperImage ? (
+                        <div
+                          ref={previewLogoMountRef}
+                          style={{
+                            position: 'absolute',
+                            inset: 0,
+                            width: '100%',
+                            height: '100%',
+                            ...(logoClipToShape ? {
+                              WebkitMaskImage: `url("${paperImage}")`,
+                              WebkitMaskRepeat: 'no-repeat',
+                              WebkitMaskPosition: 'center',
+                              WebkitMaskSize: sourceMaskSize,
+                              maskImage: `url("${paperImage}")`,
+                              maskRepeat: 'no-repeat',
+                              maskPosition: 'center',
+                              maskSize: sourceMaskSize,
+                            } : {}),
+                          }}
+                        >
+                          {renderLayerShader(logoLayer, 'preview', true) || (
+                            <img
+                              src={paperImage}
+                              alt=""
+                              style={{ display: 'block', width: '100%', height: '100%', objectFit: fitMode, transform: `scale(${logoScale})`, transformOrigin: 'center' }}
+                            />
+                          )}
+                        </div>
+                      ) : null}
+                    </div>
                   </div>
                 </div>
 
@@ -2033,9 +2292,8 @@ function Tools() {
           </div>
         </div>
 
-        {isPaperShader && paperExportActive && (
+        {paperExportActive && (
           <div
-            ref={paperExportMountRef}
             aria-hidden="true"
             style={{
               position: 'fixed',
@@ -2047,7 +2305,18 @@ function Tools() {
               pointerEvents: 'none',
             }}
           >
-            {renderPaperShader('export')}
+            <div
+              ref={exportBgMountRef}
+              style={{ position: 'absolute', inset: 0, width: frameW, height: frameH }}
+            >
+              {renderLayerShader(bgLayer, 'export')}
+            </div>
+            <div
+              ref={exportLogoMountRef}
+              style={{ position: 'absolute', inset: 0, width: frameW, height: frameH }}
+            >
+              {renderLayerShader(logoLayer, 'export', true)}
+            </div>
           </div>
         )}
       </div>

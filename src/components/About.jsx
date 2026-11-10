@@ -75,7 +75,8 @@ const About = () => {
 
   const containerStyle = {
     maxWidth: 1400,
-    marginLeft: isMobile ? 'auto' : '104px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     paddingLeft: 'var(--spacing-md)',
     paddingRight: 'var(--spacing-md)',
   };
@@ -111,7 +112,7 @@ const About = () => {
       <SectionVerticalNav sections={SECTIONS} basePath="/about" isMobile={isMobile} />
 
       <section style={{ padding: 'var(--spacing-xxl) var(--spacing-md) var(--spacing-xl)', borderBottom: HOME_SECTION_DIVIDER }}>
-        <div className="container" style={{ maxWidth: 1400, marginLeft: isMobile ? 'auto' : '104px' }}>
+        <div className="container" style={{ maxWidth: 1400, marginLeft: 'auto', marginRight: 'auto' }}>
           <header className="flex" style={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 'var(--spacing-md)' }}>
             <h1 className="section-title" style={{ fontSize: 'clamp(40px, 8vw, 128px)', marginBottom: 0, lineHeight: 0.88, letterSpacing: '-0.04em' }}>
               <DecryptText as="span" text="ABOUT" trigger="mount" duration={900} delay={150} />

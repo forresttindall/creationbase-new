@@ -1207,7 +1207,9 @@ function Tools() {
     const layerBack = isLogoLayer ? '#00000000' : bgHex;
     const common = {
       fit: fitMode,
-      scale: layer.scale,
+      // Image shaders draw the logo/text themselves (no CSS mask), so the
+      // Logo size control has to reach them through the shader's own scale.
+      scale: isLogoLayer && isImageShaderId(e) ? layer.scale * logoScale : layer.scale,
       rotation: layer.rotation,
       offsetX: layer.offsetX,
       offsetY: layer.offsetY,
@@ -1232,209 +1234,6 @@ function Tools() {
           noise={layer.hmNoise}
           innerGlow={layer.hmInnerGlow}
           outerGlow={layer.hmOuterGlow}
-        />
-      );
-    }
-
-    if (e === 'image-dithering') {
-      return (
-        <ImageDithering
-          {...sizing}
-          {...common}
-          webGlContextAttributes={webGlContextAttributes}
-          image={paperImage}
-          type={layer.idType}
-          size={layer.idSize}
-          colorFront={layer.idColorFront}
-          colorBack={layerBack}
-          colorHighlight={layer.idColorHighlight}
-          colorSteps={layer.idColorSteps}
-          originalColors={layer.idOriginalColors}
-        />
-      );
-    }
-
-    if (e === 'halftone-dots') {
-      return (
-        <HalftoneDots
-          {...sizing}
-          {...common}
-          webGlContextAttributes={webGlContextAttributes}
-          image={paperImage}
-          type={layer.hdType}
-          grid={layer.hdGrid}
-          size={layer.hdSize}
-          radius={layer.hdRadius}
-          contrast={layer.hdContrast}
-          colorFront={layer.hdColorFront}
-          colorBack={layerBack}
-        />
-      );
-    }
-
-    if (e === 'halftone-cmyk') {
-      return (
-        <HalftoneCmyk
-          {...sizing}
-          {...common}
-          webGlContextAttributes={webGlContextAttributes}
-          image={paperImage}
-          type={layer.hcType}
-          size={layer.hcSize}
-          contrast={layer.hcContrast}
-          softness={layer.hcSoftness}
-          colorBack={layerBack}
-        />
-      );
-    }
-
-    if (e === 'fluted-glass') {
-      return (
-        <FlutedGlass
-          {...sizing}
-          {...common}
-          webGlContextAttributes={webGlContextAttributes}
-          image={paperImage}
-          shape={layer.fgShape}
-          distortionShape={layer.fgDistortionShape}
-          size={layer.fgSize}
-          angle={layer.fgAngle}
-          distortion={layer.fgDistortion}
-          blur={layer.fgBlur}
-          edges={layer.fgEdges}
-          shadows={layer.fgShadows}
-          highlights={layer.fgHighlights}
-          colorBack={layerBack}
-        />
-      );
-    }
-
-    if (e === 'water') {
-      return (
-        <Water
-          {...sizing}
-          {...common}
-          webGlContextAttributes={webGlContextAttributes}
-          image={paperImage}
-          size={layer.wtSize}
-          highlights={layer.wtHighlights}
-          layering={layer.wtLayering}
-          edges={layer.wtEdges}
-          caustic={layer.wtCaustic}
-          waves={layer.wtWaves}
-          colorBack={layerBack}
-        />
-      );
-    }
-
-    if (e === 'paper-texture') {
-      return (
-        <PaperTexture
-          {...sizing}
-          {...common}
-          webGlContextAttributes={webGlContextAttributes}
-          image={paperImage}
-          contrast={layer.ptContrast}
-          roughness={layer.ptRoughness}
-          fiber={layer.ptFiber}
-          folds={layer.ptFolds}
-          foldCount={layer.ptFoldCount}
-          fade={layer.ptFade}
-          colorBack={layerBack}
-        />
-      );
-    }
-
-    if (e === 'gem-smoke') {
-      return (
-        <GemSmoke
-          {...sizing}
-          {...common}
-          webGlContextAttributes={webGlContextAttributes}
-          image={paperImage}
-          shape={layer.gsShape}
-          colors={['#333333', '#e7e6df']}
-          colorInner={layer.gsColorInner}
-          innerGlow={layer.gsInnerGlow}
-          outerGlow={layer.gsOuterGlow}
-          innerDistortion={layer.gsInnerDistortion}
-          outerDistortion={layer.gsOuterDistortion}
-          colorBack={layerBack}
-        />
-      );
-    }
-
-    if (e === 'swirl') {
-      return (
-        <Swirl
-          {...sizing}
-          {...common}
-          webGlContextAttributes={webGlContextAttributes}
-          colors={layer.swColors}
-          colorBack={layer.swColorBack}
-          bandCount={layer.swBandCount}
-          twist={layer.swTwist}
-          center={layer.swCenter}
-          proportion={layer.swProportion}
-          softness={layer.swSoftness}
-          noise={layer.swNoise}
-          noiseFrequency={layer.swNoiseFrequency}
-        />
-      );
-    }
-
-    if (e === 'warp') {
-      return (
-        <Warp
-          {...sizing}
-          {...common}
-          webGlContextAttributes={webGlContextAttributes}
-          colors={layer.wpColors}
-          proportion={layer.wpProportion}
-          softness={layer.wpSoftness}
-          distortion={layer.wpDistortion}
-          swirl={layer.wpSwirl}
-          swirlIterations={layer.wpSwirlIterations}
-          shape={layer.wpShape}
-          shapeScale={layer.wpShapeScale}
-        />
-      );
-    }
-
-    if (e === 'spiral') {
-      return (
-        <Spiral
-          {...sizing}
-          {...common}
-          webGlContextAttributes={webGlContextAttributes}
-          colorBack={layer.spColorBack}
-          colorFront={layer.spColorFront}
-          density={layer.spDensity}
-          distortion={layer.spDistortion}
-          strokeWidth={layer.spStrokeWidth}
-          strokeTaper={layer.spStrokeTaper}
-          noise={layer.spNoise}
-          noiseFrequency={layer.spNoiseFrequency}
-          softness={layer.spSoftness}
-        />
-      );
-    }
-
-    if (e === 'god-rays') {
-      return (
-        <GodRays
-          {...sizing}
-          {...common}
-          webGlContextAttributes={webGlContextAttributes}
-          colors={layer.grColors}
-          colorBack={layer.grColorBack}
-          colorBloom={layer.grColorBloom}
-          density={layer.grDensity}
-          spotty={layer.grSpotty}
-          midIntensity={layer.grMidIntensity}
-          midSize={layer.grMidSize}
-          intensity={layer.grIntensity}
-          bloom={layer.grBloom}
         />
       );
     }
@@ -1470,34 +1269,66 @@ function Tools() {
       );
     }
 
-    if (e === 'neuro-noise') {
+    if (e === 'smoke-ring') {
       return (
-        <NeuroNoise
+        <SmokeRing
           {...sizing}
           {...common}
           webGlContextAttributes={webGlContextAttributes}
-          colorFront={layer.nnColorFront}
-          colorMid={layer.nnColorMid}
-          colorBack={layer.nnColorBack}
-          brightness={layer.nnBrightness}
-          contrast={layer.nnContrast}
+          colors={layer.srColors}
+          colorBack={layer.srColorBack}
+          noiseScale={layer.srNoiseScale}
+          noiseIterations={layer.srNoiseIterations}
+          radius={layer.srRadius}
+          thickness={layer.srThickness}
+          innerShape={layer.srInnerShape}
         />
       );
     }
 
-    if (e === 'voronoi') {
+    if (e === 'color-panels') {
       return (
-        <Voronoi
+        <ColorPanels
           {...sizing}
           {...common}
           webGlContextAttributes={webGlContextAttributes}
-          colors={layer.vrColors}
-          stepsPerColor={layer.vrStepsPerColor}
-          colorGlow={layer.vrColorGlow}
-          colorGap={layer.vrColorGap}
-          distortion={layer.vrDistortion}
-          gap={layer.vrGap}
-          glow={layer.vrGlow}
+          colors={layer.cpColors}
+          colorBack={layer.cpColorBack}
+          length={layer.cpLength}
+          density={layer.cpDensity}
+          blur={layer.cpBlur}
+          fadeIn={layer.cpFadeIn}
+          fadeOut={layer.cpFadeOut}
+          gradient={layer.cpGradient}
+        />
+      );
+    }
+
+    if (e === 'simplex-noise') {
+      return (
+        <SimplexNoise
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          colors={layer.snColors}
+          stepsPerColor={layer.snStepsPerColor}
+          softness={layer.snSoftness}
+        />
+      );
+    }
+
+    if (e === 'perlin-noise') {
+      return (
+        <PerlinNoise
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          colorFront={layer.pnColorFront}
+          colorBack={layer.pnColorBack}
+          proportion={layer.pnProportion}
+          softness={layer.pnSoftness}
+          octaveCount={layer.pnOctaveCount}
+          persistence={layer.pnPersistence}
         />
       );
     }
@@ -1884,203 +1715,6 @@ function Tools() {
                 </>
               )}
 
-              {isPaperImageDithering && (
-                <>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <SelectField label="Type" value={L.idType} options={DITHER_TYPES} onChange={setP('idType')} fieldBaseStyle={fieldBaseStyle} />
-                    <SelectField
-                      label="Original colors"
-                      value={L.idOriginalColors ? 'on' : 'off'}
-                      options={[{ value: 'off', label: 'Off' }, { value: 'on', label: 'On' }]}
-                      onChange={(v) => update({ idOriginalColors: v === 'on' })}
-                      fieldBaseStyle={fieldBaseStyle}
-                    />
-                  </div>
-                  <RangeField label="Pixel size" value={L.idSize} min={1} max={12} step={0.5} onChange={setP('idSize')} rangeStyle={rangeStyle} />
-                  <RangeField label="Color steps" value={L.idColorSteps} min={1} max={8} step={1} onChange={setP('idColorSteps')} rangeStyle={rangeStyle} />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <ColorField label="Front" value={L.idColorFront} onChange={setP('idColorFront')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                    <ColorField label="Highlight" value={L.idColorHighlight} onChange={setP('idColorHighlight')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                  </div>
-                </>
-              )}
-
-              {isPaperHalftoneDots && (
-                <>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <SelectField label="Type" value={L.hdType} options={HALFTONE_DOT_TYPES} onChange={setP('hdType')} fieldBaseStyle={fieldBaseStyle} />
-                    <SelectField label="Grid" value={L.hdGrid} options={HALFTONE_GRIDS} onChange={setP('hdGrid')} fieldBaseStyle={fieldBaseStyle} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Size" value={L.hdSize} min={0.05} max={2} step={0.01} onChange={setP('hdSize')} rangeStyle={rangeStyle} />
-                    <RangeField label="Radius" value={L.hdRadius} min={0} max={2} step={0.01} onChange={setP('hdRadius')} rangeStyle={rangeStyle} />
-                  </div>
-                  <RangeField label="Contrast" value={L.hdContrast} min={0} max={1} step={0.01} onChange={setP('hdContrast')} rangeStyle={rangeStyle} />
-                  <ColorField label="Dot color" value={L.hdColorFront} onChange={setP('hdColorFront')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                </>
-              )}
-
-              {isPaperHalftoneCmyk && (
-                <>
-                  <SelectField label="Type" value={L.hcType} options={HALFTONE_CMYK_TYPES} onChange={setP('hcType')} fieldBaseStyle={fieldBaseStyle} />
-                  <RangeField label="Size" value={L.hcSize} min={0.05} max={1} step={0.01} onChange={setP('hcSize')} rangeStyle={rangeStyle} />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Contrast" value={L.hcContrast} min={0} max={1} step={0.01} onChange={setP('hcContrast')} rangeStyle={rangeStyle} />
-                    <RangeField label="Softness" value={L.hcSoftness} min={0} max={1} step={0.01} onChange={setP('hcSoftness')} rangeStyle={rangeStyle} />
-                  </div>
-                </>
-              )}
-
-              {isPaperFlutedGlass && (
-                <>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <SelectField label="Shape" value={L.fgShape} options={GLASS_SHAPES} onChange={setP('fgShape')} fieldBaseStyle={fieldBaseStyle} />
-                    <SelectField label="Distortion" value={L.fgDistortionShape} options={GLASS_DISTORTIONS} onChange={setP('fgDistortionShape')} fieldBaseStyle={fieldBaseStyle} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Size" value={L.fgSize} min={0.05} max={2} step={0.01} onChange={setP('fgSize')} rangeStyle={rangeStyle} />
-                    <RangeField label="Angle" value={L.fgAngle} min={0} max={360} step={1} onChange={setP('fgAngle')} rangeStyle={rangeStyle} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Distortion" value={L.fgDistortion} min={0} max={1} step={0.01} onChange={setP('fgDistortion')} rangeStyle={rangeStyle} />
-                    <RangeField label="Blur" value={L.fgBlur} min={0} max={1} step={0.01} onChange={setP('fgBlur')} rangeStyle={rangeStyle} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Shadows" value={L.fgShadows} min={0} max={1} step={0.01} onChange={setP('fgShadows')} rangeStyle={rangeStyle} />
-                    <RangeField label="Highlights" value={L.fgHighlights} min={0} max={1} step={0.01} onChange={setP('fgHighlights')} rangeStyle={rangeStyle} />
-                  </div>
-                  <RangeField label="Edges" value={L.fgEdges} min={0} max={1} step={0.01} onChange={setP('fgEdges')} rangeStyle={rangeStyle} />
-                </>
-              )}
-
-              {isPaperWater && (
-                <>
-                  <RangeField label="Size" value={L.wtSize} min={0.1} max={3} step={0.01} onChange={setP('wtSize')} rangeStyle={rangeStyle} />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Highlights" value={L.wtHighlights} min={0} max={1} step={0.01} onChange={setP('wtHighlights')} rangeStyle={rangeStyle} />
-                    <RangeField label="Layering" value={L.wtLayering} min={0} max={2} step={0.01} onChange={setP('wtLayering')} rangeStyle={rangeStyle} />
-                  </div>
-                  <RangeField label="Edges" value={L.wtEdges} min={0} max={1} step={0.01} onChange={setP('wtEdges')} rangeStyle={rangeStyle} />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Caustic" value={L.wtCaustic} min={0} max={1} step={0.01} onChange={setP('wtCaustic')} rangeStyle={rangeStyle} />
-                    <RangeField label="Waves" value={L.wtWaves} min={0} max={1} step={0.01} onChange={setP('wtWaves')} rangeStyle={rangeStyle} />
-                  </div>
-                </>
-              )}
-
-              {isPaperTexture && (
-                <>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Contrast" value={L.ptContrast} min={0} max={1} step={0.01} onChange={setP('ptContrast')} rangeStyle={rangeStyle} />
-                    <RangeField label="Roughness" value={L.ptRoughness} min={0} max={1} step={0.01} onChange={setP('ptRoughness')} rangeStyle={rangeStyle} />
-                  </div>
-                  <RangeField label="Fiber" value={L.ptFiber} min={0} max={1} step={0.01} onChange={setP('ptFiber')} rangeStyle={rangeStyle} />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Folds" value={L.ptFolds} min={0} max={1} step={0.01} onChange={setP('ptFolds')} rangeStyle={rangeStyle} />
-                    <RangeField label="Fold count" value={L.ptFoldCount} min={0} max={12} step={1} onChange={setP('ptFoldCount')} rangeStyle={rangeStyle} />
-                  </div>
-                  <RangeField label="Fade" value={L.ptFade} min={0} max={1} step={0.01} onChange={setP('ptFade')} rangeStyle={rangeStyle} />
-                </>
-              )}
-
-              {isPaperGemSmoke && (
-                <>
-                  <SelectField label="Shape" value={L.gsShape} options={GEM_SHAPES} onChange={setP('gsShape')} fieldBaseStyle={fieldBaseStyle} />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Inner glow" value={L.gsInnerGlow} min={0} max={1} step={0.01} onChange={setP('gsInnerGlow')} rangeStyle={rangeStyle} />
-                    <RangeField label="Outer glow" value={L.gsOuterGlow} min={0} max={1} step={0.01} onChange={setP('gsOuterGlow')} rangeStyle={rangeStyle} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Inner distort" value={L.gsInnerDistortion} min={0} max={2} step={0.01} onChange={setP('gsInnerDistortion')} rangeStyle={rangeStyle} />
-                    <RangeField label="Outer distort" value={L.gsOuterDistortion} min={0} max={2} step={0.01} onChange={setP('gsOuterDistortion')} rangeStyle={rangeStyle} />
-                  </div>
-                  <ColorField label="Inner color" value={L.gsColorInner} onChange={setP('gsColorInner')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                </>
-              )}
-
-              {isSwirl && (
-                <>
-                  <ColorListField label="Colors" values={L.swColors} onChange={colorSetter('swColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                  <ColorField label="Back color" value={L.swColorBack} onChange={setP('swColorBack')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Bands" value={L.swBandCount} min={1} max={10} step={1} onChange={setP('swBandCount')} rangeStyle={rangeStyle} />
-                    <RangeField label="Twist" value={L.swTwist} min={0} max={1} step={0.01} onChange={setP('swTwist')} rangeStyle={rangeStyle} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Center" value={L.swCenter} min={0} max={1} step={0.01} onChange={setP('swCenter')} rangeStyle={rangeStyle} />
-                    <RangeField label="Proportion" value={L.swProportion} min={0} max={1} step={0.01} onChange={setP('swProportion')} rangeStyle={rangeStyle} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Softness" value={L.swSoftness} min={0} max={1} step={0.01} onChange={setP('swSoftness')} rangeStyle={rangeStyle} />
-                    <RangeField label="Noise" value={L.swNoise} min={0} max={1} step={0.01} onChange={setP('swNoise')} rangeStyle={rangeStyle} />
-                  </div>
-                  <RangeField label="Noise freq" value={L.swNoiseFrequency} min={0} max={1} step={0.01} onChange={setP('swNoiseFrequency')} rangeStyle={rangeStyle} />
-                </>
-              )}
-
-              {isWarp && (
-                <>
-                  <SelectField label="Shape" value={L.wpShape} options={WARP_SHAPES} onChange={setP('wpShape')} fieldBaseStyle={fieldBaseStyle} />
-                  <ColorListField label="Colors" values={L.wpColors} onChange={colorSetter('wpColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Proportion" value={L.wpProportion} min={0} max={1} step={0.01} onChange={setP('wpProportion')} rangeStyle={rangeStyle} />
-                    <RangeField label="Softness" value={L.wpSoftness} min={0} max={1} step={0.01} onChange={setP('wpSoftness')} rangeStyle={rangeStyle} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Distortion" value={L.wpDistortion} min={0} max={1} step={0.01} onChange={setP('wpDistortion')} rangeStyle={rangeStyle} />
-                    <RangeField label="Swirl" value={L.wpSwirl} min={0} max={1} step={0.01} onChange={setP('wpSwirl')} rangeStyle={rangeStyle} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Swirl iter" value={L.wpSwirlIterations} min={1} max={20} step={1} onChange={setP('wpSwirlIterations')} rangeStyle={rangeStyle} />
-                    <RangeField label="Shape scale" value={L.wpShapeScale} min={0} max={1} step={0.01} onChange={setP('wpShapeScale')} rangeStyle={rangeStyle} />
-                  </div>
-                </>
-              )}
-
-              {isSpiral && (
-                <>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <ColorField label="Front color" value={L.spColorFront} onChange={setP('spColorFront')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                    <ColorField label="Back color" value={L.spColorBack} onChange={setP('spColorBack')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Density" value={L.spDensity} min={0} max={2} step={0.01} onChange={setP('spDensity')} rangeStyle={rangeStyle} />
-                    <RangeField label="Distortion" value={L.spDistortion} min={0} max={1} step={0.01} onChange={setP('spDistortion')} rangeStyle={rangeStyle} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Stroke width" value={L.spStrokeWidth} min={0} max={1} step={0.01} onChange={setP('spStrokeWidth')} rangeStyle={rangeStyle} />
-                    <RangeField label="Stroke taper" value={L.spStrokeTaper} min={0} max={1} step={0.01} onChange={setP('spStrokeTaper')} rangeStyle={rangeStyle} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Noise" value={L.spNoise} min={0} max={1} step={0.01} onChange={setP('spNoise')} rangeStyle={rangeStyle} />
-                    <RangeField label="Noise freq" value={L.spNoiseFrequency} min={0} max={1} step={0.01} onChange={setP('spNoiseFrequency')} rangeStyle={rangeStyle} />
-                  </div>
-                  <RangeField label="Softness" value={L.spSoftness} min={0} max={1} step={0.01} onChange={setP('spSoftness')} rangeStyle={rangeStyle} />
-                </>
-              )}
-
-              {isGodRays && (
-                <>
-                  <ColorListField label="Colors" values={L.grColors} onChange={colorSetter('grColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <ColorField label="Back color" value={L.grColorBack} onChange={setP('grColorBack')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                    <ColorField label="Bloom color" value={L.grColorBloom} onChange={setP('grColorBloom')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Density" value={L.grDensity} min={0} max={1} step={0.01} onChange={setP('grDensity')} rangeStyle={rangeStyle} />
-                    <RangeField label="Spotty" value={L.grSpotty} min={0} max={1} step={0.01} onChange={setP('grSpotty')} rangeStyle={rangeStyle} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Mid intensity" value={L.grMidIntensity} min={0} max={1} step={0.01} onChange={setP('grMidIntensity')} rangeStyle={rangeStyle} />
-                    <RangeField label="Mid size" value={L.grMidSize} min={0} max={1} step={0.01} onChange={setP('grMidSize')} rangeStyle={rangeStyle} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Intensity" value={L.grIntensity} min={0} max={1} step={0.01} onChange={setP('grIntensity')} rangeStyle={rangeStyle} />
-                    <RangeField label="Bloom" value={L.grBloom} min={0} max={1} step={0.01} onChange={setP('grBloom')} rangeStyle={rangeStyle} />
-                  </div>
-                </>
-              )}
-
               {isGrainGradient && (
                 <>
                   <SelectField label="Shape" value={L.ggShape} options={GRAIN_SHAPES} onChange={setP('ggShape')} fieldBaseStyle={fieldBaseStyle} />
@@ -2105,36 +1739,6 @@ function Tools() {
                     <RangeField label="Grain mixer" value={L.mgGrainMixer} min={0} max={1} step={0.01} onChange={setP('mgGrainMixer')} rangeStyle={rangeStyle} />
                     <RangeField label="Grain overlay" value={L.mgGrainOverlay} min={0} max={1} step={0.01} onChange={setP('mgGrainOverlay')} rangeStyle={rangeStyle} />
                   </div>
-                </>
-              )}
-
-              {isNeuroNoise && (
-                <>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <ColorField label="Front color" value={L.nnColorFront} onChange={setP('nnColorFront')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                    <ColorField label="Mid color" value={L.nnColorMid} onChange={setP('nnColorMid')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                  </div>
-                  <ColorField label="Back color" value={L.nnColorBack} onChange={setP('nnColorBack')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Brightness" value={L.nnBrightness} min={0} max={1} step={0.01} onChange={setP('nnBrightness')} rangeStyle={rangeStyle} />
-                    <RangeField label="Contrast" value={L.nnContrast} min={0} max={1} step={0.01} onChange={setP('nnContrast')} rangeStyle={rangeStyle} />
-                  </div>
-                </>
-              )}
-
-              {isVoronoi && (
-                <>
-                  <ColorListField label="Colors" values={L.vrColors} onChange={colorSetter('vrColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <ColorField label="Glow color" value={L.vrColorGlow} onChange={setP('vrColorGlow')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                    <ColorField label="Gap color" value={L.vrColorGap} onChange={setP('vrColorGap')} styles={{ colorInputStyle, fieldBaseStyle }} />
-                  </div>
-                  <RangeField label="Steps per color" value={L.vrStepsPerColor} min={1} max={3} step={1} onChange={setP('vrStepsPerColor')} rangeStyle={rangeStyle} />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <RangeField label="Distortion" value={L.vrDistortion} min={0} max={0.5} step={0.01} onChange={setP('vrDistortion')} rangeStyle={rangeStyle} />
-                    <RangeField label="Glow" value={L.vrGlow} min={0} max={1} step={0.01} onChange={setP('vrGlow')} rangeStyle={rangeStyle} />
-                  </div>
-                  <RangeField label="Gap" value={L.vrGap} min={0} max={0.1} step={0.001} onChange={setP('vrGap')} rangeStyle={rangeStyle} />
                 </>
               )}
 

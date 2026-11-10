@@ -1,15 +1,21 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { motion } from 'framer-motion';
+import { ArrayBufferTarget, Muxer } from 'mp4-muxer';
 import {
   ColorPanels,
+  GodRays,
   GrainGradient,
   Heatmap,
   LiquidMetal,
   MeshGradient,
-  PerlinNoise,
-  SimplexNoise,
+  Metaballs,
   SmokeRing,
+  Swirl,
+  Warp,
 } from '@paper-design/shaders-react';
+import Extrude3D, { EXTRUDE_MOTIONS, bounceBetween, livePreview } from './Extrude3D';
+import LiquidGlass, { GLASS_MOTIONS } from './LiquidGlass';
 
 const UI_LIGHT = 'var(--color-text)';
 const UI_DARK = 'var(--color-bg)';
@@ -27,26 +33,28 @@ const SHADER_OPTIONS = [
   { id: 'none', label: 'None' },
   { id: 'liquid-metal', label: 'Liquid Metal' },
   { id: 'heatmap', label: 'Heatmap' },
+  { id: 'extrude-3d', label: '3D Extrude' },
+  { id: 'liquid-glass', label: 'Liquid Glass' },
   { id: 'mesh-gradient', label: 'Mesh Gradient' },
   { id: 'grain-gradient', label: 'Grain Gradient' },
   { id: 'smoke-ring', label: 'Smoke Ring' },
   { id: 'color-panels', label: 'Color Panels' },
-  { id: 'simplex-noise', label: 'Simplex Noise' },
-  { id: 'perlin-noise', label: 'Perlin Noise' },
+  { id: 'warp', label: 'Silk Warp' },
+  { id: 'swirl', label: 'Swirl' },
+  { id: 'god-rays', label: 'Light Rays' },
+  { id: 'metaballs', label: 'Metaballs' },
 ];
 
 const optionsFor = (ids) => ids.map((id) => SHADER_OPTIONS.find((opt) => opt.id === id));
 
-// The Logo layer offers the image shaders (they shape themselves to the
-// uploaded logo's silhouette) plus a few full-frame shaders that fill the logo.
+// The Logo layer offers the four logo looks; all of them shape themselves to
+// the uploaded logo (or text) silhouette.
 const LOGO_SHADER_OPTIONS = optionsFor([
   'none',
   'liquid-metal',
   'heatmap',
-  'mesh-gradient',
-  'grain-gradient',
-  'smoke-ring',
-  'color-panels',
+  'extrude-3d',
+  'liquid-glass',
 ]);
 
 // The Background layer only offers full-frame shaders.
@@ -54,8 +62,10 @@ const BG_SHADER_OPTIONS = optionsFor([
   'none',
   'grain-gradient',
   'mesh-gradient',
-  'simplex-noise',
-  'perlin-noise',
+  'warp',
+  'swirl',
+  'god-rays',
+  'metaballs',
 ]);
 
 const FONT_OPTIONS = [
@@ -146,8 +156,38 @@ const buildTextMaskDataUrl = ({ text, color, bold, tracking, fill, font, width, 
     ctx.fillText(line, w / 2, startY + index * lineHeight);
   });
 
+  // Crop to the glyphs (plus breathing room for edge effects). A full-frame
+  // mask leaves the text tiny inside the image, so the logo shaders process it
+  // at low resolution — Liquid Metal then loses its animated ripple bands.
+  let out = canvas;
   try {
-    return canvas.toDataURL('image/png');
+    const px = ctx.getImageData(0, 0, w, h).data;
+    let x0 = w; let y0 = h; let x1 = -1; let y1 = -1;
+    for (let y = 0; y < h; y += 1) {
+      for (let x = 0; x < w; x += 1) {
+        if (px[(y * w + x) * 4 + 3] > 8) {
+          if (x < x0) x0 = x;
+          if (x > x1) x1 = x;
+          if (y < y0) y0 = y;
+          if (y > y1) y1 = y;
+        }
+      }
+    }
+    if (x1 >= 0) {
+      const pad = Math.round(fontSize * 0.3);
+      x0 = Math.max(0, x0 - pad); y0 = Math.max(0, y0 - pad);
+      x1 = Math.min(w - 1, x1 + pad); y1 = Math.min(h - 1, y1 + pad);
+      out = document.createElement('canvas');
+      out.width = x1 - x0 + 1;
+      out.height = y1 - y0 + 1;
+      out.getContext('2d').drawImage(canvas, x0, y0, out.width, out.height, 0, 0, out.width, out.height);
+    }
+  } catch {
+    out = canvas;
+  }
+
+  try {
+    return out.toDataURL('image/png');
   } catch {
     return null;
   }
@@ -208,6 +248,48 @@ const composeLayersWithSource = (ctx, { bgCanvas, logoCanvas, logoPlain, clipLog
   sc.drawImage(sourceImg, r.x, r.y, r.w, r.h);
   sc.globalCompositeOperation = 'source-over';
   ctx.drawImage(scratch, 0, 0);
+};
+
+// Drives a DVD-style bounce for the Paper image shaders. Offsets are pushed
+// straight into the shader mount every frame (no React re-render — re-rendering
+// would re-send the logo texture each frame). `toOffsets` converts a frame
+// displacement (fractions of the frame, centre = 0) into shader offsets.
+// While exporting (`time` set) it stays idle; the exporter positions the logo.
+const bounceDisplacement = (range, tt) => ({
+  dx: bounceBetween(range.x[0], range.x[1], tt + 7.3, 0.22),
+  dy: bounceBetween(range.y[0], range.y[1], tt + 3.1, 0.18),
+});
+
+const Bouncer = ({ speed, range, toOffsets, time = null, children }) => {
+  const wrapRef = useRef(null);
+  const live = useRef({});
+  live.current = { speed, range, toOffsets, time };
+  useEffect(() => {
+    let raf = 0;
+    const start = performance.now();
+    const tick = () => {
+      const p = live.current;
+      if (p.time == null && !livePreview.paused) {
+        const mount = wrapRef.current?.querySelector('[data-paper-shader]')?.paperShaderMount;
+        if (mount) {
+          const { dx, dy } = bounceDisplacement(p.range, ((performance.now() - start) / 1000) * p.speed);
+          const o = p.toOffsets(dx, dy);
+          mount.setUniformValues({ u_offsetX: o.offsetX, u_offsetY: o.offsetY });
+          // Paper only redraws on its own while animating.
+          if (!mount.currentSpeed) mount.render(performance.now());
+        }
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  const { dx, dy } = bounceDisplacement(range, 0);
+  return (
+    <div ref={wrapRef} style={{ width: '100%', height: '100%' }}>
+      {children(toOffsets(dx, dy))}
+    </div>
+  );
 };
 
 const RangeField = ({ label, value, min, max, step, onChange, rangeStyle }) => (
@@ -278,6 +360,8 @@ const GRAIN_SHAPES = [
 const IMAGE_SHADER_IDS = [
   'liquid-metal',
   'heatmap',
+  'extrude-3d',
+  'liquid-glass',
 ];
 
 const isImageShaderId = (id) => IMAGE_SHADER_IDS.includes(id);
@@ -338,17 +422,106 @@ const createLayerDefaults = () => ({
   cpFadeOut: 0.3,
   cpGradient: 0,
 
-  snColors: ['#4449cf', '#ffd1e0', '#f94446', '#ffd36b', '#ffffff'],
-  snStepsPerColor: 2,
-  snSoftness: 0,
+  wpColors: ['#121212', '#9470ff', '#121212', '#8838ff'],
+  wpProportion: 0.45,
+  wpSoftness: 1,
+  wpDistortion: 0.25,
+  wpSwirl: 0.8,
+  wpSwirlIterations: 10,
+  wpShapeScale: 0.1,
+  wpShape: 'checks',
 
-  pnColorFront: '#fccff7',
-  pnColorBack: '#632ad5',
-  pnProportion: 0.35,
-  pnSoftness: 0.1,
-  pnOctaveCount: 1,
-  pnPersistence: 1,
+  swColors: ['#ffd1d1', '#ff8a8a', '#660000'],
+  swColorBack: '#330000',
+  swBandCount: 4,
+  swTwist: 0.1,
+  swCenter: 0.2,
+  swProportion: 0.5,
+  swSoftness: 0,
+  swNoiseFrequency: 0.4,
+  swNoise: 0.2,
+
+  grColors: ['#a600ff', '#6200ff', '#ffffff', '#33fff5'],
+  grColorBack: '#000000',
+  grColorBloom: '#0000ff',
+  grDensity: 0.3,
+  grSpotty: 0.3,
+  grMidIntensity: 0.4,
+  grMidSize: 0.2,
+  grIntensity: 0.8,
+  grBloom: 0.4,
+
+  mbColors: ['#6e33cc', '#ff5500', '#ffc105', '#ffc800', '#f585ff'],
+  mbColorBack: '#000000',
+  mbCount: 10,
+  mbSize: 0.83,
+
+  bounce: false,
+
+  x3Depth: 0.35,
+  x3Motion: 'sway',
+
+  lgMotion: 'float',
+  lgBevel: 0.35,
+  lgRefraction: 0.6,
+  lgFrost: 0.06,
+  lgDispersion: 0.4,
+  lgHighlight: 0.7,
+  lgTint: '#ffffff',
 });
+
+const WARP_SHAPES = [
+  { value: 'checks', label: 'Checks' },
+  { value: 'stripes', label: 'Stripes' },
+  { value: 'edge', label: 'Edge' },
+];
+
+// One-click motion styles per shader. Each sets speed plus the parameters that
+// shape how the pattern moves; the dropdown falls back to "Custom" once any of
+// them is edited by hand.
+const MOTION_PRESETS = {
+  'grain-gradient': [
+    { id: 'breathe', label: 'Breathe', params: { speed: 0.35, ggShape: 'sphere', ggSoftness: 0.85, ggIntensity: 0.3, ggNoise: 0.2 } },
+    { id: 'corners', label: 'Corner Glow', params: { speed: 1, ggShape: 'corners', ggSoftness: 0.5, ggIntensity: 0.5, ggNoise: 0.25 } },
+    { id: 'tide', label: 'Tide', params: { speed: 0.6, ggShape: 'wave', ggSoftness: 0.7, ggIntensity: 0.15, ggNoise: 0.5 } },
+    { id: 'ripple', label: 'Ripple', params: { speed: 0.8, ggShape: 'ripple', ggSoftness: 0.5, ggIntensity: 0.5, ggNoise: 0.4 } },
+    { id: 'lava', label: 'Lava Blob', params: { speed: 0.5, ggShape: 'blob', ggSoftness: 0.3, ggIntensity: 0.2, ggNoise: 0.45 } },
+    { id: 'confetti', label: 'Grain Dots', params: { speed: 1, ggShape: 'dots', ggSoftness: 1, ggIntensity: 0.8, ggNoise: 0.6 } },
+    { id: 'weave', label: 'Weave', params: { speed: 0.7, ggShape: 'truchet', ggSoftness: 0.2, ggIntensity: 0.25, ggNoise: 0.8 } },
+  ],
+  'mesh-gradient': [
+    { id: 'still-air', label: 'Still Air', params: { speed: 0.15, mgDistortion: 0.5, mgSwirl: 0, mgGrainMixer: 0, mgGrainOverlay: 0 } },
+    { id: 'liquid', label: 'Liquid', params: { speed: 1, mgDistortion: 0.8, mgSwirl: 0.1, mgGrainMixer: 0, mgGrainOverlay: 0 } },
+    { id: 'lagoon', label: 'Lagoon', params: { speed: 0.25, mgDistortion: 0.8, mgSwirl: 0.35, mgGrainMixer: 0, mgGrainOverlay: 0 } },
+    { id: 'vortex', label: 'Vortex', params: { speed: 0.6, mgDistortion: 1, mgSwirl: 1, mgGrainMixer: 0, mgGrainOverlay: 0 } },
+    { id: 'film', label: 'Film Grain', params: { speed: 0.5, mgDistortion: 0.7, mgSwirl: 0.25, mgGrainMixer: 0.35, mgGrainOverlay: 0.4 } },
+    { id: 'storm', label: 'Storm', params: { speed: 1.8, mgDistortion: 1, mgSwirl: 0.6, mgGrainMixer: 0.15, mgGrainOverlay: 0.1 } },
+  ],
+  warp: [
+    { id: 'silk', label: 'Silk', params: { speed: 0.6, wpShape: 'checks', wpProportion: 0.45, wpSoftness: 1, wpDistortion: 0.25, wpSwirl: 0.8, wpSwirlIterations: 10, wpShapeScale: 0.1 } },
+    { id: 'marble', label: 'Marble', params: { speed: 0.4, wpShape: 'stripes', wpProportion: 0.5, wpSoftness: 0.6, wpDistortion: 0.5, wpSwirl: 0.9, wpSwirlIterations: 14, wpShapeScale: 0.25 } },
+    { id: 'aurora', label: 'Aurora', params: { speed: 0.5, wpShape: 'edge', wpProportion: 0.4, wpSoftness: 1, wpDistortion: 0.3, wpSwirl: 0.5, wpSwirlIterations: 8, wpShapeScale: 0.4 } },
+    { id: 'chromatic', label: 'Chromatic', params: { speed: 1.2, wpShape: 'stripes', wpProportion: 0.5, wpSoftness: 0.2, wpDistortion: 0.15, wpSwirl: 0.6, wpSwirlIterations: 6, wpShapeScale: 0.6 } },
+  ],
+  swirl: [
+    { id: 'hypno', label: 'Hypnotic', params: { speed: 0.32, swBandCount: 4, swTwist: 0.1, swCenter: 0.2, swProportion: 0.5, swSoftness: 0, swNoiseFrequency: 0.4, swNoise: 0.2 } },
+    { id: 'bloom', label: 'Bloom', params: { speed: 0.5, swBandCount: 2, swTwist: 0.3, swCenter: 0.2, swProportion: 0.5, swSoftness: 0, swNoiseFrequency: 0, swNoise: 0 } },
+    { id: 'soft-spin', label: 'Soft Spin', params: { speed: 0.6, swBandCount: 2, swTwist: 0.15, swCenter: 0.2, swProportion: 0.5, swSoftness: 1, swNoiseFrequency: 0.5, swNoise: 0 } },
+    { id: 'tunnel', label: 'Tunnel', params: { speed: 1, swBandCount: 6, swTwist: 0.4, swCenter: 0, swProportion: 0.45, swSoftness: 0.3, swNoiseFrequency: 0.5, swNoise: 0.1 } },
+  ],
+  'god-rays': [
+    { id: 'halo', label: 'Halo', params: { speed: 0.75, grDensity: 0.3, grSpotty: 0.3, grMidIntensity: 0.4, grMidSize: 0.2, grIntensity: 0.8, grBloom: 0.4 } },
+    { id: 'hyperspace', label: 'Hyperspace', params: { speed: 2, grDensity: 0.45, grSpotty: 0.15, grMidIntensity: 0.4, grMidSize: 0.33, grIntensity: 0.79, grBloom: 0.4 } },
+    { id: 'ether', label: 'Ether', params: { speed: 1, grDensity: 0.03, grSpotty: 0.77, grMidIntensity: 0.6, grMidSize: 0.1, grIntensity: 0.6, grBloom: 0.6 } },
+    { id: 'dawn', label: 'Dawn', params: { speed: 0.4, grDensity: 0.2, grSpotty: 0.5, grMidIntensity: 0.8, grMidSize: 0.4, grIntensity: 0.5, grBloom: 0.8 } },
+  ],
+  metaballs: [
+    { id: 'lava-lamp', label: 'Lava Lamp', params: { speed: 1, mbCount: 10, mbSize: 0.83, scale: 1 } },
+    { id: 'drift', label: 'Slow Drift', params: { speed: 0.5, mbCount: 13, mbSize: 0.81, scale: 4 } },
+    { id: 'solar', label: 'Solar', params: { speed: 1, mbCount: 7, mbSize: 0.75, scale: 1 } },
+    { id: 'droplets', label: 'Droplets', params: { speed: 2, mbCount: 18, mbSize: 0.25, scale: 1 } },
+  ],
+};
 
 // Curated palettes for the generative shaders. `colors` are the main gradient
 // stops and `back` is the backdrop colour (used as colorBack / gap colour).
@@ -369,6 +542,24 @@ const SHADER_PALETTES = [
   { id: 'mint', label: 'Mint', colors: ['#e6fff7', '#7dffd4', '#00d1a0', '#045c46'], back: '#001410' },
   { id: 'cobalt', label: 'Cobalt', colors: ['#dbeafe', '#60a5fa', '#1d4ed8', '#0b1f5c'], back: '#020617' },
   { id: 'grape', label: 'Grape', colors: ['#f5d0fe', '#e879f9', '#a21caf', '#4a044e'], back: '#160016' },
+  { id: 'aurora', label: 'Aurora', colors: ['#00ffa3', '#03e1ff', '#7b61ff', '#dc1fff', '#0a0f2c'], back: '#03040f' },
+  { id: 'peach-fuzz', label: 'Peach Fuzz', colors: ['#ffe5d9', '#ffcab0', '#ffa58a', '#f2789f', '#7d4e57'], back: '#2b1418' },
+  { id: 'lavender-haze', label: 'Lavender Haze', colors: ['#f3e8ff', '#d8b4fe', '#a78bfa', '#7c83fd', '#312e81'], back: '#0f0a24' },
+  { id: 'holo', label: 'Holographic', colors: ['#fdfcff', '#c2f5ff', '#e7c6ff', '#ffd6f6', '#b8f2e6'], back: '#e9e6f5' },
+  { id: 'matcha', label: 'Matcha Latte', colors: ['#f4f1de', '#c9d6a3', '#8aa66b', '#4f6d3a', '#24331c'], back: '#11180d' },
+  { id: 'nectar', label: 'Nectar', colors: ['#fff1a8', '#ffc94d', '#ff7a3d', '#ff3d68', '#6b1d5c'], back: '#1f0820' },
+  { id: 'midnight-bloom', label: 'Midnight Bloom', colors: ['#ff5ea8', '#b14aed', '#4b3bff', '#120c6e', '#05031c'], back: '#020010' },
+  { id: 'coral-reef', label: 'Coral Reef', colors: ['#ff7f6e', '#ffb38a', '#fff4e0', '#3ec1c9', '#0b5563'], back: '#021b21' },
+  { id: 'iris', label: 'Iris', colors: ['#e0e7ff', '#818cf8', '#c084fc', '#f472b6', '#1e1b4b'], back: '#0a0820' },
+  { id: 'solar-flare', label: 'Solar Flare', colors: ['#ffffff', '#ffe066', '#ff9f1c', '#ff4040', '#3d0000'], back: '#120000' },
+  { id: 'dusk', label: 'Dusk', colors: ['#fcd5ce', '#f8a5c2', '#9b5de5', '#3a0ca3', '#10002b'], back: '#08001a' },
+  { id: 'glacier', label: 'Glacier', colors: ['#ffffff', '#d6f3ff', '#9ad7f5', '#4b9fd6', '#163a5f'], back: '#061424' },
+  { id: 'rosewater', label: 'Rosewater', colors: ['#fff5f5', '#ffd9de', '#f4acb7', '#d8a7ca', '#9d8189'], back: '#f9eef0' },
+  { id: 'neon-tokyo', label: 'Neon Tokyo', colors: ['#ff2a6d', '#ff7edb', '#05d9e8', '#005678', '#01012b'], back: '#01011a' },
+  { id: 'terracotta', label: 'Terracotta', colors: ['#f6e7d8', '#e3a587', '#c8553d', '#7a3b2e', '#2b1b17'], back: '#140c0a' },
+  { id: 'chrome', label: 'Chrome', colors: ['#ffffff', '#d4d8de', '#8e96a3', '#3c4350', '#0d0f13'], back: '#050608' },
+  { id: 'citrus', label: 'Citrus Pop', colors: ['#fff75e', '#c6f432', '#2ee6a6', '#ff8c42', '#1b4332'], back: '#071a12' },
+  { id: 'pastel-dream', label: 'Pastel Dream', colors: ['#a0e7e5', '#b4f8c8', '#fbe7c6', '#ffaebc', '#cdb4db'], back: '#fdf6ff' },
 ];
 
 const normalizeHex = (value) => String(value || '').trim().toLowerCase();
@@ -454,6 +645,37 @@ function Tools() {
   const [fontTick, setFontTick] = useState(0);
   const [logoScale, setLogoScale] = useState(1);
   const [sourceAspect, setSourceAspect] = useState(0);
+  // Seconds; non-null only while exporting video frame by frame.
+  const [renderTime, setRenderTime] = useState(null);
+  const paperBounceGeometryRef = useRef(null);
+  const progressFillRef = useRef(null);
+  const progressTextRef = useRef(null);
+  // Progress is written straight to the DOM: a React re-render per frame would
+  // re-send every shader's inputs (including the logo texture) and slow the
+  // export down.
+  const setExportProgress = useCallback((fraction, text) => {
+    if (progressFillRef.current) progressFillRef.current.style.width = `${Math.round(Math.max(0, Math.min(1, fraction)) * 1000) / 10}%`;
+    if (progressTextRef.current && text != null) progressTextRef.current.textContent = text;
+  }, []);
+  // Pause/resume the live preview (Paper mounts + 3D loops) so the exported
+  // MP4 can play back in the page without dropped frames.
+  const pausedMountsRef = useRef([]);
+  const setLivePreviewPaused = useCallback((paused) => {
+    livePreview.paused = paused;
+    if (paused) {
+      pausedMountsRef.current = [...document.querySelectorAll('.shader-tool [data-paper-shader]')]
+        .map((el) => el.paperShaderMount)
+        .filter((m) => m && m.speed)
+        .map((m) => ({ m, speed: m.speed }));
+      pausedMountsRef.current.forEach(({ m }) => m.setSpeed(0));
+    } else {
+      pausedMountsRef.current.forEach(({ m, speed }) => { if (!m.hasBeenDisposed) m.setSpeed(speed); });
+      pausedMountsRef.current = [];
+    }
+  }, []);
+  // Visible (non-transparent) bounds of the source as fractions of the image,
+  // so the bounce turns around when the logo itself reaches the frame edge.
+  const [contentBox, setContentBox] = useState({ x0: 0, y0: 0, x1: 1, y1: 1 });
 
   // The active layer drives both the flag set below and the control panels.
   // Flag names mirror the previous single-shader implementation so the panels
@@ -465,11 +687,23 @@ function Tools() {
   const isMeshGradient = effect === 'mesh-gradient';
   const isSmokeRing = effect === 'smoke-ring';
   const isColorPanels = effect === 'color-panels';
-  const isSimplexNoise = effect === 'simplex-noise';
-  const isPerlinNoise = effect === 'perlin-noise';
+  const isWarp = effect === 'warp';
+  const isSwirl = effect === 'swirl';
+  const isGodRays = effect === 'god-rays';
+  const isMetaballs = effect === 'metaballs';
   const isGenerativeShader = effect !== 'none' && !isImageShaderId(effect);
   const setP = (key) => (value) => update({ [key]: value });
   const colorSetter = (key) => (index, value) => update({ [key]: L[key].map((c, i) => (i === index ? value : c)) });
+
+  const motionPresets = useMemo(() => MOTION_PRESETS[effect] || [], [effect]);
+  const activeMotionId = useMemo(() => {
+    const match = motionPresets.find((m) => Object.entries(m.params).every(([k, v]) => L[k] === v));
+    return match ? match.id : 'custom';
+  }, [motionPresets, L]);
+  const applyMotion = (id) => {
+    const m = motionPresets.find((x) => x.id === id);
+    if (m) update({ ...m.params, animate: true });
+  };
 
   // Maps a curated palette onto whichever generative shader is active. Shaders
   // with a colour list take the full ramp; the single/dual-colour shaders are
@@ -487,11 +721,30 @@ function Tools() {
       update({ srColors: cols, srColorBack: back });
     } else if (isColorPanels) {
       update({ cpColors: cols, cpColorBack: back });
-    } else if (isSimplexNoise) {
-      update({ snColors: cols });
-    } else if (isPerlinNoise) {
-      update({ pnColorFront: cols[0], pnColorBack: back });
+    } else if (isWarp) {
+      update({ wpColors: cols });
+    } else if (isSwirl) {
+      update({ swColors: cols, swColorBack: back });
+    } else if (isGodRays) {
+      update({ grColors: cols, grColorBack: back, grColorBloom: cols[Math.min(2, cols.length - 1)] });
+    } else if (isMetaballs) {
+      update({ mbColors: cols, mbColorBack: back });
     }
+  };
+
+  // Random palette + motion style for quick exploration.
+  const randomizeLook = () => {
+    const p = SHADER_PALETTES[Math.floor(Math.random() * SHADER_PALETTES.length)];
+    applyPalette(p.id);
+    if (motionPresets.length) applyMotion(motionPresets[Math.floor(Math.random() * motionPresets.length)].id);
+  };
+
+  // Reverses the colour order of the active shader's ramp — a cheap way to get
+  // a very different look out of the same palette.
+  const COLOR_KEYS = { 'grain-gradient': 'ggColors', 'mesh-gradient': 'mgColors', 'smoke-ring': 'srColors', 'color-panels': 'cpColors', warp: 'wpColors', swirl: 'swColors', 'god-rays': 'grColors', metaballs: 'mbColors' };
+  const flipColors = () => {
+    const key = COLOR_KEYS[effect];
+    if (key) update({ [key]: [...L[key]].reverse() });
   };
 
   // Derived (not stored) so the dropdown stays truthful the moment any colour
@@ -502,15 +755,17 @@ function Tools() {
     else if (isMeshGradient) current = { colors: L.mgColors, back: null };
     else if (isSmokeRing) current = { colors: L.srColors, back: L.srColorBack };
     else if (isColorPanels) current = { colors: L.cpColors, back: L.cpColorBack };
-    else if (isSimplexNoise) current = { colors: L.snColors, back: null };
-    else if (isPerlinNoise) current = { colors: [L.pnColorFront], back: L.pnColorBack };
+    else if (isWarp) current = { colors: L.wpColors, back: null };
+    else if (isSwirl) current = { colors: L.swColors, back: L.swColorBack };
+    else if (isGodRays) current = { colors: L.grColors, back: L.grColorBack };
+    else if (isMetaballs) current = { colors: L.mbColors, back: L.mbColorBack };
     if (!current) return 'custom';
     const match = SHADER_PALETTES.find((p) => (
       sameHexList(current.colors, p.colors.slice(0, current.colors.length))
       && (!current.back || normalizeHex(p.back) === normalizeHex(current.back))
     ));
     return match ? match.id : 'custom';
-  }, [isGrainGradient, isMeshGradient, isSmokeRing, isColorPanels, isSimplexNoise, isPerlinNoise, L]);
+  }, [isGrainGradient, isMeshGradient, isSmokeRing, isColorPanels, isWarp, isSwirl, isGodRays, isMetaballs, L]);
 
   const textMaskUrl = useMemo(() => {
     if (sourceMode !== 'text') return null;
@@ -591,6 +846,31 @@ function Tools() {
       const aw = img.naturalWidth || frameW;
       const ah = img.naturalHeight || frameH;
       setSourceAspect(ah ? aw / ah : 0);
+      try {
+        const k = Math.min(1, 512 / Math.max(aw, ah));
+        const w = Math.max(1, Math.round(aw * k));
+        const h = Math.max(1, Math.round(ah * k));
+        const c = document.createElement('canvas');
+        c.width = w;
+        c.height = h;
+        const ctx = c.getContext('2d', { willReadFrequently: true });
+        ctx.drawImage(img, 0, 0, w, h);
+        const px = ctx.getImageData(0, 0, w, h).data;
+        let x0 = w; let y0 = h; let x1 = -1; let y1 = -1;
+        for (let y = 0; y < h; y += 1) {
+          for (let x = 0; x < w; x += 1) {
+            if (px[(y * w + x) * 4 + 3] > 8) {
+              if (x < x0) x0 = x;
+              if (x > x1) x1 = x;
+              if (y < y0) y0 = y;
+              if (y > y1) y1 = y;
+            }
+          }
+        }
+        if (!cancelled) setContentBox(x1 < 0 ? { x0: 0, y0: 0, x1: 1, y1: 1 } : { x0: x0 / w, y0: y0 / h, x1: (x1 + 1) / w, y1: (y1 + 1) / h });
+      } catch {
+        if (!cancelled) setContentBox({ x0: 0, y0: 0, x1: 1, y1: 1 });
+      }
     });
     return () => { cancelled = true; };
   }, [paperImage, frameW, frameH]);
@@ -765,6 +1045,11 @@ function Tools() {
     if (mp4Download?.url) URL.revokeObjectURL(mp4Download.url);
   }, [mp4Download]);
 
+  // Resume the live preview if the inline MP4 player goes away mid-playback.
+  useEffect(() => {
+    if (!mp4Download && livePreview.paused) setLivePreviewPaused(false);
+  }, [mp4Download, setLivePreviewPaused]);
+
   const downloadFromUrl = useCallback((url, filename) => {
     const a = document.createElement('a');
     a.href = url;
@@ -938,6 +1223,133 @@ function Tools() {
 
     const sourceImg = await loadImageElement(paperImage);
     const scratch = exportScratchRef.current || (exportScratchRef.current = document.createElement('canvas'));
+
+    // Frame-accurate export (WebCodecs): every layer is driven to exactly
+    // frame / fps seconds, the composite is encoded as one H.264 frame, and
+    // the frames are muxed into an MP4. Nothing depends on how fast the
+    // browser can render in real time, so motion is perfectly even.
+    const offline = await (async () => {
+      if (typeof VideoEncoder === 'undefined' || typeof VideoFrame === 'undefined') return null;
+      const fps = Math.max(10, Math.min(60, videoFps));
+      const encW = frameW - (frameW % 2);
+      const encH = frameH - (frameH % 2);
+      const bitrate = Math.round(Math.min(40e6, Math.max(6e6, encW * encH * fps * 0.18)));
+      const codecs = ['avc1.640034', 'avc1.4d0034', 'avc1.640033', 'avc1.42003e', 'avc1.640028', 'avc1.42001f'];
+      for (const codec of codecs) {
+        try {
+          const cfg = { codec, width: encW, height: encH, bitrate, framerate: fps, latencyMode: 'quality', avc: { format: 'avc' } };
+          const res = await VideoEncoder.isConfigSupported(cfg);
+          if (res?.supported) return { cfg, fps, encW, encH };
+        } catch (e) {
+          void e;
+        }
+      }
+      return null;
+    })();
+
+    if (offline) {
+      const { cfg, fps, encW, encH } = offline;
+      const totalFrames = Math.max(1, Math.round(videoDuration * fps));
+      out.width = encW;
+      out.height = encH;
+      const nextFrame = () => new Promise((r) => requestAnimationFrame(() => r()));
+      setIsRecording(true);
+      setIsFinalizing(true);
+      let encodeError = null;
+      try {
+        const muxer = new Muxer({
+          target: new ArrayBufferTarget(),
+          video: { codec: 'avc', width: encW, height: encH, frameRate: fps },
+          fastStart: 'in-memory',
+          firstTimestampBehavior: 'offset',
+        });
+        const encoder = new VideoEncoder({
+          output: (chunk, meta) => muxer.addVideoChunk(chunk, meta),
+          error: (e) => { encodeError = e; },
+        });
+        encoder.configure(cfg);
+        const frameUs = 1e6 / fps;
+        // Freeze every layer on the export clock (Paper shaders stop their own
+        // animation loops, 3D layers stop drawing on their own), then step
+        // each layer to the exact moment directly — no React re-render and
+        // no waiting on display refreshes per frame.
+        setStatusMessage('Preparing frames…');
+        setExportProgress(0, 'Preparing…');
+        flushSync(() => setRenderTime(0));
+        for (let w = 0; w < 8; w += 1) await nextFrame();
+
+        const paperOf = (cv) => cv?.parentElement?.paperShaderMount || null;
+        const bgPaper = paperOf(bgShaderCanvas);
+        const logo3d = logoShaderCanvas?.__renderAt || null;
+        const logoPaper = logo3d ? null : paperOf(logoShaderCanvas);
+        const bgMs = (t) => (bgLayer.animate ? t * 1000 * bgLayer.speed : 0);
+        const logoMs = (t) => (logoLayer.animate ? t * 1000 * logoLayer.speed : 0);
+        const logoBounce = logoPaper && logoLayer.bounce ? paperBounceGeometryRef.current?.(logoLayer) : null;
+        const bounceSpeed = logoLayer.animate ? logoLayer.speed : 0.0001;
+
+        const renderStart = performance.now();
+        for (let i = 0; i < totalFrames; i += 1) {
+          if (encodeError) throw encodeError;
+          const t = i / fps;
+          bgPaper?.setFrame(bgMs(t));
+          if (logo3d) {
+            logo3d(t);
+          } else if (logoPaper) {
+            if (logoBounce) {
+              const { dx, dy } = bounceDisplacement(logoBounce.range, t * bounceSpeed);
+              logoPaper.setUniformValues({ u_offsetX: dx * logoBounce.bsX, u_offsetY: -dy * logoBounce.bsY });
+            }
+            logoPaper.setFrame(logoMs(t));
+          }
+          ctx.fillStyle = bgHex || '#FFFFFF';
+          ctx.fillRect(0, 0, encW, encH);
+          composeLayersWithSource(ctx, { bgCanvas: bgShaderCanvas, logoCanvas: logoShaderCanvas, logoPlain, clipLogo, sourceImg, width: encW, height: encH, fitMode, logoScale, scratch });
+          const vf = new VideoFrame(out, { timestamp: Math.round(i * frameUs), duration: Math.round(frameUs) });
+          encoder.encode(vf, { keyFrame: i % (fps * 2) === 0 });
+          vf.close();
+          while (encoder.encodeQueueSize > 8) {
+            await new Promise((r) => globalThis.setTimeout(r, 2));
+          }
+          if (i % 3 === 0 || i === totalFrames - 1) {
+            const done = i + 1;
+            const elapsed = (performance.now() - renderStart) / 1000;
+            const left = Math.max(0, Math.round((elapsed / done) * (totalFrames - done)));
+            setExportProgress((done / totalFrames) * 0.97, `Rendering ${Math.round((done / totalFrames) * 100)}% · frame ${done}/${totalFrames}${done > 6 ? ` · ~${left}s left` : ''}`);
+            // Yield so the page stays responsive and the bar repaints.
+            await new Promise((r) => globalThis.setTimeout(r, 0));
+          }
+        }
+        setStatusMessage('Finishing MP4…');
+        setExportProgress(0.98, 'Finishing MP4…');
+        await encoder.flush();
+        encoder.close();
+        if (encodeError) throw encodeError;
+        muxer.finalize();
+        const mp4 = new Blob([muxer.target.buffer], { type: 'video/mp4' });
+        const handle = saveFileHandleRef.current;
+        saveFileHandleRef.current = null;
+        if (handle && await writeFileHandle(handle, mp4)) {
+          setStatusMessage('Saved.');
+          clearMp4Download();
+        } else {
+          setMp4DownloadFromBlob(mp4, outFilename);
+          setStatusMessage('MP4 ready.');
+        }
+      } catch (e) {
+        void e;
+        setStatusMessage('Video export failed.');
+      } finally {
+        setRenderTime(null);
+        if (recordCanvasElRef.current) {
+          try { recordCanvasElRef.current.remove(); } catch (err) { void err; }
+          recordCanvasElRef.current = null;
+        }
+        setIsRecording(false);
+        setIsFinalizing(false);
+        setPaperExportActive(false);
+      }
+      return;
+    }
 
     if (isIOSDevice) {
       const maxFrames = 180;
@@ -1141,7 +1553,7 @@ function Tools() {
     recordTimeoutRef.current = window.setTimeout(() => {
       stopRecording();
     }, Math.max(1, videoDuration) * 1000 + extraStopMs);
-  }, [bgHex, bgLayer.effect, clearMp4Download, encodeMp4, fitMode, frameH, frameW, isFinalizing, isIOSDevice, isMobileDevice, isRecording, logoLayer.effect, logoScale, paperImage, pickVideoMime, requestSaveFileHandle, setMp4DownloadFromBlob, stopRecording, videoDuration, videoFps, waitForCanvasIn, writeFileHandle]);
+  }, [bgHex, bgLayer, setExportProgress, clearMp4Download, encodeMp4, fitMode, frameH, frameW, isFinalizing, isIOSDevice, isMobileDevice, isRecording, logoLayer, logoScale, paperImage, pickVideoMime, requestSaveFileHandle, setMp4DownloadFromBlob, stopRecording, videoDuration, videoFps, waitForCanvasIn, writeFileHandle]);
 
   const pageBg = UI_DARK;
   const pageFg = UI_LIGHT;
@@ -1196,7 +1608,7 @@ function Tools() {
   // shaders render a full-frame pattern and therefore need the silhouette mask.
   const logoClipToShape = logoLayer.effect !== 'none' && !isImageShaderId(logoLayer.effect);
 
-  const renderLayerShader = (layer, mode, isLogoLayer = false) => {
+  const renderLayerShaderInner = (layer, mode, isLogoLayer = false, extra = {}) => {
     const e = layer.effect;
     if (e === 'none') return null;
     // The logo layer must be transparent outside the logo so the background
@@ -1214,11 +1626,70 @@ function Tools() {
       offsetX: layer.offsetX,
       offsetY: layer.offsetY,
       speed: layer.animate ? layer.speed : 0,
+      // Frame-accurate export: freeze the clock and set the exact moment.
+      ...(renderTime != null ? { speed: 0, frame: layer.animate ? renderTime * 1000 * layer.speed : 0 } : {}),
+      ...extra,
     };
-    const webGlContextAttributes = isIOSDevice ? { preserveDrawingBuffer: true, alpha: true, premultipliedAlpha: false } : undefined;
+    // preserveDrawingBuffer lets the 3D logo looks read these canvases every
+    // frame (Liquid Glass refracts the background layer).
+    const webGlContextAttributes = isIOSDevice ? { preserveDrawingBuffer: true, alpha: true, premultipliedAlpha: false } : { preserveDrawingBuffer: true };
     const sizing = mode === 'export'
       ? { width: frameW, height: frameH, minPixelRatio: 1, maxPixelCount: Math.max(1, frameW * frameH * 4) }
       : { style: { width: '100%', height: '100%' } };
+
+    if (e === 'liquid-glass') {
+      const bgMount = mode === 'export' ? exportBgMountRef : previewBgMountRef;
+      return (
+        <LiquidGlass
+          {...(mode === 'export' ? { width: frameW, height: frameH } : {})}
+          image={paperImage}
+          scale={common.scale}
+          rotation={layer.rotation}
+          offsetX={layer.offsetX}
+          offsetY={layer.offsetY}
+          speed={layer.animate ? layer.speed : 0}
+          time={renderTime}
+          motion={layer.lgMotion}
+          bounce={isLogoLayer && layer.bounce}
+          bevel={layer.lgBevel}
+          refraction={layer.lgRefraction}
+          frost={layer.lgFrost}
+          dispersion={layer.lgDispersion}
+          highlight={layer.lgHighlight}
+          tint={layer.lgTint}
+          getBackdrop={() => bgMount.current?.querySelector('canvas') || null}
+          backdropColor={bgHex}
+        />
+      );
+    }
+
+    if (e === 'extrude-3d') {
+      return (
+        <Extrude3D
+          {...(mode === 'export' ? { width: frameW, height: frameH } : {})}
+          look="metal"
+          image={paperImage}
+          scale={common.scale}
+          rotation={layer.rotation}
+          offsetX={layer.offsetX}
+          offsetY={layer.offsetY}
+          speed={layer.animate ? layer.speed : 0}
+          time={renderTime}
+          depth={layer.x3Depth}
+          motion={layer.x3Motion}
+          bounce={isLogoLayer && layer.bounce}
+          liquidMetal={{
+            repetition: layer.lmRepetition,
+            softness: layer.lmSoftness,
+            shiftRed: layer.lmShiftRed,
+            shiftBlue: layer.lmShiftBlue,
+            distortion: layer.lmDistortion,
+            contour: layer.lmContour,
+            angle: layer.lmAngle,
+          }}
+        />
+      );
+    }
 
     if (e === 'heatmap') {
       return (
@@ -1304,31 +1775,72 @@ function Tools() {
       );
     }
 
-    if (e === 'simplex-noise') {
+    if (e === 'warp') {
       return (
-        <SimplexNoise
+        <Warp
           {...sizing}
           {...common}
           webGlContextAttributes={webGlContextAttributes}
-          colors={layer.snColors}
-          stepsPerColor={layer.snStepsPerColor}
-          softness={layer.snSoftness}
+          colors={layer.wpColors}
+          proportion={layer.wpProportion}
+          softness={layer.wpSoftness}
+          distortion={layer.wpDistortion}
+          swirl={layer.wpSwirl}
+          swirlIterations={layer.wpSwirlIterations}
+          shapeScale={layer.wpShapeScale}
+          shape={layer.wpShape}
         />
       );
     }
 
-    if (e === 'perlin-noise') {
+    if (e === 'swirl') {
       return (
-        <PerlinNoise
+        <Swirl
           {...sizing}
           {...common}
           webGlContextAttributes={webGlContextAttributes}
-          colorFront={layer.pnColorFront}
-          colorBack={layer.pnColorBack}
-          proportion={layer.pnProportion}
-          softness={layer.pnSoftness}
-          octaveCount={layer.pnOctaveCount}
-          persistence={layer.pnPersistence}
+          colors={layer.swColors}
+          colorBack={layer.swColorBack}
+          bandCount={layer.swBandCount}
+          twist={layer.swTwist}
+          center={layer.swCenter}
+          proportion={layer.swProportion}
+          softness={layer.swSoftness}
+          noiseFrequency={layer.swNoiseFrequency}
+          noise={layer.swNoise}
+        />
+      );
+    }
+
+    if (e === 'god-rays') {
+      return (
+        <GodRays
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          colors={layer.grColors}
+          colorBack={layer.grColorBack}
+          colorBloom={layer.grColorBloom}
+          density={layer.grDensity}
+          spotty={layer.grSpotty}
+          midIntensity={layer.grMidIntensity}
+          midSize={layer.grMidSize}
+          intensity={layer.grIntensity}
+          bloom={layer.grBloom}
+        />
+      );
+    }
+
+    if (e === 'metaballs') {
+      return (
+        <Metaballs
+          {...sizing}
+          {...common}
+          webGlContextAttributes={webGlContextAttributes}
+          colors={layer.mbColors}
+          colorBack={layer.mbColorBack}
+          count={layer.mbCount}
+          size={layer.mbSize}
         />
       );
     }
@@ -1350,6 +1862,48 @@ function Tools() {
         contour={layer.lmContour}
         angle={layer.lmAngle}
       />
+    );
+  };
+
+  // Paper sizing (fit: contain): the image box is scaled to fit the frame and
+  // offsets move the image in units of that box. Returns the displacement
+  // range (frame fractions) that keeps the visible logo inside the frame.
+  const paperBounceGeometry = (layer) => {
+    const fa = frameW / frameH;
+    const ia = sourceAspect || fa;
+    const containX = Math.min(fa / ia, 1);
+    const bsX = fa / (containX * ia);
+    const bsY = 1 / containX;
+    const sc = layer.scale * logoScale;
+    const imgW = sc / bsX;
+    const imgH = sc / bsY;
+    const cx = ((contentBox.x0 + contentBox.x1) / 2 - 0.5) * imgW;
+    const cy = ((contentBox.y0 + contentBox.y1) / 2 - 0.5) * imgH;
+    const hw = ((contentBox.x1 - contentBox.x0) / 2) * imgW;
+    const hh = ((contentBox.y1 - contentBox.y0) / 2) * imgH;
+    return {
+      bsX,
+      bsY,
+      range: { x: [-0.5 + hw - cx, 0.5 - hw - cx], y: [-0.5 + hh - cy, 0.5 - hh - cy] },
+    };
+  };
+
+  paperBounceGeometryRef.current = paperBounceGeometry;
+
+  const renderLayerShader = (layer, mode, isLogoLayer = false) => {
+    const e = layer.effect;
+    const isPaperImage = e === 'liquid-metal' || e === 'heatmap';
+    if (!(isLogoLayer && layer.bounce && isPaperImage)) return renderLayerShaderInner(layer, mode, isLogoLayer);
+    const { range, bsX, bsY } = paperBounceGeometry(layer);
+    return (
+      <Bouncer
+        time={renderTime}
+        speed={layer.animate ? layer.speed : 0.0001}
+        range={range}
+        toOffsets={(dx, dy) => ({ offsetX: dx * bsX, offsetY: -dy * bsY })}
+      >
+        {(offsets) => renderLayerShaderInner(layer, mode, isLogoLayer, offsets)}
+      </Bouncer>
     );
   };
 
@@ -1627,6 +2181,16 @@ function Tools() {
                 </label>
               </div>
 
+              {layerTab === 'logo' && L.effect !== 'none' && (
+                <SelectField
+                  label="Bounce (DVD)"
+                  value={L.bounce ? 'on' : 'off'}
+                  options={[{ value: 'off', label: 'Off' }, { value: 'on', label: 'On — bounce off the edges' }]}
+                  onChange={(v) => update({ bounce: v === 'on' })}
+                  fieldBaseStyle={fieldBaseStyle}
+                />
+              )}
+
               {isGenerativeShader && (
                 <SelectField
                   label="Palette"
@@ -1640,7 +2204,27 @@ function Tools() {
                 />
               )}
 
-              {isPaperLiquidMetal && (
+              {motionPresets.length > 0 && (
+                <SelectField
+                  label="Motion"
+                  value={activeMotionId}
+                  options={[
+                    ...motionPresets.map((m) => ({ value: m.id, label: m.label })),
+                    { value: 'custom', label: 'Custom' },
+                  ]}
+                  onChange={applyMotion}
+                  fieldBaseStyle={fieldBaseStyle}
+                />
+              )}
+
+              {isGenerativeShader && (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <button type="button" className="mobile-nav-link" style={{ ...fieldBaseStyle, cursor: 'pointer' }} onClick={randomizeLook}>Randomize</button>
+                  <button type="button" className="mobile-nav-link" style={{ ...fieldBaseStyle, cursor: 'pointer' }} onClick={flipColors}>Flip colors</button>
+                </div>
+              )}
+
+              {(isPaperLiquidMetal || effect === 'extrude-3d') && (
                 <>
                   <label className="small-text" style={{ display: 'grid', gap: 6, minWidth: 0 }}>
                     <span style={{ fontWeight: 'var(--font-mono-weight-bold)' }}>Distortion</span>
@@ -1679,6 +2263,31 @@ function Tools() {
                       <input style={rangeStyle} type="range" min={0} max={360} step={1} value={L.lmAngle} onChange={(ev) => update({ lmAngle: Number(ev.target.value) })} />
                     </label>
                   </div>
+                </>
+              )}
+
+              {effect === 'extrude-3d' && (
+                <>
+                  <SelectField label="Motion" value={L.x3Motion} options={EXTRUDE_MOTIONS} onChange={setP('x3Motion')} fieldBaseStyle={fieldBaseStyle} />
+                  <RangeField label="Depth" value={L.x3Depth} min={0} max={1} step={0.01} onChange={setP('x3Depth')} rangeStyle={rangeStyle} />
+                </>
+              )}
+
+              {effect === 'liquid-glass' && (
+                <>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <SelectField label="Motion" value={L.lgMotion} options={GLASS_MOTIONS} onChange={setP('lgMotion')} fieldBaseStyle={fieldBaseStyle} />
+                    <ColorField label="Tint" value={L.lgTint} onChange={setP('lgTint')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Bevel" value={L.lgBevel} min={0} max={1} step={0.01} onChange={setP('lgBevel')} rangeStyle={rangeStyle} />
+                    <RangeField label="Refraction" value={L.lgRefraction} min={0} max={1} step={0.01} onChange={setP('lgRefraction')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Frost" value={L.lgFrost} min={0} max={1} step={0.01} onChange={setP('lgFrost')} rangeStyle={rangeStyle} />
+                    <RangeField label="Rainbow edge" value={L.lgDispersion} min={0} max={1} step={0.01} onChange={setP('lgDispersion')} rangeStyle={rangeStyle} />
+                  </div>
+                  <RangeField label="Edge highlight" value={L.lgHighlight} min={0} max={1} step={0.01} onChange={setP('lgHighlight')} rangeStyle={rangeStyle} />
                 </>
               )}
 
@@ -1738,6 +2347,77 @@ function Tools() {
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                     <RangeField label="Grain mixer" value={L.mgGrainMixer} min={0} max={1} step={0.01} onChange={setP('mgGrainMixer')} rangeStyle={rangeStyle} />
                     <RangeField label="Grain overlay" value={L.mgGrainOverlay} min={0} max={1} step={0.01} onChange={setP('mgGrainOverlay')} rangeStyle={rangeStyle} />
+                  </div>
+                </>
+              )}
+
+              {isWarp && (
+                <>
+                  <SelectField label="Pattern" value={L.wpShape} options={WARP_SHAPES} onChange={setP('wpShape')} fieldBaseStyle={fieldBaseStyle} />
+                  <ColorListField label="Colors" values={L.wpColors} onChange={colorSetter('wpColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Distortion" value={L.wpDistortion} min={0} max={1} step={0.01} onChange={setP('wpDistortion')} rangeStyle={rangeStyle} />
+                    <RangeField label="Swirl" value={L.wpSwirl} min={0} max={1} step={0.01} onChange={setP('wpSwirl')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Softness" value={L.wpSoftness} min={0} max={1} step={0.01} onChange={setP('wpSoftness')} rangeStyle={rangeStyle} />
+                    <RangeField label="Proportion" value={L.wpProportion} min={0} max={1} step={0.01} onChange={setP('wpProportion')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Pattern scale" value={L.wpShapeScale} min={0} max={1} step={0.01} onChange={setP('wpShapeScale')} rangeStyle={rangeStyle} />
+                    <RangeField label="Swirl depth" value={L.wpSwirlIterations} min={0} max={20} step={1} onChange={setP('wpSwirlIterations')} rangeStyle={rangeStyle} />
+                  </div>
+                </>
+              )}
+
+              {isSwirl && (
+                <>
+                  <ColorListField label="Colors" values={L.swColors} onChange={colorSetter('swColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <ColorField label="Back color" value={L.swColorBack} onChange={setP('swColorBack')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Bands" value={L.swBandCount} min={1} max={10} step={1} onChange={setP('swBandCount')} rangeStyle={rangeStyle} />
+                    <RangeField label="Twist" value={L.swTwist} min={0} max={1} step={0.01} onChange={setP('swTwist')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Softness" value={L.swSoftness} min={0} max={1} step={0.01} onChange={setP('swSoftness')} rangeStyle={rangeStyle} />
+                    <RangeField label="Center" value={L.swCenter} min={0} max={1} step={0.01} onChange={setP('swCenter')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Noise" value={L.swNoise} min={0} max={1} step={0.01} onChange={setP('swNoise')} rangeStyle={rangeStyle} />
+                    <RangeField label="Noise frequency" value={L.swNoiseFrequency} min={0} max={1} step={0.01} onChange={setP('swNoiseFrequency')} rangeStyle={rangeStyle} />
+                  </div>
+                </>
+              )}
+
+              {isGodRays && (
+                <>
+                  <ColorListField label="Colors" values={L.grColors} onChange={colorSetter('grColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <ColorField label="Back color" value={L.grColorBack} onChange={setP('grColorBack')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                    <ColorField label="Bloom color" value={L.grColorBloom} onChange={setP('grColorBloom')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Density" value={L.grDensity} min={0} max={1} step={0.01} onChange={setP('grDensity')} rangeStyle={rangeStyle} />
+                    <RangeField label="Spotty" value={L.grSpotty} min={0} max={1} step={0.01} onChange={setP('grSpotty')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Intensity" value={L.grIntensity} min={0} max={1} step={0.01} onChange={setP('grIntensity')} rangeStyle={rangeStyle} />
+                    <RangeField label="Bloom" value={L.grBloom} min={0} max={1} step={0.01} onChange={setP('grBloom')} rangeStyle={rangeStyle} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Core size" value={L.grMidSize} min={0} max={1} step={0.01} onChange={setP('grMidSize')} rangeStyle={rangeStyle} />
+                    <RangeField label="Core glow" value={L.grMidIntensity} min={0} max={1} step={0.01} onChange={setP('grMidIntensity')} rangeStyle={rangeStyle} />
+                  </div>
+                </>
+              )}
+
+              {isMetaballs && (
+                <>
+                  <ColorListField label="Colors" values={L.mbColors} onChange={colorSetter('mbColors')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <ColorField label="Back color" value={L.mbColorBack} onChange={setP('mbColorBack')} styles={{ colorInputStyle, fieldBaseStyle }} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <RangeField label="Count" value={L.mbCount} min={1} max={20} step={1} onChange={setP('mbCount')} rangeStyle={rangeStyle} />
+                    <RangeField label="Size" value={L.mbSize} min={0} max={1} step={0.01} onChange={setP('mbSize')} rangeStyle={rangeStyle} />
                   </div>
                 </>
               )}
@@ -1802,6 +2482,15 @@ function Tools() {
                 </button>
               )}
 
+              {isRecording && (
+                <div style={{ display: 'grid', gap: 6 }} role="progressbar" aria-label="Video export progress">
+                  <div style={{ height: 8, borderRadius: 999, overflow: 'hidden', background: 'var(--color-border)' }}>
+                    <div ref={progressFillRef} style={{ height: '100%', width: '0%', borderRadius: 999, background: 'var(--color-text)', transition: 'width 120ms linear' }} />
+                  </div>
+                  <div ref={progressTextRef} className="small-text" style={{ opacity: 0.8 }}>Preparing…</div>
+                </div>
+              )}
+
               {mp4Download && !isRecording && (
                 <div style={{ display: 'grid', gap: 10 }}>
                   <button
@@ -1818,6 +2507,9 @@ function Tools() {
                       controls
                       playsInline
                       muted
+                      onPlay={() => setLivePreviewPaused(true)}
+                      onPause={() => setLivePreviewPaused(false)}
+                      onEnded={() => setLivePreviewPaused(false)}
                       style={{ width: '100%', height: 'auto', display: 'block' }}
                     />
                   </div>

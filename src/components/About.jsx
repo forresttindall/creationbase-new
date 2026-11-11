@@ -19,7 +19,7 @@ const TEAM = [
   },
   {
     name: 'Sarah Houser',
-    role: 'CMO / Art Director / Photographer',
+    role: 'CMO / Marketing / Social / Art Director / Photographer',
     image: '/images/sarah%202.webp',
   },
   {
